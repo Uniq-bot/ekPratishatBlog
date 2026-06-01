@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { BlogProvider } from "@/context/BlogListContext";
+import NavBar from "@/components/blog/NavBar";
 
 export const metadata: Metadata = {
   title: "Ek Pratishat | Blogs",
@@ -17,7 +18,10 @@ export default function RootLayout({
       lang="en"
       className="overflow-x-hidden"
     >
-      <body><BlogProvider>{children}</BlogProvider></body>
+      <body><BlogProvider>
+        <NavBar />
+        {children}
+        </BlogProvider></body>
     </html>
   );
 }

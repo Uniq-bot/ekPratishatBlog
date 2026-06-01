@@ -49,7 +49,7 @@ const BlogFilters = () => {
           onChange={(e) => setInputValue(e.target.value)}
           placeholder="Search..."
           type="text"
-          className=" pl-2  outline-none border-b border-r  text-lg py-1/2 "
+          className=" pl-2  outline-none bg-[#ece8df] border-b border-r bg-whi  text-lg py-1/2 "
         />
       </div>
       <div className="flex justify-between items-center gap-10">
@@ -60,7 +60,7 @@ const BlogFilters = () => {
             onChange={(e) => setCategoryFilter(e.target.value)}
             name="category"
             id="category"
-            className="outline-none border text-md py-1/2 w-full"
+            className="outline-none bg-[#ece8df] border text-md py-1/2 w-full"
           >
             <option value="all">All</option>
             <option value="residential">Residential</option>
@@ -75,7 +75,7 @@ const BlogFilters = () => {
             onChange={(e) => setTagsFilter(e.target.value)}
             name="tags"
             id="tags"
-            className="outline-none border text-md py-1/2 w-full"
+            className="outline-none border  bg-[#ece8df] text-md py-1/2 w-full"
           >
             <option value="all">All</option>
             <option value="residential">Residential</option>
@@ -90,7 +90,7 @@ const BlogFilters = () => {
             onChange={(e) => setSortFilter(e.target.value)}
             name="sort"
             id="sort"
-            className="outline-none border text-md py-1/2 w-full"
+            className="outline-none bg-[#ece8df] border text-md py-1/2 w-full"
           >
             <option value="latest">Latest</option>
             <option value="oldest">Oldest</option>
