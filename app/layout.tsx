@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { BlogProvider } from "@/context/BlogListContext";
 
 export const metadata: Metadata = {
   title: "Ek Pratishat | Blogs",
@@ -16,7 +17,7 @@ export default function RootLayout({
       lang="en"
       className="overflow-x-hidden"
     >
-      <body>{children}</body>
+      <body><BlogProvider>{children}</BlogProvider></body>
     </html>
   );
 }
