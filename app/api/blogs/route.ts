@@ -48,12 +48,28 @@ export async function POST(req: Request) {
       );
     }
 
+    // If tags provided, validate they exist
+    if (tags && Array.isArray(tags) && tags.length > 0) {
+      const foundTags = await prisma.tag.findMany({
+        where: { id: { in: tags } },
+        select: { id: true },
+      });
+      const foundIds = foundTags.map((t) => t.id);
+      const missing = tags.filter((t: string) => !foundIds.includes(t));
+      if (missing.length > 0) {
+        return NextResponse.json(
+          { message: `Invalid tag IDs: ${missing.join(",")}` },
+          { status: 400 },
+        );
+      }
+    }
+
     const newBlog = await createBlog(
       title,
       content,
       categoryId,
       authorId,
-      tags
+      Array.isArray(tags) ? tags : undefined,
     );
 
     return NextResponse.json(

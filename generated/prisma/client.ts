@@ -52,6 +52,11 @@ export type User = Prisma.UserModel
  */
 export type BlogPost = Prisma.BlogPostModel
 /**
+ * Model BlogViews
+ * 
+ */
+export type BlogViews = Prisma.BlogViewsModel
+/**
  * Model Category
  * 
  */

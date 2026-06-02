@@ -386,6 +386,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   User: 'User',
   BlogPost: 'BlogPost',
+  BlogViews: 'BlogViews',
   Category: 'Category',
   Tag: 'Tag'
 } as const
@@ -403,7 +404,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "blogPost" | "category" | "tag"
+    modelProps: "user" | "blogPost" | "blogViews" | "category" | "tag"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -552,6 +553,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.BlogPostCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.BlogPostCountAggregateOutputType> | number
+        }
+      }
+    }
+    BlogViews: {
+      payload: Prisma.$BlogViewsPayload<ExtArgs>
+      fields: Prisma.BlogViewsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BlogViewsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlogViewsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BlogViewsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlogViewsPayload>
+        }
+        findFirst: {
+          args: Prisma.BlogViewsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlogViewsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BlogViewsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlogViewsPayload>
+        }
+        findMany: {
+          args: Prisma.BlogViewsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlogViewsPayload>[]
+        }
+        create: {
+          args: Prisma.BlogViewsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlogViewsPayload>
+        }
+        createMany: {
+          args: Prisma.BlogViewsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BlogViewsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlogViewsPayload>[]
+        }
+        delete: {
+          args: Prisma.BlogViewsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlogViewsPayload>
+        }
+        update: {
+          args: Prisma.BlogViewsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlogViewsPayload>
+        }
+        deleteMany: {
+          args: Prisma.BlogViewsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BlogViewsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BlogViewsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlogViewsPayload>[]
+        }
+        upsert: {
+          args: Prisma.BlogViewsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlogViewsPayload>
+        }
+        aggregate: {
+          args: Prisma.BlogViewsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBlogViews>
+        }
+        groupBy: {
+          args: Prisma.BlogViewsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BlogViewsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BlogViewsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BlogViewsCountAggregateOutputType> | number
         }
       }
     }
@@ -770,6 +845,16 @@ export const BlogPostScalarFieldEnum = {
 export type BlogPostScalarFieldEnum = (typeof BlogPostScalarFieldEnum)[keyof typeof BlogPostScalarFieldEnum]
 
 
+export const BlogViewsScalarFieldEnum = {
+  id: 'id',
+  blogPostId: 'blogPostId',
+  sessionId: 'sessionId',
+  createdAt: 'createdAt'
+} as const
+
+export type BlogViewsScalarFieldEnum = (typeof BlogViewsScalarFieldEnum)[keyof typeof BlogViewsScalarFieldEnum]
+
+
 export const CategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -983,6 +1068,7 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   blogPost?: Prisma.BlogPostOmit
+  blogViews?: Prisma.BlogViewsOmit
   category?: Prisma.CategoryOmit
   tag?: Prisma.TagOmit
 }

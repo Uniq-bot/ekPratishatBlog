@@ -1,96 +1,108 @@
-import type { Category, Tag } from "@/types/blog";
+import { useBlogs } from "@/context/BlogListContext";
+import React, { useEffect, useState, useMemo } from "react";
+import { useDebounce } from "@/hooks/useDebounce";
 
-interface BlogFiltersProps {
-  categories: Category[];
-  tags: Tag[];
-  categoryFilter: string;
-  tagFilter: string;
-  dateSort: string;
-  search: string;
-  resultCount: number;
-  onCategoryChange: (value: string) => void;
-  onTagChange: (value: string) => void;
-  onDateSortChange: (value: string) => void;
-  onSearchChange: (value: string) => void;
-  onReset: () => void;
-}
+const BlogFilters = () => {
+  const [query, setQuery] = useState("");
+  const [inputValue, setInputValue] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [tagsFilter, setTagsFilter] = useState("all");
+  const [sortFilter, setSortFilter] = useState("latest");
+  const handleReset = () => {
+    setQuery("");
+    setCategoryFilter("all");
+    setTagsFilter("all");
+    setSortFilter("latest");
+    setInputValue("");
+  };
+  const { filteredBlogs, setFilteredBlogs, blogsData } = useBlogs();
+  const debouncedSetQuery = useMemo(() => useDebounce((v: string) => setQuery(v), 300), [setQuery]);
 
-const BlogFilters = ({
-  categories,
-  tags,
-  categoryFilter,
-  tagFilter,
-  dateSort,
-  search,
-  resultCount,
-  onCategoryChange,
-  onTagChange,
-  onDateSortChange,
-  onSearchChange,
-  onReset,
-}: BlogFiltersProps) => {
+  useEffect(() => {
+    let updatedBlogs = [...blogsData];
+    if(categoryFilter !== "all"){
+      updatedBlogs = updatedBlogs.filter((blog) => blog.category.toLowerCase() === categoryFilter.toLowerCase())
+    }
+    if(tagsFilter !== "all"){
+      updatedBlogs = updatedBlogs.filter((blog) => blog.tags.map((tag: string) => tag.toLowerCase()).includes(tagsFilter.toLowerCase()))
+    }
+    if(query){
+      updatedBlogs = updatedBlogs.filter((blog) => blog.title.toLowerCase().includes(query.toLowerCase()) || blog.description.toLowerCase().includes(query.toLowerCase()))
+    }
+    if(sortFilter === "latest"){
+      updatedBlogs = updatedBlogs.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    } else {
+      updatedBlogs = updatedBlogs.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+    }
+    setFilteredBlogs(updatedBlogs);
+  }, [query, categoryFilter, tagsFilter, sortFilter]);
+
+  useEffect(() => {
+    debouncedSetQuery(inputValue);
+  }, [inputValue, debouncedSetQuery]);
   return (
-    <div className="border border-neutral-200 bg-white p-4">
-      <div className="mb-4">
-        <label className="text-xs font-semibold uppercase text-neutral-500">Search</label>
+    <div className="w-full  lg:relative lg:z-0 bg-[#F7F3EA] h-40 border-b border-l border-gray-400 py-3 px-5 flex flex-col gap-4">
+      <div className="w-full flex flex-col gap-2">
+        <label>Search</label>
         <input
-          type="search"
-          value={search}
-          onChange={(e) => onSearchChange(e.target.value)}
-          placeholder="Search posts..."
-          className="mt-2 w-full border border-neutral-300 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-amber-400"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          placeholder="Search..."
+          type="text"
+          className=" pl-2  outline-none bg-[#ece8df] border-b border-r bg-whi  text-lg py-1/2 "
         />
       </div>
-
-      <div className="grid gap-4 md:grid-cols-4">
-        <div>
-          <label className="text-xs font-semibold uppercase text-neutral-500">Category</label>
+      <div className="flex justify-between items-center gap-4">
+        <div className="flex flex-col gap-1 w-full ">
+          <label className="text-md">Category</label>
           <select
             value={categoryFilter}
-            onChange={(e) => onCategoryChange(e.target.value)}
-            className="mt-2 w-full border border-neutral-300 bg-white px-3 py-2 text-sm"
+            onChange={(e) => setCategoryFilter(e.target.value)}
+            name="category"
+            id="category"
+            className="outline-none bg-[#ece8df] border text-md py-1/2 w-full"
           >
-            <option value="all">All categories</option>
-            {categories.map((cat) => (
-              <option key={cat.id} value={cat.id}>{cat.name}</option>
-            ))}
+            <option value="all">All</option>
+            <option value="residential">Residential</option>
+            <option value="commercial">Commercial</option>
+            <option value="investment">Investment</option>
           </select>
         </div>
-
-        <div>
-          <label className="text-xs font-semibold uppercase text-neutral-500">Tag</label>
+        <div className="flex flex-col gap-1 w-full">
+          <label className="text-md">Tags</label>
           <select
-            value={tagFilter}
-            onChange={(e) => onTagChange(e.target.value)}
-            className="mt-2 w-full border border-neutral-300 bg-white px-3 py-2 text-sm"
+            value={tagsFilter}
+            onChange={(e) => setTagsFilter(e.target.value)}
+            name="tags"
+            id="tags"
+            className="outline-none border  bg-[#ece8df] text-md py-1/2 w-full"
           >
-            <option value="all">All tags</option>
-            {tags.map((tag) => (
-              <option key={tag.id} value={tag.id}>{tag.name}</option>
-            ))}
+            <option value="all">All</option>
+            <option value="residential">Residential</option>
+            <option value="commercial">Commercial</option>
+            <option value="investment">Investment</option>
           </select>
         </div>
-
-        <div>
-          <label className="text-xs font-semibold uppercase text-neutral-500">Date</label>
+        <div className="flex flex-col gap-1 w-full">
+          <label className="text-md">Sort</label>
           <select
-            value={dateSort}
-            onChange={(e) => onDateSortChange(e.target.value)}
-            className="mt-2 w-full border border-neutral-300 bg-white px-3 py-2 text-sm"
+            value={sortFilter}
+            onChange={(e) => setSortFilter(e.target.value)}
+            name="sort"
+            id="sort"
+            className="outline-none bg-[#ece8df] border text-md py-1/2 w-full"
           >
-            <option value="newest">Newest</option>
+            <option value="latest">Latest</option>
             <option value="oldest">Oldest</option>
           </select>
         </div>
 
-        <div className="flex items-end justify-between gap-3">
-          <p className="text-sm text-neutral-500">{resultCount} posts</p>
+        <div className="flex items-center justify-center w-full">
           <button
-            type="button"
-            onClick={onReset}
-            className="border border-neutral-300 px-3 py-2 text-xs font-semibold"
+            onClick={() => handleReset()}
+            className="bg-red-600 cursor-pointer text-[12px] py-1 px-1 mt-7 transition-all hover:rounded-2xl md:mt-6 md:px-4 md:py-1 text-white hover:bg-red-700"
           >
-            Reset
+            Reset filter
           </button>
         </div>
       </div>

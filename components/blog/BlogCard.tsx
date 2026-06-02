@@ -1,54 +1,42 @@
-
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-
-interface BlogCardProps {
-  id: string;
-  title: string;
-  content: string;
-  createdAt: string | Date;
-  category?: { name: string } | null;
-  tags?: { id: string; name: string }[];
-}
-
-const BlogCard = ({ id, title, content, createdAt, category, tags = [] }: BlogCardProps) => {
-  const plain = content.replace(/<[^>]*>/g, "").trim();
-  const excerpt = plain.length > 160 ? `${plain.slice(0, 160)}...` : plain;
-  const dateLabel = new Date(createdAt).toLocaleDateString();
-
+const BlogCard = ({ blog }: { blog: any }) => {
+  const router=useRouter()
   return (
-    <Link href={`/blog/${id}`} className="group block h-full">
-      <div className="h-full border border-neutral-200 bg-white p-6 transition-colors hover:border-neutral-400">
-        <div className="flex items-center justify-between text-xs text-neutral-500">
-          <span className="uppercase tracking-wide">{category?.name || "Uncategorized"}</span>
-          <span>{dateLabel}</span>
-        </div>
-
-        <h3 className="mt-3 text-xl font-semibold text-neutral-900 group-hover:text-black">
-          {title}
-        </h3>
-
-        {tags.length > 0 && (
-          <div className="mt-3 flex flex-wrap gap-2">
-            {tags.map((tag) => (
-              <span
-                key={tag.id}
-                className="bg-[#FFF3C4] px-2 py-1 text-xs font-medium text-neutral-800"
-              >
-                {tag.name}
-              </span>
-            ))}
-          </div>
-        )}
-
-        <p className="mt-3 text-sm text-neutral-600 leading-6">
-          {excerpt || "No preview available."}
-        </p>
-
-        <div className="mt-4 text-xs font-semibold text-neutral-900">
-          Read article →
-        </div>
+    <div
+      key={blog.id}
+      className="w-full border-b pb-5 border-gray-400 flex flex-col md:flex-row gap-5 overflow-hidden"
+    >
+      <div className="w-full md:w-60 relative h-48 md:h-full shrink-0">
+        <Image
+          src={blog.image}
+          alt={blog.title}
+          width={320}
+          height={240}
+          className="w-full h-full object-cover"
+          style={{ width: 'auto', height: 'auto' }}
+        />
+        <span className="absolute top-4 left-0 bg-black text-white px-2 py-1">
+          {blog.category}
+        </span>
       </div>
-    </Link>
+      <div className="py-1 flex flex-col items-start flex-1">
+        <span className="text-sm mb-1 text-gray-600">
+          {blog.createdAt} | {blog.updatedAt}
+        </span>
+        <div className="w-full h-full flex flex-col gap-2">
+          <h1 className="text-2xl font-bold leading-none">{blog.title}</h1>
+          <p className="text-gray-600 text-sm">{blog.description}</p>
+        </div>
+        <Link
+          href={`/blog/${blog.slug ?? blog.id}`}
+          className="underline hover:text-purple-900 mt-2 cursor-pointer transition-all text-purple-600"
+        >
+          Read more
+        </Link>
+      </div>
+    </div>
   );
 };
 

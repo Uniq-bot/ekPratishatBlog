@@ -1,50 +1,25 @@
+"use client";
+import BlogHero from "@/components/blog/BlogHero";
 import BlogListClient from "@/components/blog/BlogListClient";
-import { BlogListProvider } from "@/context/BlogListContext";
-import { getAllBlogs } from "@/services/blogs.services";
-import type { Category, Tag } from "@/types/blog";
+import LatestBlogs from "@/components/blog/LatestBlogs";
+import BlogFilters from "@/components/shared/BlogFilters";
 
-const Blogs = async () => {
-  const blogs = await getAllBlogs();
-
-  const serializedBlogs = blogs.map((blog) => ({
-    id: blog.id,
-    title: blog.title,
-    content: blog.content,
-    createdAt: blog.createdAt.toISOString(),
-    category: blog.category
-      ? { id: blog.category.id, name: blog.category.name }
-      : null,
-    tags: blog.tags.map((tag) => ({ id: tag.id, name: tag.name })),
-  }));
-
-  const categories: Category[] = [
-    ...new Map(
-      serializedBlogs
-        .filter((blog) => blog.category)
-        .map((blog) => [blog.category!.id, blog.category!])
-    ).values(),
-  ];
-
-  const tags: Tag[] = [
-    ...new Map(serializedBlogs.flatMap((blog) => blog.tags).map((tag) => [tag.id, tag])).values(),
-  ];
-
+const Blogs = () => {
   return (
-    <div className="min-h-screen bg-[#FFFDF8] px-6 py-12">
-      <div className="mx-auto max-w-5xl">
-        <header className="border-b border-neutral-200 pb-8">
-          <p className="text-xs uppercase tracking-[0.2em] text-neutral-500">Ekpratishat</p>
-          <h1 className="mt-4 text-4xl font-semibold text-neutral-900">Latest Stories</h1>
-          <p className="mt-2 text-sm text-neutral-600 max-w-xl">
-            Insights, updates, and field notes from the Ekpratishat team.
-          </p>
-        </header>
+      <div className="w-full min-h-screen flex bg-[#F7F3EA] md:pl-30 md:pr-20 ">
 
-        <BlogListProvider blogs={serializedBlogs} categories={categories} tags={tags}>
+        <div className="lg:w-[65%] min-h-screen relative lg:p-10   flex flex-col">
+          <BlogHero />
+          
+         <div className=" lg:mb-10 relative  lg:top-10  z-10 top-30 pb-10 w-[90%] m-auto h-full flex flex-col gap-10">
+           <BlogFilters  />
           <BlogListClient />
-        </BlogListProvider>
+         </div>
+        </div>
+        <div className="lg:w-[35%] absolute lg:relative h-screen p-10">
+          <LatestBlogs />
+        </div>
       </div>
-    </div>
   );
 };
 
