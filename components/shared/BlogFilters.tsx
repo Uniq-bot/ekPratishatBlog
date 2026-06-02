@@ -41,7 +41,7 @@ const BlogFilters = () => {
     debouncedSetQuery(inputValue);
   }, [inputValue, debouncedSetQuery]);
   return (
-    <div className="w-full h-40 border-b border-l border-gray-400 py-3 px-5 flex flex-col gap-4">
+    <div className="w-full  lg:relative lg:z-0 bg-[#F7F3EA] h-40 border-b border-l border-gray-400 py-3 px-5 flex flex-col gap-4">
       <div className="w-full flex flex-col gap-2">
         <label>Search</label>
         <input
@@ -52,7 +52,7 @@ const BlogFilters = () => {
           className=" pl-2  outline-none bg-[#ece8df] border-b border-r bg-whi  text-lg py-1/2 "
         />
       </div>
-      <div className="flex justify-between items-center gap-10">
+      <div className="flex justify-between items-center gap-4">
         <div className="flex flex-col gap-1 w-full ">
           <label className="text-md">Category</label>
           <select
@@ -100,7 +100,7 @@ const BlogFilters = () => {
         <div className="flex items-center justify-center w-full">
           <button
             onClick={() => handleReset()}
-            className="bg-red-600 cursor-pointer transition-all hover:rounded-2xl mt-6 px-4 py-1 text-white hover:bg-red-700"
+            className="bg-red-600 cursor-pointer text-[12px] py-1 px-1 mt-7 transition-all hover:rounded-2xl md:mt-6 md:px-4 md:py-1 text-white hover:bg-red-700"
           >
             Reset filter
           </button>

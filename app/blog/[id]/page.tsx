@@ -3,10 +3,10 @@ import BlogDetailClient from "@/components/blog/BlogDetailClient";
 import RelatedBlogs from "@/components/blog/RelatedBlogs";
 import { useBlogs } from "@/context/BlogListContext";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 const BlogDets = () => {
   const { blogsData } = useBlogs();
-
+  const router=useRouter()
   const { id } = useParams();
   const blog = blogsData.find((b) => b.slug === id);
   const relatedBlog = blogsData.filter((b) => {
@@ -17,11 +17,11 @@ const BlogDets = () => {
     return categoryMatch || tagMatch;
   });
   return (
-    <div className="w-full min-h-screen bg-[#F7F3EA] p-10 flex flex-col items-start">
+    <div className="w-full min-h-screen bg-[#F7F3EA] lg:p-10 py-5 flex flex-col items-start">
       <div>
-        <Link
-          href="/"
-          className="flex  items-center justify-center gap-2 group  transition-all  "
+        <button
+          onClick={() => router.replace("/")}
+          className="flex  items-center justify-center gap-2 group text-sm pl-2  transition-all  "
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -58,9 +58,9 @@ const BlogDets = () => {
               {id}
             </p>
           </div>
-        </Link>
+        </button>
       </div>
-      <div className="w-full  flex justify-between px-20 py-10">
+      <div className="w-full flex flex-col md:flex-row justify-between px-4 md:px-20 py-6 gap-8">
         <BlogDetailClient blog={blog} />
         <RelatedBlogs relatedBlogs={relatedBlog} />
       </div>

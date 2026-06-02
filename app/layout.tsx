@@ -16,10 +16,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className="overflow-x-hidden"
+      className=" w-full bg-[#F7F3EA] "
     >
       <body><BlogProvider>
-        <NavBar />
         {children}
         </BlogProvider></body>
     </html>

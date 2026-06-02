@@ -21,18 +21,18 @@ const BlogListClient = () => {
   const pageItems = filteredBlogs.slice(start, end);
 
   return (
-    <div className="w-full min-h-screen flex flex-col gap-5 ">
+    <div className="w-full min-h-screen flex flex-col gap-5 px-4 sm:px-0">
       {pageItems.map((blog, index) => (
         <BlogCard key={blog.id ?? index} blog={blog} />
       ))}
 
       {/* Pagination controls */}
-      <div className="w-full flex items-center justify-between mt-4">
+      <div className="w-full flex flex-col sm:flex-row items-center sm:items-center justify-between mt-4 gap-2">
         <div className="text-sm text-gray-600">
           Showing {start + 1} - {Math.min(end, filteredBlogs.length)} of {filteredBlogs.length}
         </div>
 
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-2 items-center overflow-auto">
           <button
             onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
             disabled={currentPage === 1}
@@ -62,7 +62,6 @@ const BlogListClient = () => {
             Next
           </button>
         </div>
-        <div></div>
       </div>
     </div>
   );
