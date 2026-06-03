@@ -13,7 +13,7 @@ const BlogCard = ({ blog }: { blog: any }) => {
           src={blog.image}
           alt={blog.title}
           width={320}
-          height={240}
+          height={320}
           className="w-full h-full object-cover"
           style={{ width: 'auto', height: 'auto' }}
         />

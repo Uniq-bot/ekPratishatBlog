@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { BlogProvider } from "@/context/BlogListContext";
+import { BlogDataProvider } from "@/context/BlogListContext";
 import NavBar from "@/components/blog/NavBar";
 
 export const metadata: Metadata = {
@@ -14,13 +14,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className=" w-full bg-[#F7F3EA] "
-    >
-      <body><BlogProvider>
-        {children}
-        </BlogProvider></body>
+    <html lang="en" className=" w-full bg-[#F7F3EA] ">
+      <body>
+        <BlogDataProvider>{children}</BlogDataProvider>
+      </body>
     </html>
   );
 }

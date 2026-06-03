@@ -1,27 +1,53 @@
 const RootLoading = () => {
   return (
-    <div className="min-h-[90vh] bg-[#FFFDF8] px-6 py-12">
-      <div className="mx-auto max-w-5xl">
-        <div className="border-b border-neutral-200 pb-8">
-          <div className="h-3 w-32 bg-neutral-200 animate-pulse" />
-          <div className="mt-4 h-10 w-64 bg-neutral-200 animate-pulse" />
-          <div className="mt-3 h-3 w-80 bg-neutral-200 animate-pulse" />
+    <div className="min-h-[90vh] bg-[#F7F3EA] px-4 py-6 md:px-8 lg:px-12">
+      <div className="mx-auto flex max-w-7xl gap-8 lg:gap-10">
+
+        {/* LEFT SECTION */}
+        <div className="min-h-screen w-full lg:w-[100%] space-y-8">
+
+          <div className="space-y-4  border border-neutral-200 bg-white p-6 shadow-sm">
+            <div className="h-4 w-24 l bg-neutral-200 animate-pulse" />
+            <div className="h-10 w-3/4 bg-neutral-200 animate-pulse" />
+            <div className="h-4 w-full l bg-neutral-200 animate-pulse" />
+            <div className="h-4 w-5/6 l bg-neutral-200 animate-pulse" />
+            <div className="h-4 w-2/3 l bg-neutral-200 animate-pulse" />
+          </div>
+
+          {/* LIST SKELETON */}
+          <div className=" border border-neutral-200 bg-white p-4 shadow-sm space-y-3">
+            {[...Array(3)].map((_, index) => (
+              <div
+                key={index}
+                className="space-y-3  border border-neutral-100 p-4"
+              >
+                <div className="h-4 w-20 l bg-neutral-200 animate-pulse" />
+                <div className="h-10 w-full bg-neutral-200 animate-pulse" />
+              </div>
+            ))}
+          </div>
+
+          {/* CARDS */}
+          <div className="space-y-6">
+            {[...Array(4)].map((_, index) => (
+              <div
+                key={index}
+                className="flex gap-4  border border-neutral-200 bg-white p-4 shadow-sm"
+              >
+                <div className="h-40 w-40 shrink-0  bg-neutral-200 animate-pulse" />
+                <div className="flex-1 space-y-3 py-1">
+                  <div className="h-4 w-24 l bg-neutral-200 animate-pulse" />
+                  <div className="h-8 w-3/4 bg-neutral-200 animate-pulse" />
+                  <div className="h-4 w-full l bg-neutral-200 animate-pulse" />
+                  <div className="h-4 w-5/6 l bg-neutral-200 animate-pulse" />
+                  <div className="h-4 w-1/3 l bg-neutral-200 animate-pulse" />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="mt-10 grid gap-6 md:grid-cols-2">
-          {[...Array(6)].map((_, index) => (
-            <div key={index} className="border border-neutral-200 bg-white p-6">
-              <div className="flex items-center justify-between">
-                <div className="h-3 w-24 bg-neutral-200 animate-pulse" />
-                <div className="h-3 w-20 bg-neutral-200 animate-pulse" />
-              </div>
-              <div className="mt-4 h-5 w-40 bg-neutral-200 animate-pulse" />
-              <div className="mt-3 h-3 w-full bg-neutral-200 animate-pulse" />
-              <div className="mt-2 h-3 w-5/6 bg-neutral-200 animate-pulse" />
-              <div className="mt-4 h-3 w-20 bg-neutral-200 animate-pulse" />
-            </div>
-          ))}
-        </div>
+
       </div>
     </div>
   );

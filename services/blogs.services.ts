@@ -8,121 +8,82 @@ const toSlug = (value: string) => {
     .replace(/(^-|-$)+/g, "");
 };
 
-export const getAllBlogs = async () => {
-  const blogs = await prisma.blogPost.findMany({
-    include: {
-      category: true,
-      tags: true,
-      author: true,
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-  });
-  return blogs;
-};
-
-export const getBlogById = async (id: string) => {
-  const blog = await prisma.blogPost.findUnique({
-    where: { id },
-    include: {
-      category: true,
-      tags: true,
-      author: true,
-    },
-  });
-  return blog;
-};
-
-export const createBlog = async (
-  title: string,
-  content: string,
-  categoryId: string,
-  authorId: string,
-  tagIds?: string[]
-) => {
-  const baseSlug = toSlug(title);
-  const slug = baseSlug ? `${baseSlug}-${Date.now()}` : `post-${Date.now()}`;
-
-  const blog = await prisma.blogPost.create({
-    data: {
-      title,
-      content,
-      slug,
-      categoryID: categoryId,
-      authorID: authorId,
-      ...(tagIds && tagIds.length > 0 && {
-        tags: {
-          connect: tagIds.map((id) => ({ id })),
-        },
-      }),
-    },
-    include: {
-      category: true,
-      tags: true,
-      author: true,
-    },
-  });
-  return blog;
-};
-
-export const updateBlog = async (
-  id: string,
-  title: string,
-  content: string,
-  categoryId: string,
-  tagIds?: string[]
-) => {
-  const baseSlug = toSlug(title);
-  const slug = baseSlug ? `${baseSlug}-${Date.now()}` : `post-${Date.now()}`;
-
-  const data: {
-    title: string;
-    content: string;
-    slug: string;
-    categoryID: string;
-    tags?: { set: { id: string }[] };
-  } = {
-    title,
-    content,
-    slug,
-    categoryID: categoryId,
-  };
-
-  if (tagIds) {
-    data.tags = {
-      set: tagIds.map((tagId) => ({ id: tagId })),
-    };
-  }
-
-  const blog = await prisma.blogPost.update({
-    where: { id },
-    data,
-    include: {
-      category: true,
-      tags: true,
-      author: true,
-    },
-  });
-
-  return blog;
-};
-
-export const deleteBlog = async (id: string) => {
-  return prisma.$transaction(async (tx) => {
-    await tx.blogPost.update({
-      where: { id },
-      data: {
-        tags: {
-          set: [],
+export const getBlogByFilters = async ({
+  offset,
+  limit,
+  category,
+  tags,
+  searchQuery,
+}: {
+  offset: number;
+  limit: number;
+  category?: string;
+  tags: string[];
+  searchQuery?: string;
+}) => {
+  const where = {
+    ...(category && { categoryID: category }),
+    ...(tags.length > 0 && {
+      tags: {
+        some: {
+          name: {
+            in: tags,
+          },
         },
       },
-    });
+    }),
+    ...(searchQuery && {
+      OR: [
+        { title: { contains: searchQuery, mode: "insensitive" as const } },
+        { content: { contains: searchQuery, mode: "insensitive" as const } },
+      ],
+    }),
+  };
 
-    return tx.blogPost.delete({
-      where: { id },
-    });
+  const [posts, totalCount] = await Promise.all([
+    prisma.blogPost.findMany({
+      where,
+      include: {
+        tags: true,
+        category: true,
+      },
+      skip: offset,
+      take: limit,
+    }),
+    prisma.blogPost.count({ where }),
+  ]);
+
+  return { posts, totalCount };
+};
+
+export const getLatestBlogs = async (limit = 5) => {
+  return prisma.blogPost.findMany({
+    take: limit,
+    orderBy: {
+      createdAt: "desc",
+    },
+    include: {
+      category: true,
+      tags: true,
+    },
   });
+};
+export const createBlog = async ({ title, content, coverPage, published, authorID, categoryID, tags, slug }: { title: string; content: string; coverPage?: string; published: boolean; authorID: string; categoryID: string; tags?: string[]; slug: string }) => {
+ const post=prisma.blogPost.create({
+       data: {
+         title,
+         content,
+         coverPage,
+         published,
+         authorID,
+         categoryID,
+         slug,
+         tags: {
+           connect: tags?.map((tag: string) => ({ name: tag })),
+         },
+       },
+     });
+    return post;
 };
 
 export const createCategory = async (name: string, description?: string) => {
