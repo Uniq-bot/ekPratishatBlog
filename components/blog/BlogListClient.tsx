@@ -27,17 +27,17 @@ const BlogListClient = () => {
   }, [currentPage, setPage, totalPages]);
 
   return (
-  <div className="w-full min-h-screen flex flex-col gap-5 px-4 sm:px-0">
+  <div className="w-full  flex flex-col gap-5 px-4 sm:px-0">
 
     {loading ? (
       <RootLoading />
     ) : (
       <>
-        {pageItems.map((blog, index) => (
+        {pageItems.length>0?pageItems.map((blog, index) => (
           <BlogCard key={blog.id ?? index} blog={blog} />
-        ))}
+        )): <p className="text-gray-500 w-full text-center">No blogs found.</p>}
           {/* Pagination controls */}
-    <div className="w-full flex flex-col sm:flex-row items-center justify-between mt-4 gap-2">
+    <div className={`w-full flex flex-col ${pageItems.length>0?"flex":"hidden"} sm:flex-row items-center justify-between mt-4 gap-2`}>
       <div className="text-sm text-gray-600">
         Showing{" "}
         {filteredBlogs.length === 0
