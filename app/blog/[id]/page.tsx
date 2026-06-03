@@ -4,15 +4,17 @@ import RelatedBlogs from "@/components/blog/RelatedBlogs";
 import { useBlogs } from "@/context/BlogListContext";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+
 const BlogDets = () => {
   const { blogsData } = useBlogs();
   const router=useRouter()
   const { id } = useParams();
   const blog = blogsData.find((b) => b.slug === id);
+
   const relatedBlog = blogsData.filter((b) => {
-    const categoryMatch = b.category === blog.category;
-    const tagMatch = b.tags.some((tag: any) => tag === blog.tag);
-    const isSameBlog = b.id === blog.id;
+    const categoryMatch = b.category === blog?.category;
+    const tagMatch = b.tags.some((tag: any) => tag === blog?.tags);
+    const isSameBlog = b.id === blog?.id;
     if (isSameBlog) return false;
     return categoryMatch || tagMatch;
   });

@@ -1,88 +1,74 @@
-import { getAllBlogs, createBlog } from "@/services/blogs.services";
-import { NextResponse } from "next/server";
-import { getAuthorId } from "@/libs/auth";
 import { prisma } from "@/libs/prisma";
+import { createBlog, getBlogByFilters } from "@/services/blogs.services";
+import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function POST(req: Request) {
   try {
-    const blogs = await getAllBlogs();
-    return NextResponse.json(blogs, { status: 200 });
+    const body = await req.json();
+    const { title, content, coverPage, published, authorID, categoryID, tags } =
+      body;
+    if (!title || !content || !authorID || !categoryID) {
+      return NextResponse.json(
+        {
+          message: "missing required fields",
+        },
+        { status: 400 },
+      );
+    }
+    const slug = title
+      .toLowerCase()
+      .replace(/ /g, "-")
+      .replace(/[^\w-]+/g, "");
+    const post = await createBlog({
+      title,
+      content,
+      coverPage,
+      published: Boolean(published),
+      authorID,
+      categoryID,
+      tags,
+      slug: `${slug}-${Date.now()}`,
+    })
   } catch (err) {
-    console.error("Error fetching blogs:", err);
     return NextResponse.json(
-      { message: "Failed to fetch blogs" },
+      {
+        message: "internal server error on creation of post",
+        error: err,
+      },
       { status: 500 },
     );
   }
 }
 
-export async function POST(req: Request) {
+export async function GET(req: Request) {
   try {
-    const authorId = await getAuthorId();
+    const { searchParams } = new URL(req.url);
 
-    if (!authorId) {
-      return NextResponse.json(
-        { message: "Unauthorized: No author ID found" },
-        { status: 401 },
-      );
-    }
+    const offset = Number(searchParams.get("offset")) || 0;
+    const limit = Number(searchParams.get("limit")) || 30;
+    const category = searchParams.get("category")|| undefined;
+    const tags = searchParams.get("tags")?.split(",") || [];
+    const searchQuery = searchParams.get("query") || undefined;
 
-    const body = await req.json();
-    const { title, content, categoryId, tags } = body;
-
-    if (!title || !content || !categoryId) {
-      return NextResponse.json(
-        { message: "Title, content, and category are required" },
-        { status: 400 },
-      );
-    }
-
-    const category = await prisma.category.findUnique({
-      where: { id: categoryId },
+    const { posts, totalCount } = await getBlogByFilters({
+      offset,
+      limit,
+      category,
+      tags,
+      searchQuery,
     });
 
-    if (!category) {
-      return NextResponse.json(
-        { message: "Invalid category ID" },
-        { status: 400 },
-      );
-    }
-
-    // If tags provided, validate they exist
-    if (tags && Array.isArray(tags) && tags.length > 0) {
-      const foundTags = await prisma.tag.findMany({
-        where: { id: { in: tags } },
-        select: { id: true },
-      });
-      const foundIds = foundTags.map((t) => t.id);
-      const missing = tags.filter((t: string) => !foundIds.includes(t));
-      if (missing.length > 0) {
-        return NextResponse.json(
-          { message: `Invalid tag IDs: ${missing.join(",")}` },
-          { status: 400 },
-        );
-      }
-    }
-
-    const newBlog = await createBlog(
-      title,
-      content,
-      categoryId,
-      authorId,
-      Array.isArray(tags) ? tags : undefined,
-    );
-
+    return NextResponse.json({
+      message: "fetched posts successfully",
+      posts,
+      totalCount,
+    });
+  } catch (err) {
     return NextResponse.json(
       {
-        message: "Blog post created successfully",
-        blog: newBlog,
+        message: "internal server error on fetching posts",
+        error: err,
       },
-      { status: 201 },
-    );
-  } catch (err) {
-    console.error("Error creating blog:", err);
-    return NextResponse.json(
-      { message: "Failed to create blog" },
       { status: 500 },
     );
   }

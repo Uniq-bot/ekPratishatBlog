@@ -1,28 +1,76 @@
-import logo from "@/public/logo.png"
-import Image from "next/image"
-const LoginComp = () => {
-  return (
-    <div className="w-1/2 h-[70%] mt-10  flex flex-col items-center">
-          <div className="w-30 h-30 flex items-center justify-center">
-            <Image src={logo} alt="Logo" className="w-full h-full" />
-          </div>
-          <form className="w-full mt-8">
-            <div>
-              <label className="mb-2 block">
-              Email:
-            </label>
-            <input type="email" name="email" className="border border-gray-300 bg-[#D6CD7A]/50 outline-none focus:shadow-amber-200 focus:ring-1 ring-amber-500 rounded-md p-2 w-full mb-4" />
-            </div>
-            <div>
-              <label className="mb-2 block">
-              Password:
-            </label>
-            <input type="password" name="password" className="border border-gray-300 bg-[#D6CD7A]/50 outline-none focus:shadow-amber-200 focus:ring-1 ring-amber-500 rounded-md p-2 w-full mb-4" />
-            </div>
-            <button type="submit" className="bg-[#918D92] hover:bg-[#7a767b] cursor-pointer transition-all text-white px-4 py-2 rounded-md w-full">Login</button>
-          </form>
-    </div>
-  )
-}
+import Image from "next/image";
 
-export default LoginComp
+type Props = {
+  email: string;
+  password: string;
+  setEmail: (v: string) => void;
+  setPassword: (v: string) => void;
+  onSignIn: (payload: { email: string; password: string }) => void;
+  loading: boolean;
+  error: string | null;
+};
+
+const LoginComp = ({
+  email,
+  password,
+  setEmail,
+  setPassword,
+  onSignIn,
+  loading,
+  error,
+}: Props) => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSignIn({ email, password });
+  };
+
+  return (
+    <div className="w-1/2 h-[70%] mt-20 flex flex-col items-center">
+      <div>
+        <Image src="/logo.png" alt="logo" width={120} height={120} />
+      </div>
+      <form className="w-full mt-8" onSubmit={handleSubmit}>
+        <div>
+          <label className="mb-2 block">Email:</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="border outline-none p-2 w-full mb-4"
+          />
+        </div>
+
+        <div>
+          <label className="mb-2 block">Password:</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="border outline-none p-2 w-full mb-4"
+          />
+        </div>
+
+        {/* ERROR DISPLAY */}
+        {error && (
+          <p className="text-red-500 text-sm mb-3">
+            {error}
+          </p>
+        )}
+
+        <button
+          disabled={loading}
+          type="submit"
+          className={`w-full px-4 py-2 rounded-md text-white transition-all ${
+            loading
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-[#918D92] hover:bg-[#7a767b]"
+          }`}
+        >
+          {loading ? "Logging in..." : "Login"}
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default LoginComp;
