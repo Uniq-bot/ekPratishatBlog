@@ -27,7 +27,7 @@ const LoginComp = ({
   return (
     <div className="w-1/2 h-[70%] mt-20 flex flex-col items-center">
       <div>
-        <Image src="/logo.png" alt="logo" width={120} height={120} />
+        <Image  src="/logo.png" alt="logo" width={120} height={120} style={{width:"auto", height:"auto"}} />
       </div>
       <form className="w-full mt-8" onSubmit={handleSubmit}>
         <div>

@@ -1,15 +1,37 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { verifyToken } from "@/libs/jwt";
+import {prisma} from "@/libs/prisma";
+import { AdminProvider } from "@/context/AdminContext";
 
-const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
+const DashboardLayout = async ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const token = (await cookies()).get("token")?.value;
 
-  if (!token || !verifyToken(token)) {
+  if (!token) {
     redirect("/login");
   }
 
-  return <>{children}</>;
+  const payload = verifyToken(token);
+  console.log("payload", payload);
+  if (!payload) {
+    redirect("/login");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: payload?.userId,
+    },
+  });
+  console.log("user", user);
+  if (!user) {
+    redirect("/login");
+  }
+
+  return <AdminProvider>{children}</AdminProvider>;
 };
 
 export default DashboardLayout;
