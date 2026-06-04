@@ -63,18 +63,20 @@ const normalizeBlog = (post: any): BlogDataType => ({
   tags: Array.isArray(post.tags)
     ? post.tags.map((tag: any) => tag?.name ?? tag).filter(Boolean)
     : [],
-  createdAt: post.createdAt ? new Date(post.createdAt).toLocaleDateString() : undefined,
-  createdAtTimestamp: post.createdAt ? new Date(post.createdAt).getTime() : undefined,
-  updatedAt: post.updatedAt ? new Date(post.updatedAt).toLocaleDateString() : undefined,
+  createdAt: post.createdAt
+    ? new Date(post.createdAt).toLocaleDateString()
+    : undefined,
+  createdAtTimestamp: post.createdAt
+    ? new Date(post.createdAt).getTime()
+    : undefined,
+  updatedAt: post.updatedAt
+    ? new Date(post.updatedAt).toLocaleDateString()
+    : undefined,
   published: post.published,
   authorID: post.authorID,
 });
 
-export const BlogDataProvider = ({
-  children,
-}: {
-  children: ReactNode;
-}) => {
+export const BlogDataProvider = ({ children }: { children: ReactNode }) => {
   const [blogsData, setBlogsData] = useState<BlogDataType[]>([]);
   const [filteredBlogs, setFilteredBlogs] = useState<BlogDataType[]>([]);
   const [totalCount, setTotalCount] = useState<number>(0);
@@ -87,6 +89,13 @@ export const BlogDataProvider = ({
   const limit = 4;
   const offset = (page - 1) * limit;
   const totalPages = Math.max(1, Math.ceil(totalCount / limit));
+  const [isMount, setIsMount] = useState(false);
+
+  useEffect(() => {
+    setIsMount(true);
+  }, []);
+
+
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -120,9 +129,13 @@ export const BlogDataProvider = ({
           : [];
 
         setBlogsData(blogs);
-        console.log(blogs)
+        console.log(blogs);
         setFilteredBlogs(blogs);
-        setTotalCount(typeof fetchedData.totalCount === "number" ? fetchedData.totalCount : blogs.length);
+        setTotalCount(
+          typeof fetchedData.totalCount === "number"
+            ? fetchedData.totalCount
+            : blogs.length,
+        );
       } catch (error) {
         console.log(error);
       } finally {
@@ -137,6 +150,7 @@ export const BlogDataProvider = ({
     setPage(1);
   }, [searchQuery, categoryId, tags]);
 
+    if (!isMount) return null;
   return (
     <BlogDataContext.Provider
       value={{

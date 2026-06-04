@@ -17,6 +17,7 @@ export default function RootLayout({
     <html lang="en" className=" w-full bg-[#F7F3EA] ">
       <body>
         <BlogDataProvider>{children}</BlogDataProvider>
+        {/* {children} */}
       </body>
     </html>
   );
