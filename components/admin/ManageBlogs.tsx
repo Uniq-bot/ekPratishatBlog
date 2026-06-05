@@ -3,7 +3,7 @@ import { Edit, Trash } from "lucide-react";
 import { redirect } from "next/navigation";
 
 const ManageBlogs = () => {
-  const { blogs } = useGetAdminBlogs();
+  const { data:blogs, isLoading } = useGetAdminBlogs();
   return (
     <div className="bg-white relative z-20  shadow overflow-hidden border">
       <table className="w-full">
