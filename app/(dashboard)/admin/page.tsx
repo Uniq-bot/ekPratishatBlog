@@ -1,29 +1,35 @@
 "use client"
 import AsideBar from '@/components/admin/AsideBar'
-import CreateBlog from '@/components/admin/CreateBlog';
+import BlogEditor from '@/components/admin/BlogEditor';
+import CreateBlog from '@/components/admin/BlogEditor';
 import ManageBlogs from '@/components/admin/ManageBlogs';
 import TagNCategory from '@/components/admin/TagNCategory';
-import { useAdmin } from '@/context/AdminContext';
+import { useAdminUI } from '@/context/AdminContext';
+import { useGetCategory, useGetTags } from '@/hooks/useAdminBlogs';
 import Image from 'next/image';
-import { useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 
 
 
 
 const AdminPanel  = () => {
-  const {activeTab, setActiveTab, blocks, setBlocks, blogsData, setBlogsData}=useAdmin();
+  const {activeTab, setActiveTab, blocks, setBlocks, user}=useAdminUI();
   const [isMount, setIsMount]=useState(false);
-
-  useState(()=>{
+  const {categories}=useGetCategory();
+  useEffect(()=>{
     setIsMount(true);
   },[])
+
+  const {tags}=useGetTags();
 
   if(!isMount) return null;
   console.log(activeTab)
   const tabComponents:any={
-    "tag&category":<TagNCategory />,
-    "create-blog":<CreateBlog blocks={blocks} setBlocks={setBlocks} blogsData={blogsData} setBlogsData={setBlogsData} />,
-    "manage-blogs":<ManageBlogs blogsData={blogsData} />,
+    "tag&category":<TagNCategory tags={tags} categories={categories} />,
+    "create-blog":<BlogEditor mode="create" tags={tags} user={user} categories={categories} setBlocks={setBlocks} blocks={blocks} setBlogsData={function (value: SetStateAction<any[]>): void {
+      throw new Error('Function not implemented.');
+    } } />,
+    "manage-blogs":<ManageBlogs />,
   }
   return (
     <div className="w-full relative bg-[#F7F3EA] min-h-screen flex">

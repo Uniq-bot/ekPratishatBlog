@@ -1,45 +1,67 @@
+import { getAuthorId } from "@/libs/auth";
 import { prisma } from "@/libs/prisma";
 import { createBlog, getBlogByFilters } from "@/services/blogs.services";
 import { NextResponse } from "next/server";
 
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { title, content, coverPage, published, authorID, categoryID, tags } =
-      body;
-    if (!title || !content || !authorID || !categoryID) {
+
+    const {
+      title,
+      content,
+      coverPage,
+      published,
+      authorID,
+      categoryId,
+      tags,
+    } = body;
+
+    if (!title || !content || !categoryId) {
       return NextResponse.json(
         {
-          message: "missing required fields",
+          message: "Title, content and category are required",
         },
-        { status: 400 },
+        { status: 400 }
       );
     }
-    const slug = title
+
+    const generatedSlug = title
       .toLowerCase()
-      .replace(/ /g, "-")
+      .replace(/\s+/g, "-")
       .replace(/[^\w-]+/g, "");
+
     const post = await createBlog({
       title,
       content,
       coverPage,
-      published: Boolean(published),
+      status: "PUBLISHED",
       authorID,
-      categoryID,
-      tags,
-      slug: `${slug}-${Date.now()}`,
-    })
-  } catch (err) {
+      categoryId: categoryId, 
+      tags: tags ?? [],
+      slug: `${generatedSlug}-${Date.now()}`,
+    });
+
     return NextResponse.json(
       {
-        message: "internal server error on creation of post",
-        error: err,
+        message: "Blog created successfully",
+        post,
       },
-      { status: 500 },
+      { status: 201 }
+    );
+  } catch (err) {
+    console.error("CREATE BLOG ERROR:", err);
+
+    return NextResponse.json(
+      {
+        message: "Internal server error on creation of post",
+        error: err instanceof Error ? err.message : String(err),
+      },
+      { status: 500 }
     );
   }
 }
-
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);

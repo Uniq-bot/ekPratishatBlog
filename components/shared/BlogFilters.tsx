@@ -1,98 +1,70 @@
-import { useBlogs } from "@/context/BlogListContext";
-import React, { useEffect, useState, useMemo } from "react";
-import { useDebounce } from "@/hooks/useDebounce";
+"use client";
+
+import React, { useEffect, useState } from "react";
+import { useBlogUi } from "@/context/BlogListContext";
 
 const BlogFilters = () => {
-  const [query, setQuery] = useState("");
-  const [inputValue, setInputValue] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("all");
-  const [tagsFilter, setTagsFilter] = useState("all");
   const {
+    tag,
+    setTag,
+    category,
+    setCategory,
+    searchQuery,
     setSearchQuery,
-    setCategoryId,
-    setTags,
-    setPage,
     sortFilter,
     setSortFilter,
-  } = useBlogs();
+    setPage,
+  } = useBlogUi();
+
   const [categoriesData, setCategoriesData] = useState<
     { id: string; name: string }[]
   >([]);
-  const [tagsData, setTagsData] = useState<{ id: string; name: string }[]>([]);
+
+  const [tagsData, setTagsData] = useState<
+    { id: string; name: string }[]
+  >([]);
+
+  
+
+  /* ---------------- RESET ---------------- */
   const handleReset = () => {
-    setQuery("");
-    setCategoryFilter("all");
-    setTagsFilter("all");
-    setInputValue("");
     setSearchQuery("");
-    setCategoryId("");
-    setTags([]);
-    setPage(1);
+    setCategory("all");
+    setTag("all");
     setSortFilter("latest");
-  };
-  const debouncedSetQuery = useMemo(
-    () => useDebounce((v: string) => setQuery(v), 300),
-    [setQuery],
-  );
-
-  useEffect(() => {
-    setSearchQuery(query);
     setPage(1);
-  }, [query, setSearchQuery, setPage]);
+  };
 
-  useEffect(() => {
-    debouncedSetQuery(inputValue);
-  }, [inputValue, debouncedSetQuery]);
-
-  useEffect(() => {
-    const fetchMeta = async () => {
-      try {
-        const [catsRes, tagsRes] = await Promise.all([
-          fetch("/api/categories"),
-          fetch("/api/tags"),
-        ]);
-        if (catsRes.ok) {
-          const cats = await catsRes.json();
-          setCategoriesData(Array.isArray(cats) ? cats : []);
-          console.log("Fetched categories:", Array.isArray(cats) ? cats : []);
-        }
-        if (tagsRes.ok) {
-          const t = await tagsRes.json();
-          setTagsData(Array.isArray(t) ? t : []);
-          console.log("Fetched tags:", Array.isArray(t) ? t : []);
-        }
-      } catch (err) {
-        console.error("Failed to fetch categories/tags", err);
-      }
-    };
-    fetchMeta();
-  }, []);
   return (
-    <div className="w-full  lg:relative lg:z-0 bg-[#F7F3EA] h-40 border-b border-l border-gray-400 py-3 px-5 flex flex-col gap-4">
-      <div className="w-full flex flex-col gap-2">
+    <div className="w-full bg-[#F7F3EA] border-b border-l border-gray-400 py-3 px-5 flex flex-col gap-4">
+
+      {/* SEARCH */}
+      <div className="flex flex-col gap-2">
         <label>Search</label>
         <input
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+          value={searchQuery}
+          onChange={(e) => {
+            setSearchQuery(e.target.value);
+            setPage(1);
+          }}
           placeholder="Search..."
-          type="text"
-          className=" pl-2  outline-none bg-[#ece8df] border-b border-r  text-lg py-1/2 "
+          className="pl-2 outline-none bg-[#ece8df] border"
         />
       </div>
-      <div className="flex justify-between items-center gap-4">
-        <div className="flex flex-col gap-1 w-full ">
-          <label className="text-md">Category</label>
+
+      {/* FILTERS */}
+      <div className="flex justify-between gap-4">
+
+        {/* CATEGORY */}
+        <div className="flex flex-col w-full">
+          <label>Category</label>
           <select
-            value={categoryFilter}
+            value={category}
             onChange={(e) => {
-              const value = e.target.value;
-              setCategoryFilter(value);
-              setCategoryId(value === "all" ? "" : value);
+              setCategory(e.target.value);
               setPage(1);
             }}
-            name="category"
-            id="category"
-            className="outline-none bg-[#ece8df] border text-md py-1/2 w-full"
+            className="border bg-[#ece8df]"
           >
             <option value="all">All</option>
             {categoriesData.map((c) => (
@@ -102,35 +74,33 @@ const BlogFilters = () => {
             ))}
           </select>
         </div>
-        <div className="flex flex-col gap-1 w-full">
-          <label className="text-md">Sort</label>
+
+        {/* SORT */}
+        <div className="flex flex-col w-full">
+          <label>Sort</label>
           <select
             value={sortFilter}
             onChange={(e) => {
               setSortFilter(e.target.value);
               setPage(1);
             }}
-            name="sort"
-            id="sort"
-            className="outline-none bg-[#ece8df] border text-md py-1/2 w-full"
+            className="border bg-[#ece8df]"
           >
             <option value="latest">Latest</option>
             <option value="oldest">Oldest</option>
           </select>
         </div>
-        <div className="flex flex-col gap-1 w-full">
-          <label className="text-md">Tags</label>
+
+        {/* TAGS */}
+        <div className="flex flex-col w-full">
+          <label>Tags</label>
           <select
-            value={tagsFilter}
+            value={tag}
             onChange={(e) => {
-              const value = e.target.value;
-              setTagsFilter(value);
-              setTags(value === "all" ? [] : [value]);
+              setTag(e.target.value);
               setPage(1);
             }}
-            name="tags"
-            id="tags"
-            className="outline-none border  bg-[#ece8df] text-md py-1/2 w-full"
+            className="border bg-[#ece8df]"
           >
             <option value="all">All</option>
             {tagsData.map((t) => (
@@ -141,12 +111,13 @@ const BlogFilters = () => {
           </select>
         </div>
 
-        <div className="flex items-center justify-center w-full">
+        {/* RESET */}
+        <div className="flex items-end">
           <button
-            onClick={() => handleReset()}
-            className="bg-red-600 cursor-pointer text-[12px] py-1 px-1 mt-7 transition-all hover:rounded-2xl md:mt-6 md:px-4 md:py-1 text-white hover:bg-red-700"
+            onClick={handleReset}
+            className="bg-red-600 text-white px-3 py-1"
           >
-            Reset filter
+            Reset
           </button>
         </div>
       </div>

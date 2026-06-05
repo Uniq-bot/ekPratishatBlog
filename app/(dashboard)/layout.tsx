@@ -16,7 +16,6 @@ const DashboardLayout = async ({
   }
 
   const payload = verifyToken(token);
-  console.log("payload", payload);
   if (!payload) {
     redirect("/login");
   }
@@ -25,13 +24,13 @@ const DashboardLayout = async ({
     where: {
       id: payload?.userId,
     },
+    select: { id: true, email: true, name: true },
   });
-  console.log("user", user);
   if (!user) {
     redirect("/login");
   }
 
-  return <AdminProvider>{children}</AdminProvider>;
+  return <AdminProvider user={user}>{children}</AdminProvider>;
 };
 
 export default DashboardLayout;

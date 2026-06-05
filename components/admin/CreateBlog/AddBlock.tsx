@@ -60,14 +60,14 @@ const AddBlock = ({ setBlocks, blockType, setBlockType, setLevel, setSetLevel, c
           <p>Content</p>
           {blockType === "paragraph" ? (
             <textarea
-              className="w-full h-20 outline-none p-2"
+              className="w-full  focus:border-b transition-all h-20 outline-none p-2"
               placeholder="Paragraph content..."
               value={content}
               onChange={(e) => setContent(e.target.value)}
             ></textarea>
           ) : blockType === "heading" ? (
             <input
-              className="w-full h-10 outline-none p-2"
+              className="w-full h-10 focus:border-b transition-all outline-none p-2"
               placeholder={`Heading ${setLevel} content...`}
               value={content}
               onChange={(e) => setContent(e.target.value)}
@@ -91,7 +91,7 @@ const AddBlock = ({ setBlocks, blockType, setBlockType, setLevel, setSetLevel, c
           )}
         </div>
         <button 
-          className="px-4 py-2 bg-white border shadow shadow-black mt-5"
+          className="px-4 py-2 hover:bg-gray-200 transition-all cursor-pointer bg-white border shadow shadow-black mt-5"
           onClick={handleAddBlock}
          >
           Add Block

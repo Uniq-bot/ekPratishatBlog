@@ -1,23 +1,17 @@
 "use client";
 import BlogDetailClient from "@/components/blog/BlogDetailClient";
 import RelatedBlogs from "@/components/blog/RelatedBlogs";
-import { useBlogs } from "@/context/BlogListContext";
-import Link from "next/link";
+import { useGetBlog } from "@/hooks/useBlogs";
 import { useParams, useRouter } from "next/navigation";
 
 const BlogDets = () => {
-  const { blogsData } = useBlogs();
-  const router=useRouter()
-  const { id } = useParams();
-  const blog = blogsData.find((b) => b.slug === id);
+  const router = useRouter();
+const { slug } = useParams();
+const { blog, isLoading } = useGetBlog(slug as string);
 
-  const relatedBlog = blogsData.filter((b) => {
-    const categoryMatch = b.category === blog?.category;
-    const tagMatch = b.tags.some((tag: any) => tag === blog?.tags);
-    const isSameBlog = b.id === blog?.id;
-    if (isSameBlog) return false;
-    return categoryMatch || tagMatch;
-  });
+if (isLoading || !blog) {
+  return <p>Loading...</p>;
+}
   return (
     <div className="w-full min-h-screen bg-[#F7F3EA] lg:p-10 py-5 flex flex-col items-start">
       <div>
@@ -56,15 +50,13 @@ const BlogDets = () => {
             >
               <path d="m9 18 6-6-6-6" />
             </svg>
-            <p>
-              {id}
-            </p>
+            <p>{slug}</p>
           </div>
         </button>
       </div>
       <div className="w-full flex flex-col md:flex-row justify-between px-4 md:px-20 py-6 gap-8">
         <BlogDetailClient blog={blog} />
-        <RelatedBlogs relatedBlogs={relatedBlog} />
+        <RelatedBlogs relatedBlogs={[]} />{" "}
       </div>
     </div>
   );

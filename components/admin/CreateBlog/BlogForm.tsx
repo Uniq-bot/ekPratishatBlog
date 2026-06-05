@@ -9,11 +9,11 @@ const BlogForm = ({blocks,setBlocks}:{blocks: any, setBlocks: React.Dispatch<Rea
            
           </div>
           <div className="w-full  p-2  flex flex-col gap-2">
-            {blocks.map((block: any, index:number) => {
+            {blocks?.map((block: any, index:number) => {
               switch (block.type) {
                 case "paragraph":
                   return (
-                    <div key={index} className="flex border justify-between p-2 gap-2 items-center">
+                    <div key={block.id} className="flex border justify-between p-2 gap-2 items-center">
                       <span className="flex items-center  gap-1 ">
                         <Pilcrow size={20} /> <p>Paragraph</p>
                       </span>
@@ -45,7 +45,7 @@ const BlogForm = ({blocks,setBlocks}:{blocks: any, setBlocks: React.Dispatch<Rea
                   );
                 case "heading":
                   return (
-                    <div className="flex w-full border justify-between p-2 gap-2 items-center">
+                    <div key={block.id} className="flex w-full border justify-between p-2 gap-2 items-center">
                       <span className="flex items-center gap-1 ">
                         <Type size={20} /> <p>Heading</p>
                       </span>
@@ -77,7 +77,7 @@ const BlogForm = ({blocks,setBlocks}:{blocks: any, setBlocks: React.Dispatch<Rea
                   );
                 case "list":
                   return (
-                    <div className="flex border justify-between items-center p-2 gap-2 items-start">
+                    <div key={block.id} className="flex border justify-between items-center p-2 gap-2 items-start">
                       <span className="flex items-center gap-1">
                         <List size={20} /> <p>List</p>
                       </span>

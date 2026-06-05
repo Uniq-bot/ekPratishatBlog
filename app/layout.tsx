@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { BlogDataProvider } from "@/context/BlogListContext";
-import NavBar from "@/components/blog/NavBar";
+import QueryProvider from "@/provider/QueryProvider";
 
 export const metadata: Metadata = {
   title: "Ek Pratishat | Blogs",
@@ -16,8 +16,11 @@ export default function RootLayout({
   return (
     <html lang="en" className=" w-full bg-[#F7F3EA] ">
       <body>
-        <BlogDataProvider>{children}</BlogDataProvider>
-        {/* {children} */}
+        <QueryProvider>
+            <BlogDataProvider>
+              {children}
+            </BlogDataProvider>
+        </QueryProvider>
       </body>
     </html>
   );
