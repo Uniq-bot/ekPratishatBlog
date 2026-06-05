@@ -68,23 +68,41 @@ export const getLatestBlogs = async (limit = 5) => {
     },
   });
 };
-export const createBlog = async ({ title, content, coverPage, published, authorID, categoryID, tags, slug }: { title: string; content: string; coverPage?: string; published: boolean; authorID: string; categoryID: string; tags?: string[]; slug: string }) => {
- const post=prisma.blogPost.create({
-       data: {
-         title,
-         content,
-         coverPage,
-         published,
-         authorID,
-         categoryID,
-         slug,
-         tags: {
-           connect: tags?.map((tag: string) => ({ name: tag })),
-         },
-       },
-     });
-    return post;
+export const createBlog = async (data: any) => {
+return prisma.blogPost.create({
+  data: {
+    title: data.title,
+    content: data.content,
+    coverPage: data.coverPage,
+
+    status: "PUBLISHED", 
+
+    slug: data.slug,
+
+    category: {
+      connect: { id: data.categoryId },
+    },
+
+    author: {
+      connect: { id: data.authorID },
+    },
+
+    tags: {
+  connectOrCreate: data.tags.map((t: any) => ({
+    where: {
+      name: typeof t === "string" ? t : t.name, 
+      slug: toSlug(typeof t === "string" ? t : t.name), 
+    },
+    create: {
+      name: typeof t === "string" ? t : t.name, 
+      slug: toSlug(typeof t === "string" ? t : t.name), 
+    },
+  })),
+},
+  },
+});
 };
+
 
 export const createCategory = async (name: string, description?: string) => {
   const slug = toSlug(name);

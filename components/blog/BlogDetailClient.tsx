@@ -10,14 +10,14 @@ const BlogDetailClient = ({ blog }: { blog: any }) => {
         </h1>
         <div className="w-full h-48 md:h-120 shadow-md shadow-black/50 overflow-hidden relative mt-3">
           <Image
-            src={blog?.image}
+            src={blog?.coverImage ?? "/logo.png"}
             alt="image"
             width={800}
             height={400}
             className="w-full h-full object-cover"
           />
           <span className="absolute top-0 right-0 text-white px-4 py-1 md:px-5 md:py-2 bg-black z-10">
-            {blog?.category}
+            {blog?.category?.name}
           </span>
         </div>
         <div className="w-full flex justify-between items-center">

@@ -2,22 +2,22 @@
 import React from "react";
 import Tags from "./Tags";
 import { Trash } from "lucide-react";
+import { useCreateCategory } from "@/hooks/useAdminBlogs";
 
-const Category = ({ setCategories, categories }: { setCategories: React.Dispatch<React.SetStateAction<string[]>>; categories: string[] }) => {
-  const [catValue, setCatValue] = React.useState("");
-
+const Category = ({ categories }: { categories: any[] }) => {
+  const [catName, setCatName] = React.useState("");
+  const {mutateAsync}=useCreateCategory();
   const handleAddCategory = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!catValue.trim()) return;
-
-    setCategories((prev) => [...prev, catValue.trim()]);
-    localStorage.setItem("categories", JSON.stringify([...categories, catValue.trim()]));
-    setCatValue("");
+    if (!catName.trim()) return;
+    mutateAsync({name:catName,description:""})
+    setCatName("");
   };
 
-  const handleDelete = (index: number) => {
-    setCategories((prev) => prev.filter((_, i) => i !== index));
-    localStorage.setItem("categories", JSON.stringify(categories.filter((_, i) => i !== index)));
+  const handleDelete = (index: number, e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    // setCategories((prev) => prev.filter((_, i) => i !== index));
+    // localStorage.setItem("categories", JSON.stringify(categories.filter((_, i) => i !== index)));
   };
 
   return (
@@ -40,8 +40,8 @@ const Category = ({ setCategories, categories }: { setCategories: React.Dispatch
         <input
           type="text"
           placeholder="category name"
-          value={catValue}
-          onChange={(e) => setCatValue(e.target.value)}
+          value={catName}
+          onChange={(e) => setCatName(e.target.value)}
           className="flex-1 bg-transparent outline-none border border-gray-400 px-2 py-1"
         />
 
@@ -60,13 +60,13 @@ const Category = ({ setCategories, categories }: { setCategories: React.Dispatch
             key={index}
             className="flex justify-between items-center border-b border-gray-400 py-2 px-1"
           >
-            <span className="font-medium">{category}</span>
+            <span className="font-medium">{category.name}</span>
 
             <div className="flex items-center gap-3 text-sm text-gray-600">
               <span>Total posts</span>
 
               <button
-                onClick={() => handleDelete(index)}
+                onClick={(e) => handleDelete(index, e)}
                 className="text-red-500 hover:text-red-700"
               >
                 <Trash />
