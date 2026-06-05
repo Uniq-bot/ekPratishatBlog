@@ -19,19 +19,19 @@ export const useCreateBlog = () => {
   });
 };
 export const useGetAdminBlogs = () => {
-  const { data } = useQuery({
+  return useQuery({
     queryKey: ["admin-blogs"],
     queryFn: () =>
       fetchBlogs({ page: 1, limit: 10, tags: [], category: "all" }),
   });
-  console.log("admin blig", data);
-  return { blogs: data };
+  
 };
 
 export const useEditableBlog = (id: string) => {
   const { data } = useQuery({
     queryKey: ["blog", id],
     queryFn: async () => {
+      console.log("fetching blog details for id:", id);
       const res = await fetch(`/api/edit/${id}`);
       if (!res.ok) throw new Error("Failed to fetch blog details");
       return res.json();

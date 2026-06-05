@@ -5,10 +5,13 @@ export async function GET(
   req: Request,
   { params }: { params: { id: string } }
 ) {
+  
+  console.log("API Called")
+  const param = await params;
   try {
  const blog = await prisma.blogPost.findFirst({
   where: {
-    id: params.id,
+    id: param.id,
   },
   include: {
     category: true,
