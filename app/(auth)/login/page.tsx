@@ -20,31 +20,22 @@ const Login = () => {
 
   
 
-  const handleSignIn = async (payload: {
-    email: string;
-    password: string;
-  }) => {
-    try {
-      setLoading(true);
-      setError(null);
+const handleSignIn = async (payload: {
+  email: string;
+  password: string;
+}) => {
+  try {
+    setLoading(true);
+    setError(null);
 
-      const res = await mutateAsync(payload);
-      const data = await res.json();
-
-      if (res.ok) {
-        router.push("/admin");
-        return;
-      }
-
-      // backend error message
-      setError(data.message || "Login failed");
-    } catch (err) {
-      setError("Network error. Try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
+    await mutateAsync(payload);
+    router.push("/admin");
+  } catch (err: any) {
+    setError(err?.message || "Network error. Try again.");
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <div className="flex w-full h-screen bg-[#F7F3EA]">
       <div className="w-[55%] h-screen flex items-center justify-center">
