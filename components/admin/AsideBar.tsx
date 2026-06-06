@@ -32,7 +32,7 @@ const AsideBar = ({
   ];
   return (
     <div className="w-1/5 h-screen z-10 border-r shadow-2xl shadow-gray-500 bg-[#EBECD8] fixed top-0 left-0 bottom-0">
-      <h1 onClick={()=>router.push("/")} className="w-full text-2xl font-bold p-3 pl-5 ">
+      <h1 onClick={()=>router.push("/")} className="w-full cursor-pointer text-2xl font-bold p-3 pl-5 ">
         Ekpratishat <br /> Real estate
       </h1>
       <div className="w-full h-full  py-10">
