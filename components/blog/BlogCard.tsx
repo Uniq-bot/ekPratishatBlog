@@ -23,7 +23,8 @@ const BlogCard = ({ blog }: { blog: any }) => {
       </div>
       <div className="py-1 flex flex-col items-start flex-1">
         <span className="text-sm mb-1 text-gray-600">
-          {blog?.createdAt} | {blog?.updatedAt}
+          {new Date(blog?.createdAt).toLocaleDateString()} |{" "}
+{new Date(blog?.updatedAt).toLocaleDateString()}
         </span>
         <div className="w-full h-full flex flex-col gap-2">
           <h1 className="text-2xl font-bold leading-none">{blog?.title}</h1>

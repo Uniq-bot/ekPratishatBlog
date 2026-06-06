@@ -14,7 +14,7 @@ export default function QueryProvider({
         defaultOptions: {
           queries: {
             staleTime: 1000 * 60, // 1 min cache freshness
-            refetchOnWindowFocus: false,
+            
           },
         },
       })

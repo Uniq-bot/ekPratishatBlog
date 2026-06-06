@@ -5,6 +5,7 @@ import loginBg from "@/public/login.png";
 import LoginComp from "@/components/auth/Login";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSignIn } from "@/hooks/useAdminAuth";
 
 const Login = () => {
   const router = useRouter();
@@ -15,15 +16,9 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const signIn = async (payload: { email: string; password: string }) => {
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+ const {mutateAsync}=useSignIn();
 
-    return res;
-  };
+  
 
   const handleSignIn = async (payload: {
     email: string;
@@ -33,11 +28,11 @@ const Login = () => {
       setLoading(true);
       setError(null);
 
-      const res = await signIn(payload);
+      const res = await mutateAsync(payload);
       const data = await res.json();
 
       if (res.ok) {
-        router.replace("/admin");
+        router.push("/admin");
         return;
       }
 

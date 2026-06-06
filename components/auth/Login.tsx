@@ -1,76 +1,39 @@
+"use client";
+
 import Image from "next/image";
+import loginBg from "@/public/login.png";
+import LoginComp from "@/components/auth/Login";
+import { useState } from "react";
+import { useSignIn } from "@/hooks/useAdminAuth";
 
-type Props = {
-  email: string;
-  password: string;
-  setEmail: (v: string) => void;
-  setPassword: (v: string) => void;
-  onSignIn: (payload: { email: string; password: string }) => void;
-  loading: boolean;
-  error: string | null;
-};
+const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-const LoginComp = ({
-  email,
-  password,
-  setEmail,
-  setPassword,
-  onSignIn,
-  loading,
-  error,
-}: Props) => {
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSignIn({ email, password });
+  const { mutate: signIn, isPending, error } = useSignIn();
+
+  const handleSignIn = (payload: { email: string; password: string }) => {
+    signIn(payload);
   };
 
   return (
-    <div className="w-1/2 h-[70%] mt-20 flex flex-col items-center">
-      <div>
-        <Image  src="/logo.png" alt="logo" width={120} height={120} style={{width:"auto", height:"auto"}} />
+    <div className="flex w-full h-screen bg-[#F7F3EA]">
+      <div className="w-[55%] h-screen flex items-center justify-center">
+        <LoginComp
+          email={email}
+          password={password}
+          setEmail={setEmail}
+          setPassword={setPassword}
+          onSignIn={handleSignIn}
+          loading={isPending}
+          error={error ? (error as Error).message : null}
+        />
       </div>
-      <form className="w-full mt-8" onSubmit={handleSubmit}>
-        <div>
-          <label className="mb-2 block">Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="border outline-none p-2 w-full mb-4"
-          />
-        </div>
-
-        <div>
-          <label className="mb-2 block">Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="border outline-none p-2 w-full mb-4"
-          />
-        </div>
-
-        {/* ERROR DISPLAY */}
-        {error && (
-          <p className="text-red-500 text-sm mb-3">
-            {error}
-          </p>
-        )}
-
-        <button
-          disabled={loading}
-          type="submit"
-          className={`w-full px-4 py-2 rounded-md text-white transition-all ${
-            loading
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-[#918D92] hover:bg-[#7a767b]"
-          }`}
-        >
-          {loading ? "Logging in..." : "Login"}
-        </button>
-      </form>
+      <div className="w-[45%] h-screen">
+        <Image src={loginBg} alt="Login Background" className="w-full h-full" />
+      </div>
     </div>
   );
 };
 
-export default LoginComp;
+export default Login;

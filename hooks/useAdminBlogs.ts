@@ -18,43 +18,43 @@ export const useCreateBlog = () => {
     },
   });
 };
+
 export const useGetAdminBlogs = () => {
   return useQuery({
     queryKey: ["admin-blogs"],
     queryFn: () =>
       fetchBlogs({ page: 1, limit: 10, tags: [], category: "all" }),
   });
-  
 };
 
 export const useEditableBlog = (id: string) => {
-  const { data } = useQuery({
+  return useQuery({
     queryKey: ["blog", id],
     queryFn: async () => {
-      console.log("fetching blog details for id:", id);
       const res = await fetch(`/api/edit/${id}`);
-      if (!res.ok) throw new Error("Failed to fetch blog details");
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch blog details");
+      }
+
       return res.json();
     },
-    enabled: !!id, // 🔥 important
+    enabled: !!id,
   });
-  return { blog: data };
 };
 
 export const useGetCategory = () => {
-  const { data } = useQuery({
+  return useQuery({
     queryKey: ["categories"],
     queryFn: fetchCategory,
   });
-  return { categories: data };
 };
 
 export const useGetTags = () => {
-  const { data } = useQuery({
+  return useQuery({
     queryKey: ["tags"],
     queryFn: fetchTags,
   });
-  return { tags: data };
 };
 
 export const useCreateTag = () => {

@@ -14,15 +14,11 @@ import { SetStateAction, useEffect, useState } from 'react';
 
 const AdminPanel  = () => {
   const {activeTab, setActiveTab, blocks, setBlocks, user}=useAdminUI();
-  const [isMount, setIsMount]=useState(false);
-  const {categories}=useGetCategory();
-  useEffect(()=>{
-    setIsMount(true);
-  },[])
+  const {data:categories}=useGetCategory();
 
-  const {tags}=useGetTags();
 
-  if(!isMount) return null;
+  const {data:tags}=useGetTags();
+
   console.log(activeTab)
   const tabComponents:any={
     "tag&category":<TagNCategory tags={tags} categories={categories} />,
