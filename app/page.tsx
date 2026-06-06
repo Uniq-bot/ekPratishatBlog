@@ -1,25 +1,8 @@
 import BlogClient from "@/components/blog/BlogClient";
-import { initialFetch, initialLatestFetch } from "@/data/initialFetch";
-import { QueryClient, dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
-export default async function BlogPage() {
-  const queryClient = new QueryClient();
-
-  await Promise.all([
-    queryClient.prefetchQuery({
-      // Key MUST exactly match what useBlogs uses: ["blogs", page, limit, tags, category]
-      queryKey: ["blogs", 1, 10, [], "all"],
-      queryFn: initialFetch,
-    }),
-    queryClient.prefetchQuery({
-      queryKey: ["latestBlogs"],
-      queryFn: initialLatestFetch,
-    }),
-  ]);
-
-  return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <BlogClient />
-    </HydrationBoundary>
-  );
+// No SSR prefetch — the shared QueryClient across layouts means hydrated data
+// gets "stuck" and refetchOnMount never fires on back-navigation.
+// BlogClient fetches client-side on every mount instead, which is correct behavior.
+export default function BlogPage() {
+  return <BlogClient />;
 }

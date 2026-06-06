@@ -7,7 +7,7 @@ type BlogItem = {
   id: string;
   title: string;
   slug?: string;
-  coverPage?: string;
+  coverImage?: string;
   image?: string;
   createdAt?: string;
 };
@@ -16,7 +16,7 @@ const normalizeBlog = (blog: BlogItem) => ({
   id: blog.id,
   title: blog.title ?? "",
   slug: blog.slug ?? blog.id,
-  coverPage: blog.coverPage ?? blog.image ?? "/logo.png",
+  coverImage: blog.coverImage ?? blog.image ?? "/logo.png",
   createdAt: blog.createdAt
     ? new Date(blog.createdAt).toLocaleDateString()
     : "",
@@ -48,7 +48,7 @@ const LatestBlogs = ({ latestBlogs = [] }: { latestBlogs?: BlogItem[] }) => {
                 className="flex gap-3 items-center cursor-pointer hover:bg-gray-100 p-2 rounded"
               >
                 <Image
-                  src={b.coverPage}
+                  src={b.coverImage}
                   alt={b.title}
                   width={60}
                   height={60}

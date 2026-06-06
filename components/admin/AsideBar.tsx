@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-
+import { useRouter } from "next/navigation";
 const AsideBar = ({
   activeTab,
   setActiveTab,
@@ -9,6 +9,7 @@ const AsideBar = ({
   setActiveTab: React.Dispatch<React.SetStateAction<string>>;
 }) => {
 
+  const router=useRouter()
   const handleClick = (id: number) => {
     setActiveTab(id === 1 ? "tag&category" : id === 2 ? "create-blog" : "manage-blogs");
   };
@@ -31,7 +32,7 @@ const AsideBar = ({
   ];
   return (
     <div className="w-1/5 h-screen z-10 border-r shadow-2xl shadow-gray-500 bg-[#EBECD8] fixed top-0 left-0 bottom-0">
-      <h1 className="w-full text-2xl font-bold p-3 pl-5 ">
+      <h1 onClick={()=>router.push("/")} className="w-full text-2xl font-bold p-3 pl-5 ">
         Ekpratishat <br /> Real estate
       </h1>
       <div className="w-full h-full  py-10">

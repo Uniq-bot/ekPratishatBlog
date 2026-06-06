@@ -13,25 +13,14 @@ export const signIn = async (payload: { email: string; password: string }) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
-
   const data = await res.json();
-
-  if (!res.ok) {
-    throw new Error(data.message || "Login failed");
-  }
-
+  if (!res.ok) throw new Error(data.message || "Login failed");
   return data;
 };
 
 export const signOut = async () => {
-  const res = await fetch(`${getBaseUrl()}/api/auth/logout`, {
-    method: "POST",
-  });
-
-  if (!res.ok) {
-    throw new Error("Logout failed");
-  }
-
+  const res = await fetch(`${getBaseUrl()}/api/auth/logout`, { method: "POST" });
+  if (!res.ok) throw new Error("Logout failed");
   return res.json();
 };
 
@@ -49,13 +38,10 @@ export const fetchBlogs = async ({
   category?: string;
 }) => {
   const queryParams = new URLSearchParams();
-  const offset = String((page - 1) * limit);
-  queryParams.set("offset", offset);
+  queryParams.set("offset", String((page - 1) * limit));
   queryParams.set("limit", String(limit));
-
   if (tags.length > 0) queryParams.set("tags", tags.join(","));
   if (category && category !== "all") queryParams.set("category", category);
-
   const res = await fetch(`${getBaseUrl()}/api/blogs?${queryParams.toString()}`);
   if (!res.ok) throw new Error("Failed to fetch blogs");
   return res.json();
@@ -67,7 +53,29 @@ export const createBlogs = async (newBlog: any) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(newBlog),
   });
-  if (!res.ok) throw new Error("Failed to create blog");
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || "Failed to create blog");
+  }
+  return res.json();
+};
+
+export const updateBlog = async ({ id, ...data }: any) => {
+  const res = await fetch(`${getBaseUrl()}/api/edit/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || "Failed to update blog");
+  }
+  return res.json();
+};
+
+export const deleteBlog = async (id: string) => {
+  const res = await fetch(`${getBaseUrl()}/api/edit/${id}`, { method: "DELETE" });
+  if (!res.ok) throw new Error("Failed to delete blog");
   return res.json();
 };
 
@@ -85,7 +93,16 @@ export const createCategory = async (newCat: any) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(newCat),
   });
-  if (!res.ok) throw new Error("Failed to create category");
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || "Failed to create category");
+  }
+  return res.json();
+};
+
+export const deleteCategory = async (id: string) => {
+  const res = await fetch(`${getBaseUrl()}/api/categories/${id}`, { method: "DELETE" });
+  if (!res.ok) throw new Error("Failed to delete category");
   return res.json();
 };
 
@@ -103,6 +120,15 @@ export const createTag = async (newTag: any) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(newTag),
   });
-  if (!res.ok) throw new Error("Failed to create tag");
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || "Failed to create tag");
+  }
+  return res.json();
+};
+
+export const deleteTag = async (id: string) => {
+  const res = await fetch(`${getBaseUrl()}/api/tags/${id}`, { method: "DELETE" });
+  if (!res.ok) throw new Error("Failed to delete tag");
   return res.json();
 };

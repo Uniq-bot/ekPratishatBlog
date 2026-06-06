@@ -21,21 +21,20 @@ export const getBlogByFilters = async ({
   tags: string[];
   searchQuery?: string;
 }) => {
-  const where = {
+  const where: any = {
+    status: "PUBLISHED",
     ...(category && { categoryID: category }),
     ...(tags.length > 0 && {
       tags: {
         some: {
-          name: {
-            in: tags,
-          },
+          name: { in: tags },
         },
       },
     }),
     ...(searchQuery && {
       OR: [
         { title: { contains: searchQuery, mode: "insensitive" as const } },
-        { content: { contains: searchQuery, mode: "insensitive" as const } },
+        { description: { contains: searchQuery, mode: "insensitive" as const } },
       ],
     }),
   };
@@ -43,10 +42,8 @@ export const getBlogByFilters = async ({
   const [posts, totalCount] = await Promise.all([
     prisma.blogPost.findMany({
       where,
-      include: {
-        tags: true,
-        category: true,
-      },
+      include: { tags: true, category: true },
+      orderBy: { createdAt: "desc" },
       skip: offset,
       take: limit,
     }),
@@ -58,90 +55,90 @@ export const getBlogByFilters = async ({
 
 export const getLatestBlogs = async (limit = 5) => {
   return prisma.blogPost.findMany({
+    where: { status: "PUBLISHED" },
     take: limit,
-    orderBy: {
-      createdAt: "desc",
-    },
-    include: {
-      category: true,
-      tags: true,
+    orderBy: { createdAt: "desc" },
+    include: { category: true, tags: true },
+  });
+};
+
+export const createBlog = async (data: any) => {
+  return prisma.blogPost.create({
+    data: {
+      title: data.title,
+      content: data.content,
+      coverImage: data.coverImage,
+      description: data.description,
+      status: "PUBLISHED",
+      slug: data.slug,
+      category: { connect: { id: data.categoryId } },
+      author: { connect: { id: data.authorID } },
+      tags: {
+        connectOrCreate: (data.tags ?? []).map((t: any) => ({
+          where: { name: typeof t === "string" ? t : t.name },
+          create: {
+            name: typeof t === "string" ? t : t.name,
+            slug: toSlug(typeof t === "string" ? t : t.name),
+          },
+        })),
+      },
     },
   });
 };
-export const createBlog = async (data: any) => {
-return prisma.blogPost.create({
-  data: {
-    title: data.title,
-    content: data.content,
-    coverPage: data.coverPage,
 
-    status: "PUBLISHED", 
-
-    slug: data.slug,
-
-    category: {
-      connect: { id: data.categoryId },
+export const updateBlog = async (id: string, data: any) => {
+  return prisma.blogPost.update({
+    where: { id },
+    data: {
+      title: data.title,
+      content: data.content,
+      description: data.description,
+      coverImage: data.coverImage,
+      slug: data.slug,
+      category: { connect: { id: data.categoryId } },
+      tags: {
+        set: [],
+        connectOrCreate: (data.tags ?? []).map((t: any) => ({
+          where: { name: typeof t === "string" ? t : t.name },
+          create: {
+            name: typeof t === "string" ? t : t.name,
+            slug: toSlug(typeof t === "string" ? t : t.name),
+          },
+        })),
+      },
     },
-
-    author: {
-      connect: { id: data.authorID },
-    },
-
-    tags: {
-  connectOrCreate: data.tags.map((t: any) => ({
-    where: {
-      name: typeof t === "string" ? t : t.name, 
-      slug: toSlug(typeof t === "string" ? t : t.name), 
-    },
-    create: {
-      name: typeof t === "string" ? t : t.name, 
-      slug: toSlug(typeof t === "string" ? t : t.name), 
-    },
-  })),
-},
-  },
-});
+    include: { category: true, tags: true },
+  });
 };
 
+export const deleteBlog = async (id: string) => {
+  return prisma.blogPost.delete({ where: { id } });
+};
 
 export const createCategory = async (name: string, description?: string) => {
   const slug = toSlug(name);
-  const category = await prisma.category.create({
-    data: {
-      name,
-      slug,
-      description: description?.trim() || null,
-    },
+  return prisma.category.create({
+    data: { name, slug, description: description?.trim() || null },
   });
-  return category;
 };
 
 export const getAllCategories = async () => {
-  const categories = await prisma.category.findMany({
-    orderBy: {
-      createdAt: 'desc',
-    },
-  });
-  return categories;
+  return prisma.category.findMany({ orderBy: { createdAt: "desc" } });
+};
+
+export const deleteCategory = async (id: string) => {
+  return prisma.category.delete({ where: { id } });
 };
 
 export const createTag = async (name: string) => {
   const slug = toSlug(name);
-  const tag = await prisma.tag.create({
-    data: {
-      name,
-      slug,
-    },
-  });
-  return tag;
+  return prisma.tag.create({ data: { name, slug } });
 };
 
 export const getAllTags = async () => {
-  const tags = await prisma.tag.findMany({
-    orderBy: {
-      createdAt: 'desc',
-    },
-  });
-  return tags;
+  return prisma.tag.findMany({ orderBy: { createdAt: "desc" } });
 };
 
+export const deleteTag = async (id: string) => {
+  return prisma.tag.delete({ where: { id } });
+};

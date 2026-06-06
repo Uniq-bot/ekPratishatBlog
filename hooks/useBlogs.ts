@@ -12,18 +12,13 @@ export const useBlogs = ({
   tags?: string[];
   category?: string;
 } = {}) => {
-  const { data, isLoading, error, isError } = useQuery({
+  const { data, isLoading, error, isError, isFetching } = useQuery({
     queryKey: ["blogs", page, limit, tags, category],
     queryFn: () => fetchBlogs({ page, limit, tags, category }),
-    staleTime: 1000 * 60 * 5, // 5 min cache
+    // staleTime/refetchOnMount inherited from QueryProvider defaults
   });
 
-  return {
-    blogs: data,
-    isLoading,
-    error,
-    isError,
-  };
+  return { blogs: data, isLoading: isLoading || isFetching, error, isError };
 };
 
 export const useLatestBlogs = () => {
@@ -34,9 +29,7 @@ export const useLatestBlogs = () => {
       if (!res.ok) throw new Error("Failed to fetch latest blogs");
       return res.json();
     },
-    staleTime: 1000 * 60 * 5,
   });
-
   return { latestBlogs: data, isLoading, error, isError };
 };
 
@@ -49,13 +42,6 @@ export const useGetBlog = (slug: string) => {
       return res.json();
     },
     enabled: !!slug,
-    staleTime: 1000 * 60 * 5,
   });
-
-  return {
-    blog: data?.data,
-    isLoading,
-    error,
-    isError,
-  };
+  return { blog: data?.data, isLoading, error, isError };
 };

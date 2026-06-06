@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
@@ -17,37 +12,28 @@ model User {
   email     String     @unique
   name      String?
   password  String
- 
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   posts     BlogPost[]
 }
+
 model BlogPost {
-  id          String   @id @default(cuid())
+  id          String     @id @default(cuid())
   title       String
-  slug        String   @unique
-
+  slug        String     @unique
+  description String?
   content     Json
-
   coverImage  String?
-
   status      PostStatus @default(DRAFT)
-
   authorID    String
-  author      User     @relation(fields: [authorID], references: [id])
-
+  author      User       @relation(fields: [authorID], references: [id])
   categoryID  String
-  category    Category @relation(fields: [categoryID], references: [id])
-
-  tags        Tag[]    @relation("PostTags")
-
-  viewCount   Int      @default(0)
-
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  blogViews BlogViews[]
-
+  category    Category   @relation(fields: [categoryID], references: [id])
+  tags        Tag[]      @relation("PostTags")
+  viewCount   Int        @default(0)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  blogViews   BlogViews[]
 }
 
 enum PostStatus {
@@ -55,32 +41,33 @@ enum PostStatus {
   PUBLISHED
   ARCHIVED
 }
+
 model BlogViews {
-  id          String   @id @default(cuid())
-  blogPostId  String
-  blogPost    BlogPost @relation(fields: [blogPostId], references: [id])
-  sessionId   String
-  createdAt   DateTime @default(now())
+  id         String   @id @default(cuid())
+  blogPostId String
+  blogPost   BlogPost @relation(fields: [blogPostId], references: [id])
+  sessionId  String
+  createdAt  DateTime @default(now())
+
   @@unique([blogPostId, sessionId])
   @@index([blogPostId])
 }
 
 model Category {
-  id   String @id @default(cuid())
-  name String @unique
-  slug String @unique
+  id          String     @id @default(cuid())
+  name        String     @unique
+  slug        String     @unique
   description String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  posts BlogPost[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  posts       BlogPost[]
 }
 
 model Tag {
-  id   String @id @default(cuid())
-  name String @unique
-  slug String @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt @default(now())
-
+  id        String     @id @default(cuid())
+  name      String     @unique
+  slug      String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt @default(now())
   blogPosts BlogPost[] @relation("PostTags")
 }
