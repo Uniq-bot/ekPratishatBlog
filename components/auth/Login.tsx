@@ -1,39 +1,62 @@
 "use client";
 
-import Image from "next/image";
-import loginBg from "@/public/login.png";
-import LoginComp from "@/components/auth/Login";
-import { useState } from "react";
-import { useSignIn } from "@/hooks/useAdminAuth";
+import React from "react";
 
-const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+interface LoginCompProps {
+  email: string;
+  password: string;
+  setEmail: (val: string) => void;
+  setPassword: (val: string) => void;
+  onSignIn: (payload: { email: string; password: string }) => void;
+  loading: boolean;
+  error: string | null;
+}
 
-  const { mutate: signIn, isPending, error } = useSignIn();
-
-  const handleSignIn = (payload: { email: string; password: string }) => {
-    signIn(payload);
-  };
-
+const LoginComp = ({
+  email,
+  password,
+  setEmail,
+  setPassword,
+  onSignIn,
+  loading,
+  error,
+}: LoginCompProps) => {
   return (
-    <div className="flex w-full h-screen bg-[#F7F3EA]">
-      <div className="w-[55%] h-screen flex items-center justify-center">
-        <LoginComp
-          email={email}
-          password={password}
-          setEmail={setEmail}
-          setPassword={setPassword}
-          onSignIn={handleSignIn}
-          loading={isPending}
-          error={error ? (error as Error).message : null}
+    <div className="w-full max-w-sm flex flex-col gap-6">
+      <h1 className="text-3xl font-bold text-neutral-800">Sign in</h1>
+
+      {error && (
+        <p className="text-sm text-red-500 bg-red-50 border border-red-200 px-4 py-2 rounded">
+          {error}
+        </p>
+      )}
+
+      <div className="flex flex-col gap-4">
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="border border-neutral-300 bg-white px-4 py-3 text-sm outline-none focus:border-neutral-600"
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="border border-neutral-300 bg-white px-4 py-3 text-sm outline-none focus:border-neutral-600"
         />
       </div>
-      <div className="w-[45%] h-screen">
-        <Image src={loginBg} alt="Login Background" className="w-full h-full" />
-      </div>
+
+      <button
+        onClick={() => onSignIn({ email, password })}
+        disabled={loading}
+        className="bg-neutral-800 text-white py-3 text-sm font-medium hover:bg-neutral-700 disabled:opacity-50 transition-colors"
+      >
+        {loading ? "Signing in..." : "Sign in"}
+      </button>
     </div>
   );
 };
 
-export default Login;
+export default LoginComp;

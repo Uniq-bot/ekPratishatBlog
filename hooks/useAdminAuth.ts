@@ -1,15 +1,11 @@
 import { signIn, signOut } from "@/libs/fetch";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-
+// hooks/useAdminAuth.ts
 export const useSignIn = () => {
-  const router = useRouter();
-
   return useMutation({
     mutationFn: signIn,
-    onSuccess: () => {
-      router.replace("/admin");
-    },
+    // ❌ remove onSuccess with router.replace here
   });
 };
 
