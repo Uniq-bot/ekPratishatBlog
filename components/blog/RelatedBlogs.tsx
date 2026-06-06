@@ -1,5 +1,6 @@
+"use client"
 import Image from 'next/image';
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useRouter } from "next/navigation";
 
 const RelatedBlogs = ({relatedBlogs}:{relatedBlogs:any}) => {
@@ -8,17 +9,7 @@ const RelatedBlogs = ({relatedBlogs}:{relatedBlogs:any}) => {
     const router=useRouter();
 
     // lock body scroll when mobile panel open
-    useEffect(() => {
-      const original = typeof document !== 'undefined' ? document.body.style.overflow : '';
-      if (isOpen) {
-        if (typeof document !== 'undefined') document.body.style.overflow = 'hidden';
-      } else {
-        if (typeof document !== 'undefined') document.body.style.overflow = original || '';
-      }
-      return () => {
-        if (typeof document !== 'undefined') document.body.style.overflow = original || '';
-      };
-    }, [isOpen]);
+   
 
   return (
      <div className="w-full md:w-[35%] h-full">
