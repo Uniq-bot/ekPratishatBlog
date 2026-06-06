@@ -30,7 +30,7 @@ const BlogDetailClient = ({ blog }: { blog: any }) => {
               ))}
           </div>
           <span className="text-gray-400 hidden lg:block mr-2 text-xs md:text-sm">
-            {blog?.createdAt}
+            {/* {blog?.createdAt} */}
           </span>
         </div>
       </div>
