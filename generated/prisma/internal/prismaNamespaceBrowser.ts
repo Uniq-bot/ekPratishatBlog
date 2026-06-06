@@ -90,6 +90,7 @@ export const BlogPostScalarFieldEnum = {
   id: 'id',
   title: 'title',
   slug: 'slug',
+  description: 'description',
   content: 'content',
   coverImage: 'coverImage',
   status: 'status',

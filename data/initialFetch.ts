@@ -11,7 +11,6 @@ export const initialFetch = async () => {
       }),
       prisma.blogPost.count({ where: { status: "PUBLISHED" } }),
     ]);
-
     return { posts: blogs, totalCount };
   } catch (err) {
     console.error("INITIAL FETCH ERROR:", err);
@@ -27,8 +26,6 @@ export const initialLatestFetch = async () => {
       take: 5,
       include: { tags: true, category: true },
     });
-
-    // Return { posts } — same shape as the API and useLatestBlogs expects
     return { posts: blogs };
   } catch (err) {
     console.error("INITIAL LATEST FETCH ERROR:", err);

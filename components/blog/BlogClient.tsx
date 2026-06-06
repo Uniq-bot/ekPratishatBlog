@@ -16,6 +16,8 @@ const BlogClient = () => {
     limit: 10,
     tags: tag !== "all" ? [tag] : [],
     category: category !== "all" ? category : "all",
+    // searchQuery would be passed here if the hook / API supported it
+    // For now the debounced value is ready when the API is extended
   });
 
   const { latestBlogs } = useLatestBlogs();
