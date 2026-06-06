@@ -1,5 +1,41 @@
+const getBaseUrl = () => {
+  if (typeof window === "undefined") {
+    return process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  }
+  return "";
+};
 
+// ─── Auth ────────────────────────────────────────────────────────────────────
 
+export const signIn = async (payload: { email: string; password: string }) => {
+  const res = await fetch(`${getBaseUrl()}/api/auth/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.message || "Login failed");
+  }
+
+  return data;
+};
+
+export const signOut = async () => {
+  const res = await fetch(`${getBaseUrl()}/api/auth/logout`, {
+    method: "POST",
+  });
+
+  if (!res.ok) {
+    throw new Error("Logout failed");
+  }
+
+  return res.json();
+};
+
+// ─── Blogs ───────────────────────────────────────────────────────────────────
 
 export const fetchBlogs = async ({
   page,
@@ -13,83 +49,60 @@ export const fetchBlogs = async ({
   category?: string;
 }) => {
   const queryParams = new URLSearchParams();
-
-  queryParams.set("page", String(page));
+  const offset = String((page - 1) * limit);
+  queryParams.set("offset", offset);
   queryParams.set("limit", String(limit));
 
-  if (tags.length > 0) {
-    queryParams.set("tags", tags.join(","));
-  }
+  if (tags.length > 0) queryParams.set("tags", tags.join(","));
+  if (category && category !== "all") queryParams.set("category", category);
 
-  if (category && category !== "all") {
-    queryParams.set("category", category);
-  }
-
-  const res = await fetch(`/api/blogs?${queryParams.toString()}`);
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch blogs");
-  }
-
+  const res = await fetch(`${getBaseUrl()}/api/blogs?${queryParams.toString()}`);
+  if (!res.ok) throw new Error("Failed to fetch blogs");
   return res.json();
 };
 
-export const fetchCategory= async()=>{
-  const res= await fetch("/api/categories")
-
-  if(!res.ok){
-    throw new Error("Failed to fetch categories")
-  }
+export const createBlogs = async (newBlog: any) => {
+  const res = await fetch(`${getBaseUrl()}/api/blogs`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(newBlog),
+  });
+  if (!res.ok) throw new Error("Failed to create blog");
   return res.json();
-}
+};
 
-export const createBlogs= async(newBlog: any)=>{
+// ─── Categories ──────────────────────────────────────────────────────────────
 
-    const res= await fetch("/api/blogs", {
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json"
-        },
-        body:JSON.stringify(newBlog)
-    })
-    console.log(res)
+export const fetchCategory = async () => {
+  const res = await fetch(`${getBaseUrl()}/api/categories`);
+  if (!res.ok) throw new Error("Failed to fetch categories");
+  return res.json();
+};
 
-    if(!res){
-        throw new Error("Failed to create blog");
-    }
+export const createCategory = async (newCat: any) => {
+  const res = await fetch(`${getBaseUrl()}/api/categories`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(newCat),
+  });
+  if (!res.ok) throw new Error("Failed to create category");
+  return res.json();
+};
 
-    return res.json();
-}
+// ─── Tags ────────────────────────────────────────────────────────────────────
 
-export const fetchTags= async()=>{
-    const res= await fetch("/api/tags")
-    if(!res.ok){
-        throw new Error("Failed to fetch tags")
-    }
-    return res.json();
-}
+export const fetchTags = async () => {
+  const res = await fetch(`${getBaseUrl()}/api/tags`);
+  if (!res.ok) throw new Error("Failed to fetch tags");
+  return res.json();
+};
 
-export const createTag= async(newTag:any)=>{
-  const res= await fetch("/api/tags", {
-      method:"POST",
-      headers:{
-          "Content-Type":"application/json"
-      },
-      body:JSON.stringify(newTag)
-  })
-  console.log(res)
- 
-}
-
-
-export const createCategory= async(newCat:any)=>{
-  const res= await fetch("/api/categories", {
-      method:"POST",
-      headers:{
-          "Content-Type":"application/json"
-      },
-      body:JSON.stringify(newCat)
-  })
-  console.log(res)
- 
-}
+export const createTag = async (newTag: any) => {
+  const res = await fetch(`${getBaseUrl()}/api/tags`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(newTag),
+  });
+  if (!res.ok) throw new Error("Failed to create tag");
+  return res.json();
+};

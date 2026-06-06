@@ -1,14 +1,21 @@
 import { fetchBlogs } from "@/libs/fetch";
 import { useQuery } from "@tanstack/react-query";
 
-export const useBlogs = () => {
+export const useBlogs = ({
+  page = 1,
+  limit = 10,
+  tags = [],
+  category = "all",
+}: {
+  page?: number;
+  limit?: number;
+  tags?: string[];
+  category?: string;
+} = {}) => {
   const { data, isLoading, error, isError } = useQuery({
-    queryKey: ["blogs"],
-    queryFn: () =>
-      fetchBlogs({ page: 1, limit: 10, tags: [], category: "all" }),
-    staleTime: 1000 * 60 * 5,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
+    queryKey: ["blogs", page, limit, tags, category],
+    queryFn: () => fetchBlogs({ page, limit, tags, category }),
+    staleTime: 1000 * 60 * 5, // 5 min cache
   });
 
   return {
@@ -24,19 +31,13 @@ export const useLatestBlogs = () => {
     queryKey: ["latestBlogs"],
     queryFn: async () => {
       const res = await fetch("/api/blogs/latest?limit=5");
-      if (!res.ok) {
-        throw new Error("Failed to fetch latest blogs");
-      }
+      if (!res.ok) throw new Error("Failed to fetch latest blogs");
       return res.json();
     },
-
+    staleTime: 1000 * 60 * 5,
   });
-  return {
-    latestBlogs:data,
-    isLoading,
-    error,
-    isError,
-  }
+
+  return { latestBlogs: data, isLoading, error, isError };
 };
 
 export const useGetBlog = (slug: string) => {
@@ -48,10 +49,11 @@ export const useGetBlog = (slug: string) => {
       return res.json();
     },
     enabled: !!slug,
+    staleTime: 1000 * 60 * 5,
   });
 
   return {
-    blog: data?.data, // 🔥 IMPORTANT FIX
+    blog: data?.data,
     isLoading,
     error,
     isError,

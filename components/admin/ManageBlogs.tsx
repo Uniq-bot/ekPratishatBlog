@@ -1,12 +1,17 @@
 import { useGetAdminBlogs } from "@/hooks/useAdminBlogs";
 import { Edit, Trash } from "lucide-react";
-import { redirect } from "next/navigation";
+import { redirect, RedirectType } from "next/navigation";
+import { TableSkeleton } from "../skeleton/TableSkeleton";
 
 const ManageBlogs = () => {
   const { data:blogs, isLoading } = useGetAdminBlogs();
   return (
     <div className="bg-white relative z-20  shadow overflow-hidden border">
-      <table className="w-full">
+     {
+      isLoading ? (
+       <TableSkeleton />
+      ):(
+         <table className="w-full">
         <thead className="bg-[#DBDBB8]">
           <tr>
             <th className="px-4 py-3 text-left">Id</th>
@@ -50,7 +55,7 @@ const ManageBlogs = () => {
 
               <td className="px-4 py-4">
                 <div className="flex justify-center gap-2">
-                  <button onClick={()=>redirect(`/admin/edit/${blog.id}`)} className="p-2  bg-white transition-all cursor-pointer  border hover:bg-gray-100">
+                  <button onClick={()=>redirect(`/admin/edit/${blog.id}`, RedirectType.push)} className="p-2  bg-white transition-all cursor-pointer  border hover:bg-gray-100">
                     <Edit size={18} />
                   </button>
                   <button className="p-2  border bg-white transition-all cursor-pointer hover:bg-red-500">
@@ -62,6 +67,8 @@ const ManageBlogs = () => {
           ))}
         </tbody>
       </table>
+      )
+     }
     </div>
   );
 };

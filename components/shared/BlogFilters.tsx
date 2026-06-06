@@ -1,7 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useBlogUi } from "@/context/BlogListContext";
+import { useQuery } from "@tanstack/react-query";
+import { fetchCategory, fetchTags } from "@/libs/fetch";
 
 const BlogFilters = () => {
   const {
@@ -16,17 +18,18 @@ const BlogFilters = () => {
     setPage,
   } = useBlogUi();
 
-  const [categoriesData, setCategoriesData] = useState<
-    { id: string; name: string }[]
-  >([]);
+  const { data: categoriesData = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: fetchCategory,
+    staleTime: 1000 * 60 * 10,
+  });
 
-  const [tagsData, setTagsData] = useState<
-    { id: string; name: string }[]
-  >([]);
+  const { data: tagsData = [] } = useQuery({
+    queryKey: ["tags"],
+    queryFn: fetchTags,
+    staleTime: 1000 * 60 * 10,
+  });
 
-  
-
-  /* ---------------- RESET ---------------- */
   const handleReset = () => {
     setSearchQuery("");
     setCategory("all");
@@ -67,7 +70,7 @@ const BlogFilters = () => {
             className="border bg-[#ece8df]"
           >
             <option value="all">All</option>
-            {categoriesData.map((c) => (
+            {categoriesData.map((c: any) => (
               <option key={c.id} value={c.id}>
                 {c.name}
               </option>
@@ -103,7 +106,7 @@ const BlogFilters = () => {
             className="border bg-[#ece8df]"
           >
             <option value="all">All</option>
-            {tagsData.map((t) => (
+            {tagsData.map((t: any) => (
               <option key={t.id} value={t.name}>
                 {t.name}
               </option>

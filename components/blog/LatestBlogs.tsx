@@ -38,7 +38,7 @@ const LatestBlogs = ({ latestBlogs = [] }: { latestBlogs?: BlogItem[] }) => {
         <p className="text-sm text-gray-500">No latest blogs found.</p>
       ) : (
         <div className="flex flex-col gap-3">
-          {latestBlogs.slice(0, 5).map((blog) => {
+          {latestBlogs.slice(0, 3).map((blog) => {
             const b = normalizeBlog(blog);
 
             return (
