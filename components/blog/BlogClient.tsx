@@ -6,20 +6,22 @@ import BlogFilters from "@/components/shared/BlogFilters";
 import { useBlogs, useLatestBlogs } from "@/hooks/useBlogs";
 import { useBlogUi } from "@/context/BlogListContext";
 import { useDebounce } from "@/hooks/useDebounce";
+import { useRouter } from "next/navigation";
 
 const BlogClient = () => {
+  
   const { tag, category, searchQuery, page, setPage } = useBlogUi();
   const debouncedSearch = useDebounce(searchQuery, 400);
-
+  const router=useRouter();
   const { blogs, isLoading } = useBlogs({
     page,
     limit: 10,
+    searchQuery: debouncedSearch ?? "",
     tags: tag !== "all" ? [tag] : [],
     category: category !== "all" ? category : "all",
-    // searchQuery would be passed here if the hook / API supported it
-    // For now the debounced value is ready when the API is extended
+ 
   });
-
+  console.log("blog", blogs)
   const { latestBlogs } = useLatestBlogs();
 
   return (
@@ -40,6 +42,9 @@ const BlogClient = () => {
       </div>
       <div className="lg:w-[35%] absolute lg:relative h-screen p-10">
         <LatestBlogs latestBlogs={latestBlogs?.posts ?? []} />
+        <button onClick={() => router.push("/admin")} className="mt-10 w-full bg-[#ece8df] border py-2">
+          Admin Page
+        </button>
       </div>
     </div>
   );

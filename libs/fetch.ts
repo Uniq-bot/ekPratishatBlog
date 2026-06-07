@@ -29,10 +29,12 @@ export const signOut = async () => {
 export const fetchBlogs = async ({
   page,
   limit,
+  searchQuery,
   tags = [],
   category,
 }: {
   page: number;
+  searchQuery:string;
   limit: number;
   tags?: string[];
   category?: string;
@@ -40,6 +42,7 @@ export const fetchBlogs = async ({
   const queryParams = new URLSearchParams();
   queryParams.set("offset", String((page - 1) * limit));
   queryParams.set("limit", String(limit));
+  if(searchQuery) queryParams.set("query", searchQuery);
   if (tags.length > 0) queryParams.set("tags", tags.join(","));
   if (category && category !== "all") queryParams.set("category", category);
   const res = await fetch(`${getBaseUrl()}/api/blogs?${queryParams.toString()}`);

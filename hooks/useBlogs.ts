@@ -4,18 +4,21 @@ import { useQuery } from "@tanstack/react-query";
 export const useBlogs = ({
   page = 1,
   limit = 10,
+  searchQuery,
   tags = [],
   category = "all",
 }: {
   page?: number;
+  searchQuery?:string;
   limit?: number;
   tags?: string[];
   category?: string;
 } = {}) => {
   const { data, isLoading, error, isError, isFetching } = useQuery({
-    queryKey: ["blogs", page, limit, tags, category],
-    queryFn: () => fetchBlogs({ page, limit, tags, category }),
-    // staleTime/refetchOnMount inherited from QueryProvider defaults
+    queryKey: ["blogs", page, limit, searchQuery, tags, category],
+    queryFn: () => fetchBlogs({ page, limit, searchQuery: searchQuery ?? "", tags, category }),
+    staleTime: 1000 * 60 * 5,
+    refetchOnMount:true
   });
 
   return { blogs: data, isLoading: isLoading || isFetching, error, isError };
