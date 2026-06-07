@@ -1,7 +1,7 @@
 "use client";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function QueryProvider({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
@@ -9,15 +9,24 @@ export default function QueryProvider({ children }: { children: React.ReactNode 
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 0,               // all queries stale immediately
-            gcTime: 1000 * 60 * 5,      // keep unused cache 5 min (was cacheTime)
-            refetchOnMount: "always",   // always refetch when a component mounts
-            refetchOnWindowFocus: false,
-            retry: 1,
+            staleTime: 0,
+            gcTime: 1000 * 60 * 5,
+            refetchOnMount: "always",
+            refetchOnWindowFocus: true,
           },
         },
       })
   );
+
+  useEffect(() => {
+    const handler = (e: PageTransitionEvent) => {
+      if (e.persisted) {
+        queryClient.invalidateQueries();
+      }
+    };
+    window.addEventListener("pageshow", handler);
+    return () => window.removeEventListener("pageshow", handler);
+  }, [queryClient]);
 
   return (
     <QueryClientProvider client={queryClient}>

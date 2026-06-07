@@ -35,20 +35,20 @@ const Tag = ({ tags }: { tags: any[] }) => {
 
       <form
         onSubmit={handleAddTags}
-        className="border border-dashed border-gray-500 p-3 flex items-center gap-3 bg-transparent"
+        className="border border-dashed flex flex-col lg:flex-row p-2 items-center gap-3 bg-transparent"
       >
         <input
           type="text"
           placeholder="Tag name"
           value={tagValue}
           onChange={(e) => setTagValue(e.target.value)}
-          className="flex-1 bg-transparent outline-none border border-gray-400 px-2 py-1"
+          className="flex-1  bg-transparent outline-none border border-gray-400 px-2 py-1"
           required
         />
         <button
           type="submit"
           disabled={isCreating}
-          className="bg-black text-white px-4 py-1 text-sm disabled:opacity-50"
+          className="bg-black w-full lg:w-auto text-white px-4 py-1 text-sm disabled:opacity-50"
         >
           {isCreating ? "Adding..." : "Add +"}
         </button>

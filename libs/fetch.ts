@@ -50,11 +50,11 @@ export const fetchBlogs = async ({
   return res.json();
 };
 
-export const createBlogs = async (newBlog: any) => {
+// ✅ Fixed createBlogs
+export const createBlogs = async (newBlog: FormData) => {
   const res = await fetch(`${getBaseUrl()}/api/blogs`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(newBlog),
+    body: newBlog,
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
@@ -63,11 +63,11 @@ export const createBlogs = async (newBlog: any) => {
   return res.json();
 };
 
-export const updateBlog = async ({ id, ...data }: any) => {
+// ✅ Fixed updateBlog
+export const updateBlog = async ({ id, formData }: { id: string; formData: FormData }) => {
   const res = await fetch(`${getBaseUrl()}/api/edit/${id}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
+    body: formData,
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
@@ -75,7 +75,6 @@ export const updateBlog = async ({ id, ...data }: any) => {
   }
   return res.json();
 };
-
 export const deleteBlog = async (id: string) => {
   const res = await fetch(`${getBaseUrl()}/api/edit/${id}`, { method: "DELETE" });
   if (!res.ok) throw new Error("Failed to delete blog");

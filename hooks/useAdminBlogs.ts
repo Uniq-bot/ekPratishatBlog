@@ -54,8 +54,7 @@ export const useDeleteBlog = () => {
 export const useGetAdminBlogs = () => {
   return useQuery({
     queryKey: ["admin-blogs"],
-    queryFn: () => fetchBlogs({ page: 1, limit: 100, tags: [], category: "all" }),
-    staleTime: 0,
+queryFn: () => fetchBlogs({ page: 1, limit: 100, tags: [], category: "all", searchQuery: "" }),    staleTime: 0,
   });
 };
 

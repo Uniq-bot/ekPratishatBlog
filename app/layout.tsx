@@ -15,6 +15,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className=" w-full bg-[#F7F3EA] ">
+          <head>
+        <meta httpEquiv="Cache-Control" content="no-store" />
+      </head>
       <body>
         <QueryProvider>
             <BlogDataProvider>

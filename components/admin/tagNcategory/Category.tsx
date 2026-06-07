@@ -39,7 +39,7 @@ const Category = ({ categories }: { categories: any[] }) => {
         onSubmit={handleAddCategory}
         className="border border-dashed border-gray-500 p-3 flex flex-col gap-2 bg-transparent"
       >
-        <div className="flex items-center gap-3">
+        <div className="flex items-center flex-col lg:flex-row gap-3">
           <input
             type="text"
             placeholder="Category name *"
@@ -48,6 +48,13 @@ const Category = ({ categories }: { categories: any[] }) => {
             className="flex-1 bg-transparent outline-none border border-gray-400 px-2 py-1"
             required
           />
+           <input
+          type="text"
+          placeholder="Description (optional)"
+          value={catDesc}
+          onChange={(e) => setCatDesc(e.target.value)}
+          className="bg-transparent w-full lg:hidden outline-none border border-gray-400 px-2 py-1 text-sm"
+        />
           <button
             type="submit"
             disabled={isCreating}
@@ -56,12 +63,12 @@ const Category = ({ categories }: { categories: any[] }) => {
             {isCreating ? "Adding..." : "Add +"}
           </button>
         </div>
-        <input
+         <input
           type="text"
           placeholder="Description (optional)"
           value={catDesc}
           onChange={(e) => setCatDesc(e.target.value)}
-          className="bg-transparent outline-none border border-gray-400 px-2 py-1 text-sm"
+          className="bg-transparent hidden lg:block outline-none border border-gray-400 px-2 py-1 text-sm"
         />
       </form>
 

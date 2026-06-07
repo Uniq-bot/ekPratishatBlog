@@ -30,25 +30,19 @@ const AdminPanel = () => {
   return (
     <div className="w-full relative bg-[#F7F3EA] min-h-screen flex">
       <AsideBar activeTab={activeTab} setActiveTab={setActiveTab} />
-      <div className="w-[80%] p-5 h-screen overflow-y-auto absolute right-0 bg-[#F7F3EA]">
+
+      {/* Content area: full width on mobile, offset by sidebar width on desktop */}
+      <div className="w-full lg:ml-2 p-4 lg:p-5 min-h-screen overflow-y-auto bg-[#F7F3EA]">
         {/* Background logo watermark */}
         <div className="w-full h-full absolute top-0 right-0 left-0 bottom-0 flex items-center justify-center opacity-10 pointer-events-none">
           <Image src="/logo.png" alt="logo" width={500} height={400} className="object-contain" />
         </div>
-        <div className="relative z-10">
+        <div className="relative z-10 pt-14 lg:pt-0">
           {tabComponents[activeTab] ?? null}
         </div>
       </div>
     </div>
   );
 };
-
-// const AdminPanel = () => {
-//   return(
-//     <p>
-//       Admin page this is just for testing purpose, actual admin panel is in /admin folder
-//     </p>
-//   )
-// }
 
 export default AdminPanel;

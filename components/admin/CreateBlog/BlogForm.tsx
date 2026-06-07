@@ -96,15 +96,15 @@ const BlogForm = ({
   };
 
   return (
-    <div className="w-full p-2 flex border border-dashed flex-col gap-2 my-5">
-      <div className="w-full flex items-center justify-between">
-        <label className="text-sm font-medium text-gray-700">
+    <div className="w-full p-2 lg:p-3 flex border border-dashed flex-col gap-2 my-3 lg:my-5">
+      <div className="w-full flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1 sm:gap-0">
+        <label className="text-xs lg:text-sm font-medium text-gray-700">
           Content Blocks
         </label>
         <span className="text-xs text-gray-400">{blocks.length} block{blocks.length !== 1 ? "s" : ""} -- drag to reorder</span>
       </div>
 
-      <div className="w-full flex flex-col gap-2">
+      <div className="w-full flex flex-col gap-2 lg:gap-3">
         {blocks?.map((block, index) => (
           <div
             key={block.id}
@@ -112,27 +112,27 @@ const BlogForm = ({
             onDragStart={(e) => handleDragStart(e, index)}
             onDragOver={(e) => handleDragOver(e, index)}
             onDrop={handleDrop}
-            className="flex border justify-between p-2 gap-2 items-start bg-white hover:border-gray-400 transition-colors"
+            className="flex border justify-between p-2 gap-2 lg:gap-3 items-start bg-white hover:border-gray-400 transition-colors flex-col sm:flex-row"
           >
             <div
-              className="shrink-0 cursor-grab active:cursor-grabbing mt-1 text-gray-300 hover:text-gray-500"
+              className="shrink-0 cursor-grab active:cursor-grabbing mt-1 text-gray-300 hover:text-gray-500 hidden sm:block"
               title="Drag to reorder"
             >
               <GripVertical size={16} />
             </div>
 
             {/* Block icon + label */}
-            <span className="flex items-center gap-1 mt-1 w-24 shrink-0">
+            <span className="flex items-center gap-1 mt-1 w-auto sm:w-24 shrink-0 text-xs lg:text-sm">
               <BlockIcon type={block.type} />
               <p className="text-xs capitalize text-gray-600">
                 {block.type === "heading" ? `H${block.level ?? 1}` : block.type}
               </p>
             </span>
 
-            <div className="flex-1">
+            <div className="flex-1 w-full">
               {block.type === "paragraph" && (
                 <textarea
-                  className="w-full min-h-[5rem] outline-none p-2 border text-sm resize-y"
+                  className="w-full min-h-[4rem] lg:min-h-[5rem] outline-none p-2 border text-xs lg:text-sm resize-y"
                   placeholder="Paragraph content..."
                   value={block.content ?? ""}
                   onChange={(e) => updateBlock(block.id, { content: e.target.value })}
@@ -154,7 +154,7 @@ const BlogForm = ({
                     ))}
                   </div>
                   <input
-                    className="w-full outline-none p-2 border text-sm"
+                    className="w-full outline-none p-2 border text-xs lg:text-sm"
                     placeholder={`Heading ${block.level ?? 1} content...`}
                     value={block.content ?? ""}
                     onChange={(e) => updateBlock(block.id, { content: e.target.value })}
@@ -162,23 +162,16 @@ const BlogForm = ({
                 </div>
               )}
 
-              {block.type === "image" && (
-                <input
-                  className="w-full outline-none p-2 border text-sm"
-                  placeholder="Image URL..."
-                  value={block.content ?? ""}
-                  onChange={(e) => updateBlock(block.id, { content: e.target.value })}
-                />
-              )}
+
 
               {block.type === "list" && (
                 <div className="flex flex-col gap-1">
                   {(Array.isArray(block.content) ? block.content : []).map(
                     (item: string, i: number) => (
                       <div key={i} className="flex gap-1 items-center">
-                        <span className="text-gray-400 text-xs">{i + 1}.</span>
+                        <span className="text-gray-400 text-xs shrink-0">{i + 1}.</span>
                         <input
-                          className="flex-1 outline-none p-1 border text-sm"
+                          className="flex-1 outline-none p-1 border text-xs lg:text-sm"
                           value={item}
                           placeholder={`List item ${i + 1}`}
                           onChange={(e) => updateListItem(block.id, i, e.target.value)}
@@ -186,7 +179,7 @@ const BlogForm = ({
                         <button
                           type="button"
                           onClick={() => removeListItem(block.id, i)}
-                          className="text-gray-400 hover:text-red-500 px-1"
+                          className="text-gray-400 hover:text-red-500 px-1 shrink-0"
                         >
                           ×
                         </button>
