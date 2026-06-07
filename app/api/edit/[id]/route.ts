@@ -1,5 +1,6 @@
 import { prisma } from "@/libs/prisma";
-import { updateBlog } from "@/services/blogs.services";
+import { writeFile, mkdir } from "fs/promises";
+import { join } from "path";
 import { NextResponse } from "next/server";
 
 type RouteContext = { params: Promise<{ id: string }> };
@@ -23,14 +24,52 @@ export async function GET(_req: Request, { params }: RouteContext) {
 export async function PUT(req: Request, { params }: RouteContext) {
   const { id } = await params;
   try {
-    const body = await req.json();
-    const { title, content, coverImage, description, categoryId, tags, slug } = body;
+    const formData = await req.formData();
 
-    if (!title || !content || !categoryId) {
-      return NextResponse.json({ message: "Title, content and category are required" }, { status: 400 });
+    const title       = formData.get("title") as string;
+    const contentRaw  = formData.get("content") as string;
+    const description = formData.get("description") as string;
+    const categoryId  = formData.get("categoryId") as string;
+    const tagsRaw     = formData.get("tags") as string;
+    const imageFile   = formData.get("coverImage") as File | null;
+
+    const content = contentRaw ? JSON.parse(contentRaw) : [];
+    const tags: string[] = tagsRaw
+      ? JSON.parse(tagsRaw).map((t: any) => (typeof t === "string" ? t : t.id))
+      : [];
+
+    if (!title || !categoryId) {
+      return NextResponse.json({ message: "Title and category are required" }, { status: 400 });
     }
 
-    const updated = await updateBlog(id, { title, content, coverImage, description, categoryId, tags: tags ?? [], slug });
+    // Save new image only if a new file was uploaded
+    let coverImagePath: string | undefined = undefined;
+    if (imageFile && imageFile.size > 0) {
+      const uploadDir = join(process.cwd(), "public", "uploads");
+      await mkdir(uploadDir, { recursive: true });
+      const bytes = await imageFile.arrayBuffer();
+      const ext = imageFile.name.split(".").pop();
+      const filename = `cover-${Date.now()}.${ext}`;
+      await writeFile(join(uploadDir, filename), Buffer.from(bytes));
+      coverImagePath = `/uploads/${filename}`;
+    }
+
+  const updated = await prisma.blogPost.update({
+  where: { id },
+  data: {
+    title,
+    description,
+    content,
+    category: {
+      connect: { id: categoryId }, // ✅ not categoryId directly
+    },
+    ...(coverImagePath && { coverImage: coverImagePath }),
+    tags: {
+      set: tags.map((tagId: string) => ({ id: tagId })),
+    },
+  },
+  include: { category: true, tags: true },
+});
     return NextResponse.json({ message: "Blog updated successfully", data: updated }, { status: 200 });
   } catch (err: any) {
     console.error("UPDATE BLOG ERROR:", err);

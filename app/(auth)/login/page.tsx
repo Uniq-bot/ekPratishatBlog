@@ -37,8 +37,8 @@ const handleSignIn = async (payload: {
   }
 };
   return (
-    <div className="flex w-full h-screen bg-[#F7F3EA]">
-      <div className="w-[55%] h-screen flex items-center justify-center">
+    <div className="flex flex-col lg:flex-row w-full min-h-screen bg-[#F7F3EA]">
+      <div className="w-full lg:w-[55%] min-h-screen flex items-center justify-center py-8 lg:py-0 px-4 sm:px-6">
         <LoginComp
           email={email}
           password={password}
@@ -50,8 +50,8 @@ const handleSignIn = async (payload: {
         />
       </div>
 
-      <div className="w-[45%] h-screen">
-        <Image src={loginBg} alt="Login Background" className="w-full h-full" />
+      <div className="hidden lg:flex lg:w-[45%] min-h-screen">
+        <Image src={loginBg} alt="Login Background" className="w-full h-full object-cover" />
       </div>
     </div>
   );

@@ -2,17 +2,45 @@ import { prisma } from "@/libs/prisma";
 import { createBlog, getBlogByFilters } from "@/services/blogs.services";
 import { NextResponse } from "next/server";
 
+import { writeFile, mkdir } from "fs/promises";
+import { join } from "path";
+
+
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const { title, content, coverImage, description, published, authorID, categoryId, tags } = body;
+    const formData = await req.formData();
 
+    const title       = formData.get("title") as string;
+    const content     = formData.get("content") as string;
+    const description = formData.get("description") as string;
+    const authorID    = formData.get("authorID") as string;
+    const categoryId  = formData.get("categoryId") as string;
+    const tagsRaw     = formData.get("tags") as string;
+    const imageFile   = formData.get("coverImage") as File | null;
+
+    const tags = tagsRaw ? JSON.parse(tagsRaw) : [];
+    console.log(imageFile)
     if (!title || !content || !categoryId) {
       return NextResponse.json({ message: "Title, content and category are required" }, { status: 400 });
     }
-
     if (!authorID) {
       return NextResponse.json({ message: "Author ID is required" }, { status: 400 });
+    }
+
+    let coverImagePath: string | null = null;
+    if (imageFile && imageFile.size > 0) {
+      const uploadDir = join(process.cwd(), "public", "uploads");
+      await mkdir(uploadDir, { recursive: true }); 
+
+      const bytes = await imageFile.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+
+      const ext = imageFile.name.split(".").pop();
+      const filename = `cover-${Date.now()}.${ext}`;
+      const filepath = join(uploadDir, filename);
+
+      await writeFile(filepath, buffer);
+      coverImagePath = `/uploads/${filename}`;
     }
 
     const generatedSlug = `${title
@@ -23,12 +51,12 @@ export async function POST(req: Request) {
     const post = await createBlog({
       title,
       content,
-      coverImage,
+      coverImage: coverImagePath,
       description,
       status: "PUBLISHED",
       authorID,
       categoryId,
-      tags: tags ?? [],
+      tags,
       slug: generatedSlug,
     });
 
@@ -36,7 +64,7 @@ export async function POST(req: Request) {
   } catch (err: any) {
     console.error("CREATE BLOG ERROR:", err);
     return NextResponse.json(
-      { message: "Internal server error on creation of post", error: err?.message ?? String(err) },
+      { message: "Internal server error", error: err?.message ?? String(err) },
       { status: 500 }
     );
   }
