@@ -43,4 +43,12 @@ const AdminPanel = () => {
   );
 };
 
+// const AdminPanel = () => {
+//   return(
+//     <p>
+//       Admin page this is just for testing purpose, actual admin panel is in /admin folder
+//     </p>
+//   )
+// }
+
 export default AdminPanel;

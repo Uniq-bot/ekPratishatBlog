@@ -101,7 +101,7 @@ const BlogForm = ({
         <label className="text-sm font-medium text-gray-700">
           Content Blocks
         </label>
-        <span className="text-xs text-gray-400">{blocks.length} block{blocks.length !== 1 ? "s" : ""} — drag to reorder</span>
+        <span className="text-xs text-gray-400">{blocks.length} block{blocks.length !== 1 ? "s" : ""} -- drag to reorder</span>
       </div>
 
       <div className="w-full flex flex-col gap-2">
@@ -114,7 +114,6 @@ const BlogForm = ({
             onDrop={handleDrop}
             className="flex border justify-between p-2 gap-2 items-start bg-white hover:border-gray-400 transition-colors"
           >
-            {/* Drag handle */}
             <div
               className="shrink-0 cursor-grab active:cursor-grabbing mt-1 text-gray-300 hover:text-gray-500"
               title="Drag to reorder"

@@ -3,7 +3,7 @@ import React from 'react'
 
 const PreviewBlog = ({blocks}:{blocks: any[]}) => {
   return (
-    <div className="w-full border h-1/2 bg-[#EBECD8]/50 py-5">
+    <div className="w-full border min-h-1/2 bg-[#EBECD8]/50 py-5">
         <p className="text-md border-r border border-l-0 bg-[#DBDBB8] w-fit  px-10 py-2">
             Preview of Blog Post
         </p>
