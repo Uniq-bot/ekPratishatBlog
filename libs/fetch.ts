@@ -50,7 +50,6 @@ export const fetchBlogs = async ({
   return res.json();
 };
 
-// ✅ Fixed createBlogs
 export const createBlogs = async (newBlog: FormData) => {
   const res = await fetch(`${getBaseUrl()}/api/blogs`, {
     method: "POST",
