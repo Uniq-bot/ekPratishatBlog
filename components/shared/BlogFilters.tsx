@@ -5,7 +5,7 @@ import { useBlogUi } from "@/context/BlogListContext";
 import { useQuery } from "@tanstack/react-query";
 import { fetchCategory, fetchTags } from "@/libs/fetch";
 
-const BlogFilters = ({ initialCategories, initialTags }: { initialCategories: any; initialTags: any }) => {
+const BlogFilters = () => {
   const {
     tag,
     setTag,
@@ -22,14 +22,12 @@ const BlogFilters = ({ initialCategories, initialTags }: { initialCategories: an
     queryKey: ["categories"],
     queryFn: fetchCategory,
     staleTime: 1000 * 60 * 10,
-    initialData: initialCategories?.categories ?? [],
   });
 
   const { data: tagsData = [] } = useQuery({
     queryKey: ["tags"],
     queryFn: fetchTags,
     staleTime: 1000 * 60 * 10,
-    initialData: initialTags?.tags ?? [],
   });
 
   const handleReset = () => {

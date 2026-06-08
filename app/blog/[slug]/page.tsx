@@ -3,9 +3,15 @@ import RelatedBlogs from "@/components/blog/RelatedBlogs";
 import { prisma } from "@/libs/prisma";
 import { notFound } from "next/navigation";
 import BackButton from "@/components/blog/BackButton";
-import { getBlogDetails } from "@/data/getBlogDet";
 
-
+// Fetch directly from DB on the server — no API round-trip, works on any host
+async function getBlog(slug: string) {
+  const blog = await prisma.blogPost.findFirst({
+    where: { slug },
+    include: { category: true, tags: true },
+  });
+  return blog;
+}
 
 export default async function BlogDets({
   params,
@@ -13,7 +19,7 @@ export default async function BlogDets({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const blog = await getBlogDetails(slug);
+  const blog = await getBlog(slug);
 
   if (!blog) {
     notFound();

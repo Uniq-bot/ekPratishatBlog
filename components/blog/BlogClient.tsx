@@ -6,19 +6,9 @@ import BlogFilters from "@/components/shared/BlogFilters";
 import { useBlogs, useLatestBlogs } from "@/hooks/useBlogs";
 import { useBlogUi } from "@/context/BlogListContext";
 import { useDebounce } from "@/hooks/useDebounce";
-import AsideAds from "../ads/AsideAds";
 
-const BlogClient = ({
-  initialBlogs,
-  initialLatestBlogs,
-  initialCategories,
-  initialTags,
-}: {
-  initialBlogs: any;
-  initialLatestBlogs: any;
-  initialCategories: any;
-  initialTags: any;
-}) => {
+const BlogClient = () => {
+  
   const { tag, category, searchQuery, page, setPage } = useBlogUi();
   const debouncedSearch = useDebounce(searchQuery, 400);
   const { blogs, isLoading } = useBlogs({
@@ -27,20 +17,17 @@ const BlogClient = ({
     searchQuery: debouncedSearch ?? "",
     tags: tag !== "all" ? [tag] : [],
     category: category !== "all" ? category : "all",
-    initialData:
-      page === 1 && !debouncedSearch && tag === "all" && category === "all"
-        ? initialBlogs
-        : undefined,
+ 
   });
-  console.log("blog", blogs);
-  const { latestBlogs } = useLatestBlogs({ initialLatestBlogs });
+  console.log("blog", blogs)
+  const { latestBlogs } = useLatestBlogs();
 
   return (
     <div className="w-full min-h-screen flex bg-[#F7F3EA] md:pl-30 md:pr-20">
       <div className="lg:w-[65%] min-h-screen relative lg:p-10 flex flex-col">
         <BlogHero />
         <div className="lg:mb-10 relative lg:top-10 z-10 top-30 pb-10 w-[90%] m-auto h-full flex flex-col gap-10">
-          <BlogFilters initialCategories={initialCategories} initialTags={initialTags} />
+          <BlogFilters />
           <BlogListClient
             blogs={blogs?.posts ?? []}
             isLoading={isLoading}
@@ -51,9 +38,9 @@ const BlogClient = ({
           />
         </div>
       </div>
-      <div className="lg:w-[35%] hidden md:flex flex-col gap-40 absolute lg:relative h-screen p-10">
+      <div className="lg:w-[35%] hidden md:block absolute lg:relative h-screen p-10">
         <LatestBlogs latestBlogs={latestBlogs?.posts ?? []} />
-        <AsideAds />
+       
       </div>
     </div>
   );
