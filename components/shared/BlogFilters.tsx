@@ -5,19 +5,27 @@ import { useBlogUi } from "@/context/BlogListContext";
 import { useQuery } from "@tanstack/react-query";
 import { fetchCategory, fetchTags } from "@/libs/fetch";
 
-const BlogFilters = () => {
-  const {
-    tag,
-    setTag,
-    category,
-    setCategory,
-    searchQuery,
-    setSearchQuery,
-    sortFilter,
-    setSortFilter,
-    setPage,
-  } = useBlogUi();
-
+const BlogFilters = ({
+  tag,
+  setTag,
+  category,
+  setCategory,
+  searchQuery,
+  setSearchQuery,
+  sortFilter,
+  setSortFilter,
+  setPage,
+}: {
+  tag: string;
+  setTag: React.Dispatch<React.SetStateAction<string>>;
+  category: string;
+  setCategory: React.Dispatch<React.SetStateAction<string>>;
+  searchQuery: string;
+  setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
+  sortFilter: string;
+  setSortFilter: React.Dispatch<React.SetStateAction<string>>;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
+}) => {
   const { data: categoriesData = [] } = useQuery({
     queryKey: ["categories"],
     queryFn: fetchCategory,
@@ -40,7 +48,6 @@ const BlogFilters = () => {
 
   return (
     <div className="w-full bg-[#F7F3EA] border-b border-l border-gray-400 py-3 px-5 flex flex-col gap-4">
-
       {/* SEARCH */}
       <div className="flex flex-col gap-2">
         <label>Search</label>
@@ -57,7 +64,6 @@ const BlogFilters = () => {
 
       {/* FILTERS */}
       <div className="flex justify-between gap-4">
-
         {/* CATEGORY */}
         <div className="flex flex-col w-full">
           <label>Category</label>

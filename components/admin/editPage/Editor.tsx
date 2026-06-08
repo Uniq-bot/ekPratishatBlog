@@ -8,6 +8,7 @@ import {
 } from "@/hooks/useAdminBlogs";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const Editor = ({ id }: { id: string }) => {
   const router = useRouter();
@@ -15,6 +16,14 @@ const Editor = ({ id }: { id: string }) => {
   const { data: tags } = useGetTags();
   const { data: categories } = useGetCategory();
   const { data: blog, isLoading } = useEditableBlog(id);
+
+  // Clear shared blocks when leaving the edit page so the
+  // Create Blog tab always starts empty
+  useEffect(() => {
+    return () => {
+      setBlocks([]);
+    };
+  }, [setBlocks]);
 
   return (
     <div className="w-full min-h-screen px-3 sm:px-6 lg:px-10 relative py-6 lg:py-10 flex items-start flex-col">

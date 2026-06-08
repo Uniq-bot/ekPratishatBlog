@@ -7,9 +7,25 @@ import { useBlogs, useLatestBlogs } from "@/hooks/useBlogs";
 import { useBlogUi } from "@/context/BlogListContext";
 import { useDebounce } from "@/hooks/useDebounce";
 
-const BlogClient = () => {
-  
-  const { tag, category, searchQuery, page, setPage } = useBlogUi();
+const BlogClient = ({
+  initialBlogs,
+  latestBlogs,
+}: {
+  initialBlogs: { posts: any[]; totalCount: number };
+  latestBlogs: { posts: any[] };
+}) => {
+  const {
+    tag,
+    setTag,
+    category,
+    setCategory,
+    searchQuery,
+    setSearchQuery,
+    sortFilter,
+    page,
+    setSortFilter,
+    setPage,
+  } = useBlogUi();
   const debouncedSearch = useDebounce(searchQuery, 400);
   const { blogs, isLoading } = useBlogs({
     page,
@@ -17,17 +33,27 @@ const BlogClient = () => {
     searchQuery: debouncedSearch ?? "",
     tags: tag !== "all" ? [tag] : [],
     category: category !== "all" ? category : "all",
- 
+    initialData: initialBlogs,
   });
-  console.log("blog", blogs)
-  const { latestBlogs } = useLatestBlogs();
+  console.log("blog", blogs);
+  const { latestBlogss } = useLatestBlogs({ initialData: latestBlogs });
 
   return (
     <div className="w-full min-h-screen flex bg-[#F7F3EA] md:pl-30 md:pr-20">
       <div className="lg:w-[65%] min-h-screen relative lg:p-10 flex flex-col">
         <BlogHero />
         <div className="lg:mb-10 relative lg:top-10 z-10 top-30 pb-10 w-[90%] m-auto h-full flex flex-col gap-10">
-          <BlogFilters />
+          <BlogFilters
+            tag={tag}
+            setTag={setTag}
+            category={category}
+            setCategory={setCategory}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            sortFilter={sortFilter}
+            setSortFilter={setSortFilter}
+            setPage={setPage}
+          />
           <BlogListClient
             blogs={blogs?.posts ?? []}
             isLoading={isLoading}
@@ -39,8 +65,7 @@ const BlogClient = () => {
         </div>
       </div>
       <div className="lg:w-[35%] hidden md:block absolute lg:relative h-screen p-10">
-        <LatestBlogs latestBlogs={latestBlogs?.posts ?? []} />
-       
+        <LatestBlogs latestBlogs={latestBlogss?.posts ?? []} />
       </div>
     </div>
   );
