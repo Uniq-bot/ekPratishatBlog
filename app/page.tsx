@@ -1,8 +1,19 @@
 import BlogClient from "@/components/blog/BlogClient";
+import { BlogDataProvider } from "@/context/BlogListContext";
+import { initialFetch, initialLatestFetch } from "@/data/initialFetch";
 
-// No SSR prefetch — the shared QueryClient across layouts means hydrated data
-// gets "stuck" and refetchOnMount never fires on back-navigation.
-// BlogClient fetches client-side on every mount instead, which is correct behavior.
-export default function BlogPage() {
-  return <BlogClient />;
+
+
+export default async function BlogPage() {
+  const initialBlogs = await initialFetch();
+  const latestBlogs = await initialLatestFetch();
+
+  return (
+    <BlogDataProvider>
+      <BlogClient
+        initialBlogs={initialBlogs}   // ✅ pass full { posts, totalCount }
+        latestBlogs={latestBlogs}     // ✅ pass full object
+      />
+    </BlogDataProvider>
+  );
 }

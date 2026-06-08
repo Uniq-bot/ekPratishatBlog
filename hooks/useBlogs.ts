@@ -7,24 +7,28 @@ export const useBlogs = ({
   searchQuery,
   tags = [],
   category = "all",
+  initialData,
 }: {
   page?: number;
   searchQuery?:string;
   limit?: number;
   tags?: string[];
   category?: string;
+  initialData?: any;
 } = {}) => {
   const { data, isLoading, error, isError, isFetching } = useQuery({
     queryKey: ["blogs", page, limit, searchQuery, tags, category],
     queryFn: () => fetchBlogs({ page, limit, searchQuery: searchQuery ?? "", tags, category }),
     staleTime: 1000 * 60 * 5,
-    refetchOnMount:true
+    refetchOnMount:true,
+    placeholderData: initialData,  // ✅ won't block refetch on filter change
+   
   });
 
   return { blogs: data, isLoading: isLoading || isFetching, error, isError };
 };
 
-export const useLatestBlogs = () => {
+export const useLatestBlogs = ({ initialData }: { initialData?: any }) => {
   const { data, isLoading, error, isError } = useQuery({
     queryKey: ["latestBlogs"],
     queryFn: async () => {
@@ -32,8 +36,9 @@ export const useLatestBlogs = () => {
       if (!res.ok) throw new Error("Failed to fetch latest blogs");
       return res.json();
     },
+    placeholderData: initialData,  // ✅ won't block refetch on filter change
   });
-  return { latestBlogs: data, isLoading, error, isError };
+  return { latestBlogss: data, isLoading, error, isError };
 };
 
 export const useGetBlog = (slug: string) => {

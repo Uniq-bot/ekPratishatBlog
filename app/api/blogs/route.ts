@@ -1,10 +1,8 @@
-import { prisma } from "@/libs/prisma";
 import { createBlog, getBlogByFilters } from "@/services/blogs.services";
 import { NextResponse } from "next/server";
-
+import { revalidatePath } from "next/cache";
 import { writeFile, mkdir } from "fs/promises";
 import { join } from "path";
-
 
 export async function POST(req: Request) {
   try {
@@ -19,7 +17,7 @@ export async function POST(req: Request) {
     const imageFile   = formData.get("coverImage") as File | null;
 
     const tags = tagsRaw ? JSON.parse(tagsRaw) : [];
-    console.log(imageFile)
+
     if (!title || !content || !categoryId) {
       return NextResponse.json({ message: "Title, content and category are required" }, { status: 400 });
     }
@@ -30,7 +28,7 @@ export async function POST(req: Request) {
     let coverImagePath: string | null = null;
     if (imageFile && imageFile.size > 0) {
       const uploadDir = join(process.cwd(), "public", "uploads");
-      await mkdir(uploadDir, { recursive: true }); 
+      await mkdir(uploadDir, { recursive: true });
 
       const bytes = await imageFile.arrayBuffer();
       const buffer = Buffer.from(bytes);
@@ -59,6 +57,11 @@ export async function POST(req: Request) {
       tags,
       slug: generatedSlug,
     });
+
+    // Revalidate all pages that list or feature blog posts
+    revalidatePath("/");
+    // revalidatePath("/blog");
+    revalidatePath(`/blog/${generatedSlug}`);
 
     return NextResponse.json({ message: "Blog created successfully", post }, { status: 201 });
   } catch (err: any) {

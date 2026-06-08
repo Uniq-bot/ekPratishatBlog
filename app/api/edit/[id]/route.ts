@@ -2,6 +2,7 @@ import { prisma } from "@/libs/prisma";
 import { writeFile, mkdir } from "fs/promises";
 import { join } from "path";
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -54,22 +55,28 @@ export async function PUT(req: Request, { params }: RouteContext) {
       coverImagePath = `/uploads/${filename}`;
     }
 
-  const updated = await prisma.blogPost.update({
-  where: { id },
-  data: {
-    title,
-    description,
-    content,
-    category: {
-      connect: { id: categoryId }, // ✅ not categoryId directly
-    },
-    ...(coverImagePath && { coverImage: coverImagePath }),
-    tags: {
-      set: tags.map((tagId: string) => ({ id: tagId })),
-    },
-  },
-  include: { category: true, tags: true },
-});
+    const updated = await prisma.blogPost.update({
+      where: { id },
+      data: {
+        title,
+        description,
+        content,
+        category: {
+          connect: { id: categoryId },
+        },
+        ...(coverImagePath && { coverImage: coverImagePath }),
+        tags: {
+          set: tags.map((tagId: string) => ({ id: tagId })),
+        },
+      },
+      include: { category: true, tags: true },
+    });
+
+    // Revalidate the updated blog's detail page and all listing pages
+    revalidatePath(`/blog/${updated.slug}`);
+    revalidatePath("/");
+    revalidatePath("/blog");
+
     return NextResponse.json({ message: "Blog updated successfully", data: updated }, { status: 200 });
   } catch (err: any) {
     console.error("UPDATE BLOG ERROR:", err);
@@ -80,7 +87,17 @@ export async function PUT(req: Request, { params }: RouteContext) {
 export async function DELETE(_req: Request, { params }: RouteContext) {
   const { id } = await params;
   try {
+    // Fetch slug before deleting so we can revalidate the right path
+    const blog = await prisma.blogPost.findUnique({ where: { id }, select: { slug: true } });
+
     await prisma.blogPost.delete({ where: { id } });
+
+    if (blog?.slug) {
+      revalidatePath(`/blog/${blog.slug}`);
+    }
+    revalidatePath("/");
+    revalidatePath("/blog");
+
     return NextResponse.json({ message: "Blog deleted successfully" }, { status: 200 });
   } catch (err: any) {
     console.error("DELETE BLOG ERROR:", err);
