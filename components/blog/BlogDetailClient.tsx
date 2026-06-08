@@ -3,8 +3,6 @@ import { Dot } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 
-// Blocks are stored as { id, type, content, level? }
-// Tags from Prisma are { id, name, slug }
 
 const BlogDetailClient = ({ blog }: { blog: any }) => {
   const blocks: any[] = (() => {
