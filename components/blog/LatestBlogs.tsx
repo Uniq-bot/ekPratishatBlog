@@ -1,6 +1,7 @@
+"use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 type BlogItem = {
   id: string;
@@ -22,8 +23,12 @@ const normalizeBlog = (blog: BlogItem) => ({
 });
 
 const LatestBlogs = ({ latestBlogs = [] }: { latestBlogs?: BlogItem[] }) => {
+  const router = useRouter();
 
-
+  const openBlog = (blog: BlogItem) => {
+    const normalized = normalizeBlog(blog);
+    router.push(`/blog/${normalized.slug}`);
+  };
 
   return (
     <div className="space-y-4">
@@ -37,10 +42,9 @@ const LatestBlogs = ({ latestBlogs = [] }: { latestBlogs?: BlogItem[] }) => {
             const b = normalizeBlog(blog);
 
             return (
-              <Link 
-              href={`/blog/${b.slug}`}
+              <div
                 key={b.id}
-                
+                onClick={() => openBlog(blog)}
                 className="flex gap-3 items-center cursor-pointer hover:bg-gray-100 p-2 rounded"
               >
                 <Image
@@ -59,7 +63,7 @@ const LatestBlogs = ({ latestBlogs = [] }: { latestBlogs?: BlogItem[] }) => {
                     {b.createdAt}
                   </span>
                 </div>
-              </Link>
+              </div>
             );
           })}
         </div>
