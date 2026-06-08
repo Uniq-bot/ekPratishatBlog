@@ -21,12 +21,12 @@ const AsideBar = ({
 
   const handleClick = (slug: string) => {
     setActiveTab(slug);
-    setIsOpen(false); // close on mobile after selecting
+    setIsOpen(false); 
   };
 
   return (
     <>
-      {/* Hamburger button — visible only on mobile when sidebar is closed */}
+      
       <button
         className="lg:hidden fixed top-4 left-4 z-30 p-2 rounded-md bg-[#EBECD8] shadow-md border border-gray-300"
         onClick={() => setIsOpen(true)}
@@ -35,7 +35,6 @@ const AsideBar = ({
         <Menu size={20} />
       </button>
 
-      {/* Backdrop — mobile only */}
       {isOpen && (
         <div
           className="lg:hidden fixed inset-0 z-20 bg-black/40 backdrop-blur-sm"
@@ -43,7 +42,6 @@ const AsideBar = ({
         />
       )}
 
-      {/* Sidebar */}
     <aside
   className={`
     fixed top-0 left-0 bottom-0 z-30 h-screen w-64 lg:w-1/5
@@ -53,7 +51,6 @@ const AsideBar = ({
     lg:translate-x-0 lg:sticky lg:top-0 lg:h-screen lg:z-auto lg:shadow-none
   `}
 >
-        {/* Header */}
         <div className="w-full flex items-center justify-between">
           <h1
             onClick={() => router.push("/")}
@@ -61,7 +58,6 @@ const AsideBar = ({
           >
             Ekpratishat <br /> Real estate
           </h1>
-          {/* Close button — mobile only */}
           <span
             className="lg:hidden p-3 cursor-pointer"
             onClick={() => setIsOpen(false)}
@@ -70,7 +66,6 @@ const AsideBar = ({
           </span>
         </div>
 
-        {/* Nav */}
         <nav className="w-full py-10">
           <h3 className="text-sm text-gray-500 px-5 uppercase tracking-widest">
             Content

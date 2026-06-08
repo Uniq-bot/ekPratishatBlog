@@ -10,9 +10,13 @@ import { useDebounce } from "@/hooks/useDebounce";
 const BlogClient = ({
   initialBlogs,
   latestBlogs,
+  initialCategories,
+  initialTags,
 }: {
   initialBlogs: { posts: any[]; totalCount: number };
   latestBlogs: { posts: any[] };
+  initialCategories: any[];
+  initialTags: any[];
 }) => {
   const {
     tag,
@@ -26,16 +30,15 @@ const BlogClient = ({
     setSortFilter,
     setPage,
   } = useBlogUi();
-  const debouncedSearch = useDebounce(searchQuery, 400);
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
   const { blogs, isLoading } = useBlogs({
     page,
     limit: 10,
-    searchQuery: debouncedSearch ?? "",
+    searchQuery: debouncedSearchQuery,
     tags: tag !== "all" ? [tag] : [],
     category: category !== "all" ? category : "all",
     initialData: initialBlogs,
   });
-  console.log("blog", blogs);
   const { latestBlogss } = useLatestBlogs({ initialData: latestBlogs });
 
   return (
@@ -44,15 +47,8 @@ const BlogClient = ({
         <BlogHero />
         <div className="lg:mb-10 relative lg:top-10 z-10 top-30 pb-10 w-[90%] m-auto h-full flex flex-col gap-10">
           <BlogFilters
-            tag={tag}
-            setTag={setTag}
-            category={category}
-            setCategory={setCategory}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            sortFilter={sortFilter}
-            setSortFilter={setSortFilter}
-            setPage={setPage}
+            initialCategories={initialCategories}
+            initialTags={initialTags}
           />
           <BlogListClient
             blogs={blogs?.posts ?? []}

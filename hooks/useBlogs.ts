@@ -21,7 +21,7 @@ export const useBlogs = ({
     queryFn: () => fetchBlogs({ page, limit, searchQuery: searchQuery ?? "", tags, category }),
     staleTime: 1000 * 60 * 5,
     refetchOnMount:true,
-    placeholderData: initialData,  // ✅ won't block refetch on filter change
+    placeholderData: initialData,  
    
   });
 
@@ -36,7 +36,7 @@ export const useLatestBlogs = ({ initialData }: { initialData?: any }) => {
       if (!res.ok) throw new Error("Failed to fetch latest blogs");
       return res.json();
     },
-    placeholderData: initialData,  // ✅ won't block refetch on filter change
+    placeholderData: initialData,
   });
   return { latestBlogss: data, isLoading, error, isError };
 };
