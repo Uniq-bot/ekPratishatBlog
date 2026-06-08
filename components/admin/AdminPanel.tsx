@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import AsideBar from "@/components/admin/AsideBar";
 import BlogEditor from "@/components/admin/BlogEditor";
 import ManageBlogs from "@/components/admin/ManageBlogs";
@@ -7,13 +7,13 @@ import { useAdminUI } from "@/context/AdminContext";
 import { useGetCategory, useGetTags } from "@/hooks/useAdminBlogs";
 import Image from "next/image";
 
-const AdminPanel = () => {
+const AdminPanel = ({ initialCategories, initialTags }: { initialCategories: any[]; initialTags: any[] }) => {
   const { activeTab, setActiveTab, blocks, setBlocks, user } = useAdminUI();
 
-  const { data: categories } = useGetCategory();
-  const { data: tags } = useGetTags();
+  const { data: categories } = useGetCategory({initialCategories});
+  const { data: tags } = useGetTags({initialTags});
 
-  const tabComponents = {
+  const tabComponents: any = {
     "tag&category": <TagNCategory tags={tags ?? []} categories={categories ?? []} />,
     "create-blog": (
       <BlogEditor

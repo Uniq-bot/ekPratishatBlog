@@ -13,8 +13,8 @@ import { useEffect } from "react";
 const Editor = ({ id }: { id: string }) => {
   const router = useRouter();
   const { blocks, setBlocks, user } = useAdminUI();
-  const { data: tags } = useGetTags();
-  const { data: categories } = useGetCategory();
+  const { data: tags } = useGetTags({ initialTags: [] });
+  const { data: categories } = useGetCategory({ initialCategories: [] });
   const { data: blog, isLoading } = useEditableBlog(id);
 
   // Clear shared blocks when leaving the edit page so the

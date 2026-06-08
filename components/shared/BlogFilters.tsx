@@ -4,38 +4,39 @@ import React from "react";
 import { useBlogUi } from "@/context/BlogListContext";
 import { useQuery } from "@tanstack/react-query";
 import { fetchCategory, fetchTags } from "@/libs/fetch";
+import { useDebounce } from "@/hooks/useDebounce";
 
 const BlogFilters = ({
-  tag,
-  setTag,
-  category,
-  setCategory,
-  searchQuery,
-  setSearchQuery,
-  sortFilter,
-  setSortFilter,
-  setPage,
+  initialCategories,
+  initialTags,
 }: {
-  tag: string;
-  setTag: React.Dispatch<React.SetStateAction<string>>;
-  category: string;
-  setCategory: React.Dispatch<React.SetStateAction<string>>;
-  searchQuery: string;
-  setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
-  sortFilter: string;
-  setSortFilter: React.Dispatch<React.SetStateAction<string>>;
-  setPage: React.Dispatch<React.SetStateAction<number>>;
+  initialCategories: any[];
+  initialTags: any[];
 }) => {
+  const {
+    tag,
+    setTag,
+    category,
+    setCategory,
+    searchQuery,
+    setSearchQuery,
+    sortFilter,
+    setSortFilter,
+    setPage,
+  } = useBlogUi();
+
   const { data: categoriesData = [] } = useQuery({
     queryKey: ["categories"],
     queryFn: fetchCategory,
     staleTime: 1000 * 60 * 10,
+    placeholderData: initialCategories,  
   });
 
   const { data: tagsData = [] } = useQuery({
     queryKey: ["tags"],
     queryFn: fetchTags,
     staleTime: 1000 * 60 * 10,
+    placeholderData: initialTags, 
   });
 
   const handleReset = () => {

@@ -74,11 +74,12 @@ export const useEditableBlog = (id: string) => {
 
 // ─── Categories ──────────────────────────────────────────────────────────────
 
-export const useGetCategory = () => {
+export const useGetCategory = ({ initialCategories }: { initialCategories: any[] }) => {
   return useQuery({
     queryKey: ["categories"],
     queryFn: fetchCategory,
     staleTime: 1000 * 60 * 5,
+    placeholderData: initialCategories,
   });
 };
 
@@ -104,11 +105,12 @@ export const useDeleteCategory = () => {
 
 // ─── Tags ────────────────────────────────────────────────────────────────────
 
-export const useGetTags = () => {
+export const useGetTags = ({ initialTags }: { initialTags: any[] }) => {
   return useQuery({
     queryKey: ["tags"],
     queryFn: fetchTags,
     staleTime: 1000 * 60 * 5,
+    placeholderData: initialTags,
   });
 };
 

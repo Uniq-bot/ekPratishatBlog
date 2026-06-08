@@ -32,3 +32,28 @@ export const initialLatestFetch = async () => {
     return { posts: [] };
   }
 };
+
+
+export const initialCategoryFetch= async()=>{
+  try {
+    const categories = await prisma.category.findMany({
+      orderBy: { name: "asc" },
+    });
+    return categories;
+  } catch (err) {
+    console.error("INITIAL CATEGORY FETCH ERROR:", err);
+    return [];
+  }
+}
+
+export const initialTagFetch= async()=>{
+  try {
+    const tags = await prisma.tag.findMany({
+      orderBy: { name: "asc" },
+    });
+    return tags;
+  } catch (err) {
+    console.error("INITIAL TAG FETCH ERROR:", err);
+    return [];
+  }
+}

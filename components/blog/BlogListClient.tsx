@@ -20,15 +20,7 @@ const BlogListClient = ({
 }) => {
 const totalPages = Math.ceil(totalCount / limit);
 
-  if (isLoading) {
-    return (
-      <div className="w-full flex flex-col gap-5">
-        {[...Array(3)].map((_, i) => (
-          <div key={i} className="w-full h-40 bg-neutral-200 animate-pulse" />
-        ))}
-      </div>
-    );
-  }
+
 
   return (
     <div className="w-full flex flex-col gap-5 px-4 sm:px-0">
