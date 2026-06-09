@@ -9,8 +9,7 @@ export default async function BlogPage() {
   const latestBlogs = await initialLatestFetch();
   const categories = await initialCategoryFetch();
   const tags = await initialTagFetch();
-  console.log("cate", categories)
-  console.log("tags", tags)
+ console.log(" hey this is server loading but i cant send the js of the client side ")
 
   return (
     <BlogDataProvider>
