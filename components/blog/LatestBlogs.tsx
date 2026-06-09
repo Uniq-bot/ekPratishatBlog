@@ -43,6 +43,7 @@ const LatestBlogs = ({ latestBlogs = [] }: { latestBlogs?: BlogItem[] }) => {
 
             return (
               <div
+              title={b.slug}
                 key={b.id}
                 onClick={() => openBlog(blog)}
                 className="flex gap-3 items-center cursor-pointer hover:bg-gray-100 p-2 rounded"
