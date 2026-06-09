@@ -42,7 +42,7 @@ const BlogClient = ({
   const { latestBlogss } = useLatestBlogs({ initialData: latestBlogs });
 
   return (
-    <div className="w-full min-h-screen flex flex-col bg-[#ffff] md:pl-20 md:pr-20">
+    <div className="w-full min-h-screen flex flex-col bg-[#2E2E2E] md:pl-20 md:pr-20">
       <div className="lg:w-full min-h-100 relative lg:p-10 gap-5 flex">
         <BlogHero />
         <LatestBlogs latestBlogs={latestBlogss?.posts ?? []} />

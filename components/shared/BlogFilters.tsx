@@ -48,7 +48,7 @@ const BlogFilters = ({
   };
 
   return (
-    <div className="w-full bg-[#F7F3EA] border border-[#D2C5AB] py-7 px-5 flex justify-between  gap-4">
+    <div className="w-full  text-white   border-b-5 border-[#C9981A] py-7 px-5 flex justify-between  gap-4">
       {/* SEARCH */}
       <div className="flex flex-col w-1/2 ">
         <label>Search</label>
@@ -59,7 +59,7 @@ const BlogFilters = ({
             setPage(1);
           }}
           placeholder="Search..."
-          className="pl-2 outline-none bg-[#ece8df] border border-[#D2C5AB]" 
+          className="pl-2 outline-none focus:bg-[#2D2D2D] focus:text-[#e8b940] bg-[#ece8df] border border-[#D2C5AB] text-black" 
         />
       </div>
 
@@ -74,7 +74,7 @@ const BlogFilters = ({
               setCategory(e.target.value);
               setPage(1);
             }}
-            className="border border-[#D2C5AB] bg-[#ece8df]"
+            className="border text-black focus:bg-[#2D2D2D] focus:text-[#e8b940] border-[#D2C5AB] bg-[#ece8df]"
           >
             <option value="all">All</option>
             {categoriesData.map((c: any) => (
@@ -94,7 +94,7 @@ const BlogFilters = ({
               setSortFilter(e.target.value);
               setPage(1);
             }}
-            className="border border-[#D2C5AB] bg-[#ece8df]"
+            className="border text-black focus:bg-[#2D2D2D] focus:text-[#e8b940] border-[#D2C5AB] bg-[#ece8df]"
           >
             <option value="latest">Latest</option>
             <option value="oldest">Oldest</option>
@@ -110,7 +110,7 @@ const BlogFilters = ({
               setTag(e.target.value);
               setPage(1);
             }}
-            className="border border-[#D2C5AB] bg-[#ece8df]"
+            className="border text-black focus:bg-[#2D2D2D] focus:text-[#e8b940] border-[#D2C5AB] bg-[#ece8df]"
           >
             <option value="all">All</option>
             {tagsData.map((t: any) => (
