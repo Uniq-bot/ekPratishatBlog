@@ -24,7 +24,7 @@ export default function BackButton({ slug }: { slug: string }) {
         <path d="M2 12H22" />
       </svg>
       <div className="group-hover:underline flex items-center leading-none gap-0.5 sm:gap-1 min-w-0">
-        <p className="text-gray-500 hidden sm:block">Blogs</p>
+        <p className="text-gray-200 hidden sm:block">Blogs</p>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"

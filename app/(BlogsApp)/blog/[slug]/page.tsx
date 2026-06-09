@@ -26,7 +26,7 @@ export default async function BlogDets({
   }
 
   return (
-    <div className="w-full min-h-screen bg-[#F7F3EA] p-3 sm:p-6 lg:p-10 py-4 sm:py-5 lg:py-10 flex flex-col items-start">
+    <div className="w-full min-h-screen  text-white p-3 sm:p-6 lg:p-10 py-4 sm:py-5 lg:py-10 flex flex-col items-start">
       <BackButton slug={slug} />
       <div className="w-full flex flex-col lg:flex-row justify-between px-0 sm:px-4 lg:px-6 py-4 sm:py-6 gap-4 sm:gap-6 lg:gap-8">
         <BlogDetailClient blog={blog} />

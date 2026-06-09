@@ -14,7 +14,7 @@ export default function RootLayout({
 }>) {
   
   return (
-    <html lang="en" className=" w-full bg-[#F7F3EA] ">
+    <html lang="en" className=" w-full bg-[#2E2E2E] ">
        
       <body>
         <QueryProvider>
