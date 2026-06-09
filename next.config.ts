@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  devIndicators: false, // optional, hides the dev overlay too
+experimental: {
+    turbopackFileSystemCacheForDev:true
+},
  async headers() {
     return [
       {
