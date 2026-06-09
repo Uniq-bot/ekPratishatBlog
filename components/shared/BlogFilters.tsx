@@ -48,9 +48,9 @@ const BlogFilters = ({
   };
 
   return (
-    <div className="w-full bg-[#F7F3EA] border-b border-l border-gray-400 py-3 px-5 flex flex-col gap-4">
+    <div className="w-full bg-[#F7F3EA] border border-[#D2C5AB] py-7 px-5 flex justify-between  gap-4">
       {/* SEARCH */}
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col w-1/2 ">
         <label>Search</label>
         <input
           value={searchQuery}
@@ -59,14 +59,14 @@ const BlogFilters = ({
             setPage(1);
           }}
           placeholder="Search..."
-          className="pl-2 outline-none bg-[#ece8df] border"
+          className="pl-2 outline-none bg-[#ece8df] border border-[#D2C5AB]" 
         />
       </div>
 
       {/* FILTERS */}
-      <div className="flex justify-between gap-4">
+    
         {/* CATEGORY */}
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col w-1/5">
           <label>Category</label>
           <select
             value={category}
@@ -74,7 +74,7 @@ const BlogFilters = ({
               setCategory(e.target.value);
               setPage(1);
             }}
-            className="border bg-[#ece8df]"
+            className="border border-[#D2C5AB] bg-[#ece8df]"
           >
             <option value="all">All</option>
             {categoriesData.map((c: any) => (
@@ -86,7 +86,7 @@ const BlogFilters = ({
         </div>
 
         {/* SORT */}
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col w-1/5">
           <label>Sort</label>
           <select
             value={sortFilter}
@@ -94,7 +94,7 @@ const BlogFilters = ({
               setSortFilter(e.target.value);
               setPage(1);
             }}
-            className="border bg-[#ece8df]"
+            className="border border-[#D2C5AB] bg-[#ece8df]"
           >
             <option value="latest">Latest</option>
             <option value="oldest">Oldest</option>
@@ -102,7 +102,7 @@ const BlogFilters = ({
         </div>
 
         {/* TAGS */}
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col w-1/5">
           <label>Tags</label>
           <select
             value={tag}
@@ -110,7 +110,7 @@ const BlogFilters = ({
               setTag(e.target.value);
               setPage(1);
             }}
-            className="border bg-[#ece8df]"
+            className="border border-[#D2C5AB] bg-[#ece8df]"
           >
             <option value="all">All</option>
             {tagsData.map((t: any) => (
@@ -131,7 +131,6 @@ const BlogFilters = ({
           </button>
         </div>
       </div>
-    </div>
   );
 };
 

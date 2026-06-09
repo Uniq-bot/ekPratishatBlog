@@ -42,26 +42,24 @@ const BlogClient = ({
   const { latestBlogss } = useLatestBlogs({ initialData: latestBlogs });
 
   return (
-    <div className="w-full min-h-screen flex bg-[#F7F3EA] md:pl-30 md:pr-20">
-      <div className="lg:w-[65%] min-h-screen relative lg:p-10 flex flex-col">
+    <div className="w-full min-h-screen flex flex-col bg-[#ffff] md:pl-20 md:pr-20">
+      <div className="lg:w-full min-h-100 relative lg:p-10 gap-5 flex">
         <BlogHero />
-        <div className="lg:mb-10 relative lg:top-10 z-10 top-30 pb-10 w-[90%] m-auto h-full flex flex-col gap-10">
-          <BlogFilters
-            initialCategories={initialCategories}
-            initialTags={initialTags}
-          />
-          <BlogListClient
-            blogs={blogs?.posts ?? []}
-            isLoading={isLoading}
-            page={page}
-            totalCount={blogs?.totalCount ?? 0}
-            limit={10}
-            onPageChange={setPage}
-          />
-        </div>
-      </div>
-      <div className="lg:w-[35%] hidden md:block absolute lg:relative h-screen p-10">
         <LatestBlogs latestBlogs={latestBlogss?.posts ?? []} />
+      </div>
+      <div className="lg:mb-10 relative lg:top-10 z-10 top-30 pb-10 w-[90%] m-auto h-full flex flex-col gap-10">
+        <BlogFilters
+          initialCategories={initialCategories}
+          initialTags={initialTags}
+        />
+        <BlogListClient
+          blogs={blogs?.posts ?? []}
+          isLoading={isLoading}
+          page={page}
+          totalCount={blogs?.totalCount ?? 0}
+          limit={10}
+          onPageChange={setPage}
+        />
       </div>
     </div>
   );

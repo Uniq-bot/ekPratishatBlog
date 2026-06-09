@@ -2,6 +2,7 @@
 
 import React from "react";
 import BlogCard from "./BlogCard";
+import RelatedBlogs from "./RelatedBlogs";
 
 const BlogListClient = ({
   blogs,
@@ -18,45 +19,47 @@ const BlogListClient = ({
   limit: number;
   onPageChange: (page: number) => void;
 }) => {
-const totalPages = Math.ceil(totalCount / limit);
-
-
+  const totalPages = Math.ceil(totalCount / limit);
 
   return (
     <div className="w-full flex flex-col gap-5 px-4 sm:px-0">
-      {blogs?.length > 0 ? (
+     <div className="w-full flex  gap-10 lg:flex-row">
+      <div className="w-full lg:w-[65%] flex flex-col gap-5">
+         {blogs?.length > 0 ? (
         blogs.map((blog) => <BlogCard key={blog?.id} blog={blog} />)
       ) : (
         <p className="text-gray-500 w-full text-center">No blogs found.</p>
       )}
+      </div>
+      <div className="w-full lg:w-[35%]">
+        
+      </div>
+     </div>
 
-      <div className="w-full flex flex-col sm:flex-row items-center justify-between mt-4 gap-2">
-        <div className="text-sm text-gray-600">
-          Page {page} of {totalPages} | Total {totalCount}
-        </div>
+      <div className="w-full flex sm:flex-row items-center justify-center mt-4 gap-5">
+         <button onClick={() => onPageChange(page - 1)} disabled={page <= 1}>
+            Prev
+          </button>
 
-     <div className="flex gap-2 items-center">
-  <button onClick={() => onPageChange(page - 1)} disabled={page <= 1}>
-    Prev
-  </button>
+          {[...Array(totalPages)].map((_, i) => {
+            const pageNum = i + 1;
+            return (
+              <button
+                key={pageNum}
+                onClick={() => onPageChange(pageNum)}
+                className={`px-3 py-1 border ${page === pageNum ? "bg-[#FEE685]" : ""}`}
+              >
+                {pageNum}
+              </button>
+            );
+          })}
 
-  {[...Array(totalPages)].map((_, i) => {
-    const pageNum = i + 1;
-    return (
-      <button
-        key={pageNum}
-        onClick={() => onPageChange(pageNum)}
-        className={`px-3 py-1 border ${page === pageNum ? "bg-[#FEE685]" : ""}`}
-      >
-        {pageNum}
-      </button>
-    );
-  })}
-
-  <button onClick={() => onPageChange(page + 1)} disabled={page >= totalPages}>
-    Next
-  </button>
-</div>
+          <button
+            onClick={() => onPageChange(page + 1)}
+            disabled={page >= totalPages}
+          >
+            Next
+          </button>
       </div>
     </div>
   );

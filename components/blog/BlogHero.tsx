@@ -2,7 +2,7 @@ import BlogHeroPng from '@/public/BlogHero.png'
 import Image from 'next/image'
 const BlogHero = () => {
   return (
-    <div className="w-full top-0 left-0 right-0 absolute z-5  lg:h-120 h-50 shadow-md shadow-black md:relative">
+    <div className="w-[75%] top-0 left-0 right-0 absolute z-5  lg:h-130 h-50 shadow-md shadow-black md:relative">
             <div className="w-full h-full absolute bg-black/60 z-6" />
             <div className="w-full h-full absolute z-5 ">
                 <Image src={BlogHeroPng} alt="Blog Hero" className="w-full h-full" />
