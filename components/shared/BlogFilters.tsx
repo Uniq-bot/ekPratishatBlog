@@ -2,6 +2,7 @@
 
 import React, { useRef, useTransition } from "react";
 import { useRouter, usePathname } from "next/navigation";
+import { motion } from "framer-motion";
 
 interface BlogFiltersProps {
   categories: { id: string; name: string; slug: string }[];
@@ -35,7 +36,7 @@ const BlogFilters = ({
     // Always reset to page 1 when any filter changes
     params.delete("page");
     startTransition(() => {
-      router.push(`${pathname}?${params.toString()}`);
+      router.push(`${pathname}?${params.toString()}`, {scroll: false});
     });
   };
 
@@ -53,8 +54,11 @@ const BlogFilters = ({
   };
 
   return (
-    <div
-      className={`w-full text-white border-b-5 border-[#C9981A] py-7 px-5 flex justify-between gap-4 transition-opacity ${
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, }}
+      className={`w-full text-white border-b-5 border-[#EBC044]  py-7 px-5 flex justify-between gap-4 transition-opacity ${
         isPending ? "opacity-60 pointer-events-none" : ""
       }`}
     >
@@ -129,7 +133,7 @@ const BlogFilters = ({
           Reset
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

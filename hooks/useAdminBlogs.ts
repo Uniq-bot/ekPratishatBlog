@@ -54,7 +54,6 @@ export const useDeleteBlog = () => {
 export const useGetAdminBlogs = () => {
   return useQuery({
     queryKey: ["admin-blogs"],
-    // Pass category as undefined so the API doesn't filter — fetches all blogs
     queryFn: () =>
       fetchBlogs({
         page: 1,

@@ -5,7 +5,6 @@ import BlogFilters from "@/components/shared/BlogFilters";
 import NewsLetter from "@/components/blog/NewsLetter";
 import { getBlogs, getCategory, getLatestBlogs, getTags } from "@/data/getBlogs";
 
-// Force dynamic so search params always re-fetch on the server
 export const dynamic = "force-dynamic";
 
 interface PageProps {
@@ -29,14 +28,13 @@ export default async function BlogPage({ searchParams }: PageProps) {
   ]);
 
   return (
-    <div className="w-full min-h-screen flex flex-col bg-[#2E2E2E] md:px-20">
+    <div className="w-full min-h-screen flex flex-col bg-[#1d1d1d] md:p-10">
       <div className="lg:w-full min-h-100 flex gap-5">
         <BlogHero />
         <LatestBlogs latestBlogs={latestBlogs?.posts ?? []} />
       </div>
 
       <div className="lg:mb-10 relative lg:top-10 pb-10 w-[90%] m-auto flex flex-col gap-10">
-        {/* Filters — pure server-rendered form using <Link> / URLSearchParams */}
         <BlogFilters
           categories={categories}
           tags={tags}

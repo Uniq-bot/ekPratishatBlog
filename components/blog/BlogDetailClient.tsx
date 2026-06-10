@@ -41,9 +41,9 @@ const BlogDetailClient = ({ blog }: { blog: any }) => {
   console.log(blocks);
   console.log(blog.coverImage);
   return (
-    <div className="w-full lg:w-[65%] h-full px-3 sm:px-6 lg:px-10">
-      <div className="w-full flex flex-col gap-2.5">
-        <h1 className="text-2xl sm:text-3xl lg:text-5xl font-semibold leading-tight">
+    <div className="w-full lg:w-[65%] py-5 h-full bg-[#383735] px-3 sm:px-6 lg:px-10">
+      <div className="w-full flex flex-col border-b-3 pb-5 border-[#d8a92f] gap-2.5">
+        <h1 className="text-2xl sm:text-3xl  lg:text-5xl font-semibold leading-tight">
           {blog?.title}
         </h1>
 
@@ -81,15 +81,16 @@ const BlogDetailClient = ({ blog }: { blog: any }) => {
         </div>
       </div>
 
-      {blog?.description && (
-        <p className="bg-gray-300 text-black p-3 sm:p-4 lg:p-5 text-xs sm:text-sm lg:text-base leading-relaxed mt-6">
-          {blog.description}
+      <div className="w-full mt-6 flex flex-col   px-5 pb-5">
+        {blog?.description && (
+        <p className="bg-gray-300 text-black italic p-3 sm:p-4 lg:p-5 text-xs sm:text-sm lg:text-base leading-relaxed mt-6">
+          "{blog.description}"
         </p>
       )}
 
       {/* Table of Contents */}
       {blocks.some((b) => b.type === "heading") && (
-        <div className="w-full border text-black bg-gray-300 mt-8 lg:mt-10 min-h-12 p-3 sm:p-4 lg:p-5">
+        <div className="w-full  text-white bg-[#1D1D1D] mt-8 lg:mt-10 min-h-12 p-3 sm:p-4 lg:p-5">
           <p className="text-lg sm:text-xl lg:text-2xl font-bold">Table of Contents</p>
           {blocks
             .filter((b) => b.type === "heading")
@@ -111,7 +112,7 @@ const BlogDetailClient = ({ blog }: { blog: any }) => {
       )}
 
       {/* Content Blocks */}
-      <div className="mt-6 lg:mt-8 flex flex-col gap-4 lg:gap-5">
+      <div className=" flex flex-col">
         {(() => {
           let headingIndex = 0;
           return blocks.map((block: any, index: number) => {
@@ -120,7 +121,7 @@ const BlogDetailClient = ({ blog }: { blog: any }) => {
                 return (
                   <p
                     key={block.id ?? index}
-                    className="text-xs sm:text-sm lg:text-base text-gray-200 leading-relaxed"
+                    className="text-xs sm:text-sm mt-2 lg:text-base text-gray-200 leading-relaxed"
                   >
                     {block.content}
                   </p>
@@ -161,7 +162,7 @@ const BlogDetailClient = ({ blog }: { blog: any }) => {
                 return (
                   <ul
                     key={block.id ?? index}
-                    className="list-disc ml-4 sm:ml-6 lg:ml-10 list-inside text-gray-300 text-xs sm:text-sm lg:text-base space-y-1"
+                    className="list-disc ml-4 sm:ml-6 lg:ml-10 mt-5 list-inside text-gray-300 text-xs sm:text-sm lg:text-base space-y-1"
                   >
                     {(Array.isArray(block.content) ? block.content : []).map(
                       (item: string, i: number) => (
@@ -176,6 +177,7 @@ const BlogDetailClient = ({ blog }: { blog: any }) => {
             }
           });
         })()}
+      </div>
       </div>
     </div>
   );

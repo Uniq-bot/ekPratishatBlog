@@ -39,7 +39,7 @@ export default function BackButton({ slug }: { slug: string }) {
         >
           <path d="m9 18 6-6-6-6" />
         </svg>
-        <p className="truncate">{slug}</p>
+        <p className="truncate text-[#EBC044]">{slug}</p>
       </div>
     </button>
   );
