@@ -1,7 +1,7 @@
 
 
 import AdminPanel from "@/components/admin/AdminPanel";
-import { initialCategoryFetch, initialTagFetch } from "@/data/initialFetch";
+import { initialCategoryFetch, initialTagFetch } from "@/data/getBlogs";
 
 
 

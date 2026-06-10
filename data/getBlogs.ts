@@ -1,24 +1,54 @@
 import { prisma } from "@/libs/prisma";
 
-export const initialFetch = async () => {
+export const getBlogs = async ({
+  page = 1,
+  limit = 10,
+  category,
+  tag,
+}: {
+  page?: number;
+  limit?: number;
+  category?: string;
+  tag?: string;
+} = {}) => {
   try {
+    const skip = (page - 1) * limit;
+
+    const where: any = {
+      status: "PUBLISHED",
+      ...(category && {
+        category: {
+          slug: category,
+        },
+      }),
+      ...(tag && {
+        tags: {
+          some: {
+            slug: tag,
+          },
+        },
+      }),
+    };
+
     const [blogs, totalCount] = await Promise.all([
       prisma.blogPost.findMany({
-        where: { status: "PUBLISHED" },
+        where,
         orderBy: { createdAt: "desc" },
-        take: 10,
+        skip,
+        take: limit,
         include: { tags: true, category: true },
       }),
-      prisma.blogPost.count({ where: { status: "PUBLISHED" } }),
+      prisma.blogPost.count({ where }),
     ]);
+
     return { posts: blogs, totalCount };
   } catch (err) {
-    console.error("INITIAL FETCH ERROR:", err);
+    console.error("BLOG FETCH ERROR:", err);
     return { posts: [], totalCount: 0 };
   }
 };
 
-export const initialLatestFetch = async () => {
+export const getLatestBlogs = async () => {
   try {
     const blogs = await prisma.blogPost.findMany({
       where: { status: "PUBLISHED" },
@@ -34,7 +64,7 @@ export const initialLatestFetch = async () => {
 };
 
 
-export const initialCategoryFetch= async()=>{
+export const getCategory= async()=>{
   try {
     const categories = await prisma.category.findMany({
       orderBy: { name: "asc" },
@@ -46,7 +76,7 @@ export const initialCategoryFetch= async()=>{
   }
 }
 
-export const initialTagFetch= async()=>{
+export const getTags= async()=>{
   try {
     const tags = await prisma.tag.findMany({
       orderBy: { name: "asc" },

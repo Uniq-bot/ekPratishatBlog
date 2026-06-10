@@ -1,24 +1,35 @@
 import BlogClient from "@/components/blog/BlogClient";
-import { BlogDataProvider } from "@/context/BlogListContext";
-import { initialCategoryFetch, initialFetch, initialLatestFetch, initialTagFetch } from "@/data/initialFetch";
 
+import { getBlogDetails } from "@/data/getBlogDet";
+import { getBlogs, getCategory, getLatestBlogs, getTags } from "@/data/getBlogs";
 
+export default async function BlogPage({ searchParams }: { searchParams: { [key: string]: string | undefined } }) {
+  const page = Number(searchParams.page) || 1;
+  const category = searchParams.category;
+  const tag = searchParams.tag;
+  const sort = searchParams.sort;
 
-export default async function BlogPage() {
-  const initialBlogs = await initialFetch();
-  const latestBlogs = await initialLatestFetch();
-  const categories = await initialCategoryFetch();
-  const tags = await initialTagFetch();
- console.log(" hey this is server loading but i cant send the js of the client side ")
+  const blogs = await getBlogs({
+    page,
+    category,
+    tag,
+  });
+
+  const latestBlogs = await getLatestBlogs();
+  const categories = await getCategory();
+  const tags = await getTags();
 
   return (
-    <BlogDataProvider>
-      <BlogClient
-        initialBlogs={initialBlogs}   
-        latestBlogs={latestBlogs}     
-        initialCategories={categories}
-        initialTags={tags}
-      />
-    </BlogDataProvider>
+    <BlogClient
+      blogs={blogs}
+      latestBlogs={latestBlogs}
+      categories={categories}
+      tags={tags}
+      page={page}
+      category={category}
+      tag={tag}
+      search={search}
+      sort={sort}
+    />
   );
 }
