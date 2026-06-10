@@ -5,7 +5,7 @@ const getBaseUrl = () => {
   return "";
 };
 
-// ─── Auth ────────────────────────────────────────────────────────────────────
+// ─── Auth ─────────────────────────────────────────────────────────────────────
 
 export const signIn = async (payload: { email: string; password: string }) => {
   const res = await fetch(`${getBaseUrl()}/api/auth/login`, {
@@ -24,7 +24,7 @@ export const signOut = async () => {
   return res.json();
 };
 
-// ─── Blogs ───────────────────────────────────────────────────────────────────
+// ─── Blogs ────────────────────────────────────────────────────────────────────
 
 export const fetchBlogs = async ({
   page,
@@ -32,25 +32,29 @@ export const fetchBlogs = async ({
   searchQuery,
   tags = [],
   category,
+  sort,
 }: {
   page: number;
-  searchQuery:string;
+  searchQuery?: string;
   limit: number;
   tags?: string[];
   category?: string;
+  sort?: string;
 }) => {
   const queryParams = new URLSearchParams();
   queryParams.set("offset", String((page - 1) * limit));
   queryParams.set("limit", String(limit));
-  if(searchQuery) queryParams.set("query", searchQuery);
+  if (searchQuery) queryParams.set("query", searchQuery);
   if (tags.length > 0) queryParams.set("tags", tags.join(","));
+  // Never forward "all" — leave it absent so the API returns everything
   if (category && category !== "all") queryParams.set("category", category);
+  if (sort && sort !== "latest") queryParams.set("sort", sort);
+
   const res = await fetch(`${getBaseUrl()}/api/blogs?${queryParams.toString()}`);
   if (!res.ok) throw new Error("Failed to fetch blogs");
   return res.json();
 };
 
-// ✅ Fixed createBlogs
 export const createBlogs = async (newBlog: FormData) => {
   const res = await fetch(`${getBaseUrl()}/api/blogs`, {
     method: "POST",
@@ -63,8 +67,13 @@ export const createBlogs = async (newBlog: FormData) => {
   return res.json();
 };
 
-// ✅ Fixed updateBlog
-export const updateBlog = async ({ id, formData }: { id: string; formData: FormData }) => {
+export const updateBlog = async ({
+  id,
+  formData,
+}: {
+  id: string;
+  formData: FormData;
+}) => {
   const res = await fetch(`${getBaseUrl()}/api/edit/${id}`, {
     method: "PUT",
     body: formData,
@@ -75,13 +84,15 @@ export const updateBlog = async ({ id, formData }: { id: string; formData: FormD
   }
   return res.json();
 };
+
 export const deleteBlog = async (id: string) => {
-  const res = await fetch(`${getBaseUrl()}/api/edit/${id}`, { method: "DELETE" });
+  const res = await fetch(`${getBaseUrl()}/api/edit/${id}`, {
+    method: "DELETE",
+  });
   if (!res.ok) throw new Error("Failed to delete blog");
   return res.json();
 };
 
-// ─── Categories ──────────────────────────────────────────────────────────────
 
 export const fetchCategory = async () => {
   const res = await fetch(`${getBaseUrl()}/api/categories`);
@@ -89,7 +100,10 @@ export const fetchCategory = async () => {
   return res.json();
 };
 
-export const createCategory = async (newCat: any) => {
+export const createCategory = async (newCat: {
+  name: string;
+  description?: string;
+}) => {
   const res = await fetch(`${getBaseUrl()}/api/categories`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -103,12 +117,13 @@ export const createCategory = async (newCat: any) => {
 };
 
 export const deleteCategory = async (id: string) => {
-  const res = await fetch(`${getBaseUrl()}/api/categories/${id}`, { method: "DELETE" });
+  const res = await fetch(`${getBaseUrl()}/api/categories/${id}`, {
+    method: "DELETE",
+  });
   if (!res.ok) throw new Error("Failed to delete category");
   return res.json();
 };
 
-// ─── Tags ────────────────────────────────────────────────────────────────────
 
 export const fetchTags = async () => {
   const res = await fetch(`${getBaseUrl()}/api/tags`);
@@ -116,7 +131,7 @@ export const fetchTags = async () => {
   return res.json();
 };
 
-export const createTag = async (newTag: any) => {
+export const createTag = async (newTag: { name: string }) => {
   const res = await fetch(`${getBaseUrl()}/api/tags`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -130,7 +145,9 @@ export const createTag = async (newTag: any) => {
 };
 
 export const deleteTag = async (id: string) => {
-  const res = await fetch(`${getBaseUrl()}/api/tags/${id}`, { method: "DELETE" });
+  const res = await fetch(`${getBaseUrl()}/api/tags/${id}`, {
+    method: "DELETE",
+  });
   if (!res.ok) throw new Error("Failed to delete tag");
   return res.json();
 };

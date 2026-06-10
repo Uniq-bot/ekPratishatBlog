@@ -1,14 +1,14 @@
 "use client";
+
 import { useDeleteBlog, useGetAdminBlogs } from "@/hooks/useAdminBlogs";
 import { Edit, Trash } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { TableSkeleton } from "./skeleton/TableSkeleton";
+import Link from "next/link";
+import { TableSkeleton } from "@/components/admin/skeleton/TableSkeleton";
 import { useState } from "react";
 
 const ManageBlogs = () => {
   const { data: blogs, isLoading } = useGetAdminBlogs();
   const { mutate: deleteBlog, isPending: isDeleting } = useDeleteBlog();
-  const router = useRouter();
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const handleDelete = (id: string) => {
@@ -22,7 +22,6 @@ const ManageBlogs = () => {
       {isLoading ? (
         <TableSkeleton />
       ) : (
-        // Horizontal scroll wrapper for mobile
         <div className="overflow-x-auto w-full">
           <table className="w-full min-w-[640px]">
             <thead className="bg-[#DBDBB8]">
@@ -36,39 +35,58 @@ const ManageBlogs = () => {
               </tr>
             </thead>
             <tbody>
+              {blogs?.posts?.length === 0 && (
+                <tr>
+                  <td colSpan={6} className="px-4 py-8 text-center text-gray-400">
+                    No blogs yet.
+                  </td>
+                </tr>
+              )}
               {blogs?.posts?.map((blog: any, index: number) => (
-                <tr key={blog.id} className="border-t hover:bg-gray-50 transition-colors">
-                  <td className="px-4 py-4">{index + 1}</td>
+                <tr
+                  key={blog.id}
+                  className="border-t hover:bg-gray-50 transition-colors"
+                >
+                  <td className="px-4 py-4 text-sm text-gray-500">{index + 1}</td>
                   <td className="px-4 py-4">
-                    <div className="font-medium">{blog.title}</div>
+                    <div className="font-medium text-sm">{blog.title}</div>
+                    <div className="text-xs text-gray-400 mt-0.5 truncate max-w-[220px]">
+                      {blog.slug}
+                    </div>
                   </td>
                   <td className="px-4 py-4">
-                    <span className="px-3 py-1 rounded-full text-sm bg-blue-100 whitespace-nowrap">
+                    <span className="px-3 py-1 rounded-full text-xs bg-blue-100 whitespace-nowrap">
                       {blog.category?.name ?? "—"}
                     </span>
                   </td>
                   <td className="px-4 py-4">
                     <div className="flex flex-wrap gap-1">
                       {blog.tags?.map((tag: any) => (
-                        <span key={tag.id} className="px-2 py-1 rounded-full text-sm bg-green-100 whitespace-nowrap">
+                        <span
+                          key={tag.id}
+                          className="px-2 py-0.5 rounded-full text-xs bg-green-100 whitespace-nowrap"
+                        >
                           {tag.name}
                         </span>
                       ))}
                     </div>
                   </td>
-                  <td className="px-4 py-4 text-center">{blog.viewCount ?? 0}</td>
+                  <td className="px-4 py-4 text-center text-sm">
+                    {blog.viewCount ?? 0}
+                  </td>
                   <td className="px-4 py-4">
                     <div className="flex justify-center gap-2">
-                      <button
-                        onClick={() => router.push(`/admin/edit/${blog.id}`)}
-                        className="p-2 bg-white border cursor-pointer hover:bg-gray-100 transition-all"
+                      {/* Link instead of router.push */}
+                      <Link
+                        href={`/admin/edit/${blog.id}`}
+                        className="p-2 bg-white border hover:bg-gray-100 transition-all"
                         title="Edit"
                       >
                         <Edit size={18} />
-                      </button>
+                      </Link>
                       <button
                         onClick={() => handleDelete(blog.id)}
-                        disabled={deletingId === blog.id}
+                        disabled={deletingId === blog.id || isDeleting}
                         className="p-2 border bg-white cursor-pointer hover:bg-red-500 hover:text-white disabled:opacity-50 transition-all"
                         title="Delete"
                       >

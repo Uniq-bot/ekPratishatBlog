@@ -1,136 +1,135 @@
 "use client";
 
-import React from "react";
-import { useBlogUi } from "@/context/BlogListContext";
-import { useQuery } from "@tanstack/react-query";
-import { fetchCategory, fetchTags } from "@/libs/fetch";
-import { useDebounce } from "@/hooks/useDebounce";
+import React, { useRef, useTransition } from "react";
+import { useRouter, usePathname } from "next/navigation";
+
+interface BlogFiltersProps {
+  categories: { id: string; name: string; slug: string }[];
+  tags: { id: string; name: string; slug: string }[];
+  currentCategory?: string;
+  currentTag?: string;
+  currentSort?: string;
+  currentSearch?: string;
+}
 
 const BlogFilters = ({
-  initialCategories,
-  initialTags,
-}: {
-  initialCategories: any[];
-  initialTags: any[];
-}) => {
-  const {
-    tag,
-    setTag,
-    category,
-    setCategory,
-    searchQuery,
-    setSearchQuery,
-    sortFilter,
-    setSortFilter,
-    setPage,
-  } = useBlogUi();
+  categories,
+  tags,
+  currentCategory,
+  currentTag,
+  currentSort = "latest",
+  currentSearch,
+}: BlogFiltersProps) => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const [isPending, startTransition] = useTransition();
+  const searchRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const { data: categoriesData = [] } = useQuery({
-    queryKey: ["categories"],
-    queryFn: fetchCategory,
-    staleTime: 1000 * 60 * 10,
-    placeholderData: initialCategories,  
-  });
+  const updateParam = (key: string, value: string) => {
+    const params = new URLSearchParams(window.location.search);
+    if (value && value !== "all" && value !== "") {
+      params.set(key, value);
+    } else {
+      params.delete(key);
+    }
+    // Always reset to page 1 when any filter changes
+    params.delete("page");
+    startTransition(() => {
+      router.push(`${pathname}?${params.toString()}`);
+    });
+  };
 
-  const { data: tagsData = [] } = useQuery({
-    queryKey: ["tags"],
-    queryFn: fetchTags,
-    staleTime: 1000 * 60 * 10,
-    placeholderData: initialTags, 
-  });
+  const handleSearch = (val: string) => {
+    if (searchRef.current) clearTimeout(searchRef.current);
+    searchRef.current = setTimeout(() => {
+      updateParam("search", val);
+    }, 400);
+  };
 
   const handleReset = () => {
-    setSearchQuery("");
-    setCategory("all");
-    setTag("all");
-    setSortFilter("latest");
-    setPage(1);
+    startTransition(() => {
+      router.push("/");
+    });
   };
 
   return (
-    <div className="w-full  text-white   border-b-5 border-[#C9981A] py-7 px-5 flex justify-between  gap-4">
+    <div
+      className={`w-full text-white border-b-5 border-[#C9981A] py-7 px-5 flex justify-between gap-4 transition-opacity ${
+        isPending ? "opacity-60 pointer-events-none" : ""
+      }`}
+    >
       {/* SEARCH */}
-      <div className="flex flex-col w-1/2 ">
-        <label>Search</label>
+      <div className="flex flex-col w-1/2">
+        <label htmlFor="filter-search">Search</label>
         <input
-          value={searchQuery}
-          onChange={(e) => {
-            setSearchQuery(e.target.value);
-            setPage(1);
-          }}
+          id="filter-search"
+          defaultValue={currentSearch ?? ""}
+          onChange={(e) => handleSearch(e.target.value)}
           placeholder="Search..."
-          className="pl-2 outline-none focus:bg-[#2D2D2D] focus:text-[#e8b940] bg-[#ece8df] border border-[#D2C5AB] text-black" 
+          className="pl-2 outline-none focus:bg-[#2D2D2D] focus:text-[#e8b940] bg-[#ece8df] border border-[#D2C5AB] text-black"
         />
       </div>
 
-      {/* FILTERS */}
-    
-        {/* CATEGORY */}
-        <div className="flex flex-col w-1/5">
-          <label>Category</label>
-          <select
-            value={category}
-            onChange={(e) => {
-              setCategory(e.target.value);
-              setPage(1);
-            }}
-            className="border text-black focus:bg-[#2D2D2D] focus:text-[#e8b940] border-[#D2C5AB] bg-[#ece8df]"
-          >
-            <option value="all">All</option>
-            {categoriesData.map((c: any) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* SORT */}
-        <div className="flex flex-col w-1/5">
-          <label>Sort</label>
-          <select
-            value={sortFilter}
-            onChange={(e) => {
-              setSortFilter(e.target.value);
-              setPage(1);
-            }}
-            className="border text-black focus:bg-[#2D2D2D] focus:text-[#e8b940] border-[#D2C5AB] bg-[#ece8df]"
-          >
-            <option value="latest">Latest</option>
-            <option value="oldest">Oldest</option>
-          </select>
-        </div>
-
-        {/* TAGS */}
-        <div className="flex flex-col w-1/5">
-          <label>Tags</label>
-          <select
-            value={tag}
-            onChange={(e) => {
-              setTag(e.target.value);
-              setPage(1);
-            }}
-            className="border text-black focus:bg-[#2D2D2D] focus:text-[#e8b940] border-[#D2C5AB] bg-[#ece8df]"
-          >
-            <option value="all">All</option>
-            {tagsData.map((t: any) => (
-              <option key={t.id} value={t.name}>
-                {t.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* RESET */}
-        <div className="flex items-end">
-          <button
-            onClick={handleReset}
-            className="bg-red-600 text-white px-3 py-1"
-          >
-            Reset
-          </button>
-        </div>
+      {/* CATEGORY */}
+      <div className="flex flex-col w-1/5">
+        <label htmlFor="filter-category">Category</label>
+        <select
+          id="filter-category"
+          value={currentCategory ?? "all"}
+          onChange={(e) => updateParam("category", e.target.value)}
+          className="border text-black focus:bg-[#2D2D2D] focus:text-[#e8b940] border-[#D2C5AB] bg-[#ece8df]"
+        >
+          <option value="all">All</option>
+          {categories.map((c) => (
+            <option key={c.id} value={c.slug}>
+              {c.name}
+            </option>
+          ))}
+        </select>
       </div>
+
+      {/* SORT */}
+      <div className="flex flex-col w-1/5">
+        <label htmlFor="filter-sort">Sort</label>
+        <select
+          id="filter-sort"
+          value={currentSort}
+          onChange={(e) => updateParam("sort", e.target.value)}
+          className="border text-black focus:bg-[#2D2D2D] focus:text-[#e8b940] border-[#D2C5AB] bg-[#ece8df]"
+        >
+          <option value="latest">Latest</option>
+          <option value="oldest">Oldest</option>
+        </select>
+      </div>
+
+      {/* TAGS */}
+      <div className="flex flex-col w-1/5">
+        <label htmlFor="filter-tag">Tags</label>
+        <select
+          id="filter-tag"
+          value={currentTag ?? "all"}
+          onChange={(e) => updateParam("tag", e.target.value)}
+          className="border text-black focus:bg-[#2D2D2D] focus:text-[#e8b940] border-[#D2C5AB] bg-[#ece8df]"
+        >
+          <option value="all">All</option>
+          {tags.map((t) => (
+            <option key={t.id} value={t.slug}>
+              {t.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* RESET */}
+      <div className="flex items-end">
+        <button
+          onClick={handleReset}
+          className="bg-red-600 text-white px-3 py-1"
+        >
+          Reset
+        </button>
+      </div>
+    </div>
   );
 };
 

@@ -1,13 +1,11 @@
-
-
 import AdminPanel from "@/components/admin/AdminPanel";
-import { initialCategoryFetch, initialTagFetch } from "@/data/getBlogs";
-
-
-
+import { getCategory, getTags } from "@/data/getBlogs";
 
 export default async function Page() {
-    const categories = await initialCategoryFetch();
-  const tags = await initialTagFetch();
+  const [categories, tags] = await Promise.all([
+    getCategory(),
+    getTags(),
+  ]);
+
   return <AdminPanel initialCategories={categories} initialTags={tags} />;
 }

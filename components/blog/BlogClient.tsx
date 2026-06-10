@@ -15,49 +15,56 @@ const BlogClient = ({
   page,
   category,
   tag,
-  search,
   sort,
 }) => {
   const router = useRouter();
-  const params = useSearchParams();
+  const searchParams = useSearchParams();
 
   const updateUrl = (key, value) => {
-    const newParams = new URLSearchParams(params.toString());
+    const params = new URLSearchParams(searchParams.toString());
 
-    newParams.set(key, value);
+    if (value === "all" || value === "") {
+      params.delete(key);
+    } else {
+      params.set(key, value);
+    }
+    console.log(categories)
 
-    // reset page on filter change
+    // reset pagination when filters change
     if (key !== "page") {
-      newParams.set("page", "1");
+      params.set("page", "1");
     }
 
-    router.push(`?${newParams.toString()}`);
+    router.push(`?${params.toString()}`);
   };
 
   return (
     <div className="w-full min-h-screen flex flex-col bg-[#2E2E2E] md:px-20">
 
+      {/* HERO */}
       <div className="lg:w-full min-h-100 flex gap-5">
         <BlogHero />
-
         <LatestBlogs latestBlogs={latestBlogs?.posts ?? []} />
       </div>
 
+      {/* MAIN */}
       <div className="lg:mb-10 relative lg:top-10 pb-10 w-[90%] m-auto flex flex-col gap-10">
 
-        {/* FILTERS */}
+        {/* FILTERS (URL-driven) */}
         <BlogFilters
           categories={categories}
           tags={tags}
+          category={category}
+          tag={tag}
+          sort={sort}
           onCategoryChange={(val) => updateUrl("category", val)}
           onTagChange={(val) => updateUrl("tag", val)}
-          onSearchChange={(val) => updateUrl("search", val)}
           onSortChange={(val) => updateUrl("sort", val)}
         />
 
         <div className="w-full flex gap-5">
 
-          {/* BLOG LIST */}
+          {/* BLOG LIST (server-fed data only) */}
           <BlogListClient
             blogs={blogs.posts}
             page={page}
@@ -68,6 +75,7 @@ const BlogClient = ({
 
           <NewsLetter />
         </div>
+
       </div>
     </div>
   );
