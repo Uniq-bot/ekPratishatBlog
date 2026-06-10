@@ -1,6 +1,6 @@
 "use client";
 
-import { Clock } from "lucide-react";
+import { Calendar, Clock } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -38,7 +38,7 @@ const LatestBlogs = ({ latestBlogs = [] }: { latestBlogs?: BlogItem[] }) => {
         <p className="text-sm text-gray-500">No latest blogs found.</p>
       ) : (
         <div className="flex flex-col gap-3">
-          {latestBlogs.slice(0, 3).map((blog) => {
+          {latestBlogs.slice(0, 2).map((blog) => {
             const b = normalizeBlog(blog);
 
             return (
@@ -58,7 +58,7 @@ const LatestBlogs = ({ latestBlogs = [] }: { latestBlogs?: BlogItem[] }) => {
                   </h2>
                 </div>
                 <p className="flex items-center gap-1 text-sm text-white/70">
-                  <Clock /> {b.createdAt}
+                  <Calendar size={20} /> {b.createdAt}
                 </p>
               </div>
             );

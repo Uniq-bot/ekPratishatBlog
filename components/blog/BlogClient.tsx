@@ -1,65 +1,73 @@
 "use client";
+
 import BlogHero from "@/components/blog/BlogHero";
-import BlogListClient from "@/components/blog/BlogListClient";
+import BlogListClient from "@/components/blog/BlogList";
 import LatestBlogs from "@/components/blog/LatestBlogs";
 import BlogFilters from "@/components/shared/BlogFilters";
-import { useBlogs, useLatestBlogs } from "@/hooks/useBlogs";
-import { useBlogUi } from "@/context/BlogListContext";
-import { useDebounce } from "@/hooks/useDebounce";
+import NewsLetter from "./NewsLetter";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const BlogClient = ({
-  initialBlogs,
+  blogs,
   latestBlogs,
-  initialCategories,
-  initialTags,
-}: {
-  initialBlogs: { posts: any[]; totalCount: number };
-  latestBlogs: { posts: any[] };
-  initialCategories: any[];
-  initialTags: any[];
+  categories,
+  tags,
+  page,
+  category,
+  tag,
+  search,
+  sort,
 }) => {
-  const {
-    tag,
-    setTag,
-    category,
-    setCategory,
-    searchQuery,
-    setSearchQuery,
-    sortFilter,
-    page,
-    setSortFilter,
-    setPage,
-  } = useBlogUi();
-  const debouncedSearchQuery = useDebounce(searchQuery, 500);
-  const { blogs, isLoading } = useBlogs({
-    page,
-    limit: 10,
-    searchQuery: debouncedSearchQuery,
-    tags: tag !== "all" ? [tag] : [],
-    category: category !== "all" ? category : "all",
-    initialData: initialBlogs,
-  });
-  const { latestBlogss } = useLatestBlogs({ initialData: latestBlogs });
+  const router = useRouter();
+  const params = useSearchParams();
+
+  const updateUrl = (key, value) => {
+    const newParams = new URLSearchParams(params.toString());
+
+    newParams.set(key, value);
+
+    // reset page on filter change
+    if (key !== "page") {
+      newParams.set("page", "1");
+    }
+
+    router.push(`?${newParams.toString()}`);
+  };
 
   return (
-    <div className="w-full min-h-screen flex flex-col bg-[#2E2E2E] md:pl-20 md:pr-20">
-      <div className="lg:w-full min-h-100 relative lg:p-10 gap-5 flex">
+    <div className="w-full min-h-screen flex flex-col bg-[#2E2E2E] md:px-20">
+
+      <div className="lg:w-full min-h-100 flex gap-5">
         <BlogHero />
-        <LatestBlogs latestBlogs={latestBlogss?.posts ?? []} />
+
+        <LatestBlogs latestBlogs={latestBlogs?.posts ?? []} />
       </div>
-      <div className="lg:mb-10 relative lg:top-10 z-10 top-30 pb-10 w-[90%] m-auto h-full flex flex-col gap-10">
+
+      <div className="lg:mb-10 relative lg:top-10 pb-10 w-[90%] m-auto flex flex-col gap-10">
+
+        {/* FILTERS */}
         <BlogFilters
-          initialCategories={initialCategories}
-          initialTags={initialTags}
+          categories={categories}
+          tags={tags}
+          onCategoryChange={(val) => updateUrl("category", val)}
+          onTagChange={(val) => updateUrl("tag", val)}
+          onSearchChange={(val) => updateUrl("search", val)}
+          onSortChange={(val) => updateUrl("sort", val)}
         />
-        <BlogListClient
-          blogs={blogs?.posts ?? []}
-          isLoading={isLoading}
-          page={page}
-          totalCount={blogs?.totalCount ?? 0}
-          limit={10}
-          onPageChange={setPage}
-        />
+
+        <div className="w-full flex gap-5">
+
+          {/* BLOG LIST */}
+          <BlogListClient
+            blogs={blogs.posts}
+            page={page}
+            totalCount={blogs.totalCount}
+            limit={10}
+            onPageChange={(p) => updateUrl("page", String(p))}
+          />
+
+          <NewsLetter />
+        </div>
       </div>
     </div>
   );

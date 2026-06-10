@@ -2,13 +2,12 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 const BlogCard = ({ blog }: { blog: any }) => {
-  const router = useRouter();
   return (
     <div
       key={blog?.id}
       className="w-full border-b-2 pb-5  text-white cursor-pointer group   flex flex-col p-5 md:flex-row border-[#C9981A] gap-5 overflow-hidden"
     >
-      <div className="w-full md:w-60 relative h-48 md:h-full shrink-0">
+      <div className="w-full md:w-60 relative h-48 md:h-full overflow-hidden shrink-0">
         <Image
           src={blog?.coverImage ?? "/logo.png"}
           alt={blog?.title}
