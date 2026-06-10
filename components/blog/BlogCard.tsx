@@ -1,9 +1,15 @@
+"use client"
 import Image from "next/image";
 import Link from "next/link";
-
+import { motion } from "framer-motion";
 const BlogCard = ({ blog }: { blog: any }) => {
   return (
-    <div className="w-full border-b-2 pb-5 text-white cursor-pointer group flex flex-col p-5 md:flex-row border-[#C9981A] gap-5 overflow-hidden">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, }}
+      
+    className="w-full border-b-2 pb-5 text-white cursor-pointer group flex flex-col p-5 md:flex-row border-[#EBC044] gap-5 overflow-hidden">
       <div className="w-full md:w-60 relative h-48 md:h-auto overflow-hidden shrink-0">
         <Image
           src={blog?.coverImage ?? "/logo.png"}
@@ -18,16 +24,16 @@ const BlogCard = ({ blog }: { blog: any }) => {
       </div>
 
       <div className="py-1 flex flex-col items-start flex-1 gap-2">
-        <span className="text-[12px] font-semibold bg-[rgba(154,106,0,0.07)] p-1 px-3 rounded-2xl text-[#d69406]">
+        <span className="text-[12px] font-semibold bg-[rgba(154,106,0,0.07)] p-1 px-3 rounded-2xl text-[#EBC044]">
           {new Date(blog?.createdAt).toLocaleDateString()}
         </span>
 
-        <h2 className="text-2xl group-hover:text-[#d69406] transition-all leading-tight">
+        <h2 className="text-2xl group-hover:text-[#EBC044] transition-all leading-tight">
           {blog?.title}
         </h2>
 
         {blog?.description && (
-          <p className="text-sm text-gray-400 line-clamp-2">
+          <p className="text-sm text-gray-300 line-clamp-2">
             {blog.description}
           </p>
         )}
@@ -38,7 +44,7 @@ const BlogCard = ({ blog }: { blog: any }) => {
             {blog.tags.slice(0, 3).map((tag: any) => (
               <span
                 key={tag.id}
-                className="text-[11px] border border-[#FFD07E] px-2 py-0.5 text-[#d69406]"
+                className="text-[11px] border border-[#FFD07E] px-2 py-0.5 text-[#EBC044]"
               >
                 {tag.name}
               </span>
@@ -48,12 +54,14 @@ const BlogCard = ({ blog }: { blog: any }) => {
 
         <Link
           href={`/blog/${blog?.slug ?? blog?.id}`}
-          className="underline hover:text-[#d69406] mt-auto cursor-pointer transition-all text-[#d69406] text-sm"
+          className="underline hover:text-[#d69406] mt-auto cursor-pointer transition-all text- textwhite-sm"
         >
-          Read more →
+         <motion.p whileHover={{ x: 5 }} transition={{ duration: 0.3 }}>
+           Read more <span>→</span>
+         </motion.p>
         </Link>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
