@@ -1,7 +1,8 @@
 "use client";
+
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { PanelLeftClose, Menu } from "lucide-react";
+import Link from "next/link";
 
 const AsideBar = ({
   activeTab,
@@ -11,7 +12,6 @@ const AsideBar = ({
   setActiveTab: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
 
   const asideBarItems = [
     { id: 1, slug: "tag&category", name: "Tag & Category" },
@@ -21,12 +21,12 @@ const AsideBar = ({
 
   const handleClick = (slug: string) => {
     setActiveTab(slug);
-    setIsOpen(false); 
+    setIsOpen(false);
   };
 
   return (
     <>
-      
+      {/* Mobile hamburger */}
       <button
         className="lg:hidden fixed top-4 left-4 z-30 p-2 rounded-md bg-[#EBECD8] shadow-md border border-gray-300"
         onClick={() => setIsOpen(true)}
@@ -35,6 +35,7 @@ const AsideBar = ({
         <Menu size={20} />
       </button>
 
+      {/* Mobile overlay */}
       {isOpen && (
         <div
           className="lg:hidden fixed inset-0 z-20 bg-black/40 backdrop-blur-sm"
@@ -42,22 +43,23 @@ const AsideBar = ({
         />
       )}
 
-    <aside
-  className={`
-    fixed top-0 left-0 bottom-0 z-30 h-screen w-64 lg:w-1/5
-    bg-[#EBECD8] border-r shadow-2xl shadow-gray-500
-    transition-transform duration-300 ease-in-out
-    ${isOpen ? "translate-x-0" : "-translate-x-full"}
-    lg:translate-x-0 lg:sticky lg:top-0 lg:h-screen lg:z-auto lg:shadow-none
-  `}
->
+      <aside
+        className={`
+          fixed top-0 left-0 bottom-0 z-30 h-screen w-64 lg:w-1/5
+          bg-[#EBECD8] border-r shadow-2xl shadow-gray-500
+          transition-transform duration-300 ease-in-out
+          ${isOpen ? "translate-x-0" : "-translate-x-full"}
+          lg:translate-x-0 lg:sticky lg:top-0 lg:h-screen lg:z-auto lg:shadow-none
+        `}
+      >
         <div className="w-full flex items-center justify-between">
-          <h1
-            onClick={() => router.push("/")}
-            className="cursor-pointer text-2xl font-bold p-3 pl-5 leading-tight"
+          {/* Use Link instead of router.push */}
+          <Link
+            href="/"
+            className="text-2xl font-bold p-3 pl-5 leading-tight hover:opacity-80 transition-opacity"
           >
             Ekpratishat <br /> Real estate
-          </h1>
+          </Link>
           <span
             className="lg:hidden p-3 cursor-pointer"
             onClick={() => setIsOpen(false)}

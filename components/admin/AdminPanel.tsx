@@ -1,4 +1,5 @@
-"use client"
+"use client";
+
 import AsideBar from "@/components/admin/AsideBar";
 import BlogEditor from "@/components/admin/BlogEditor";
 import ManageBlogs from "@/components/admin/ManageBlogs";
@@ -7,20 +8,26 @@ import { useAdminUI } from "@/context/AdminContext";
 import { useGetCategory, useGetTags } from "@/hooks/useAdminBlogs";
 import Image from "next/image";
 
-const AdminPanel = ({ initialCategories, initialTags }: { initialCategories: any[]; initialTags: any[] }) => {
+interface Props {
+  initialCategories: any[];
+  initialTags: any[];
+}
+
+const AdminPanel = ({ initialCategories, initialTags }: Props) => {
   const { activeTab, setActiveTab, blocks, setBlocks, user } = useAdminUI();
 
-  const { data: categories } = useGetCategory({initialCategories});
-  const { data: tags } = useGetTags({initialTags});
+  // Seeded with server-fetched data; React Query refreshes in background
+  const { data: categories = initialCategories } = useGetCategory({ initialCategories });
+  const { data: tags = initialTags } = useGetTags({ initialTags });
 
-  const tabComponents: any = {
-    "tag&category": <TagNCategory tags={tags ?? []} categories={categories ?? []} />,
+  const tabComponents: Record<string, React.ReactNode> = {
+    "tag&category": <TagNCategory tags={tags} categories={categories} />,
     "create-blog": (
       <BlogEditor
         mode="create"
-        tags={tags ?? []}
+        tags={tags}
         user={user}
-        categories={categories ?? []}
+        categories={categories}
         setBlocks={setBlocks}
         blocks={blocks}
       />
@@ -33,6 +40,7 @@ const AdminPanel = ({ initialCategories, initialTags }: { initialCategories: any
       <AsideBar activeTab={activeTab} setActiveTab={setActiveTab} />
 
       <div className="w-full lg:ml-2 p-4 lg:p-5 min-h-screen overflow-y-auto">
+        {/* Watermark */}
         <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
           <Image src="/logo.png" alt="logo" width={500} height={400} />
         </div>

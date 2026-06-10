@@ -54,27 +54,26 @@ export const useDeleteBlog = () => {
 export const useGetAdminBlogs = () => {
   return useQuery({
     queryKey: ["admin-blogs"],
-queryFn: () => fetchBlogs({ page: 1, limit: 100, tags: [], category: "all", searchQuery: "" }),    staleTime: 0,
-  });
-};
-
-export const useEditableBlog = (id: string) => {
-  return useQuery({
-    queryKey: ["editable-blog", id],
-    queryFn: async () => {
-      const res = await fetch(`/api/edit/${id}`);
-      if (!res.ok) throw new Error("Failed to fetch blog details");
-      return res.json();
-    },
-    enabled: !!id,
-    staleTime: 0,           // always fresh when entering edit page
-    refetchOnMount: "always",
+    // Pass category as undefined so the API doesn't filter — fetches all blogs
+    queryFn: () =>
+      fetchBlogs({
+        page: 1,
+        limit: 100,
+        tags: [],
+        category: undefined,
+        searchQuery: "",
+      }),
+    staleTime: 0,
   });
 };
 
 // ─── Categories ──────────────────────────────────────────────────────────────
 
-export const useGetCategory = ({ initialCategories }: { initialCategories: any[] }) => {
+export const useGetCategory = ({
+  initialCategories,
+}: {
+  initialCategories: any[];
+}) => {
   return useQuery({
     queryKey: ["categories"],
     queryFn: fetchCategory,

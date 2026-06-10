@@ -1,35 +1,65 @@
-import BlogClient from "@/components/blog/BlogClient";
-
-import { getBlogDetails } from "@/data/getBlogDet";
+import BlogHero from "@/components/blog/BlogHero";
+import BlogList from "@/components/blog/BlogList";
+import LatestBlogs from "@/components/blog/LatestBlogs";
+import BlogFilters from "@/components/shared/BlogFilters";
+import NewsLetter from "@/components/blog/NewsLetter";
 import { getBlogs, getCategory, getLatestBlogs, getTags } from "@/data/getBlogs";
 
-export default async function BlogPage({ searchParams }: { searchParams: { [key: string]: string | undefined } }) {
-  const page = Number(searchParams.page) || 1;
-  const category = searchParams.category;
-  const tag = searchParams.tag;
-  const sort = searchParams.sort;
+// Force dynamic so search params always re-fetch on the server
+export const dynamic = "force-dynamic";
 
-  const blogs = await getBlogs({
-    page,
-    category,
-    tag,
-  });
+interface PageProps {
+  searchParams: Promise<{ [key: string]: string | undefined }>;
+}
 
-  const latestBlogs = await getLatestBlogs();
-  const categories = await getCategory();
-  const tags = await getTags();
+export default async function BlogPage({ searchParams }: PageProps) {
+  const params = await searchParams;
+
+  const page     = Math.max(1, Number(params.page) || 1);
+  const category = params.category;
+  const tag      = params.tag;
+  const sort     = (params.sort as "latest" | "oldest") ?? "latest";
+  const search   = params.search;
+
+  const [blogs, latestBlogs, categories, tags] = await Promise.all([
+    getBlogs({ page, category, tag, sort, search }),
+    getLatestBlogs(),
+    getCategory(),
+    getTags(),
+  ]);
 
   return (
-    <BlogClient
-      blogs={blogs}
-      latestBlogs={latestBlogs}
-      categories={categories}
-      tags={tags}
-      page={page}
-      category={category}
-      tag={tag}
-      search={search}
-      sort={sort}
-    />
+    <div className="w-full min-h-screen flex flex-col bg-[#2E2E2E] md:px-20">
+      <div className="lg:w-full min-h-100 flex gap-5">
+        <BlogHero />
+        <LatestBlogs latestBlogs={latestBlogs?.posts ?? []} />
+      </div>
+
+      <div className="lg:mb-10 relative lg:top-10 pb-10 w-[90%] m-auto flex flex-col gap-10">
+        {/* Filters — pure server-rendered form using <Link> / URLSearchParams */}
+        <BlogFilters
+          categories={categories}
+          tags={tags}
+          currentCategory={category}
+          currentTag={tag}
+          currentSort={sort}
+          currentSearch={search}
+        />
+
+        <div className="w-full flex gap-5">
+          <BlogList
+            blogs={blogs.posts}
+            page={page}
+            totalCount={blogs.totalCount}
+            limit={10}
+            category={category}
+            tag={tag}
+            sort={sort}
+            search={search}
+          />
+          <NewsLetter />
+        </div>
+      </div>
+    </div>
   );
 }

@@ -5,11 +5,15 @@ export const getBlogs = async ({
   limit = 10,
   category,
   tag,
+  sort = "latest",
+  search,
 }: {
   page?: number;
   limit?: number;
   category?: string;
   tag?: string;
+  sort?: "latest" | "oldest";
+  search?: string;
 } = {}) => {
   try {
     const skip = (page - 1) * limit;
@@ -17,23 +21,30 @@ export const getBlogs = async ({
     const where: any = {
       status: "PUBLISHED",
       ...(category && {
-        category: {
-          slug: category,
-        },
+        category: { slug: category },
       }),
       ...(tag && {
         tags: {
-          some: {
-            slug: tag,
-          },
+          some: { slug: tag },
         },
       }),
+      ...(search && {
+        OR: [
+          { title: { contains: search, mode: "insensitive" as const } },
+          { description: { contains: search, mode: "insensitive" as const } },
+        ],
+      }),
     };
+
+    const orderBy =
+      sort === "oldest"
+        ? { createdAt: "asc" as const }
+        : { createdAt: "desc" as const };
 
     const [blogs, totalCount] = await Promise.all([
       prisma.blogPost.findMany({
         where,
-        orderBy: { createdAt: "desc" },
+        orderBy,
         skip,
         take: limit,
         include: { tags: true, category: true },
@@ -63,27 +74,20 @@ export const getLatestBlogs = async () => {
   }
 };
 
-
-export const getCategory= async()=>{
+export const getCategory = async () => {
   try {
-    const categories = await prisma.category.findMany({
-      orderBy: { name: "asc" },
-    });
-    return categories;
+    return await prisma.category.findMany({ orderBy: { name: "asc" } });
   } catch (err) {
     console.error("INITIAL CATEGORY FETCH ERROR:", err);
     return [];
   }
-}
+};
 
-export const getTags= async()=>{
+export const getTags = async () => {
   try {
-    const tags = await prisma.tag.findMany({
-      orderBy: { name: "asc" },
-    });
-    return tags;
+    return await prisma.tag.findMany({ orderBy: { name: "asc" } });
   } catch (err) {
     console.error("INITIAL TAG FETCH ERROR:", err);
     return [];
   }
-}
+};

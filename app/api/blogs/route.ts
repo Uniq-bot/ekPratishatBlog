@@ -19,10 +19,16 @@ export async function POST(req: Request) {
     const tags = tagsRaw ? JSON.parse(tagsRaw) : [];
 
     if (!title || !content || !categoryId) {
-      return NextResponse.json({ message: "Title, content and category are required" }, { status: 400 });
+      return NextResponse.json(
+        { message: "Title, content and category are required" },
+        { status: 400 }
+      );
     }
     if (!authorID) {
-      return NextResponse.json({ message: "Author ID is required" }, { status: 400 });
+      return NextResponse.json(
+        { message: "Author ID is required" },
+        { status: 400 }
+      );
     }
 
     let coverImagePath: string | null = null;
@@ -58,12 +64,13 @@ export async function POST(req: Request) {
       slug: generatedSlug,
     });
 
-    // Revalidate all pages that list or feature blog posts
     revalidatePath("/");
-    // revalidatePath("/blog");
     revalidatePath(`/blog/${generatedSlug}`);
 
-    return NextResponse.json({ message: "Blog created successfully", post }, { status: 201 });
+    return NextResponse.json(
+      { message: "Blog created successfully", post },
+      { status: 201 }
+    );
   } catch (err: any) {
     console.error("CREATE BLOG ERROR:", err);
     return NextResponse.json(
@@ -76,16 +83,27 @@ export async function POST(req: Request) {
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
-    const offset = Number(searchParams.get("offset")) || 0;
-    const limit = Number(searchParams.get("limit")) || 30;
-    const category = searchParams.get("category") || undefined;
-    const tags = searchParams.get("tags")?.split(",").filter(Boolean) || [];
+    const offset      = Number(searchParams.get("offset")) || 0;
+    const limit       = Number(searchParams.get("limit")) || 10;
+    const category    = searchParams.get("category") || undefined;
+    const tags        = searchParams.get("tags")?.split(",").filter(Boolean) || [];
     const searchQuery = searchParams.get("query") || undefined;
+    const sort        = (searchParams.get("sort") as "latest" | "oldest") || "latest";
 
-    const { posts, totalCount } = await getBlogByFilters({ offset, limit, category, tags, searchQuery });
+    const { posts, totalCount } = await getBlogByFilters({
+      offset,
+      limit,
+      category,
+      tags,
+      searchQuery,
+      sort,
+    });
 
     return NextResponse.json({ message: "Fetched posts successfully", posts, totalCount });
   } catch (err: any) {
-    return NextResponse.json({ message: "Internal server error on fetching posts", error: err?.message }, { status: 500 });
+    return NextResponse.json(
+      { message: "Internal server error on fetching posts", error: err?.message },
+      { status: 500 }
+    );
   }
 }
