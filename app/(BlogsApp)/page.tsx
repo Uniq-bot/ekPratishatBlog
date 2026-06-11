@@ -1,3 +1,4 @@
+// "use client";
 import BlogHero from "@/components/blog/BlogHero";
 import BlogList from "@/components/blog/BlogList";
 import LatestBlogs from "@/components/blog/LatestBlogs";
@@ -60,3 +61,19 @@ export default async function BlogPage({ searchParams }: PageProps) {
     </div>
   );
 }
+
+// import React from 'react'
+
+// const page = () => {
+//   return (
+//     <div>
+//       <form onSubmit={()=> alert("submitted")}>
+//         <button type="submit">
+//         Click
+//       </button>
+//       </form>
+//     </div>
+//   )
+// }
+
+// export default page
