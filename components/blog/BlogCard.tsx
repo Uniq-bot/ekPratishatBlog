@@ -18,7 +18,7 @@ const BlogCard = ({ blog }: { blog: any }) => {
           height={320}
           className="w-full h-full object-cover"
         />
-        <span className="absolute top-4 left-0 bg-black text-white px-2 py-1 text-xs">
+        <span className="absolute top-4  left-0 bg-black font-semibold text-white px-3 py-2 text-md">
           {blog?.category?.name}
         </span>
       </div>

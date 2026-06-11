@@ -5,7 +5,6 @@ import BlogFilters from "@/components/shared/BlogFilters";
 import NewsLetter from "@/components/blog/NewsLetter";
 import { getBlogs, getCategory, getLatestBlogs, getTags } from "@/data/getBlogs";
 
-export const dynamic = "force-dynamic";
 
 interface PageProps {
   searchParams: Promise<{ [key: string]: string | undefined }>;

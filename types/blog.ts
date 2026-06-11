@@ -25,3 +25,14 @@ export interface Blog {
   category?: { id: string; name: string } | null;
   tags: Tag[];
 }
+
+
+// types/blog.ts
+export type BlogItem = {
+  id: string;
+  title: string;
+  slug: string | null;
+  coverImage: string | null;
+  createdAt: Date;
+  category: { name: string } | null;
+};

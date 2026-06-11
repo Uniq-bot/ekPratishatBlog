@@ -2,6 +2,7 @@ import React from "react";
 import BlogCard from "./BlogCard";
 import Link from "next/link";
 
+
 interface Props {
   blogs: any[];
   page: number;
