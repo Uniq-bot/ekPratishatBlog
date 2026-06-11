@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useTransition } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 
 interface BlogFiltersProps {
@@ -9,7 +9,7 @@ interface BlogFiltersProps {
   tags: { id: string; name: string; slug: string }[];
   currentCategory?: string;
   currentTag?: string;
-  currentSort?: string;
+  currentSort?: "latest" | "oldest";
   currentSearch?: string;
 }
 
@@ -23,25 +23,32 @@ const BlogFilters = ({
 }: BlogFiltersProps) => {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const [isPending, startTransition] = useTransition();
+
   const searchRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const updateParam = (key: string, value: string) => {
-    const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(searchParams.toString());
+
     if (value && value !== "all" && value !== "") {
       params.set(key, value);
     } else {
       params.delete(key);
     }
-    // Always reset to page 1 when any filter changes
+
+    // reset pagination
     params.delete("page");
+
     startTransition(() => {
-      router.push(`${pathname}?${params.toString()}`, {scroll: false});
+      router.push(`${pathname}?${params.toString()}`, { scroll: false });
     });
   };
 
   const handleSearch = (val: string) => {
     if (searchRef.current) clearTimeout(searchRef.current);
+
     searchRef.current = setTimeout(() => {
       updateParam("search", val);
     }, 400);
@@ -49,7 +56,7 @@ const BlogFilters = ({
 
   const handleReset = () => {
     startTransition(() => {
-      router.push("/");
+      router.push(pathname);
     });
   };
 
@@ -57,13 +64,13 @@ const BlogFilters = ({
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, }}
-      className={`w-full text-white border-b-5 border-[#EBC044]  py-7 px-5 flex justify-between gap-4 transition-opacity ${
+      transition={{ duration: 0.5 }}
+      className={`w-full text-white border-b-5 border-[#EBC044] py-7 px-5 flex justify-between gap-4 transition-opacity ${
         isPending ? "opacity-60 pointer-events-none" : ""
       }`}
     >
       {/* SEARCH */}
-      <div className="flex flex-col w-1/2">
+      <div className="flex flex-col w-1/5">
         <label htmlFor="filter-search">Search</label>
         <input
           id="filter-search"

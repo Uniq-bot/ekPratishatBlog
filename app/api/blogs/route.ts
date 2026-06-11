@@ -88,7 +88,7 @@ export async function GET(req: Request) {
     const category    = searchParams.get("category") || undefined;
     const tags        = searchParams.get("tags")?.split(",").filter(Boolean) || [];
     const searchQuery = searchParams.get("query") || undefined;
-    const sort        = (searchParams.get("sort") as "latest" | "oldest") || "latest";
+    // const sort        = (searchParams.get("sort") as "latest" | "oldest") || "latest";
 
     const { posts, totalCount } = await getBlogByFilters({
       offset,
@@ -96,7 +96,6 @@ export async function GET(req: Request) {
       category,
       tags,
       searchQuery,
-      sort,
     });
 
     return NextResponse.json({ message: "Fetched posts successfully", posts, totalCount });

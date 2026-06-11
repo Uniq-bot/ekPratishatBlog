@@ -4,7 +4,7 @@ import { Dot } from "lucide-react";
 import Image from "next/image";
 
 // Heading tag map: level → HTML tag
-const headingTag: Record<number, keyof JSX.IntrinsicElements> = {
+const headingTag: Record<number, keyof React.JSX.IntrinsicElements> = {
   1: "h1",
   2: "h2",
   3: "h3",
