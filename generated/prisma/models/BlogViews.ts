@@ -221,7 +221,7 @@ export type BlogViewsCreateInput = {
   id?: string
   sessionId: string
   createdAt?: Date | string
-  blogPost: Prisma.BlogPostCreateNestedOneWithoutViewsInput
+  blogPost: Prisma.BlogPostCreateNestedOneWithoutBlogViewsInput
 }
 
 export type BlogViewsUncheckedCreateInput = {
@@ -235,7 +235,7 @@ export type BlogViewsUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   sessionId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  blogPost?: Prisma.BlogPostUpdateOneRequiredWithoutViewsNestedInput
+  blogPost?: Prisma.BlogPostUpdateOneRequiredWithoutBlogViewsNestedInput
 }
 
 export type BlogViewsUncheckedUpdateInput = {

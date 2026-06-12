@@ -1,5 +1,6 @@
+"use client"
 import Image from 'next/image';
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useRouter } from "next/navigation";
 
 const RelatedBlogs = ({relatedBlogs}:{relatedBlogs:any}) => {
@@ -8,31 +9,21 @@ const RelatedBlogs = ({relatedBlogs}:{relatedBlogs:any}) => {
     const router=useRouter();
 
     // lock body scroll when mobile panel open
-    useEffect(() => {
-      const original = typeof document !== 'undefined' ? document.body.style.overflow : '';
-      if (isOpen) {
-        if (typeof document !== 'undefined') document.body.style.overflow = 'hidden';
-      } else {
-        if (typeof document !== 'undefined') document.body.style.overflow = original || '';
-      }
-      return () => {
-        if (typeof document !== 'undefined') document.body.style.overflow = original || '';
-      };
-    }, [isOpen]);
+   
 
   return (
-     <div className="w-full md:w-[35%] h-full">
+     <div className="w-full lg:w-[35%] h-full">
              {/* Mobile toggle button */}
              <button
                aria-label={isOpen ? 'Close related' : 'Open related'}
                onClick={() => setIsOpen(s => !s)}
-               className="fixed top-4 right-2 z-50 p-2  bg-white border shadow-md md:hidden"
+               className="fixed top-4 right-3 z-50 p-2 bg-white border shadow-md lg:hidden text-sm"
              >
                {isOpen ? '✕' : '☰'}
              </button>
 
-             <h1 className="text-2xl ">Related Blogs</h1>
-             <div className="w-full flex flex-col gap-2 mt-5 hidden md:flex">
+             <h1 className="text-lg sm:text-xl lg:text-2xl font-semibold hidden lg:block">Related Blogs</h1>
+             <div className="w-full flex flex-col gap-2 mt-3 lg:mt-5 hidden lg:flex">
                      {relatedBlogs.length > 0 ? relatedBlogs.slice(0, 3).map((blog:any) => {
                        return (
                          <div
@@ -40,9 +31,9 @@ const RelatedBlogs = ({relatedBlogs}:{relatedBlogs:any}) => {
                          onMouseEnter={()=>setIsHovered(blog.id)}
                          onMouseLeave={()=>setIsHovered(null)}
                            key={blog.id}
-                           className={`w-full h-30 transition-all cursor-pointer ${isHovered === blog.id ? 'bg-amber-200' : 'bg-white'}  flex items-center gap-2 p-2 justify-between`}
+                           className={`w-full h-24 sm:h-28 lg:h-32 transition-all cursor-pointer ${isHovered === blog.id ? 'bg-amber-200' : 'bg-white'} flex items-center gap-2 p-2 lg:p-3 justify-between`}
                          >
-                           <div className="w-30 h-full">
+                           <div className="w-24 sm:w-28 lg:w-32 h-full shrink-0">
                              <Image
                                src={blog.image}
                                alt={blog.title}
@@ -52,10 +43,10 @@ const RelatedBlogs = ({relatedBlogs}:{relatedBlogs:any}) => {
                                style={{ width: 'auto', height: 'auto' }}
                              />
                            </div>
-                           <div className="w-[calc(100%-120px)] h-full flex flex-col justify-between">
+                           <div className="flex-1 h-full flex flex-col justify-between gap-1">
                              <div>
-                               <h1>{blog.title}</h1>
-                               {Array.isArray(blog.tags) && blog.tags.map((tag: string) => (
+                               <h1 className="text-xs sm:text-sm lg:text-base font-semibold line-clamp-2">{blog.title}</h1>
+                               {Array.isArray(blog.tags) && blog.tags.slice(0, 2).map((tag: string) => (
                                  <span
                                    key={tag}
                                    className={`text-sm ${isHovered===blog.id?"bg-white":"bg-amber-200"}  px-2 py-0.5 text-gray-600 mr-2`}

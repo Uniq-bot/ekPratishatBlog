@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { BlogProvider } from "@/context/BlogListContext";
-import NavBar from "@/components/blog/NavBar";
-
+import QueryProvider from "@/provider/QueryProvider";
+export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Ek Pratishat | Blogs",
   description: "Place where we share our Ideas, and Experiences",
@@ -13,14 +12,17 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  
   return (
-    <html
-      lang="en"
-      className=" w-full bg-[#F7F3EA] "
-    >
-      <body><BlogProvider>
-        {children}
-        </BlogProvider></body>
+    <html lang="en" className=" w-full bg-[#F7F3EA] ">
+       
+      <body>
+        <QueryProvider>
+           
+              {children}
+            
+        </QueryProvider>
+      </body>
     </html>
   );
 }

@@ -8,161 +8,137 @@ const toSlug = (value: string) => {
     .replace(/(^-|-$)+/g, "");
 };
 
-export const getAllBlogs = async () => {
-  const blogs = await prisma.blogPost.findMany({
-    include: {
-      category: true,
-      tags: true,
-      author: true,
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-  });
-  return blogs;
-};
-
-export const getBlogById = async (id: string) => {
-  const blog = await prisma.blogPost.findUnique({
-    where: { id },
-    include: {
-      category: true,
-      tags: true,
-      author: true,
-    },
-  });
-  return blog;
-};
-
-export const createBlog = async (
-  title: string,
-  content: string,
-  categoryId: string,
-  authorId: string,
-  tagIds?: string[]
-) => {
-  const baseSlug = toSlug(title);
-  const slug = baseSlug ? `${baseSlug}-${Date.now()}` : `post-${Date.now()}`;
-
-  const blog = await prisma.blogPost.create({
-    data: {
-      title,
-      content,
-      slug,
-      categoryID: categoryId,
-      authorID: authorId,
-      ...(tagIds && tagIds.length > 0 && {
-        tags: {
-          connect: tagIds.map((id) => ({ id })),
+export const getBlogByFilters = async ({
+  offset,
+  limit,
+  category,
+  tags,
+  searchQuery,
+}: {
+  offset: number;
+  limit: number;
+  category?: string;
+  tags: string[];
+  searchQuery?: string;
+}) => {
+  const where: any = {
+    status: "PUBLISHED",
+    ...(category && { categoryID: category }),
+    ...(tags.length > 0 && {
+      tags: {
+        some: {
+          name: { in: tags },
         },
-      }),
-    },
-    include: {
-      category: true,
-      tags: true,
-      author: true,
-    },
-  });
-  return blog;
-};
-
-export const updateBlog = async (
-  id: string,
-  title: string,
-  content: string,
-  categoryId: string,
-  tagIds?: string[]
-) => {
-  const baseSlug = toSlug(title);
-  const slug = baseSlug ? `${baseSlug}-${Date.now()}` : `post-${Date.now()}`;
-
-  const data: {
-    title: string;
-    content: string;
-    slug: string;
-    categoryID: string;
-    tags?: { set: { id: string }[] };
-  } = {
-    title,
-    content,
-    slug,
-    categoryID: categoryId,
+      },
+    }),
+    ...(searchQuery && {
+      OR: [
+        { title: { contains: searchQuery, mode: "insensitive" as const } },
+        { description: { contains: searchQuery, mode: "insensitive" as const } },
+      ],
+    }),
   };
 
-  if (tagIds) {
-    data.tags = {
-      set: tagIds.map((tagId) => ({ id: tagId })),
-    };
-  }
+  const [posts, totalCount] = await Promise.all([
+    prisma.blogPost.findMany({
+      where,
+      include: { tags: true, category: true },
+      orderBy: { createdAt: "desc" },
+      skip: offset,
+      take: limit,
+    }),
+    prisma.blogPost.count({ where }),
+  ]);
 
-  const blog = await prisma.blogPost.update({
-    where: { id },
-    data,
-    include: {
-      category: true,
-      tags: true,
-      author: true,
+  return { posts, totalCount };
+};
+
+export const getLatestBlogs = async (limit = 5) => {
+  return prisma.blogPost.findMany({
+    where: { status: "PUBLISHED" },
+    take: limit,
+    orderBy: { createdAt: "desc" },
+    include: { category: true, tags: true },
+  });
+};
+
+export const createBlog = async (data: any) => {
+  return prisma.blogPost.create({
+    data: {
+      title: data.title,
+      content: data.content,
+      coverImage: data.coverImage,
+      description: data.description,
+      status: "PUBLISHED",
+      slug: data.slug,
+      category: { connect: { id: data.categoryId } },
+      author: { connect: { id: data.authorID } },
+      tags: {
+        connectOrCreate: (data.tags ?? []).map((t: any) => ({
+          where: { name: typeof t === "string" ? t : t.name },
+          create: {
+            name: typeof t === "string" ? t : t.name,
+            slug: toSlug(typeof t === "string" ? t : t.name),
+          },
+        })),
+      },
     },
   });
+};
 
-  return blog;
+export const updateBlog = async (id: string, data: any) => {
+  return prisma.blogPost.update({
+    where: { id },
+    data: {
+      title: data.title,
+      content: data.content,
+      description: data.description,
+      coverImage: data.coverImage,
+      slug: data.slug,
+      category: { connect: { id: data.categoryId } },
+      tags: {
+        set: [],
+        connectOrCreate: (data.tags ?? []).map((t: any) => ({
+          where: { name: typeof t === "string" ? t : t.name },
+          create: {
+            name: typeof t === "string" ? t : t.name,
+            slug: toSlug(typeof t === "string" ? t : t.name),
+          },
+        })),
+      },
+    },
+    include: { category: true, tags: true },
+  });
 };
 
 export const deleteBlog = async (id: string) => {
-  return prisma.$transaction(async (tx) => {
-    await tx.blogPost.update({
-      where: { id },
-      data: {
-        tags: {
-          set: [],
-        },
-      },
-    });
-
-    return tx.blogPost.delete({
-      where: { id },
-    });
-  });
+  return prisma.blogPost.delete({ where: { id } });
 };
 
 export const createCategory = async (name: string, description?: string) => {
   const slug = toSlug(name);
-  const category = await prisma.category.create({
-    data: {
-      name,
-      slug,
-      description: description?.trim() || null,
-    },
+  return prisma.category.create({
+    data: { name, slug, description: description?.trim() || null },
   });
-  return category;
 };
 
 export const getAllCategories = async () => {
-  const categories = await prisma.category.findMany({
-    orderBy: {
-      createdAt: 'desc',
-    },
-  });
-  return categories;
+  return prisma.category.findMany({ orderBy: { createdAt: "desc" } });
+};
+
+export const deleteCategory = async (id: string) => {
+  return prisma.category.delete({ where: { id } });
 };
 
 export const createTag = async (name: string) => {
   const slug = toSlug(name);
-  const tag = await prisma.tag.create({
-    data: {
-      name,
-      slug,
-    },
-  });
-  return tag;
+  return prisma.tag.create({ data: { name, slug } });
 };
 
 export const getAllTags = async () => {
-  const tags = await prisma.tag.findMany({
-    orderBy: {
-      createdAt: 'desc',
-    },
-  });
-  return tags;
+  return prisma.tag.findMany({ orderBy: { createdAt: "desc" } });
 };
 
+export const deleteTag = async (id: string) => {
+  return prisma.tag.delete({ where: { id } });
+};

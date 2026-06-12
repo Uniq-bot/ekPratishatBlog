@@ -1,89 +1,91 @@
-import { getAllBlogs, createBlog } from "@/services/blogs.services";
+import { createBlog, getBlogByFilters } from "@/services/blogs.services";
 import { NextResponse } from "next/server";
-import { getAuthorId } from "@/libs/auth";
-import { prisma } from "@/libs/prisma";
+import { revalidatePath } from "next/cache";
+import { writeFile, mkdir } from "fs/promises";
+import { join } from "path";
 
-export async function GET() {
+export async function POST(req: Request) {
   try {
-    const blogs = await getAllBlogs();
-    return NextResponse.json(blogs, { status: 200 });
-  } catch (err) {
-    console.error("Error fetching blogs:", err);
+    const formData = await req.formData();
+
+    const title       = formData.get("title") as string;
+    const content     = formData.get("content") as string;
+    const description = formData.get("description") as string;
+    const authorID    = formData.get("authorID") as string;
+    const categoryId  = formData.get("categoryId") as string;
+    const tagsRaw     = formData.get("tags") as string;
+    const imageFile   = formData.get("coverImage") as File | null;
+
+    const tags = tagsRaw ? JSON.parse(tagsRaw) : [];
+
+    if (!title || !content || !categoryId) {
+      return NextResponse.json({ message: "Title, content and category are required" }, { status: 400 });
+    }
+    if (!authorID) {
+      return NextResponse.json({ message: "Author ID is required" }, { status: 400 });
+    }
+
+    let coverImagePath: string | null = null;
+    if (imageFile && imageFile.size > 0) {
+      const uploadDir = join(process.cwd(), "public", "uploads");
+      await mkdir(uploadDir, { recursive: true });
+
+      const bytes = await imageFile.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+
+      const ext = imageFile.name.split(".").pop();
+      const filename = `cover-${Date.now()}.${ext}`;
+      const filepath = join(uploadDir, filename);
+
+      await writeFile(filepath, buffer);
+      coverImagePath = `/uploads/${filename}`;
+    }
+
+    const generatedSlug = `${title
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^\w-]+/g, "")}-${Date.now()}`;
+
+    const post = await createBlog({
+      title,
+      content,
+      coverImage: coverImagePath,
+      description,
+      status: "PUBLISHED",
+      authorID,
+      categoryId,
+      tags,
+      slug: generatedSlug,
+    });
+
+    // Revalidate all pages that list or feature blog posts
+    revalidatePath("/");
+    // revalidatePath("/blog");
+    revalidatePath(`/blog/${generatedSlug}`);
+
+    return NextResponse.json({ message: "Blog created successfully", post }, { status: 201 });
+  } catch (err: any) {
+    console.error("CREATE BLOG ERROR:", err);
     return NextResponse.json(
-      { message: "Failed to fetch blogs" },
-      { status: 500 },
+      { message: "Internal server error", error: err?.message ?? String(err) },
+      { status: 500 }
     );
   }
 }
 
-export async function POST(req: Request) {
+export async function GET(req: Request) {
   try {
-    const authorId = await getAuthorId();
+    const { searchParams } = new URL(req.url);
+    const offset = Number(searchParams.get("offset")) || 0;
+    const limit = Number(searchParams.get("limit")) || 30;
+    const category = searchParams.get("category") || undefined;
+    const tags = searchParams.get("tags")?.split(",").filter(Boolean) || [];
+    const searchQuery = searchParams.get("query") || undefined;
 
-    if (!authorId) {
-      return NextResponse.json(
-        { message: "Unauthorized: No author ID found" },
-        { status: 401 },
-      );
-    }
+    const { posts, totalCount } = await getBlogByFilters({ offset, limit, category, tags, searchQuery });
 
-    const body = await req.json();
-    const { title, content, categoryId, tags } = body;
-
-    if (!title || !content || !categoryId) {
-      return NextResponse.json(
-        { message: "Title, content, and category are required" },
-        { status: 400 },
-      );
-    }
-
-    const category = await prisma.category.findUnique({
-      where: { id: categoryId },
-    });
-
-    if (!category) {
-      return NextResponse.json(
-        { message: "Invalid category ID" },
-        { status: 400 },
-      );
-    }
-
-    // If tags provided, validate they exist
-    if (tags && Array.isArray(tags) && tags.length > 0) {
-      const foundTags = await prisma.tag.findMany({
-        where: { id: { in: tags } },
-        select: { id: true },
-      });
-      const foundIds = foundTags.map((t) => t.id);
-      const missing = tags.filter((t: string) => !foundIds.includes(t));
-      if (missing.length > 0) {
-        return NextResponse.json(
-          { message: `Invalid tag IDs: ${missing.join(",")}` },
-          { status: 400 },
-        );
-      }
-    }
-
-    const newBlog = await createBlog(
-      title,
-      content,
-      categoryId,
-      authorId,
-      Array.isArray(tags) ? tags : undefined,
-    );
-
-    return NextResponse.json(
-      {
-        message: "Blog post created successfully",
-        blog: newBlog,
-      },
-      { status: 201 },
-    );
-  } catch (err) {
-    console.error("Error creating blog:", err);
-    return NextResponse.json(
-      { message: "Failed to create blog" },
-      { status: 500 },
-    );
+    return NextResponse.json({ message: "Fetched posts successfully", posts, totalCount });
+  } catch (err: any) {
+    return NextResponse.json({ message: "Internal server error on fetching posts", error: err?.message }, { status: 500 });
   }
 }

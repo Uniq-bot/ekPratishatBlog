@@ -1,28 +1,62 @@
-import logo from "@/public/logo.png"
-import Image from "next/image"
-const LoginComp = () => {
-  return (
-    <div className="w-1/2 h-[70%] mt-10  flex flex-col items-center">
-          <div className="w-30 h-30 flex items-center justify-center">
-            <Image src={logo} alt="Logo" className="w-full h-full" />
-          </div>
-          <form className="w-full mt-8">
-            <div>
-              <label className="mb-2 block">
-              Email:
-            </label>
-            <input type="email" name="email" className="border border-gray-300 bg-[#D6CD7A]/50 outline-none focus:shadow-amber-200 focus:ring-1 ring-amber-500 rounded-md p-2 w-full mb-4" />
-            </div>
-            <div>
-              <label className="mb-2 block">
-              Password:
-            </label>
-            <input type="password" name="password" className="border border-gray-300 bg-[#D6CD7A]/50 outline-none focus:shadow-amber-200 focus:ring-1 ring-amber-500 rounded-md p-2 w-full mb-4" />
-            </div>
-            <button type="submit" className="bg-[#918D92] hover:bg-[#7a767b] cursor-pointer transition-all text-white px-4 py-2 rounded-md w-full">Login</button>
-          </form>
-    </div>
-  )
+"use client";
+
+import React from "react";
+
+interface LoginCompProps {
+  email: string;
+  password: string;
+  setEmail: (val: string) => void;
+  setPassword: (val: string) => void;
+  onSignIn: (payload: { email: string; password: string }) => void;
+  loading: boolean;
+  error: string | null;
 }
 
-export default LoginComp
+const LoginComp = ({
+  email,
+  password,
+  setEmail,
+  setPassword,
+  onSignIn,
+  loading,
+  error,
+}: LoginCompProps) => {
+  return (
+    <div className="w-full max-w-sm flex flex-col gap-4 sm:gap-5 lg:gap-6 px-4 sm:px-0">
+      <h1 className="text-2xl sm:text-2.5xl lg:text-3xl font-bold text-neutral-800">Sign in</h1>
+
+      {error && (
+        <p className="text-xs sm:text-sm text-red-500 bg-red-50 border border-red-200 px-3 sm:px-4 py-2 rounded">
+          {error}
+        </p>
+      )}
+
+      <div className="flex flex-col gap-3 sm:gap-3.5 lg:gap-4">
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="border border-neutral-300 bg-white px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm outline-none focus:border-neutral-600 transition-colors"
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="border border-neutral-300 bg-white px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm outline-none focus:border-neutral-600 transition-colors"
+        />
+      </div>
+
+      <button
+        onClick={() => onSignIn({ email, password })}
+        disabled={loading}
+        className="bg-neutral-800 text-white py-2.5 sm:py-3 text-xs sm:text-sm font-medium hover:bg-neutral-700 disabled:opacity-50 transition-colors w-full"
+      >
+        {loading ? "Signing in..." : "Sign in"}
+      </button>
+    </div>
+  );
+};
+
+export default LoginComp;

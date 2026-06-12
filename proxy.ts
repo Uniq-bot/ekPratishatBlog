@@ -9,11 +9,22 @@ const getJwtSecret = () => {
   return new TextEncoder().encode(secret);
 };
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const token = request.cookies.get("token")?.value;
+  const { pathname } = request.nextUrl;
+  const isPublicReadEndpoint =
+    (request.method === "GET" || request.method === "POST") &&
+    (pathname === "/api/blogs" ||
+      pathname === "/api/blogs/latest" ||
+      pathname === "/api/categories" ||
+      pathname === "/api/tags");
+
+  if (isPublicReadEndpoint) {
+    return NextResponse.next();
+  }
 
   // Check if route requires authentication (all /api/* except /api/auth/*)
-  if (request.nextUrl.pathname.startsWith("/api/") && !request.nextUrl.pathname.startsWith("/api/auth/")) {
+  if (pathname.startsWith("/api/") && !pathname.startsWith("/api/auth/")) {
     if (!token) {
       return NextResponse.json(
         { message: "Unauthorized: No token provided" },
