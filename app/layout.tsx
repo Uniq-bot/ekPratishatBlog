@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import QueryProvider from "@/provider/QueryProvider";
 // import QueryProvider from "@/provider/QueryProvider";
 // import NavBar from "@/components/blog/NavBar";
 
@@ -16,7 +17,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="w-full bg-[#1d1d1d]">
       <body cz-shortcut-listen="true">
-        {children}
+        <QueryProvider>
+          {children}
+        </QueryProvider>
       </body>
     </html>
   );
