@@ -1,5 +1,6 @@
 import { prisma } from "@/libs/prisma";
-
+export const cache = new Map<string, any>();
+const TTL = 5 * 60 * 1000; // 5 minutes
 export const getBlogs = async ({
   page = 1,
   limit = 10,
@@ -17,7 +18,16 @@ export const getBlogs = async ({
 } = {}) => {
   try {
     const skip = (page - 1) * limit;
-
+    const cacheKey = `blogs:${page}:${limit}:${category}:${tag}:${sort}:${search}`;
+    if (cache.has(cacheKey)) {
+      if (cache.get(cacheKey).timestamp > Date.now() - 5 * 60 * 1000) {
+        console.log("blogs", cache.get(cacheKey).data);
+        return cache.get(cacheKey).data;
+      } else {
+        cache.delete(cacheKey);
+      }
+    }
+    console.log("Cache not used")
     const where: any = {
       status: "PUBLISHED",
       ...(category && {
@@ -52,6 +62,10 @@ export const getBlogs = async ({
       prisma.blogPost.count({ where }),
     ]);
 
+    cache.set(cacheKey, {
+      data: { posts: blogs, totalCount },
+      timestamp: Date.now() + TTL,
+    });
     return { posts: blogs, totalCount };
   } catch (err) {
     console.error("BLOG FETCH ERROR:", err);
@@ -61,11 +75,26 @@ export const getBlogs = async ({
 
 export const getLatestBlogs = async () => {
   try {
+    const cacheKey = "latestBlogs";
+    if (cache.has(cacheKey)) {
+      if (cache.get(cacheKey).timestamp > Date.now() - 5 * 60 * 1000) {
+        // 5 min cache
+        console.log(cache.get(cacheKey));
+
+        return cache.get(cacheKey).data;
+      } else {
+        cache.delete(cacheKey);
+      }
+    }
     const blogs = await prisma.blogPost.findMany({
       where: { status: "PUBLISHED" },
       orderBy: { createdAt: "desc" },
       take: 5,
       include: { tags: true, category: true },
+    });
+    cache.set(cacheKey, {
+      data: { posts: blogs },
+      timestamp: Date.now() + TTL,
     });
     return { posts: blogs };
   } catch (err) {
@@ -76,7 +105,25 @@ export const getLatestBlogs = async () => {
 
 export const getCategory = async () => {
   try {
-    return await prisma.category.findMany({ orderBy: { name: "asc" } });
+    const cacheKey = "categories";
+    if (cache.has(cacheKey)) {
+      if (cache.get(cacheKey).timestamp > Date.now() - 5 * 60 * 1000) {
+        // 5 min cache
+        console.log(cache.get(cacheKey));
+
+        return cache.get(cacheKey).data.posts;
+      } else {
+        cache.delete(cacheKey);
+      }
+    }
+    const categories = await prisma.category.findMany({
+      orderBy: { name: "asc" },
+    });
+    cache.set(cacheKey, {
+      data: { posts: categories },
+      timestamp: Date.now() + TTL,
+    });
+    return categories;
   } catch (err) {
     console.error("INITIAL CATEGORY FETCH ERROR:", err);
     return [];
@@ -85,7 +132,18 @@ export const getCategory = async () => {
 
 export const getTags = async () => {
   try {
-    return await prisma.tag.findMany({ orderBy: { name: "asc" } });
+    const cacheKey = "tags";
+    if (cache.has(cacheKey)) {
+      if (cache.get(cacheKey).timestamp > Date.now() - 5 * 60 * 1000) {
+        // 5 min cache
+        return cache.get(cacheKey).data.posts;
+      } else {
+        cache.delete(cacheKey);
+      }
+    }
+    const tags = await prisma.tag.findMany({ orderBy: { name: "asc" } });
+    cache.set(cacheKey, { data: { posts: tags }, timestamp: Date.now() + TTL });
+    return tags;
   } catch (err) {
     console.error("INITIAL TAG FETCH ERROR:", err);
     return [];
