@@ -1,6 +1,8 @@
+"use client"
 import React from "react";
 import BlogCard from "./BlogCard";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 
 interface Props {
@@ -25,20 +27,50 @@ const BlogList = ({
   search,
 }: Props) => {
   const totalPages = Math.ceil(totalCount / limit);
+  const router=useRouter()
+
+  const updateParam = (key: string, value: string) => {
+    const params = new URLSearchParams();
+    if (category) params.set("category", category);
+    if (tag) params.set("tag", tag);
+    if (search) params.set("search", search);
+    if (value && value !== "all" && value !== "") {
+      params.set(key, value);
+    } else {
+      params.delete(key);
+    }
+    // reset pagination
+    params.delete("page");
+
+    const qs = params.toString();
+    const url = qs ? `?${qs}` : "?";
+    router.push(url, {scroll:false});
+  }
 
   const buildUrl = (newPage: number) => {
     const params = new URLSearchParams();
     if (category) params.set("category", category);
-    if (tag) params.set("tag", tag);
-    if (sort && sort !== "latest") params.set("sort", sort);
     if (search) params.set("search", search);
     if (newPage > 1) params.set("page", String(newPage));
     const qs = params.toString();
     return qs ? `?${qs}` : "?";
   };
 
+ 
+
   return (
     <div className="w-2/3 flex flex-col gap-5 px-4 sm:px-0">
+      <div className="w-full flex items-center justify-between">
+        <h2 className="text-2xl font-bold text-white ">Blogs of your <span className="text-[#FEE685] font-[Girls] underline underline-offset-5">Interest</span></h2>
+        <select
+          className="bg-[#1d1d1d] text-gray-300 border border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          value={sort}
+          onChange={(e) =>  updateParam("sort", e.target.value)}
+        >
+          <option value="latest">Latest</option>
+          <option value="oldest">Oldest</option>
+        </select>
+      </div>
       <div className="w-full flex flex-col gap-5">
         {blogs?.length > 0 ? (
           blogs.map((blog) => <BlogCard key={blog.id} blog={blog} />)

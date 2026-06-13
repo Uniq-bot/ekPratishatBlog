@@ -5,6 +5,7 @@ import LatestBlogs from "@/components/blog/LatestBlogs";
 import BlogFilters from "@/components/shared/BlogFilters";
 import NewsLetter from "@/components/blog/NewsLetter";
 import { getBlogs, getCategory, getLatestBlogs, getTags } from "@/data/getBlogs";
+import CategoryNav from "@/components/blog/CategoryNav";
 
 
 interface PageProps {
@@ -35,14 +36,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
       </div>
 
       <div className="lg:mb-10 relative lg:top-10 pb-10 w-[90%] m-auto flex flex-col gap-10">
-        <BlogFilters
-          categories={categories}
-          tags={tags}
-          currentCategory={category}
-          currentTag={tag}
-          currentSort={sort}
-          currentSearch={search}
-        />
+        <CategoryNav categories={categories} />
 
         <div className="w-full flex gap-5">
           <BlogList

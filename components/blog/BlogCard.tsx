@@ -4,7 +4,8 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 const BlogCard = ({ blog }: { blog: any }) => {
   return (
-    <motion.div
+    <Link href={`/blog/${blog.slug}`} title={blog.title} className="w-full h-48 bg-[#1d1d1d] rounded-lg group">
+      <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, }}
@@ -52,16 +53,13 @@ const BlogCard = ({ blog }: { blog: any }) => {
           </div>
         )}
 
-        <Link
-          href={`/blog/${blog?.slug ?? blog?.id}`}
-          className="underline hover:text-[#d69406] mt-auto cursor-pointer transition-all text- textwhite-sm"
-        >
+      
          <motion.p whileHover={{ x: 5 }} transition={{ duration: 0.3 }}>
            Read more <span>→</span>
          </motion.p>
-        </Link>
       </div>
     </motion.div>
+    </Link>
   );
 };
 
