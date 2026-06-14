@@ -2,9 +2,7 @@ import {
   createBlogs,
   createCategory,
   createTag,
-  deleteCategory,
   deleteBlog,
-  deleteTag,
   fetchBlogs,
   fetchCategory,
   fetchTags,
@@ -68,16 +66,13 @@ export const useGetAdminBlogs = () => {
 
 // ─── Categories ──────────────────────────────────────────────────────────────
 
-export const useGetCategory = ({
-  initialCategories,
-}: {
-  initialCategories: any[];
-}) => {
+export const useGetCategory = () => {
   return useQuery({
     queryKey: ["categories"],
     queryFn: fetchCategory,
-    staleTime: 1000 * 60 * 5,
-    placeholderData: initialCategories,
+    staleTime: 0,
+    refetchOnMount: "always"
+    // placeholderData: initialCategory ? initialCategory: undefined,
   });
 };
 
@@ -91,24 +86,15 @@ export const useCreateCategory = () => {
   });
 };
 
-export const useDeleteCategory = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: deleteCategory,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["categories"] });
-    },
-  });
-};
-
 // ─── Tags ────────────────────────────────────────────────────────────────────
 
-export const useGetTags = ({ initialTags }: { initialTags: any[] }) => {
+export const useGetTags = () => {
   return useQuery({
     queryKey: ["tags"],
     queryFn: fetchTags,
-    staleTime: 1000 * 60 * 5,
-    placeholderData: initialTags,
+    staleTime: 0,
+    refetchOnMount: "always"
+    // placeholderData: initialTags ? initialTags: undefined,
   });
 };
 
@@ -122,12 +108,3 @@ export const useCreateTag = () => {
   });
 };
 
-export const useDeleteTag = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: deleteTag,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tags"] });
-    },
-  });
-};

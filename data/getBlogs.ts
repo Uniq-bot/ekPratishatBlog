@@ -21,13 +21,12 @@ export const getBlogs = async ({
     const cacheKey = `blogs:${page}:${limit}:${category}:${tag}:${sort}:${search}`;
     if (cache.has(cacheKey)) {
       if (cache.get(cacheKey).timestamp > Date.now() - 5 * 60 * 1000) {
-        console.log("blogs", cache.get(cacheKey).data);
         return cache.get(cacheKey).data;
       } else {
         cache.delete(cacheKey);
       }
     }
-    console.log("Cache not used")
+    console.log("Cache not used");
     const where: any = {
       status: "PUBLISHED",
       ...(category && {
@@ -78,9 +77,6 @@ export const getLatestBlogs = async () => {
     const cacheKey = "latestBlogs";
     if (cache.has(cacheKey)) {
       if (cache.get(cacheKey).timestamp > Date.now() - 5 * 60 * 1000) {
-        // 5 min cache
-        console.log(cache.get(cacheKey));
-
         return cache.get(cacheKey).data;
       } else {
         cache.delete(cacheKey);
@@ -105,24 +101,8 @@ export const getLatestBlogs = async () => {
 
 export const getCategory = async () => {
   try {
-    const cacheKey = "categories";
-    if (cache.has(cacheKey)) {
-      if (cache.get(cacheKey).timestamp > Date.now() - 5 * 60 * 1000) {
-        // 5 min cache
-        console.log(cache.get(cacheKey));
+    const categories = await prisma.category.findMany({});
 
-        return cache.get(cacheKey).data.posts;
-      } else {
-        cache.delete(cacheKey);
-      }
-    }
-    const categories = await prisma.category.findMany({
-      orderBy: { name: "asc" },
-    });
-    cache.set(cacheKey, {
-      data: { posts: categories },
-      timestamp: Date.now() + TTL,
-    });
     return categories;
   } catch (err) {
     console.error("INITIAL CATEGORY FETCH ERROR:", err);
@@ -132,17 +112,7 @@ export const getCategory = async () => {
 
 export const getTags = async () => {
   try {
-    const cacheKey = "tags";
-    if (cache.has(cacheKey)) {
-      if (cache.get(cacheKey).timestamp > Date.now() - 5 * 60 * 1000) {
-        // 5 min cache
-        return cache.get(cacheKey).data.posts;
-      } else {
-        cache.delete(cacheKey);
-      }
-    }
-    const tags = await prisma.tag.findMany({ orderBy: { name: "asc" } });
-    cache.set(cacheKey, { data: { posts: tags }, timestamp: Date.now() + TTL });
+    const tags = await prisma.tag.findMany({});
     return tags;
   } catch (err) {
     console.error("INITIAL TAG FETCH ERROR:", err);

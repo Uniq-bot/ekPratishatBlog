@@ -16,10 +16,8 @@ interface Props {
 const Editor = ({ id, initialBlog }: Props) => {
   const { blocks, setBlocks, user } = useAdminUI();
 
-  // Seed with server data; React Query keeps fresh if needed
-  const { data: tags = [] } = useGetTags({ initialTags: [] });
-  const { data: categories = [] } = useGetCategory({ initialCategories: [] });
-
+    const {data:tags, isLoading:isTagLoading}= useGetTags();
+    const {data:categories, isLoading:isCategoryLoading}= useGetCategory();
   // Clear shared blocks when leaving so Create Blog tab starts empty
   useEffect(() => {
     return () => {
@@ -45,7 +43,9 @@ const Editor = ({ id, initialBlog }: Props) => {
         setBlocks={setBlocks}
         user={user}
         tags={tags}
+        isTagLoading={isTagLoading}
         categories={categories}
+        isCategoryLoading={isCategoryLoading}
       />
     </div>
   );

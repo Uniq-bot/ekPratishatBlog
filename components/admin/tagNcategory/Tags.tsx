@@ -1,13 +1,17 @@
 "use client";
-import { useCreateTag, useDeleteTag } from "@/hooks/useAdminBlogs";
+import { useCreateTag, useGetTags } from "@/hooks/useAdminBlogs";
+import { Tag as TagP } from "@/types/blog";
 import { Trash } from "lucide-react";
 import React from "react";
 
-const Tag = ({ tags }: { tags: any[] }) => {
+
+interface TagProp {
+  initialTags?: TagP[]
+}
+
+const Tag = ({ tags, isLoading }: { tags?: TagP[]; isLoading: boolean }) => {
   const [tagValue, setTagValue] = React.useState("");
   const { mutateAsync: createTag, isPending: isCreating } = useCreateTag();
-  const { mutate: deleteTag, isPending: isDeleting } = useDeleteTag();
-
   const handleAddTags = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!tagValue.trim()) return;
@@ -19,13 +23,8 @@ const Tag = ({ tags }: { tags: any[] }) => {
     }
   };
 
-  const handleDelete = (id: string) => {
-    if (!confirm("Delete this tag?")) return;
-    deleteTag(id);
-  };
-
   return (
-    <div className="w-full h-auto bg-[#EBECD8] p-4 relative z-20">
+    <div className="w-full h-auto transition-all bg-[#EBECD8] p-4 relative z-20">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-lg font-semibold">Tags</h1>
         <span className="text-xs bg-black/10 px-2 py-1 rounded">
@@ -54,24 +53,21 @@ const Tag = ({ tags }: { tags: any[] }) => {
         </button>
       </form>
 
-      <div className="mt-4 space-y-2">
-        {tags?.map((tag) => (
+      {
+        isLoading ? (
+          <p className="text-sm text-gray-500 mt-3">Loading tags...</p>
+        ) : (<div className="mt-4 space-y-2">
+        {tags?.map((tag : TagP) => (
           <div
             key={tag.id}
             className="flex justify-between items-center border-b border-gray-400 py-2 px-1"
           >
             <span className="font-medium">{tag.name}</span>
-            <button
-              onClick={() => handleDelete(tag.id)}
-              disabled={isDeleting}
-              className="text-red-500 hover:text-red-700 disabled:opacity-50"
-              title="Delete tag"
-            >
-              <Trash size={16} />
-            </button>
+          
           </div>
         ))}
-      </div>
+      </div>)
+      }
     </div>
   );
 };

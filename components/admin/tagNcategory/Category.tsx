@@ -1,14 +1,21 @@
 "use client";
 import React from "react";
 import { Trash } from "lucide-react";
-import { useCreateCategory, useDeleteCategory } from "@/hooks/useAdminBlogs";
+import { useCreateCategory, useGetCategory } from "@/hooks/useAdminBlogs";
+import { Category as Cate } from "@/types/blog";
 
-const Category = ({ categories }: { categories: any[] }) => {
+
+interface CategoryProp{
+  categories?: Cate[]
+  isLoading: boolean
+}
+
+const Category = ({ categories, isLoading }: CategoryProp) => {
   const [catName, setCatName] = React.useState("");
   const [catDesc, setCatDesc] = React.useState("");
   const { mutateAsync: createCategory, isPending: isCreating } = useCreateCategory();
-  const { mutate: deleteCategory, isPending: isDeleting } = useDeleteCategory();
-
+  
+  // console.log("category of category: ", categories)
   const handleAddCategory = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!catName.trim()) return;
@@ -21,10 +28,7 @@ const Category = ({ categories }: { categories: any[] }) => {
     }
   };
 
-  const handleDelete = (id: string) => {
-    if (!confirm("Delete this category? All related posts will lose their category.")) return;
-    deleteCategory(id);
-  };
+
 
   return (
     <div className="w-full h-auto bg-[#EBECD8] p-4 relative z-20">
@@ -73,27 +77,23 @@ const Category = ({ categories }: { categories: any[] }) => {
       </form>
 
       <div className="mt-4 space-y-2">
-        {categories?.map((category) => (
-          <div
-            key={category.id}
-            className="flex justify-between items-center border-b border-gray-400 py-2 px-1"
-          >
-            <div>
-              <span className="font-medium">{category.name}</span>
-              {category.description && (
-                <p className="text-xs text-gray-500">{category.description}</p>
-              )}
-            </div>
-            <button
-              onClick={() => handleDelete(category.id)}
-              disabled={isDeleting}
-              className="text-red-500 hover:text-red-700 disabled:opacity-50"
-              title="Delete category"
+        {isLoading ? (
+          <p className="text-sm text-gray-500 mt-3">Loading categories...</p>
+        ) : (
+          categories?.map((category : Cate) => (
+            <div
+              key={category.id}
+              className="flex justify-between items-center border-b border-gray-400 py-2 px-1"
             >
-              <Trash size={16} />
-            </button>
+              <div>
+                <span className="font-medium">{category.name}</span>
+                {category.description && (
+                  <p className="text-xs text-gray-500">{category.description}</p>
+                )}
+              </div>
+           
           </div>
-        ))}
+        )))}
       </div>
     </div>
   );

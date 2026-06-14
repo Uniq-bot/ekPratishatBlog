@@ -8,26 +8,23 @@ import { useAdminUI } from "@/context/AdminContext";
 import { useGetCategory, useGetTags } from "@/hooks/useAdminBlogs";
 import Image from "next/image";
 
-interface Props {
-  initialCategories: any[];
-  initialTags: any[];
-}
-
-const AdminPanel = ({ initialCategories, initialTags }: Props) => {
+const AdminPanel = () => {
   const { activeTab, setActiveTab, blocks, setBlocks, user } = useAdminUI();
-
-  // Seeded with server-fetched data; React Query refreshes in background
-  const { data: categories = initialCategories } = useGetCategory({ initialCategories });
-  const { data: tags = initialTags } = useGetTags({ initialTags });
-
+  const {data:categories, isLoading:isCategoryLoading}=useGetCategory();
+    const {data:tags, isLoading:isTagLoading}=useGetTags()
   const tabComponents: Record<string, React.ReactNode> = {
-    "tag&category": <TagNCategory tags={tags} categories={categories} />,
+    "tag&category": (
+      <TagNCategory
+       tags={tags} isTagLoading={isTagLoading}
+       categories={categories} isCategoryLoading={isCategoryLoading}
+      />
+    ),
     "create-blog": (
       <BlogEditor
         mode="create"
-        tags={tags}
+        tags={tags} isTagLoading={isTagLoading}
+        categories={categories} isCategoryLoading={isCategoryLoading}
         user={user}
-        categories={categories}
         setBlocks={setBlocks}
         blocks={blocks}
       />
