@@ -7,6 +7,7 @@ import {
   fetchCategory,
   fetchTags,
   updateBlog,
+  uploadImage,
 } from "@/libs/fetch";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -36,6 +37,13 @@ export const useUpdateBlog = () => {
     },
   });
 };
+
+export const useImageUpload=()=>{
+  const queryClient=useQueryClient();
+  return useMutation({
+    mutationFn: uploadImage
+  })
+}
 
 export const useDeleteBlog = () => {
   const queryClient = useQueryClient();

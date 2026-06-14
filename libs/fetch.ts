@@ -86,6 +86,22 @@ export const updateBlog = async ({
   return res.json();
 };
 
+export const uploadImage = async (file: File) => {
+  const formData = new FormData();
+  formData.append("image", file);
+
+  const res = await fetch(`${getBaseUrl()}/api/upload`, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || "Failed to upload image");
+  }
+
+  return res.json(); // { imagePath }
+};
 export const deleteBlog = async (id: string) => {
   const res = await fetch(`${getBaseUrl()}/api/edit/${id}`, {
     method: "DELETE",
