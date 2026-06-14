@@ -60,6 +60,7 @@ export const createBlogs = async (newBlog: FormData) => {
     method: "POST",
     body: newBlog,
   });
+ 
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
     throw new Error(err.message || "Failed to create blog");

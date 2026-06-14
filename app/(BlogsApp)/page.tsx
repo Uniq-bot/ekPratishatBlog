@@ -17,6 +17,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
 
   const page     = Math.max(1, Number(params.page) || 1);
   const category = params.category;
+  console.log(category)
   const tag      = params.tag;
   const sort     = (params.sort as "latest" | "oldest") ?? "latest";
   const search   = params.search;
@@ -27,6 +28,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
     getCategory(),
     getTags(),
   ]);
+  console.log("filteredBy category: ", blogs)
 
   return (
     <div className="w-full min-h-screen flex flex-col bg-[#1d1d1d] md:p-10">

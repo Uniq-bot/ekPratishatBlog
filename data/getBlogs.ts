@@ -17,8 +17,9 @@ export const getBlogs = async ({
   search?: string;
 } = {}) => {
   try {
+    console.log(category);
     const skip = (page - 1) * limit;
-    const cacheKey = `blogs:${page}:${limit}:${category}:${tag}:${sort}:${search}`;
+    const cacheKey = `blogs:${page}:${limit}:${category ?? ""}:${tag ?? ""}:${sort}:${search ?? ""}`;
     if (cache.has(cacheKey)) {
       if (cache.get(cacheKey).timestamp > Date.now() - 5 * 60 * 1000) {
         return cache.get(cacheKey).data;
@@ -30,7 +31,9 @@ export const getBlogs = async ({
     const where: any = {
       status: "PUBLISHED",
       ...(category && {
-        category: { slug: category },
+        category: {
+          is: { slug: category },
+        },
       }),
       ...(tag && {
         tags: {
