@@ -116,13 +116,6 @@ export const createCategory = async (newCat: {
   return res.json();
 };
 
-export const deleteCategory = async (id: string) => {
-  const res = await fetch(`${getBaseUrl()}/api/categories/${id}`, {
-    method: "DELETE",
-  });
-  if (!res.ok) throw new Error("Failed to delete category");
-  return res.json();
-};
 
 
 export const fetchTags = async () => {
@@ -144,10 +137,3 @@ export const createTag = async (newTag: { name: string }) => {
   return res.json();
 };
 
-export const deleteTag = async (id: string) => {
-  const res = await fetch(`${getBaseUrl()}/api/tags/${id}`, {
-    method: "DELETE",
-  });
-  if (!res.ok) throw new Error("Failed to delete tag");
-  return res.json();
-};

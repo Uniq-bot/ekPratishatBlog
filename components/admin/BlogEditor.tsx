@@ -6,24 +6,29 @@ import PreviewBlog from "./CreateBlog/PreviewBlog";
 import { useCreateBlog, useUpdateBlog } from "@/hooks/useAdminBlogs";
 import { useRouter } from "next/navigation";
 import { Image } from "lucide-react";
+import { Category, Tag } from "@/types/blog";
 
 const BlogEditor = ({
   mode = "create",
   initialBlog,
   isLoading,
-  tags,
   blocks,
   setBlocks,
+  tags: tags,
+  isTagLoading,
   categories,
+  isCategoryLoading,
   user,
 }: {
   mode?: "create" | "edit";
   initialBlog?: any;
   isLoading?: boolean;
-  tags: any[];
   blocks: any[];
   setBlocks: React.Dispatch<React.SetStateAction<any[]>>;
-  categories: any[];
+  tags: Tag[];
+  isTagLoading: boolean;
+  categories: Category[];
+  isCategoryLoading: boolean;
   user: any;
 }) => {
   const router = useRouter();
@@ -40,7 +45,7 @@ const BlogEditor = ({
   const [blockType, setBlockType] = useState("heading");
   const [setLevel, setSetLevel] = useState(1);
   const [content, setContent] = useState("");
-
+  console.log(categories);
   const { mutateAsync: createBlog, isPending: isCreating } = useCreateBlog();
   const { mutateAsync: updateBlog, isPending: isUpdating } = useUpdateBlog();
 
@@ -93,40 +98,49 @@ const BlogEditor = ({
     if (coverImageRef.current) coverImageRef.current.value = "";
   };
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setSubmitError(null);
-  setSuccessMsg(null);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitError(null);
+    setSuccessMsg(null);
 
-  if (!title.trim()) { setSubmitError("Title is required"); return; }
-  if (!categoryId) { setSubmitError("Please select a category"); return; }
-  if (blocks.length === 0) { setSubmitError("Add at least one content block"); return; }
-
-  const formData = new FormData();
-  formData.append("title", title.trim());
-  formData.append("description", description.trim());
-  formData.append("slug", slug);
-  formData.append("categoryId", categoryId);
-  formData.append("tags", JSON.stringify(tagsValue));
-  formData.append("authorID", user?.id ?? "");
-  formData.append("content", JSON.stringify(blocks)); // blocks as JSON string
-  if (coverImage) formData.append("coverImage", coverImage);
-
-  try {
-    if (mode === "edit") {
-      const blogId = initialBlog?.data?.id;
-      await updateBlog({ id: blogId, formData }); // update your hook to accept formData
-      setSuccessMsg("Blog updated successfully!");
-      setTimeout(() => router.push("/admin"), 1500);
-    } else {
-      await createBlog(formData); // update your hook to accept formData
-      setSuccessMsg("Blog created successfully!");
-      resetForm();
+    if (!title.trim()) {
+      setSubmitError("Title is required");
+      return;
     }
-  } catch (err: any) {
-    setSubmitError(err.message || "Something went wrong");
-  }
-};
+    if (!categoryId) {
+      setSubmitError("Please select a category");
+      return;
+    }
+    if (blocks.length === 0) {
+      setSubmitError("Add at least one content block");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("title", title.trim());
+    formData.append("description", description.trim());
+    formData.append("slug", slug);
+    formData.append("categoryId", categoryId);
+    formData.append("tags", JSON.stringify(tagsValue));
+    formData.append("authorID", user?.id ?? "");
+    formData.append("content", JSON.stringify(blocks)); // blocks as JSON string
+    if (coverImage) formData.append("coverImage", coverImage);
+
+    try {
+      if (mode === "edit") {
+        const blogId = initialBlog?.data?.id;
+        await updateBlog({ id: blogId, formData }); // update your hook to accept formData
+        setSuccessMsg("Blog updated successfully!");
+        setTimeout(() => router.push("/admin"), 1500);
+      } else {
+        await createBlog(formData); // update your hook to accept formData
+        setSuccessMsg("Blog created successfully!");
+        resetForm();
+      }
+    } catch (err: any) {
+      setSubmitError(err.message || "Something went wrong");
+    }
+  };
 
   const toggleTag = (tag: any) => {
     setTagsValue((prev) => {
@@ -173,7 +187,10 @@ const handleSubmit = async (e: React.FormEvent) => {
           </div>
         )}
 
-        <form className="w-full lg:w-[90%] m-auto px-3 lg:px-10" onSubmit={handleSubmit}>
+        <form
+          className="w-full lg:w-[90%] m-auto px-3 lg:px-10"
+          onSubmit={handleSubmit}
+        >
           {/* Title */}
           <div className="w-full flex flex-col gap-2 my-3 lg:my-5">
             <label className="text-xs lg:text-sm font-medium">Title *</label>
@@ -224,21 +241,24 @@ const handleSubmit = async (e: React.FormEvent) => {
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-gray-400 flex flex-col items-center gap-1 lg:gap-2 px-2">
                   <Image size={20} className="lg:w-6 lg:h-6" />
                   <p className="text-xs lg:text-sm text-center">
-                    Choose the cover Image for the blog post. Recommended size: 1200x600px
+                    Choose the cover Image for the blog post. Recommended size:
+                    1200x600px
                   </p>
-                  </div>
-                <input
-                ref={coverImageRef}
-                type="file"
-                accept="image/*"
-                className="w-full border absolute opacity-0 top-0 left-0 right-0 bottom-0 pl-2 h-full text-gray-400 outline-none text-sm bg-gray-50"
-                onChange={(e) => setCoverImage(e.target.files?.[0] || null)}
-              />
                 </div>
+                <input
+                  ref={coverImageRef}
+                  type="file"
+                  accept="image/*"
+                  className="w-full border absolute opacity-0 top-0 left-0 right-0 bottom-0 pl-2 h-full text-gray-400 outline-none text-sm bg-gray-50"
+                  onChange={(e) => setCoverImage(e.target.files?.[0] || null)}
+                />
+              </div>
             )}
           </div>
           <div className="w-full flex flex-col gap-2 my-3 lg:my-5">
-            <label className="text-xs lg:text-sm font-medium">Description</label>
+            <label className="text-xs lg:text-sm font-medium">
+              Description
+            </label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}

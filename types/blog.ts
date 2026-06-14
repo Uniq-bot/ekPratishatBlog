@@ -8,7 +8,10 @@ export type AdminTab =
 export interface Category {
   id: string;
   name: string;
-  description?: string;
+  slug: string;
+  description: string | null;
+  createdAt: string | Date;
+  updatedAt: string | Date;
 }
 
 export interface Tag {
@@ -36,3 +39,4 @@ export type BlogItem = {
   createdAt: Date;
   category: { name: string } | null;
 };
+

@@ -44,7 +44,7 @@ export async function POST(req: Request) {
         { status: 409 },
       );
     }
-
+    console.error("Error creating tag:", err);
     return NextResponse.json(
       { message: "Failed to create tag" },
       { status: 500 },
