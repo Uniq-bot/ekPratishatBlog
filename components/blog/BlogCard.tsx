@@ -5,10 +5,8 @@ import { motion } from "framer-motion";
 const BlogCard = ({ blog }: { blog: any }) => {
   return (
     <Link href={`/blog/${blog.slug}`} title={blog.title} className="w-full min-h-48 bg-[#FFFFFF] hover:bg-[#f0f0f0] transition-all  group">
-      <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, }}
+      <div
+      
       
     className="w-full border-b-2 pb-5 text-black cursor-pointer group flex flex-col p-5 md:flex-row border-[#EBC044] gap-5 overflow-hidden">
       <div className="w-full md:w-60 relative h-48 md:h-auto overflow-hidden shrink-0">
@@ -58,7 +56,7 @@ const BlogCard = ({ blog }: { blog: any }) => {
            Read more <span>→</span>
          </motion.p>
       </div>
-    </motion.div>
+    </div>
     </Link>
   );
 };

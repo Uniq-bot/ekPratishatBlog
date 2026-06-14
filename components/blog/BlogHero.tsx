@@ -4,10 +4,8 @@ import { motion } from 'framer-motion'
 import Image from 'next/image'
 const BlogHero = () => {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }} className="w-[75%]  overflow-hidden top-0 left-0 right-0 absolute z-5  lg:h-130 h-50 border-b-5 border-[#EBC044] md:relative">
+    <div
+     className="w-[75%]  overflow-hidden top-0 left-0 right-0 absolute z-5  lg:h-130 h-50 border-b-5 border-[#EBC044] md:relative">
             <div className="w-full h-full absolute bg-black/60 z-6" />
             <div className="w-full h-full absolute z-5 ">
                 <Image src={BlogHeroPng} alt="Blog Hero" className="w-full h-full" />
@@ -20,7 +18,7 @@ const BlogHero = () => {
                     Stay informed with practical insights that help you make smarter property decisions.
                 </p>
             </div>
-    </motion.div>
+    </div>
   )
 }
 
