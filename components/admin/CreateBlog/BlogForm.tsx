@@ -11,6 +11,7 @@ import {
   Minus,
   Info,
 } from "lucide-react";
+import { useDeleteImage } from "@/hooks/useAdminBlogs";
 interface Block {
   id: string | number;
   type:
@@ -88,10 +89,20 @@ const BlogForm = ({
       prev.map((b) => (b.id === id ? { ...b, ...patch } : b)),
     );
   };
+  const deleteImage = useDeleteImage();
 
-  const removeBlock = (id: string | number) => {
-    setBlocks((prev) => prev.filter((b) => b.id !== id));
-  };
+    const removeBlock = async (block: Block) => {
+      console.log(block)
+  if (
+    block.type === "image" &&
+    typeof block.content === "string" &&
+    block.content.startsWith("/uploads/")
+  ) {
+    await deleteImage.mutateAsync(block.content);
+  }
+
+  setBlocks((prev) => prev.filter((b) => b.id !== block.id));
+}
 
   const updateListItem = (
     blockId: string | number,
@@ -272,7 +283,7 @@ const BlogForm = ({
             {/* Delete block */}
             <button
               type="button"
-              onClick={() => removeBlock(block.id)}
+              onClick={() => removeBlock(block)}
               className="shrink-0 p-1 hover:text-red-500 transition-colors"
               title="Remove block"
             >

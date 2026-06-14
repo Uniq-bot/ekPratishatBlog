@@ -45,6 +45,26 @@ export const useImageUpload=()=>{
   })
 }
 
+export const useDeleteImage=()=>{
+  const queryClient=useQueryClient();
+  return useMutation({
+    mutationFn: async (imagePath:string)=>{
+      const res=await fetch(`/api/upload/delete`,{
+        method:"POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ imagePath }),
+      })
+      if(!res.ok){
+        const err=await res.json().catch(()=>({}));
+        throw new Error(err.message || "Failed to delete image");
+      }
+      return res.json();
+    }
+  })
+}
+
 export const useDeleteBlog = () => {
   const queryClient = useQueryClient();
   return useMutation({
