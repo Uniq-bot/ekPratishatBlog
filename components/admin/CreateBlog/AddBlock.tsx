@@ -1,4 +1,6 @@
 "use client";
+
+import { useImageUpload } from "@/hooks/useAdminBlogs";
 import React from "react";
 
 const AddBlock = ({
@@ -9,6 +11,8 @@ const AddBlock = ({
   setSetLevel,
   content,
   setContent,
+  image,
+  setImage,
 }: {
   setBlocks: React.Dispatch<React.SetStateAction<any[]>>;
   blockType: string;
@@ -17,101 +21,188 @@ const AddBlock = ({
   setSetLevel: React.Dispatch<React.SetStateAction<number>>;
   content: string;
   setContent: React.Dispatch<React.SetStateAction<string>>;
+  image: File | null;
+  setImage: React.Dispatch<React.SetStateAction<File | null>>;
 }) => {
   const headingLevels = [1, 2, 3, 4, 5];
 
-  const handleAddBlock = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (!content.trim() && blockType !== "list") return;
+  const imageUpload = useImageUpload();
+ const handleAddBlock = async (e: React.MouseEvent) => {
+  e.preventDefault();
 
-    const newBlock = {
-      id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
-      type: blockType,
-      ...(blockType === "heading" && { level: setLevel }),
-      content: blockType === "list"
-        ? content.split("\n").map((s) => s.trim()).filter(Boolean)
+  if (blockType !== "separator" && !content.trim() && !image) return;
+
+  let imagePath = null;
+
+  // 🚨 upload image first
+  if (blockType === "image" && image) {
+    const res = await imageUpload.mutateAsync(image);
+    imagePath = res.imagePath;
+  }
+
+  const newBlock = {
+    id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+    type: blockType,
+
+    ...(blockType === "heading" && {
+      level: setLevel,
+    }),
+
+    content:
+      blockType === "list"
+        ? content
+            .split("\n")
+            .map((s) => s.trim())
+            .filter(Boolean)
+        : blockType === "image"
+        ? imagePath
+        : blockType === "separator"
+        ? null
         : content,
-    };
-
-    setBlocks((prev: any[]) => [...prev, newBlock]);
-    setContent("");
-    // Keep block type and level — user likely wants to add more of the same
   };
 
-  return (
-    <div className="w-full py-3 lg:py-5 border bg-[#EBECD8]/50">
-      <h1 className="text-sm lg:text-base border-r border border-l-0 bg-[#DBDBB8] w-fit px-4 lg:px-10 py-2">
-        Add Block
-      </h1>
-      <div className="px-3 lg:px-5 mt-2">
-        {/* Block type selector */}
-        <div>
-          <label className="text-xs lg:text-sm font-medium">Block Type</label>
-          <select
-            value={blockType}
-            onChange={(e) => setBlockType(e.target.value)}
-            className="w-full border h-8 lg:h-10 outline-none text-xs lg:text-sm ml-0 lg:ml-2 mt-1"
-          >
-            <option value="paragraph">Paragraph</option>
-            <option value="heading">Heading</option>
-            <option value="list">List</option>
-          </select>
-        </div>
+  setBlocks((prev) => [...prev, newBlock]);
 
-        {/* Heading level picker */}
-        {blockType === "heading" && (
-          <div className="w-full flex flex-wrap flex-col gap-2 mt-2">
-            <label className="text-xs lg:text-sm font-medium">Heading Level</label>
-            <div className="flex flex-wrap gap-1.5 lg:gap-2 ml-0 lg:ml-2">
-              {headingLevels.map((level) => (
-                <button
-                  type="button"
-                  onClick={() => setSetLevel(level)}
-                  className={`border text-xs lg:text-sm ${setLevel === level ? "bg-[#d0d05d] border-yellow-500" : "bg-[#DBDBB8]/60 hover:bg-[#CFCFC0]"} cursor-pointer py-1 px-2 lg:px-3`}
-                  key={level}
-                >
-                  H{level}
-                </button>
-              ))}
-            </div>
+  setContent("");
+  setImage(null);
+};
+
+  return (
+    <div className="w-full border p-3 lg:p-5 bg-[#F0EFE1]">
+      <h2 className="text-sm lg:text-base font-semibold mb-3">
+        Add Block
+      </h2>
+
+      {/* Block Type */}
+      <div className="flex flex-col gap-1">
+        <label className="text-xs lg:text-sm font-medium">
+          Block Type
+        </label>
+
+        <select
+          value={blockType}
+          onChange={(e) => {
+            setBlockType(e.target.value);
+            setContent("");
+          }}
+          className="w-full border h-9 lg:h-10 outline-none px-2 text-xs lg:text-sm"
+        >
+          <option value="paragraph">Paragraph</option>
+          <option value="heading">Heading</option>
+          <option value="list">List</option>
+          <option value="image">Image</option>
+          <option value="quote">Quote</option>
+          <option value="callout">Callout</option>
+          <option value="separator">Divider</option>
+        </select>
+      </div>
+
+      {/* Heading Level */}
+      {blockType === "heading" && (
+        <div className="flex flex-col gap-2 mt-4">
+          <label className="text-xs lg:text-sm font-medium">
+            Heading Level
+          </label>
+
+          <div className="flex flex-wrap gap-2">
+            {headingLevels.map((level) => (
+              <button
+                key={level}
+                type="button"
+                onClick={() => setSetLevel(level)}
+                className={`border px-3 py-1 text-xs lg:text-sm transition ${
+                  setLevel === level
+                    ? "bg-[#d0d05d] border-yellow-500"
+                    : "bg-gray-100 hover:bg-gray-200"
+                }`}
+              >
+                H{level}
+              </button>
+            ))}
           </div>
+        </div>
+      )}
+
+      {/* Content */}
+      <div className="w-full flex flex-col gap-2 mt-4">
+        <label className="text-xs lg:text-sm font-medium">
+          Content
+        </label>
+
+        {blockType === "paragraph" && (
+          <textarea
+            className="w-full h-24 outline-none p-2 border text-xs lg:text-sm resize-y"
+            placeholder="Write paragraph..."
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+          />
         )}
 
-        {/* Content input */}
-        <div className="w-full flex flex-col gap-2 mt-3 lg:mt-5">
-          <p className="text-xs lg:text-sm font-medium">Content</p>
-          {blockType === "paragraph" ? (
-            <textarea
-              className="w-full focus:border-b transition-all h-16 lg:h-20 outline-none p-2 border text-xs lg:text-sm"
-              placeholder="Paragraph content..."
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-            />
-          ) : blockType === "heading" ? (
-            <input
-              className="w-full h-8 lg:h-10 focus:border-b transition-all outline-none p-2 border text-xs lg:text-sm"
-              placeholder={`Heading ${setLevel} content...`}
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-            />
-          ) : blockType === "list" ? (
-            <textarea
-              className="w-full h-16 lg:h-20 outline-none p-2 border text-xs lg:text-sm"
-              placeholder={"List item 1\nList item 2\nList item 3"}
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-            />
-          ) : null}
-        </div>
+        {blockType === "heading" && (
+          <input
+            className="w-full h-10 outline-none p-2 border text-xs lg:text-sm"
+            placeholder={`Heading ${setLevel} content...`}
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+          />
+        )}
 
-        <button
-          type="button"
-          className="px-3 lg:px-4 py-2 hover:bg-gray-200 transition-all cursor-pointer bg-white border shadow shadow-black mt-3 lg:mt-5 text-xs lg:text-sm w-full sm:w-auto"
-          onClick={handleAddBlock}
-        >
-          Add Block
-        </button>
+        {blockType === "list" && (
+          <textarea
+            className="w-full h-24 outline-none p-2 border text-xs lg:text-sm resize-y"
+            placeholder={`List item 1
+List item 2
+List item 3`}
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+          />
+        )}
+
+    {blockType === "image" && (
+  <input
+    type="file"
+    accept="image/*"
+    className="w-full h-10 outline-none p-2 border text-xs lg:text-sm"
+    onChange={(e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      setImage(file); 
+    }}
+  />
+)}
+
+        {blockType === "quote" && (
+          <textarea
+            className="w-full h-24 outline-none p-2 border italic text-xs lg:text-sm resize-y"
+            placeholder="Enter quote..."
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+          />
+        )}
+
+        {blockType === "callout" && (
+          <textarea
+            className="w-full h-24 outline-none p-2 border bg-yellow-50 text-xs lg:text-sm resize-y"
+            placeholder="Important note or tip..."
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+          />
+        )}
+
+        {blockType === "separator" && (
+          <div className="border rounded p-4 text-center text-gray-400 text-sm">
+            Divider will be inserted
+          </div>
+        )}
       </div>
+
+      <button
+        type="button"
+        onClick={handleAddBlock}
+        className="mt-5 w-full sm:w-auto px-4 py-2 border bg-white hover:bg-gray-100 transition shadow text-xs lg:text-sm cursor-pointer"
+      >
+        Add Block
+      </button>
     </div>
   );
 };

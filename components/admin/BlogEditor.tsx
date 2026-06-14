@@ -5,8 +5,9 @@ import BlogForm from "./CreateBlog/BlogForm";
 import PreviewBlog from "./CreateBlog/PreviewBlog";
 import { useCreateBlog, useUpdateBlog } from "@/hooks/useAdminBlogs";
 import { useRouter } from "next/navigation";
-import { Image } from "lucide-react";
+import { Image, Info } from "lucide-react";
 import { Category, Tag } from "@/types/blog";
+import GuideModel from "./GuideModel";
 
 const BlogEditor = ({
   mode = "create",
@@ -45,6 +46,9 @@ const BlogEditor = ({
   const [blockType, setBlockType] = useState("heading");
   const [setLevel, setSetLevel] = useState(1);
   const [content, setContent] = useState("");
+  const [image, setImage] = useState<File | null>(null);
+  const [showModel, setShowModal] = useState(false);
+
   console.log(categories);
   const { mutateAsync: createBlog, isPending: isCreating } = useCreateBlog();
   const { mutateAsync: updateBlog, isPending: isUpdating } = useUpdateBlog();
@@ -58,32 +62,29 @@ const BlogEditor = ({
 
   // Populate fields when editing
   useEffect(() => {
-    if (mode === "edit" && initialBlog?.data) {
-      const blog = initialBlog.data;
-      setTitle(blog.title ?? "");
-      setDescription(blog.description ?? "");
-      setCategoryId(blog.categoryID ?? blog.categoryId ?? "");
-      setTagsValue(blog.tags ?? []);
+    if (!initialBlog?.data) return;
 
-      const raw = blog.content;
-      const parsedBlocks = Array.isArray(raw)
-        ? raw
-        : raw?.blocks
-          ? raw.blocks
-          : typeof raw === "string"
-            ? (() => {
-                try {
-                  return JSON.parse(raw);
-                } catch {
-                  return [];
-                }
-              })()
-            : [];
-      setBlocks(parsedBlocks);
-    }
+    const blog = initialBlog.data;
+
+    setTitle(blog.title ?? "");
+    setDescription(blog.description ?? "");
+    setCategoryId(blog.categoryID ?? blog.categoryId ?? "");
+    setTagsValue(blog.tags ?? []);
+
+    const raw = blog.content;
+
+    const parsedBlocks = Array.isArray(raw)
+      ? raw
+      : raw?.blocks
+        ? raw.blocks
+        : typeof raw === "string"
+          ? JSON.parse(raw)
+          : [];
+
+    setBlocks(parsedBlocks);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mode, initialBlog]);
-
+  }, []);
   // In resetForm(), reset the file input via ref
   const resetForm = () => {
     setTitle("");
@@ -169,13 +170,22 @@ const BlogEditor = ({
   const isBusy = isCreating || isUpdating;
 
   return (
-    <div className="w-full min-h-full relative flex flex-col lg:flex-row gap-4 lg:gap-5">
+    <div className={`w-full min-h-full relative flex flex-col lg:flex-row gap-4 lg:gap-5 ${showModel ? "overflow-hidden" : ""}`}>
       {/* Editor panel */}
       <div className="w-full lg:flex-1 transition-all min-h-[calc(100%-5px)] border shadow shadow-black py-3 lg:py-5 bg-[#EBECD8]/50 relative z-20">
-        <h1 className="text-lg lg:text-xl border-r border border-l-0 bg-[#DBDBB8] w-fit px-4 lg:px-10 py-2">
-          {mode === "create" ? "Create" : "Edit"} Blog
-        </h1>
+        <div className="w-full flex items-center justify-between pr-5">
+          <h1 className="text-lg lg:text-xl border-r border border-l-0 bg-[#DBDBB8] w-fit px-4 lg:px-10 py-2">
+            {mode === "create" ? "Create" : "Edit"} Blog
+          </h1>
+          <span
+          onClick={()=>setShowModal(true)}
+            title="Blog content support guide."
+            className="text-gray-500 hover:text-gray-700 transition-colors cursor-pointer"
+          >
+            <Info />
+          </span>
 
+        </div>
         {submitError && (
           <div className="mx-3 lg:mx-10 mt-4 px-3 lg:px-4 py-2 bg-red-100 border border-red-400 text-red-700 text-xs lg:text-sm">
             {submitError}
@@ -335,9 +345,14 @@ const BlogEditor = ({
           setSetLevel={setSetLevel}
           content={content}
           setContent={setContent}
+          image={image}
+          setImage={setImage}
         />
         <PreviewBlog blocks={blocks} />
       </div>
+      {showModel && (
+        <GuideModel showModel={showModel} setShowModel={setShowModal} />
+      )}
     </div>
   );
 };

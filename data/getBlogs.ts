@@ -19,15 +19,7 @@ export const getBlogs = async ({
   try {
     console.log(category);
     const skip = (page - 1) * limit;
-    const cacheKey = `blogs:${page}:${limit}:${category ?? ""}:${tag ?? ""}:${sort}:${search ?? ""}`;
-    if (cache.has(cacheKey)) {
-      if (cache.get(cacheKey).timestamp > Date.now() - 5 * 60 * 1000) {
-        return cache.get(cacheKey).data;
-      } else {
-        cache.delete(cacheKey);
-      }
-    }
-    console.log("Cache not used");
+  
     const where: any = {
       status: "PUBLISHED",
       ...(category && {
@@ -64,10 +56,7 @@ export const getBlogs = async ({
       prisma.blogPost.count({ where }),
     ]);
 
-    cache.set(cacheKey, {
-      data: { posts: blogs, totalCount },
-      timestamp: Date.now() + TTL,
-    });
+   
     return { posts: blogs, totalCount };
   } catch (err) {
     console.error("BLOG FETCH ERROR:", err);
