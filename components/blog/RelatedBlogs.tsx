@@ -13,7 +13,7 @@ const RelatedBlogs = ({ relatedBlogs }: { relatedBlogs: any }) => {
   // lock body scroll when mobile panel open
 
   return (
-    <div className="w-full lg:w-[35%] h-full">
+    <div className="w-full lg:w-[35%] h-full text-black">
       {/* Mobile toggle button */}
       <button
         aria-label={isOpen ? "Close related" : "Open related"}

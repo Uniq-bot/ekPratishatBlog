@@ -6,9 +6,10 @@ import { usePathname, useSearchParams } from "next/navigation";
 const CategoryNav = ({
   categories,
 }: {
-  categories: { id: string; name: string }[];
+  categories: { id: string; name: string; slug: string }[];
 }) => {
   const searchParams = useSearchParams();
+ 
   const currentCategory = searchParams.get("category");
   const pathname = usePathname();
   return (
@@ -16,7 +17,7 @@ const CategoryNav = ({
       <Link
         scroll={false}
         href={pathname}
-        className={`px-3 py-1 border ${!currentCategory ? "bg-amber-400 text-black" : "border-gray-500 text-gray-300"}`}
+        className={`px-3 py-1 border ${!currentCategory ? "bg-amber-400 text-black" : "border-gray-500 text-black"}`}
       >
         All
       </Link>
@@ -24,12 +25,13 @@ const CategoryNav = ({
         <Link
           key={category.id}
           scroll={false}
-          href={`${pathname}?category=${category.name.toLowerCase()}`}
-          className={`px-3 py-1 border ${currentCategory === category.name.toLowerCase() ? "bg-amber-400 text-black" : "border-gray-500 text-gray-300"}`}
+          href={`${pathname}?category=${category.slug}`}
+          className={`px-3 py-1 border ${currentCategory === category.slug ? "bg-amber-400 text-black" : "border-gray-500 text-black"}`}
         >
           {category.name}
         </Link>
       ))}
+    
     </div>
   );
 };

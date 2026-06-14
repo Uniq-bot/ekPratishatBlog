@@ -31,7 +31,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
   console.log("filteredBy category: ", blogs)
 
   return (
-    <div className="w-full min-h-screen flex flex-col bg-[#1d1d1d] md:p-10">
+    <div className="w-full min-h-screen flex flex-col bg-[#FFFFFF] md:p-10">
       <div className="lg:w-full min-h-100 flex gap-5">
         <BlogHero />
         <LatestBlogs latestBlogs={latestBlogs?.posts ?? []} />

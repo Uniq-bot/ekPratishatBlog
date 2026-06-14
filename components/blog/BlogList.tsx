@@ -61,16 +61,18 @@ const BlogList = ({
   return (
     <div className="w-2/3 flex flex-col gap-5 px-4 sm:px-0">
       <div className="w-full flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-white ">Blogs of your <span className="text-[#FEE685] font-[Girls] underline underline-offset-5">Interest</span></h2>
+        <h2 className="text-2xl font-bold text-dblack ">Blogs of your <span className="text-[#f4c91b] bg-black p-2 font-[Girls] underline underline-offset-5">Interest</span></h2>
         <select
-          className="bg-[#1d1d1d] text-gray-300 border border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="bg-[#1d1d1d] p-2 text-white border border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
           value={sort}
           onChange={(e) =>  updateParam("sort", e.target.value)}
         >
           <option value="latest">Latest</option>
           <option value="oldest">Oldest</option>
         </select>
-      </div>
+      </div>{
+        
+      }
       <div className="w-full flex flex-col gap-5">
         {blogs?.length > 0 ? (
           blogs.map((blog) => <BlogCard key={blog.id} blog={blog} />)
@@ -83,7 +85,7 @@ const BlogList = ({
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="w-full flex items-center justify-center mt-4 gap-3 text-white flex-wrap">
+        <div className="w-full flex items-center justify-center mt-4 gap-3 text-dblack flex-wrap">
           {page > 1 && (
             <Link
               href={buildUrl(page - 1)}

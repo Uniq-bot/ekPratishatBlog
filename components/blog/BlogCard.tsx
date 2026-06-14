@@ -4,13 +4,13 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 const BlogCard = ({ blog }: { blog: any }) => {
   return (
-    <Link href={`/blog/${blog.slug}`} title={blog.title} className="w-full h-48 bg-[#1d1d1d] rounded-lg group">
+    <Link href={`/blog/${blog.slug}`} title={blog.title} className="w-full min-h-48 bg-[#FFFFFF] hover:bg-[#f0f0f0] transition-all  group">
       <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, }}
       
-    className="w-full border-b-2 pb-5 text-white cursor-pointer group flex flex-col p-5 md:flex-row border-[#EBC044] gap-5 overflow-hidden">
+    className="w-full border-b-2 pb-5 text-black cursor-pointer group flex flex-col p-5 md:flex-row border-[#EBC044] gap-5 overflow-hidden">
       <div className="w-full md:w-60 relative h-48 md:h-auto overflow-hidden shrink-0">
         <Image
           src={blog?.coverImage ?? "/logo.png"}
@@ -25,16 +25,16 @@ const BlogCard = ({ blog }: { blog: any }) => {
       </div>
 
       <div className="py-1 flex flex-col items-start flex-1 gap-2">
-        <span className="text-[12px] font-semibold bg-[rgba(154,106,0,0.07)] p-1 px-3 rounded-2xl text-[#EBC044]">
+        <span className="text-[12px] font-semibold bg-[rgba(154,106,0,0.07)] p-1 px-3 rounded-2xl text-[#e9b519]">
           {new Date(blog?.createdAt).toLocaleDateString()}
         </span>
 
-        <h2 className="text-2xl group-hover:text-[#EBC044] transition-all leading-tight">
+        <h2 className="text-2xl group-hover:text-[#ad8408] transition-all leading-tight">
           {blog?.title}
         </h2>
 
         {blog?.description && (
-          <p className="text-sm text-gray-300 line-clamp-2">
+          <p className="text-sm text-black/50 line-clamp-2">
             {blog.description}
           </p>
         )}
@@ -45,7 +45,7 @@ const BlogCard = ({ blog }: { blog: any }) => {
             {blog.tags.slice(0, 3).map((tag: any) => (
               <span
                 key={tag.id}
-                className="text-[11px] border border-[#FFD07E] px-2 py-0.5 text-[#EBC044]"
+                className="text-[11px] border border-[#1111] bg-[#FFD07E]  p-1  text-[#36332e]  uppercase font-semibold"
               >
                 {tag.name}
               </span>
