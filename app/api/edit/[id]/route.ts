@@ -1,5 +1,5 @@
 import { prisma } from "@/libs/prisma";
-import { writeFile, mkdir } from "fs/promises";
+import { writeFile, mkdir, unlink } from "fs/promises";
 import { join } from "path";
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
@@ -87,9 +87,22 @@ export async function PUT(req: Request, { params }: RouteContext) {
 export async function DELETE(_req: Request, { params }: RouteContext) {
   const { id } = await params;
   try {
-    // Fetch slug before deleting so we can revalidate the right path
-    const blog = await prisma.blogPost.findUnique({ where: { id }, select: { slug: true } });
-
+ const blog = await prisma.blogPost.findUnique({
+  where: { id },
+  select: {
+    slug: true,
+    coverImage: true, 
+  },
+});
+    const deleteImagePath = blog?.coverImage;
+    if (deleteImagePath) {
+      const filePath = join(process.cwd(), "public", deleteImagePath);
+     try {
+  await unlink(filePath);
+} catch (err) {
+  console.error("Failed to delete cover image:", err);
+}
+    }
     await prisma.blogPost.delete({ where: { id } });
 
     if (blog?.slug) {
