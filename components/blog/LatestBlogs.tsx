@@ -18,12 +18,9 @@ const LatestBlogs = ({ latestBlogs = [] }: { latestBlogs?: BlogItem[] }) => {
             const createdAt = new Date(blog.createdAt).toLocaleDateString();
 
             return (
-              <motion.div
+              <div
                 key={blog.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                whileHover={{ x: 10 }}
+              
                 className="w-full"
               >
                 <Link
@@ -44,7 +41,7 @@ const LatestBlogs = ({ latestBlogs = [] }: { latestBlogs?: BlogItem[] }) => {
                     <Calendar size={16} /> {createdAt}
                   </p>
                 </Link>
-              </motion.div>
+              </div>
             );
           })}
         </div>
