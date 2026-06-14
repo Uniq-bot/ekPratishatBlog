@@ -8,7 +8,7 @@ const NewsLetter = () => {
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="w-1/3 h-fit text-white  md:flex flex-col items-start  border-l-5 border-[#EBC044]  gap-5 p-5 "
+      className="w-1/3 h-fit text-black  md:flex flex-col items-start  border-l-5 border-[#EBC044]  gap-5 p-5 "
     >
       <h2 className="text-xl font-bold">
         Stay Updated with Real Estate Trends

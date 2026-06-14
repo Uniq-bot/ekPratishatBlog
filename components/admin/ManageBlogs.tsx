@@ -30,7 +30,7 @@ const ManageBlogs = () => {
                 <th className="px-4 py-3 text-left">Title</th>
                 <th className="px-4 py-3 text-left">Category</th>
                 <th className="px-4 py-3 text-left">Tags</th>
-                <th className="px-4 py-3 text-center">Views</th>
+                {/* <th className="px-4 py-3 text-center">Views</th> */}
                 <th className="px-4 py-3 text-center">Actions</th>
               </tr>
             </thead>
@@ -71,9 +71,9 @@ const ManageBlogs = () => {
                       ))}
                     </div>
                   </td>
-                  <td className="px-4 py-4 text-center text-sm">
+                  {/* <td className="px-4 py-4 text-center text-sm">
                     {blog.viewCount ?? 0}
-                  </td>
+                  </td> */}
                   <td className="px-4 py-4">
                     <div className="flex justify-center gap-2">
                       {/* Link instead of router.push */}

@@ -41,9 +41,9 @@ const BlogDetailClient = ({ blog }: { blog: any }) => {
   console.log(blocks);
   console.log(blog.coverImage);
   return (
-    <div className="w-full lg:w-[65%] py-5 h-full bg-[#383735] px-3 sm:px-6 lg:px-10">
+    <div className="w-full lg:w-[65%] py-5 h-full bg-[#ffffff] text-black px-3 sm:px-6 lg:px-10">
       <div className="w-full flex flex-col border-b-3 pb-5 border-[#d8a92f] gap-2.5">
-        <h1 className="text-2xl sm:text-3xl  lg:text-5xl font-semibold leading-tight">
+        <h1 className="text-2xl sm:text-3xl   lg:text-5xl font-semibold leading-tight">
           {blog?.title}
         </h1>
 
@@ -75,7 +75,7 @@ const BlogDetailClient = ({ blog }: { blog: any }) => {
                 </span>
               ))}
           </div>
-          <span className="text-gray-200 text-xs sm:text-sm whitespace-nowrap">
+          <span className="text-black text-xs sm:text-sm whitespace-nowrap">
             {blog?.createdAt ? new Date(blog.createdAt).toLocaleDateString() : ""}
           </span>
         </div>
@@ -83,7 +83,7 @@ const BlogDetailClient = ({ blog }: { blog: any }) => {
 
       <div className="w-full mt-6 flex flex-col   px-5 pb-5">
         {blog?.description && (
-        <p className="bg-gray-300 text-black italic p-3 sm:p-4 lg:p-5 text-xs sm:text-sm lg:text-base leading-relaxed mt-6">
+        <p className="bg-gray-300 border-l-10 border-[#000000] text-black italic p-3 sm:p-4 lg:p-5 text-xs sm:text-sm lg:text-base leading-relaxed mt-6">
           "{blog.description}"
         </p>
       )}
@@ -97,12 +97,12 @@ const BlogDetailClient = ({ blog }: { blog: any }) => {
             .map((b, i) => (
               <div
                 key={i}
-                className="flex items-start gap-2 sm:gap-3 mt-2 px-2 sm:px-3 py-1 text-xs sm:text-sm"
+                className={`flex items-start gap-2 sm:gap-3 mt-2 px-2 ${b.level > 1 ? 'ml-5' : ''} ${b.level > 2 ? 'hidden' : ''} sm:px-3 py-1 text-xs sm:text-sm`}
               >
                 <Dot size={18} className="shrink-0 mt-1 sm:mt-0.5" />
                 <a
                   href={`#heading-${i}`}
-                  className="hover:text-[#79570E] transition-all font-semibold"
+                  className={`hover:text-[#79570E]  transition-all font-semibold`}
                 >
                   {b.content}
                 </a>
@@ -121,7 +121,7 @@ const BlogDetailClient = ({ blog }: { blog: any }) => {
                 return (
                   <p
                     key={block.id ?? index}
-                    className="text-xs sm:text-sm mt-2 lg:text-base text-gray-200 leading-relaxed"
+                    className="text-xs sm:text-sm mt-2 lg:text-base text-black leading-relaxed"
                   >
                     {block.content}
                   </p>
@@ -136,7 +136,7 @@ const BlogDetailClient = ({ blog }: { blog: any }) => {
                   <Tag
                     key={block.id ?? index}
                     id={anchorId}
-                    className={`${cls} mt-4 lg:mt-6 scroll-mt-20`}
+                    className={`${cls} mt-4 lg:mt-6  ${level>1?"ml-5":""}  scroll-mt-20`}
                   >
                     {block.content}
                   </Tag>
@@ -162,7 +162,7 @@ const BlogDetailClient = ({ blog }: { blog: any }) => {
                 return (
                   <ul
                     key={block.id ?? index}
-                    className="list-disc ml-4 sm:ml-6 lg:ml-10 mt-5 list-inside text-gray-300 text-xs sm:text-sm lg:text-base space-y-1"
+                    className="list-disc ml-4 sm:ml-6 lg:ml-10 mt-0.5 list-inside text-black text-xs sm:text-sm lg:text-base space-y-1"
                   >
                     {(Array.isArray(block.content) ? block.content : []).map(
                       (item: string, i: number) => (

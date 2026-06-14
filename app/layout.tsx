@@ -15,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="w-full bg-[#1d1d1d]">
+    <html lang="en" className="w-full bg-[#FFFFFF] select-none font-serif">
       <body cz-shortcut-listen="true">
         <QueryProvider>
           {children}
