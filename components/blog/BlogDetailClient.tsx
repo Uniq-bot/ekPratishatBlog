@@ -56,7 +56,7 @@ const BlogDetailClient = ({ blog }: { blog: any }) => {
             priority
           />
           {blog?.category?.name && (
-            <span className="absolute top-0 right-0 text-white px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm lg:text-base bg-black z-10">
+            <span className="absolute top-0 right-0 text-white px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm lg:text-base bg-black ">
               {blog.category.name}
             </span>
           )}

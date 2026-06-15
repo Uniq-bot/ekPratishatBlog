@@ -13,7 +13,15 @@ export interface Category {
   createdAt: string | Date;
   updatedAt: string | Date;
 }
-
+export type BlogItems = {
+  id: string;
+  title: string;
+  slug: string | null;
+  coverImage: string | null;
+  createdAt: Date;
+  category: { name: string } | null;
+  viewCount?: number;
+};
 export interface Tag {
   id: string;
   name: string;

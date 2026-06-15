@@ -2,38 +2,38 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-const BlogCard = ({ blog }: { blog: any }) => {
-  const handleClick = async () => {
-    console.log("Clicking the blog");
-    const sessionId = localStorage.getItem("sessionId") || crypto.randomUUID();
+import { useRouter } from "next/navigation";
 
+const BlogCard = ({ blog }: { blog: any }) => {
+  const router = useRouter();
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+
+    const sessionId =
+      localStorage.getItem("sessionId") || crypto.randomUUID();
     localStorage.setItem("sessionId", sessionId);
 
     const key = `viewed-${blog.id}`;
-    if (sessionStorage.getItem(key)) return;
+    if (!sessionStorage.getItem(key)) {
+      sessionStorage.setItem(key, "true");
+      fetch("/api/blogs/views", {
+        method: "POST",
+        keepalive: true,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ blogId: blog.id, sessionId }),
+      }).catch(() => {});
+    }
 
-    sessionStorage.setItem(key, "true");
-
-    await fetch("/api/blogs/views", {
-      method: "POST",
-      keepalive: true,
-
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        blogId: blog.id,
-        sessionId,
-      }),
-    });
-    console.log("clickedd");
+    router.push(`/blog/${blog.slug}`);
   };
+
   return (
     <Link
       href={`/blog/${blog.slug}`}
-      onMouseDown={handleClick}
+      onClick={handleClick}
       title={blog.title}
-      className="w-full min-h-48 bg-[#FFFFFF] rounded-2xl overflow-hidden hover:bg-[#f0f0f0] transition-all  group"
+      className="w-full min-h-48 bg-[#FFFFFF] rounded-2xl overflow-hidden hover:bg-[#f0f0f0] transition-all group"
     >
       <div className="w-full border-b-2 pb-5 text-black cursor-pointer group flex flex-col p-5 md:flex-row border-[#EBC044] rounded-2xl gap-5 overflow-hidden">
         <div className="w-full md:w-60 relative h-48 md:h-auto overflow-hidden shrink-0">
@@ -44,7 +44,7 @@ const BlogCard = ({ blog }: { blog: any }) => {
             height={320}
             className="w-full h-full object-cover"
           />
-          <span className="absolute top-4  left-0 bg-black font-semibold text-white px-3 py-2 text-md">
+          <span className="absolute top-4 left-0 bg-black font-semibold text-white px-3 py-2 text-md">
             {blog?.category?.name}
           </span>
         </div>
@@ -64,13 +64,12 @@ const BlogCard = ({ blog }: { blog: any }) => {
             </p>
           )}
 
-          {/* Tags */}
           {Array.isArray(blog?.tags) && blog.tags.length > 0 && (
             <div className="flex flex-wrap gap-1 mt-1">
               {blog.tags.slice(0, 3).map((tag: any) => (
                 <span
                   key={tag.id}
-                  className="text-[11px] border rounded-xl border-[#1111] bg-[#FFD07E]  p-1  text-[#36332e]  uppercase font-semibold"
+                  className="text-[11px] border rounded-xl border-[#1111] bg-[#FFD07E] p-1 text-[#36332e] uppercase font-semibold"
                 >
                   {tag.name}
                 </span>
