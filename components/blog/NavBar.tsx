@@ -19,7 +19,7 @@ const NavBar = () => {
     const pathname=usePathname();
 
   return (
-    <div className="  w-full flex items-center justify-between gap-5 py-4 shadow-[0_2px_0_0_rgba(0,0,0,0.15)]  border-b pb- px-10">
+    <div className="  w-full  flex items-center justify-between gap-5 py-4 shadow-[0_2px_0_0_rgba(0,0,0,0.15)]  border-b pb- px-10">
       <div>
         <Image
           src="/logo.png"
@@ -36,7 +36,7 @@ const NavBar = () => {
             href={navItems.find((i) => i.name === item)?.href || "#"}
             className={`px-3 py-1 text-xl ${
               pathname === navItems.find((i) => i.name === item)?.href
-                ? "border-b-2 border-[#C9981A] text-black"
+                ? "border-b-2 outline-none border-[#C9981A] text-black"
                 : "text-black"
             }`}
           >

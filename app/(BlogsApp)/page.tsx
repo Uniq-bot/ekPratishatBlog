@@ -1,13 +1,13 @@
-// "use client";
 import BlogHero from "@/components/blog/BlogHero";
 import BlogList from "@/components/blog/BlogList";
 import LatestBlogs from "@/components/blog/LatestBlogs";
-import BlogFilters from "@/components/shared/BlogFilters";
+import PopularBlogs from "@/components/blog/PopulatBlogs";
 import NewsLetter from "@/components/blog/NewsLetter";
 import {
   getBlogs,
   getCategory,
   getLatestBlogs,
+  getPopularBlogs,
   getTags,
 } from "@/data/getBlogs";
 import CategoryNav from "@/components/blog/CategoryNav";
@@ -26,12 +26,15 @@ export default async function BlogPage({ searchParams }: PageProps) {
   const sort = (params.sort as "latest" | "oldest") ?? "latest";
   const search = params.search;
 
-  const [blogs, latestBlogs, categories, tags] = await Promise.all([
-    getBlogs({ page, category, tag, sort, search }),
-    getLatestBlogs(),
-    getCategory(),
-    getTags(),
-  ]);
+  const [blogs, latestBlogs, popularBlogs, categories, tags] =
+    await Promise.all([
+      getBlogs({ page, category, tag, sort, search }),
+      getLatestBlogs(),
+      getPopularBlogs(),
+      getCategory(),
+      getTags(),
+    ]);
+
   return (
     <div className="w-full min-h-screen flex flex-col bg-[#FFFFFF] md:p-10">
       <div className="lg:w-full min-h-100 flex gap-5">
@@ -39,12 +42,10 @@ export default async function BlogPage({ searchParams }: PageProps) {
         <LatestBlogs latestBlogs={latestBlogs?.posts ?? []} />
       </div>
 
-      <div className="lg:mb-10 relative lg:top-10 pb-10 w-[90%] m-auto flex flex-col gap-10">
-        <SearchFilter category={category} tag={tag} search={search} />
-
-        <CategoryNav categories={categories} />
-
-        <div className="w-full flex gap-5 relative">
+      <div className="lg:mb-10 relative lg:top-10 pb-10 w-full m-auto flex">
+        <div className="w-[70%] mb-30  flex flex-col gap-5">
+          <SearchFilter category={category} tag={tag} search={search} />
+          <CategoryNav categories={categories} />
           <BlogList
             blogs={blogs.posts}
             page={page}
@@ -55,25 +56,13 @@ export default async function BlogPage({ searchParams }: PageProps) {
             sort={sort}
             search={search}
           />
+        </div>
+
+        <div className="w-1/3 sticky top-0  h-fit flex flex-col gap-8  p-5">
+          <PopularBlogs popularBlogs={popularBlogs?.posts ?? []} />
           <NewsLetter />
         </div>
       </div>
     </div>
   );
 }
-
-// import React from 'react'
-
-// const page = () => {
-//   return (
-//     <div>
-//       <form onSubmit={()=> alert("submitted")}>
-//         <button type="submit">
-//         Click
-//       </button>
-//       </form>
-//     </div>
-//   )
-// }
-
-// export default page

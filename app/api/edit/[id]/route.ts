@@ -103,6 +103,7 @@ export async function DELETE(_req: Request, { params }: RouteContext) {
   console.error("Failed to delete cover image:", err);
 }
     }
+    await prisma.blogViews.deleteMany({ where: { blogPostId: id } });
     await prisma.blogPost.delete({ where: { id } });
 
     if (blog?.slug) {

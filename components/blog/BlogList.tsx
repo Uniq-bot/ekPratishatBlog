@@ -59,7 +59,7 @@ const BlogList = ({
  
 
   return (
-    <div className="w-2/3 flex flex-col gap-5 px-4 sm:px-0">
+    <div className="w-full flex flex-col gap-5 px-4 sm:px-0">
       <div className="w-full flex items-center justify-between">
         <h2 className="text-2xl font-bold text-dblack ">Blogs of your <span className="text-[#f4c91b] bg-black p-2 font-[Girls] underline underline-offset-5">Interest</span></h2>
         <select

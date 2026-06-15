@@ -100,3 +100,18 @@ export const getTags = async () => {
     return [];
   }
 };
+
+export const getPopularBlogs = async () => {
+  try {
+    const blogs = await prisma.blogPost.findMany({
+      where: { status: "PUBLISHED" },
+      orderBy: [{ viewCount: "desc" }, { createdAt: "desc" }],
+      take: 3,
+      include: { tags: true, category: true },
+    });
+    return { posts: blogs };
+  } catch (err) {
+    console.error("POPULAR BLOGS FETCH ERROR:", err);
+    return { posts: [] };
+  }
+};
