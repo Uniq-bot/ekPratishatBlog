@@ -91,18 +91,17 @@ const BlogForm = ({
   };
   const deleteImage = useDeleteImage();
 
-    const removeBlock = async (block: Block) => {
-      console.log(block)
-  if (
-    block.type === "image" &&
-    typeof block.content === "string" &&
-    block.content.startsWith("/uploads/")
-  ) {
-    await deleteImage.mutateAsync(block.content);
-  }
+  const removeBlock = async (block: Block) => {
+    if (
+      block.type === "image" &&
+      typeof block.content === "string" &&
+      block.content.startsWith("/uploads/")
+    ) {
+      await deleteImage.mutateAsync(block.content);
+    }
 
-  setBlocks((prev) => prev.filter((b) => b.id !== block.id));
-}
+    setBlocks((prev) => prev.filter((b) => b.id !== block.id));
+  };
 
   const updateListItem = (
     blockId: string | number,

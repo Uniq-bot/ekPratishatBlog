@@ -38,8 +38,7 @@ const parseBlocks = (raw: any): any[] => {
 
 const BlogDetailClient = ({ blog }: { blog: any }) => {
   const blocks = parseBlocks(blog?.content);
-  console.log(blocks);
-  console.log(blog.coverImage);
+  
   return (
     <div className="w-full lg:w-[65%] py-5 h-full bg-[#ffffff] text-black px-3 sm:px-6 lg:px-10">
       <div className="w-full flex flex-col border-b-3 pb-5 border-[#d8a92f] gap-2.5">
@@ -271,7 +270,12 @@ const BlogDetailClient = ({ blog }: { blog: any }) => {
                       className="flex items-center gap-4 my-12"
                     >
                       <div className="h-px bg-gray-300 flex-1" />
-                      <Image src="/logo.png" alt="Logo" width={70} height={40} />
+                      <Image
+                        src="/logo.png"
+                        alt="Logo"
+                        width={70}
+                        height={40}
+                      />
                       <div className="h-px bg-gray-300 flex-1" />
                     </div>
                   );

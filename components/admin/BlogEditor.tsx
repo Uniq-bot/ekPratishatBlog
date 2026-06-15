@@ -49,7 +49,6 @@ const BlogEditor = ({
   const [image, setImage] = useState<File | null>(null);
   const [showModel, setShowModal] = useState(false);
 
-  console.log(categories);
   const { mutateAsync: createBlog, isPending: isCreating } = useCreateBlog();
   const { mutateAsync: updateBlog, isPending: isUpdating } = useUpdateBlog();
 

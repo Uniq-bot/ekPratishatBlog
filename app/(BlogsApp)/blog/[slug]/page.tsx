@@ -8,6 +8,44 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
+
+
+export async function generateMetadata({ params }: Props) {
+  const { slug } = await params;
+
+  const blog = await prisma.blogPost.findFirst({
+    where: { slug },
+  });
+
+  if (!blog) return {};
+
+  return {
+    title: blog.title,
+    description: blog.description,
+    openGraph: {
+      title: blog.title,
+      description: blog.description,
+      url: `https://localhost:3000/blog/${blog.slug}`,
+      type: "article",
+      images: [
+        {
+          url: `http://localhost:3000${blog.coverImage}`, 
+          width: 1200,
+          height: 630,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: blog.title,
+      description: blog.description,
+      images: [`http://localhost:3000${blog.coverImage}`], 
+    },
+  };
+}
+
+
+
 async function getBlog(slug: string) {
   return prisma.blogPost.findFirst({
     where: { slug },
@@ -49,13 +87,12 @@ async function getRelatedBlogs(
 export default async function BlogDets({ params }: Props) {
   const { slug } = await params;
   const blog = await getBlog(slug);
-  console.log(blog)
+  
   if (!blog) {
     notFound();
   }
 
   const relatedBlogs= await getRelatedBlogs(blog.categoryID, slug, blog.tags.map(t => t.id)); 
-  console.log("related blog",relatedBlogs)
 
   return (
     <div className="w-full min-h-screen text-white p-3 sm:p-6 lg:p-10 py-4 sm:py-5 lg:py-10 flex flex-col items-start">
