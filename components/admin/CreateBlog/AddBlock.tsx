@@ -34,7 +34,6 @@ const AddBlock = ({
 
   let imagePath = null;
 
-  // 🚨 upload image first
   if (blockType === "image" && image) {
     const res = await imageUpload.mutateAsync(image);
     imagePath = res.imagePath;

@@ -17,7 +17,6 @@ export const getBlogs = async ({
   search?: string;
 } = {}) => {
   try {
-    console.log(category);
     const skip = (page - 1) * limit;
   
     const where: any = {
@@ -66,24 +65,14 @@ export const getBlogs = async ({
 
 export const getLatestBlogs = async () => {
   try {
-    const cacheKey = "latestBlogs";
-    if (cache.has(cacheKey)) {
-      if (cache.get(cacheKey).timestamp > Date.now() - 5 * 60 * 1000) {
-        return cache.get(cacheKey).data;
-      } else {
-        cache.delete(cacheKey);
-      }
-    }
+    
     const blogs = await prisma.blogPost.findMany({
       where: { status: "PUBLISHED" },
       orderBy: { createdAt: "desc" },
       take: 5,
       include: { tags: true, category: true },
     });
-    cache.set(cacheKey, {
-      data: { posts: blogs },
-      timestamp: Date.now() + TTL,
-    });
+  
     return { posts: blogs };
   } catch (err) {
     console.error("INITIAL LATEST FETCH ERROR:", err);

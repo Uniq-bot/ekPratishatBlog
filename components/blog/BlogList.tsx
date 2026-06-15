@@ -63,7 +63,7 @@ const BlogList = ({
       <div className="w-full flex items-center justify-between">
         <h2 className="text-2xl font-bold text-dblack ">Blogs of your <span className="text-[#f4c91b] bg-black p-2 font-[Girls] underline underline-offset-5">Interest</span></h2>
         <select
-          className="bg-[#1d1d1d] p-2 text-white border border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="bg-[#1d1d1d] p-2 text-white border border-gray-500 focus:outline-none focus:ring-2 focus:ring-[#f4c91b]"
           value={sort}
           onChange={(e) =>  updateParam("sort", e.target.value)}
         >

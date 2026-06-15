@@ -17,7 +17,7 @@ const CategoryNav = ({
       <Link
         scroll={false}
         href={pathname}
-        className={`px-3 py-1 border ${!currentCategory ? "bg-amber-400 text-black" : "border-gray-500 text-black"}`}
+        className={`px-3 py-1 rounded border ${!currentCategory ? "bg-amber-400 text-black" : "border-gray-500 text-black"}`}
       >
         All
       </Link>
@@ -26,7 +26,7 @@ const CategoryNav = ({
           key={category.id}
           scroll={false}
           href={`${pathname}?category=${category.slug}`}
-          className={`px-3 py-1 border ${currentCategory === category.slug ? "bg-amber-400 text-black" : "border-gray-500 text-black"}`}
+          className={`px-3 py-1 rounded border ${currentCategory === category.slug ? "bg-amber-400 text-black" : "border-gray-500 text-black"}`}
         >
           {category.name}
         </Link>
