@@ -228,11 +228,11 @@ const BlogEditor = ({
             </label>
 
             {coverImage ? (
-              <div className="relative w-full border bg-gray-50 overflow-hidden">
+              <div className="relative w-1/2 border bg-gray-50 overflow-hidden">
                 <img
                   src={URL.createObjectURL(coverImage)}
                   alt="Cover preview"
-                  className="w-full h-32 sm:h-40 lg:h-48 object-cover"
+                  className="w-full h-32 sm:h-40 lg:h-60 object-cover"
                 />
                 <button
                   type="button"
