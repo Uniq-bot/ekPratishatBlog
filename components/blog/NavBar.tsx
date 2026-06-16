@@ -45,7 +45,7 @@ const NavBar = () => {
         py-4 px-10 transition-all duration-500
         ${
           isScrolled
-            ? "bg-black/70 backdrop-blur-md shadow-lg border-b border-white/10"
+            ? "bg-black/70 backdrop-blur-md shadow-lg "
             : "bg-transparent"
         }
       `}
