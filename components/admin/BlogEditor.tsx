@@ -200,6 +200,46 @@ const BlogEditor = ({
           className="w-full lg:w-[90%] m-auto px-3 lg:px-10"
           onSubmit={handleSubmit}
         >
+            <div className="w-full flex flex-col gap-2 my-3 lg:my-5">
+            <label className="text-xs lg:text-sm font-medium">Category *</label>
+            <select
+              value={categoryId}
+              onChange={(e) => setCategoryId(e.target.value)}
+              className="w-full border pl-2 text-gray-600 h-9 lg:h-10 outline-none text-xs lg:text-sm"
+            >
+              <option value="">Select Category</option>
+              {(categories ?? []).map((cat: any) => (
+                <option value={cat.id} key={cat.id}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+          </div>
+           <div className="w-full flex flex-col gap-2 my-3 lg:my-5">
+            <label className="text-xs lg:text-sm font-medium">Tags</label>
+            <div className="flex flex-wrap gap-1.5 lg:gap-2">
+              {(tags ?? []).map((t: any) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  onClick={() => toggleTag(t)}
+                  className={`border py-1 px-2 lg:px-3 text-xs lg:text-sm transition-colors hover:cursor-pointer ${
+                    tagsValue.some((tag) => tag.id === t.id)
+                      ? "bg-[#e3e37b] border-yellow-500"
+                      : "bg-[#DBDBB8]/60 hover:bg-[#CFCFC0]"
+                  }`}
+                >
+                  {t.name}
+                </button>
+              ))}
+              {(!tags || tags.length === 0) && (
+                <span className="text-xs lg:text-sm text-gray-400">
+                  No tags yet — create some in Tags &amp; Categories
+                </span>
+              )}
+            </div>
+          </div>
+
           {/* Title */}
           <div className="w-full flex flex-col gap-2 my-3 lg:my-5">
             <label className="text-xs lg:text-sm font-medium">Title *</label>
@@ -276,46 +316,8 @@ const BlogEditor = ({
             />
           </div>
 
-          <div className="w-full flex flex-col gap-2 my-3 lg:my-5">
-            <label className="text-xs lg:text-sm font-medium">Tags</label>
-            <div className="flex flex-wrap gap-1.5 lg:gap-2">
-              {(tags ?? []).map((t: any) => (
-                <button
-                  key={t.id}
-                  type="button"
-                  onClick={() => toggleTag(t)}
-                  className={`border py-1 px-2 lg:px-3 text-xs lg:text-sm transition-colors hover:cursor-pointer ${
-                    tagsValue.some((tag) => tag.id === t.id)
-                      ? "bg-[#e3e37b] border-yellow-500"
-                      : "bg-[#DBDBB8]/60 hover:bg-[#CFCFC0]"
-                  }`}
-                >
-                  {t.name}
-                </button>
-              ))}
-              {(!tags || tags.length === 0) && (
-                <span className="text-xs lg:text-sm text-gray-400">
-                  No tags yet — create some in Tags &amp; Categories
-                </span>
-              )}
-            </div>
-          </div>
-
-          <div className="w-full flex flex-col gap-2 my-3 lg:my-5">
-            <label className="text-xs lg:text-sm font-medium">Category *</label>
-            <select
-              value={categoryId}
-              onChange={(e) => setCategoryId(e.target.value)}
-              className="w-full border pl-2 text-gray-600 h-9 lg:h-10 outline-none text-xs lg:text-sm"
-            >
-              <option value="">Select Category</option>
-              {(categories ?? []).map((cat: any) => (
-                <option value={cat.id} key={cat.id}>
-                  {cat.name}
-                </option>
-              ))}
-            </select>
-          </div>
+         
+        
 
           <BlogForm blocks={blocks} setBlocks={setBlocks} />
 

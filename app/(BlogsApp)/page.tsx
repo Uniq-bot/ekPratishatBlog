@@ -41,14 +41,14 @@ export default async function BlogPage({ searchParams }: PageProps) {
     <div className="w-full min-h-screen flex flex-col bg-[#FFFFFF]">
       <div className="lg:w-full h-[115vh] pb-2 flex relative  flex-col ">
         <div className="w-full h-[calc(100vh-150px)]  relative">
-          <div className="w-full h-full relative">
-            <Image
+          <div className="w-full h-full relative bg-[linear-gradient(90deg,rgba(248,245,239,0.94)_0%,rgba(248,245,239,0.78)_42%,rgba(248,245,239,0.18)_100%)]">
+            {/* <Image
               src={BlogHeroImage}
               alt="Blog Hero"
               width={1200}
               height={600}
               className="w-full h-full object-cover"
-            />
+            /> */}
             <h1
               className="text-6xl absolute top-80 left-30 transform -translate-y-1/2 font-black leading-[0.92] tracking-tighter 
                 z-50
@@ -56,7 +56,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
                 sm:text-8xl lg:text-[7rem]
             "
             >
-              REAL <br />{" "}
+              REAL- <br />{" "}
               <span className="text-outline-yellow clamp">ESTATE</span> <br />{" "}
               MADE <br />{" "}
               <span className="text-outline-silver clamp">CLEAR.</span>
@@ -67,13 +67,19 @@ export default async function BlogPage({ searchParams }: PageProps) {
             </p> */}
           </div>
 
-          <div className="w-full  absolute inset-0 bg-black/50 bg-opacity-50" />
+          {/* <div className="w-full  absolute inset-0 bg-black/50 bg-opacity-50" /> */}
           <div className="absolute min-h-30 w-full -bottom-30 left-1/2 transform -translate-x-1/2   text-white p-5 flex items-center justify-center gap-5 rounded z-10">
             <LatestBlogs latestBlogs={latestBlogs.posts} />
           </div>
         </div>
         <div className="w-1/2 rounded-lg overflow-hidden left-1/2 transform -translate-x-1/2 h-32  absolute bottom-5 flex items-center justify-center text-white bg-black font-bold">
-         <Image src="/Ad2.png" alt="Ad" width={200} height={200} className=" object-contain w-full h-full" />
+          <Image
+            src="/Ad2.png"
+            alt="Ad"
+            width={200}
+            height={200}
+            className=" object-contain w-full h-full"
+          />
         </div>
       </div>
 
@@ -93,7 +99,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
           />
         </div>
 
-        <div className="w-1/3 sticky top-[70px]  h-fit flex flex-col gap-8  p-5">
+        <div className="w-1/3 sticky top-18.75  h-fit flex flex-col gap-8  p-5">
           <PopularBlogs popularBlogs={popularBlogs?.posts ?? []} />
           <NewsLetter />
         </div>
