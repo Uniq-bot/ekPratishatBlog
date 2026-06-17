@@ -7,8 +7,10 @@ import TagNCategory from "@/components/admin/TagNCategory";
 import { useAdminUI } from "@/context/AdminContext";
 import { useGetCategory, useGetTags } from "@/hooks/useAdminBlogs";
 import Image from "next/image";
+import Advertisement from "./Advertisement";
+import ManageAds from "./ManageAds";
 
-const AdminPanel = () => {
+const AdminPanel = ({ advertisements }: { advertisements: any[] }) => {
   const { activeTab, setActiveTab, blocks, setBlocks, user } = useAdminUI();
   const {data:categories, isLoading:isCategoryLoading}=useGetCategory();
     const {data:tags, isLoading:isTagLoading}=useGetTags()
@@ -30,6 +32,8 @@ const AdminPanel = () => {
       />
     ),
     "manage-blogs": <ManageBlogs />,
+    "advertisement": <Advertisement  />,
+    "manage-ads": <ManageAds advertisements={advertisements} />
   };
 
   return (

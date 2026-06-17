@@ -55,7 +55,8 @@ export const ModelName = {
   BlogPost: 'BlogPost',
   BlogViews: 'BlogViews',
   Category: 'Category',
-  Tag: 'Tag'
+  Tag: 'Tag',
+  Advertisement: 'Advertisement'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -136,6 +137,20 @@ export const TagScalarFieldEnum = {
 } as const
 
 export type TagScalarFieldEnum = (typeof TagScalarFieldEnum)[keyof typeof TagScalarFieldEnum]
+
+
+export const AdvertisementScalarFieldEnum = {
+  id: 'id',
+  AdTitle: 'AdTitle',
+  AdDescription: 'AdDescription',
+  AdPoster: 'AdPoster',
+  AdLink: 'AdLink',
+  AdSponsorName: 'AdSponsorName',
+  isAdRunning: 'isAdRunning',
+  AdType: 'AdType'
+} as const
+
+export type AdvertisementScalarFieldEnum = (typeof AdvertisementScalarFieldEnum)[keyof typeof AdvertisementScalarFieldEnum]
 
 
 export const SortOrder = {

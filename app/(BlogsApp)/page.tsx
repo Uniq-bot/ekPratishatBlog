@@ -52,7 +52,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
               className="w-full h-full object-cover"
             /> */}
             <h1
-              className="text-6xl absolute top-80 left-20 rotate-10 transform -translate-y-1/2 font-black leading-[0.92] tracking-tighter 
+              className="text-6xl absolute top-80 left-20  transform -translate-y-1/2 font-black leading-[0.92] tracking-tighter 
                 z-50 
                 sm:text-8xl lg:text-[7rem]
             "

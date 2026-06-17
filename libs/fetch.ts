@@ -170,3 +170,6 @@ export const createTag = async (newTag: { name: string }) => {
   }
   return res.json();
 };
+
+
+// Advertisement

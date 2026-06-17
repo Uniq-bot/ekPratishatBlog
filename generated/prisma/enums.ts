@@ -16,3 +16,12 @@ export const PostStatus = {
 } as const
 
 export type PostStatus = (typeof PostStatus)[keyof typeof PostStatus]
+
+
+export const AdType = {
+  BANNER: 'BANNER',
+  ASIDE: 'ASIDE',
+  POPUP: 'POPUP'
+} as const
+
+export type AdType = (typeof AdType)[keyof typeof AdType]

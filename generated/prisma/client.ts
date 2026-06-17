@@ -66,3 +66,8 @@ export type Category = Prisma.CategoryModel
  * 
  */
 export type Tag = Prisma.TagModel
+/**
+ * Model Advertisement
+ * 
+ */
+export type Advertisement = Prisma.AdvertisementModel
