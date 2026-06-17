@@ -46,6 +46,7 @@ export type BlogPostMinAggregateOutputType = {
   viewCount: number | null
   createdAt: Date | null
   updatedAt: Date | null
+  isToggled: boolean | null
 }
 
 export type BlogPostMaxAggregateOutputType = {
@@ -60,6 +61,7 @@ export type BlogPostMaxAggregateOutputType = {
   viewCount: number | null
   createdAt: Date | null
   updatedAt: Date | null
+  isToggled: boolean | null
 }
 
 export type BlogPostCountAggregateOutputType = {
@@ -75,6 +77,7 @@ export type BlogPostCountAggregateOutputType = {
   viewCount: number
   createdAt: number
   updatedAt: number
+  isToggled: number
   _all: number
 }
 
@@ -99,6 +102,7 @@ export type BlogPostMinAggregateInputType = {
   viewCount?: true
   createdAt?: true
   updatedAt?: true
+  isToggled?: true
 }
 
 export type BlogPostMaxAggregateInputType = {
@@ -113,6 +117,7 @@ export type BlogPostMaxAggregateInputType = {
   viewCount?: true
   createdAt?: true
   updatedAt?: true
+  isToggled?: true
 }
 
 export type BlogPostCountAggregateInputType = {
@@ -128,6 +133,7 @@ export type BlogPostCountAggregateInputType = {
   viewCount?: true
   createdAt?: true
   updatedAt?: true
+  isToggled?: true
   _all?: true
 }
 
@@ -230,6 +236,7 @@ export type BlogPostGroupByOutputType = {
   viewCount: number
   createdAt: Date
   updatedAt: Date
+  isToggled: boolean
   _count: BlogPostCountAggregateOutputType | null
   _avg: BlogPostAvgAggregateOutputType | null
   _sum: BlogPostSumAggregateOutputType | null
@@ -268,6 +275,7 @@ export type BlogPostWhereInput = {
   viewCount?: Prisma.IntFilter<"BlogPost"> | number
   createdAt?: Prisma.DateTimeFilter<"BlogPost"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"BlogPost"> | Date | string
+  isToggled?: Prisma.BoolFilter<"BlogPost"> | boolean
   author?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   category?: Prisma.XOR<Prisma.CategoryScalarRelationFilter, Prisma.CategoryWhereInput>
   tags?: Prisma.TagListRelationFilter
@@ -287,6 +295,7 @@ export type BlogPostOrderByWithRelationInput = {
   viewCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  isToggled?: Prisma.SortOrder
   author?: Prisma.UserOrderByWithRelationInput
   category?: Prisma.CategoryOrderByWithRelationInput
   tags?: Prisma.TagOrderByRelationAggregateInput
@@ -309,6 +318,7 @@ export type BlogPostWhereUniqueInput = Prisma.AtLeast<{
   viewCount?: Prisma.IntFilter<"BlogPost"> | number
   createdAt?: Prisma.DateTimeFilter<"BlogPost"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"BlogPost"> | Date | string
+  isToggled?: Prisma.BoolFilter<"BlogPost"> | boolean
   author?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   category?: Prisma.XOR<Prisma.CategoryScalarRelationFilter, Prisma.CategoryWhereInput>
   tags?: Prisma.TagListRelationFilter
@@ -328,6 +338,7 @@ export type BlogPostOrderByWithAggregationInput = {
   viewCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  isToggled?: Prisma.SortOrder
   _count?: Prisma.BlogPostCountOrderByAggregateInput
   _avg?: Prisma.BlogPostAvgOrderByAggregateInput
   _max?: Prisma.BlogPostMaxOrderByAggregateInput
@@ -351,6 +362,7 @@ export type BlogPostScalarWhereWithAggregatesInput = {
   viewCount?: Prisma.IntWithAggregatesFilter<"BlogPost"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"BlogPost"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"BlogPost"> | Date | string
+  isToggled?: Prisma.BoolWithAggregatesFilter<"BlogPost"> | boolean
 }
 
 export type BlogPostCreateInput = {
@@ -364,6 +376,7 @@ export type BlogPostCreateInput = {
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  isToggled?: boolean
   author: Prisma.UserCreateNestedOneWithoutPostsInput
   category: Prisma.CategoryCreateNestedOneWithoutPostsInput
   tags?: Prisma.TagCreateNestedManyWithoutBlogPostsInput
@@ -383,6 +396,7 @@ export type BlogPostUncheckedCreateInput = {
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  isToggled?: boolean
   tags?: Prisma.TagUncheckedCreateNestedManyWithoutBlogPostsInput
   blogViews?: Prisma.BlogViewsUncheckedCreateNestedManyWithoutBlogPostInput
 }
@@ -398,6 +412,7 @@ export type BlogPostUpdateInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isToggled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   author?: Prisma.UserUpdateOneRequiredWithoutPostsNestedInput
   category?: Prisma.CategoryUpdateOneRequiredWithoutPostsNestedInput
   tags?: Prisma.TagUpdateManyWithoutBlogPostsNestedInput
@@ -417,6 +432,7 @@ export type BlogPostUncheckedUpdateInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isToggled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   tags?: Prisma.TagUncheckedUpdateManyWithoutBlogPostsNestedInput
   blogViews?: Prisma.BlogViewsUncheckedUpdateManyWithoutBlogPostNestedInput
 }
@@ -434,6 +450,7 @@ export type BlogPostCreateManyInput = {
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  isToggled?: boolean
 }
 
 export type BlogPostUpdateManyMutationInput = {
@@ -447,6 +464,7 @@ export type BlogPostUpdateManyMutationInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isToggled?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type BlogPostUncheckedUpdateManyInput = {
@@ -462,6 +480,7 @@ export type BlogPostUncheckedUpdateManyInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isToggled?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type BlogPostListRelationFilter = {
@@ -487,6 +506,7 @@ export type BlogPostCountOrderByAggregateInput = {
   viewCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  isToggled?: Prisma.SortOrder
 }
 
 export type BlogPostAvgOrderByAggregateInput = {
@@ -505,6 +525,7 @@ export type BlogPostMaxOrderByAggregateInput = {
   viewCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  isToggled?: Prisma.SortOrder
 }
 
 export type BlogPostMinOrderByAggregateInput = {
@@ -519,6 +540,7 @@ export type BlogPostMinOrderByAggregateInput = {
   viewCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  isToggled?: Prisma.SortOrder
 }
 
 export type BlogPostSumOrderByAggregateInput = {
@@ -582,6 +604,10 @@ export type IntFieldUpdateOperationsInput = {
   decrement?: number
   multiply?: number
   divide?: number
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
 }
 
 export type BlogPostCreateNestedOneWithoutBlogViewsInput = {
@@ -689,6 +715,7 @@ export type BlogPostCreateWithoutAuthorInput = {
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  isToggled?: boolean
   category: Prisma.CategoryCreateNestedOneWithoutPostsInput
   tags?: Prisma.TagCreateNestedManyWithoutBlogPostsInput
   blogViews?: Prisma.BlogViewsCreateNestedManyWithoutBlogPostInput
@@ -706,6 +733,7 @@ export type BlogPostUncheckedCreateWithoutAuthorInput = {
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  isToggled?: boolean
   tags?: Prisma.TagUncheckedCreateNestedManyWithoutBlogPostsInput
   blogViews?: Prisma.BlogViewsUncheckedCreateNestedManyWithoutBlogPostInput
 }
@@ -752,6 +780,7 @@ export type BlogPostScalarWhereInput = {
   viewCount?: Prisma.IntFilter<"BlogPost"> | number
   createdAt?: Prisma.DateTimeFilter<"BlogPost"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"BlogPost"> | Date | string
+  isToggled?: Prisma.BoolFilter<"BlogPost"> | boolean
 }
 
 export type BlogPostCreateWithoutBlogViewsInput = {
@@ -765,6 +794,7 @@ export type BlogPostCreateWithoutBlogViewsInput = {
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  isToggled?: boolean
   author: Prisma.UserCreateNestedOneWithoutPostsInput
   category: Prisma.CategoryCreateNestedOneWithoutPostsInput
   tags?: Prisma.TagCreateNestedManyWithoutBlogPostsInput
@@ -783,6 +813,7 @@ export type BlogPostUncheckedCreateWithoutBlogViewsInput = {
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  isToggled?: boolean
   tags?: Prisma.TagUncheckedCreateNestedManyWithoutBlogPostsInput
 }
 
@@ -813,6 +844,7 @@ export type BlogPostUpdateWithoutBlogViewsInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isToggled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   author?: Prisma.UserUpdateOneRequiredWithoutPostsNestedInput
   category?: Prisma.CategoryUpdateOneRequiredWithoutPostsNestedInput
   tags?: Prisma.TagUpdateManyWithoutBlogPostsNestedInput
@@ -831,6 +863,7 @@ export type BlogPostUncheckedUpdateWithoutBlogViewsInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isToggled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   tags?: Prisma.TagUncheckedUpdateManyWithoutBlogPostsNestedInput
 }
 
@@ -845,6 +878,7 @@ export type BlogPostCreateWithoutCategoryInput = {
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  isToggled?: boolean
   author: Prisma.UserCreateNestedOneWithoutPostsInput
   tags?: Prisma.TagCreateNestedManyWithoutBlogPostsInput
   blogViews?: Prisma.BlogViewsCreateNestedManyWithoutBlogPostInput
@@ -862,6 +896,7 @@ export type BlogPostUncheckedCreateWithoutCategoryInput = {
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  isToggled?: boolean
   tags?: Prisma.TagUncheckedCreateNestedManyWithoutBlogPostsInput
   blogViews?: Prisma.BlogViewsUncheckedCreateNestedManyWithoutBlogPostInput
 }
@@ -903,6 +938,7 @@ export type BlogPostCreateWithoutTagsInput = {
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  isToggled?: boolean
   author: Prisma.UserCreateNestedOneWithoutPostsInput
   category: Prisma.CategoryCreateNestedOneWithoutPostsInput
   blogViews?: Prisma.BlogViewsCreateNestedManyWithoutBlogPostInput
@@ -921,6 +957,7 @@ export type BlogPostUncheckedCreateWithoutTagsInput = {
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  isToggled?: boolean
   blogViews?: Prisma.BlogViewsUncheckedCreateNestedManyWithoutBlogPostInput
 }
 
@@ -957,6 +994,7 @@ export type BlogPostCreateManyAuthorInput = {
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  isToggled?: boolean
 }
 
 export type BlogPostUpdateWithoutAuthorInput = {
@@ -970,6 +1008,7 @@ export type BlogPostUpdateWithoutAuthorInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isToggled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   category?: Prisma.CategoryUpdateOneRequiredWithoutPostsNestedInput
   tags?: Prisma.TagUpdateManyWithoutBlogPostsNestedInput
   blogViews?: Prisma.BlogViewsUpdateManyWithoutBlogPostNestedInput
@@ -987,6 +1026,7 @@ export type BlogPostUncheckedUpdateWithoutAuthorInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isToggled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   tags?: Prisma.TagUncheckedUpdateManyWithoutBlogPostsNestedInput
   blogViews?: Prisma.BlogViewsUncheckedUpdateManyWithoutBlogPostNestedInput
 }
@@ -1003,6 +1043,7 @@ export type BlogPostUncheckedUpdateManyWithoutAuthorInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isToggled?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type BlogPostCreateManyCategoryInput = {
@@ -1017,6 +1058,7 @@ export type BlogPostCreateManyCategoryInput = {
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  isToggled?: boolean
 }
 
 export type BlogPostUpdateWithoutCategoryInput = {
@@ -1030,6 +1072,7 @@ export type BlogPostUpdateWithoutCategoryInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isToggled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   author?: Prisma.UserUpdateOneRequiredWithoutPostsNestedInput
   tags?: Prisma.TagUpdateManyWithoutBlogPostsNestedInput
   blogViews?: Prisma.BlogViewsUpdateManyWithoutBlogPostNestedInput
@@ -1047,6 +1090,7 @@ export type BlogPostUncheckedUpdateWithoutCategoryInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isToggled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   tags?: Prisma.TagUncheckedUpdateManyWithoutBlogPostsNestedInput
   blogViews?: Prisma.BlogViewsUncheckedUpdateManyWithoutBlogPostNestedInput
 }
@@ -1063,6 +1107,7 @@ export type BlogPostUncheckedUpdateManyWithoutCategoryInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isToggled?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type BlogPostUpdateWithoutTagsInput = {
@@ -1076,6 +1121,7 @@ export type BlogPostUpdateWithoutTagsInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isToggled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   author?: Prisma.UserUpdateOneRequiredWithoutPostsNestedInput
   category?: Prisma.CategoryUpdateOneRequiredWithoutPostsNestedInput
   blogViews?: Prisma.BlogViewsUpdateManyWithoutBlogPostNestedInput
@@ -1094,6 +1140,7 @@ export type BlogPostUncheckedUpdateWithoutTagsInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isToggled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   blogViews?: Prisma.BlogViewsUncheckedUpdateManyWithoutBlogPostNestedInput
 }
 
@@ -1110,6 +1157,7 @@ export type BlogPostUncheckedUpdateManyWithoutTagsInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isToggled?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 
@@ -1165,6 +1213,7 @@ export type BlogPostSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   viewCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  isToggled?: boolean
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
   tags?: boolean | Prisma.BlogPost$tagsArgs<ExtArgs>
@@ -1185,6 +1234,7 @@ export type BlogPostSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   viewCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  isToggled?: boolean
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["blogPost"]>
@@ -1202,6 +1252,7 @@ export type BlogPostSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   viewCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  isToggled?: boolean
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["blogPost"]>
@@ -1219,9 +1270,10 @@ export type BlogPostSelectScalar = {
   viewCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  isToggled?: boolean
 }
 
-export type BlogPostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "description" | "content" | "coverImage" | "status" | "authorID" | "categoryID" | "viewCount" | "createdAt" | "updatedAt", ExtArgs["result"]["blogPost"]>
+export type BlogPostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "description" | "content" | "coverImage" | "status" | "authorID" | "categoryID" | "viewCount" | "createdAt" | "updatedAt" | "isToggled", ExtArgs["result"]["blogPost"]>
 export type BlogPostInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
@@ -1259,6 +1311,7 @@ export type $BlogPostPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     viewCount: number
     createdAt: Date
     updatedAt: Date
+    isToggled: boolean
   }, ExtArgs["result"]["blogPost"]>
   composites: {}
 }
@@ -1698,6 +1751,7 @@ export interface BlogPostFieldRefs {
   readonly viewCount: Prisma.FieldRef<"BlogPost", 'Int'>
   readonly createdAt: Prisma.FieldRef<"BlogPost", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"BlogPost", 'DateTime'>
+  readonly isToggled: Prisma.FieldRef<"BlogPost", 'Boolean'>
 }
     
 

@@ -45,6 +45,7 @@ export type BlogItem = {
   slug: string | null;
   coverImage: string | null;
   createdAt: Date;
+  discription?: string | null;
   category: { name: string } | null;
 };
 

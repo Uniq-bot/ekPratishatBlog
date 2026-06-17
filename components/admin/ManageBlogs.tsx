@@ -1,6 +1,6 @@
 "use client";
 
-import { useDeleteBlog, useGetAdminBlogs } from "@/hooks/useAdminBlogs";
+import { useCurateBlog, useDeleteBlog, useGetAdminBlogs } from "@/hooks/useAdminBlogs";
 import { Edit, Trash } from "lucide-react";
 import Link from "next/link";
 import { TableSkeleton } from "@/components/admin/skeleton/TableSkeleton";
@@ -10,13 +10,17 @@ const ManageBlogs = () => {
   const { data: blogs, isLoading } = useGetAdminBlogs();
   const { mutate: deleteBlog, isPending: isDeleting } = useDeleteBlog();
   const [deletingId, setDeletingId] = useState<string | null>(null);
-
+  const {mutateAsync:curateBlog}=useCurateBlog();
   const handleDelete = (id: string) => {
     if (!confirm("Are you sure you want to delete this blog?")) return;
     setDeletingId(id);
     deleteBlog(id, { onSettled: () => setDeletingId(null) });
   };
-
+  
+  const handleCurate = (id: string) => {
+    curateBlog(id);
+  }
+      
   return (
     <div className="bg-white relative z-20 shadow border overflow-hidden">
       {isLoading ? (
@@ -32,12 +36,16 @@ const ManageBlogs = () => {
                 <th className="px-4 py-3 text-left">Tags</th>
                 <th className="px-4 py-3 text-center">Views</th>
                 <th className="px-4 py-3 text-center">Actions</th>
+                <th className="px-4 py-3 text-center">Curate</th>
               </tr>
             </thead>
             <tbody>
               {blogs?.posts?.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="px-4 py-8 text-center text-gray-400">
+                  <td
+                    colSpan={6}
+                    className="px-4 py-8 text-center text-gray-400"
+                  >
                     No blogs yet.
                   </td>
                 </tr>
@@ -47,7 +55,9 @@ const ManageBlogs = () => {
                   key={blog.id}
                   className="border-t hover:bg-gray-50 transition-colors"
                 >
-                  <td className="px-4 py-4 text-sm text-gray-500">{index + 1}</td>
+                  <td className="px-4 py-4 text-sm text-gray-500">
+                    {index + 1}
+                  </td>
                   <td className="px-4 py-4">
                     <div className="font-medium text-sm">{blog.title}</div>
                     <div className="text-xs text-gray-400 mt-0.5 truncate max-w-[220px]">
@@ -93,6 +103,9 @@ const ManageBlogs = () => {
                         <Trash size={18} />
                       </button>
                     </div>
+                  </td>
+                  <td className="px-4 py-4">
+                   <input checked={blog.isToggled} onChange={()=>handleCurate(blog.id)} type="checkbox" />
                   </td>
                 </tr>
               ))}
