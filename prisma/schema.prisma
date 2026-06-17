@@ -72,3 +72,20 @@ model Tag {
   updatedAt DateTime   @updatedAt @default(now())
   blogPosts BlogPost[] @relation("PostTags")
 }
+
+model Advertisement{
+  id String @id @default(cuid())
+  AdTitle String
+  AdDescription String
+  AdPoster String
+  AdLink String
+  AdSponsorName String
+  isAdRunning Boolean @default(true)
+  AdType AdType @default(BANNER)
+}
+
+enum AdType{
+  BANNER
+  ASIDE
+  POPUP
+}

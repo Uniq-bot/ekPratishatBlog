@@ -17,6 +17,8 @@ const AsideBar = ({
     { id: 1, slug: "tag&category", name: "Tag & Category" },
     { id: 2, slug: "create-blog", name: "Create Blog" },
     { id: 3, slug: "manage-blogs", name: "Manage Blogs" },
+    {id:4, slug:"advertisement", name:"Advertisement"},
+    {id:5, slug:"manage-ads", name:"Manage Advertisement"}
   ];
 
   const handleClick = (slug: string) => {

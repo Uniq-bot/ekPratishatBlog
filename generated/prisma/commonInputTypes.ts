@@ -218,6 +218,23 @@ export type BoolWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedBoolFilter<$PrismaModel>
 }
 
+export type EnumAdTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.AdType | Prisma.EnumAdTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.AdType[] | Prisma.ListEnumAdTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AdType[] | Prisma.ListEnumAdTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAdTypeFilter<$PrismaModel> | $Enums.AdType
+}
+
+export type EnumAdTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AdType | Prisma.EnumAdTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.AdType[] | Prisma.ListEnumAdTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AdType[] | Prisma.ListEnumAdTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAdTypeWithAggregatesFilter<$PrismaModel> | $Enums.AdType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAdTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAdTypeFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -406,6 +423,23 @@ export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedBoolFilter<$PrismaModel>
   _max?: Prisma.NestedBoolFilter<$PrismaModel>
+}
+
+export type NestedEnumAdTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.AdType | Prisma.EnumAdTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.AdType[] | Prisma.ListEnumAdTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AdType[] | Prisma.ListEnumAdTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAdTypeFilter<$PrismaModel> | $Enums.AdType
+}
+
+export type NestedEnumAdTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AdType | Prisma.EnumAdTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.AdType[] | Prisma.ListEnumAdTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AdType[] | Prisma.ListEnumAdTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAdTypeWithAggregatesFilter<$PrismaModel> | $Enums.AdType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAdTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAdTypeFilter<$PrismaModel>
 }
 
 
