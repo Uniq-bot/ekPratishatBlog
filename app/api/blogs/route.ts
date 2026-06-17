@@ -1,37 +1,40 @@
-import { createBlog, getBlogByFilters } from "@/services/blogs.services";
 import { NextResponse } from "next/server";
-import { revalidatePath } from "next/cache";
-import { writeFile, mkdir } from "fs/promises";
+import { mkdir, writeFile } from "fs/promises";
 import { join } from "path";
+import { prisma } from "@/libs/prisma";
+import { revalidatePath } from "next/cache";
+import { getBlogByFilters } from "@/services/blogs.services";
 
 export async function POST(req: Request) {
   try {
     const formData = await req.formData();
 
-    const title       = formData.get("title") as string;
-    const content     = formData.get("content") as string;
+    const title = formData.get("title") as string;
+    const content = formData.get("content") as string;
     const description = formData.get("description") as string;
-    const authorID    = formData.get("authorID") as string;
-    const categoryId  = formData.get("categoryId") as string;
-    const tagsRaw     = formData.get("tags") as string;
-    const imageFile   = formData.get("coverImage") as File | null;
+    const authorID = formData.get("authorID") as string;
+    const categoryId = formData.get("categoryId") as string;
+    const tagsRaw = formData.get("tags") as string;
+    const imageFile = formData.get("coverImage") as File | null;
 
     const tags = tagsRaw ? JSON.parse(tagsRaw) : [];
 
     if (!title || !content || !categoryId) {
       return NextResponse.json(
         { message: "Title, content and category are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
+
     if (!authorID) {
       return NextResponse.json(
         { message: "Author ID is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     let coverImagePath: string | null = null;
+
     if (imageFile && imageFile.size > 0) {
       const uploadDir = join(process.cwd(), "public", "uploads");
       await mkdir(uploadDir, { recursive: true });
@@ -52,16 +55,29 @@ export async function POST(req: Request) {
       .replace(/\s+/g, "-")
       .replace(/[^\w-]+/g, "")}-${Date.now()}`;
 
-    const post = await createBlog({
-      title,
-      content,
-      coverImage: coverImagePath,
-      description,
-      status: "PUBLISHED",
-      authorID,
-      categoryId,
-      tags,
-      slug: generatedSlug,
+    const post = await prisma.$transaction(async (tx) => {
+      const existingCurated = await tx.blogPost.findFirst({
+        where: { isToggled: true },
+      });
+      return tx.blogPost.create({
+        data: {
+          title,
+          content,
+          coverImage: coverImagePath,
+          description,
+          status: "PUBLISHED",
+          authorID,
+          categoryID: categoryId,
+          tags: {
+            connect: tags.map((tag: any) => ({
+              id: tag.id,
+            })),
+          },
+          slug: generatedSlug,
+
+          isToggled: !existingCurated,
+        },
+      });
     });
 
     revalidatePath("/");
@@ -69,13 +85,17 @@ export async function POST(req: Request) {
 
     return NextResponse.json(
       { message: "Blog created successfully", post },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (err: any) {
     console.error("CREATE BLOG ERROR:", err);
+
     return NextResponse.json(
-      { message: "Internal server error", error: err?.message ?? String(err) },
-      { status: 500 }
+      {
+        message: "Internal server error",
+        error: err?.message ?? String(err),
+      },
+      { status: 500 },
     );
   }
 }
@@ -83,10 +103,10 @@ export async function POST(req: Request) {
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
-    const offset      = Number(searchParams.get("offset")) || 0;
-    const limit       = Number(searchParams.get("limit")) || 10;
-    const category    = searchParams.get("category") || undefined;
-    const tags        = searchParams.get("tags")?.split(",").filter(Boolean) || [];
+    const offset = Number(searchParams.get("offset")) || 0;
+    const limit = Number(searchParams.get("limit")) || 10;
+    const category = searchParams.get("category") || undefined;
+    const tags = searchParams.get("tags")?.split(",").filter(Boolean) || [];
     const searchQuery = searchParams.get("query") || undefined;
     // const sort        = (searchParams.get("sort") as "latest" | "oldest") || "latest";
 
@@ -98,11 +118,18 @@ export async function GET(req: Request) {
       searchQuery,
     });
 
-    return NextResponse.json({ message: "Fetched posts successfully", posts, totalCount });
+    return NextResponse.json({
+      message: "Fetched posts successfully",
+      posts,
+      totalCount,
+    });
   } catch (err: any) {
     return NextResponse.json(
-      { message: "Internal server error on fetching posts", error: err?.message },
-      { status: 500 }
+      {
+        message: "Internal server error on fetching posts",
+        error: err?.message,
+      },
+      { status: 500 },
     );
   }
 }

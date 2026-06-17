@@ -98,7 +98,8 @@ export const BlogPostScalarFieldEnum = {
   categoryID: 'categoryID',
   viewCount: 'viewCount',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  isToggled: 'isToggled'
 } as const
 
 export type BlogPostScalarFieldEnum = (typeof BlogPostScalarFieldEnum)[keyof typeof BlogPostScalarFieldEnum]

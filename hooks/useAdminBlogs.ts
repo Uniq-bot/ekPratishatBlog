@@ -2,6 +2,7 @@ import {
   createBlogs,
   createCategory,
   createTag,
+  curateBlog,
   deleteBlog,
   fetchBlogs,
   fetchCategory,
@@ -76,6 +77,18 @@ export const useDeleteBlog = () => {
     },
   });
 };
+
+export const useCurateBlog=()=>{
+  const queryClient=useQueryClient();
+  return useMutation({
+    mutationFn: curateBlog,
+    onSuccess:()=>{
+      queryClient.invalidateQueries({ queryKey: ["blogs"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-blogs"] });
+      queryClient.invalidateQueries({ queryKey: ["latestBlogs"] });
+    }
+  })
+}
 
 export const useGetAdminBlogs = () => {
   return useQuery({

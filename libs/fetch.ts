@@ -19,7 +19,9 @@ export const signIn = async (payload: { email: string; password: string }) => {
 };
 
 export const signOut = async () => {
-  const res = await fetch(`${getBaseUrl()}/api/auth/logout`, { method: "POST" });
+  const res = await fetch(`${getBaseUrl()}/api/auth/logout`, {
+    method: "POST",
+  });
   if (!res.ok) throw new Error("Logout failed");
   return res.json();
 };
@@ -50,7 +52,9 @@ export const fetchBlogs = async ({
   if (category && category !== "all") queryParams.set("category", category);
   if (sort && sort !== "latest") queryParams.set("sort", sort);
 
-  const res = await fetch(`${getBaseUrl()}/api/blogs?${queryParams.toString()}`);
+  const res = await fetch(
+    `${getBaseUrl()}/api/blogs?${queryParams.toString()}`,
+  );
   if (!res.ok) throw new Error("Failed to fetch blogs");
   return res.json();
 };
@@ -60,7 +64,7 @@ export const createBlogs = async (newBlog: FormData) => {
     method: "POST",
     body: newBlog,
   });
- 
+
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
     throw new Error(err.message || "Failed to create blog");
@@ -110,6 +114,21 @@ export const deleteBlog = async (id: string) => {
   return res.json();
 };
 
+export const curateBlog = async (id: string) => {
+  const res = await fetch(`${getBaseUrl()}/api/blogs/curate`, {
+    method: "PATCH",
+    body: JSON.stringify({ id }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || "Failed to curate blog");
+  }
+  console.log("Succeed to curate the blog");
+  return res.json();
+};
 
 export const fetchCategory = async () => {
   const res = await fetch(`${getBaseUrl()}/api/categories`);
@@ -133,8 +152,6 @@ export const createCategory = async (newCat: {
   return res.json();
 };
 
-
-
 export const fetchTags = async () => {
   const res = await fetch(`${getBaseUrl()}/api/tags`);
   if (!res.ok) throw new Error("Failed to fetch tags");
@@ -153,4 +170,3 @@ export const createTag = async (newTag: { name: string }) => {
   }
   return res.json();
 };
-
