@@ -964,7 +964,9 @@ export const AdvertisementScalarFieldEnum = {
   AdLink: 'AdLink',
   AdSponsorName: 'AdSponsorName',
   isAdRunning: 'isAdRunning',
-  AdType: 'AdType'
+  AdType: 'AdType',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type AdvertisementScalarFieldEnum = (typeof AdvertisementScalarFieldEnum)[keyof typeof AdvertisementScalarFieldEnum]

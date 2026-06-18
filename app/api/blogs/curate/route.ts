@@ -19,7 +19,6 @@ export async function PATCH(req: Request) {
         where: { isToggled: true },
       });
 
-      // curate selected
       await tx.blogPost.update({
         where: { id },
         data: { isToggled: true },

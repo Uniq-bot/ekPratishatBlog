@@ -4,6 +4,7 @@ import PopularBlogs from "@/components/blog/PopulatBlogs";
 import NewsLetter from "@/components/blog/NewsLetter";
 import BlogHeroImage from "@/public/BlogHero.png";
 import {
+  getAds,
   getBlogs,
   getCategory,
   getLatestBlogs,
@@ -14,6 +15,9 @@ import CategoryNav from "@/components/blog/CategoryNav";
 import SearchFilter from "@/components/blog/SearchFilter";
 import Image from "next/image";
 import CuratedBlog from "@/components/blog/CuratedBlog";
+import Link from "next/link";
+import AsideAd from "@/components/blog/AsideAd";
+import BannerAd from "@/components/blog/BannerAds";
 
 interface PageProps {
   searchParams: Promise<{ [key: string]: string | undefined }>;
@@ -28,20 +32,25 @@ export default async function BlogPage({ searchParams }: PageProps) {
   const sort = (params.sort as "latest" | "oldest") ?? "latest";
   const search = params.search;
 
-  const [blogs, latestBlogs, popularBlogs, categories, tags] =
+  const [blogs, latestBlogs, popularBlogs, categories, tags, ads] =
     await Promise.all([
       getBlogs({ page, category, tag, sort, search }),
       getLatestBlogs(),
       getPopularBlogs(),
       getCategory(),
       getTags(),
+      getAds(),
     ]);
+  const AsideAds = ads.find((ad) => ad.AdType === "ASIDE");
+  console.log(AsideAds);
+  const BannerAds = ads.find((ad) => ad.AdType === "BANNER");
+  console.log(BannerAds);
   const curatedBlog = blogs.posts.find((blog) => blog.isToggled);
   console.log(latestBlogs);
 
   return (
     <div className="w-full min-h-screen flex flex-col bg-[#FFFFFF]">
-      <div className="lg:w-full h-[115vh] pb-2 flex relative  flex-col ">
+      <div className="lg:w-full min-h-[100vh] pb-2 flex relative  flex-col ">
         <div className="w-full h-[calc(100vh-150px)]  relative">
           <div className="w-full inset-0 ">
             {/* <Image
@@ -88,7 +97,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
               </svg>
             </div>
             <CuratedBlog curatedBlog={curatedBlog} />
-            <div className="absolute text-3xl z-50 w-100 h-120  right-5 top-10 transform bg-red-300 text-center text-black "></div>
+            {AsideAds && <AsideAd AsideAds={AsideAds} />}
           </div>
 
           <div className="w-full  absolute inset-0  h-full bg-[linear-gradient(90deg,rgba(248,246,240,1)_0%,rgba(245,242,236,0.95)_35%,rgba(235,231,225,0.85)_65%,rgba(216,213,208,0.7)_85%,rgba(192,191,186,0.9)_100%)]" />
@@ -96,15 +105,13 @@ export default async function BlogPage({ searchParams }: PageProps) {
             <LatestBlogs latestBlogs={latestBlogs.posts} />
           </div>
         </div>
-        <div className="w-1/2 rounded-lg overflow-hidden left-1/2 transform -translate-x-1/2 h-32  absolute bottom-0 flex items-center justify-center text-white bg-black font-bold">
-          <Image
-            src="/Ad2.png"
-            alt="Ad"
-            width={200}
-            height={200}
-            className=" object-contain w-full h-full"
-          />
-        </div>
+        {
+          BannerAds && ( 
+        <div className="w-full h-70 relative bottom-0 left-1/2 transform -translate-x-1/2 ">
+           <BannerAd BannerAds={BannerAds} />
+          </div>
+           )
+         }
       </div>
 
       <div className="lg:mb-10 relative lg:top-10 pb-10 p-10 w-full m-auto flex">
