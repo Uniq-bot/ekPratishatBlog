@@ -8,6 +8,8 @@ interface AdminContextType {
   blocks: any[];
   setBlocks: React.Dispatch<React.SetStateAction<any[]>>;
   user:any;
+ editingAdId: string | null;
+setEditingAdId: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 export const AdminContext = createContext<AdminContextType | null>(null);
@@ -21,7 +23,7 @@ export const AdminProvider = ({
 }) => {
   const [activeTab, setActiveTab] = useState("tag&category");
   const [blocks, setBlocks] = useState<any[]>([]);
-
+  const [editingAdId, setEditingAdId] = useState<string | null>(null);
   return (
     <AdminContext.Provider
       value={{
@@ -29,7 +31,9 @@ export const AdminProvider = ({
         setActiveTab,
         blocks,
         setBlocks,
-        user
+        user,
+        setEditingAdId,
+        editingAdId
       }}
     >
       {children}

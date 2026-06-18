@@ -18,7 +18,7 @@ export const getBlogs = async ({
 } = {}) => {
   try {
     const skip = (page - 1) * limit;
-  
+
     const where: any = {
       status: "PUBLISHED",
       ...(category && {
@@ -55,7 +55,6 @@ export const getBlogs = async ({
       prisma.blogPost.count({ where }),
     ]);
 
-   
     return { posts: blogs, totalCount };
   } catch (err) {
     console.error("BLOG FETCH ERROR:", err);
@@ -65,14 +64,13 @@ export const getBlogs = async ({
 
 export const getLatestBlogs = async () => {
   try {
-    
     const blogs = await prisma.blogPost.findMany({
       where: { status: "PUBLISHED" },
       orderBy: { createdAt: "desc" },
       take: 5,
       include: { tags: true, category: true },
     });
-  
+
     return { posts: blogs };
   } catch (err) {
     console.error("INITIAL LATEST FETCH ERROR:", err);
@@ -113,5 +111,19 @@ export const getPopularBlogs = async () => {
   } catch (err) {
     console.error("POPULAR BLOGS FETCH ERROR:", err);
     return { posts: [] };
+  }
+};
+
+export const getAds = async () => {
+  try {
+    const threeAds = await prisma.advertisement.findMany({
+      where: { isAdRunning: true },
+      orderBy: { createdAt: "desc" },
+      // take: 3,
+    });
+    return threeAds;
+  } catch (error) {
+    console.error("ADS FETCH ERROR:", error);
+    return [];
   }
 };

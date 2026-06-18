@@ -33,6 +33,8 @@ export type AdvertisementMinAggregateOutputType = {
   AdSponsorName: string | null
   isAdRunning: boolean | null
   AdType: $Enums.AdType | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type AdvertisementMaxAggregateOutputType = {
@@ -44,6 +46,8 @@ export type AdvertisementMaxAggregateOutputType = {
   AdSponsorName: string | null
   isAdRunning: boolean | null
   AdType: $Enums.AdType | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type AdvertisementCountAggregateOutputType = {
@@ -55,6 +59,8 @@ export type AdvertisementCountAggregateOutputType = {
   AdSponsorName: number
   isAdRunning: number
   AdType: number
+  createdAt: number
+  updatedAt: number
   _all: number
 }
 
@@ -68,6 +74,8 @@ export type AdvertisementMinAggregateInputType = {
   AdSponsorName?: true
   isAdRunning?: true
   AdType?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type AdvertisementMaxAggregateInputType = {
@@ -79,6 +87,8 @@ export type AdvertisementMaxAggregateInputType = {
   AdSponsorName?: true
   isAdRunning?: true
   AdType?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type AdvertisementCountAggregateInputType = {
@@ -90,6 +100,8 @@ export type AdvertisementCountAggregateInputType = {
   AdSponsorName?: true
   isAdRunning?: true
   AdType?: true
+  createdAt?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -174,6 +186,8 @@ export type AdvertisementGroupByOutputType = {
   AdSponsorName: string
   isAdRunning: boolean
   AdType: $Enums.AdType
+  createdAt: Date
+  updatedAt: Date
   _count: AdvertisementCountAggregateOutputType | null
   _min: AdvertisementMinAggregateOutputType | null
   _max: AdvertisementMaxAggregateOutputType | null
@@ -206,6 +220,8 @@ export type AdvertisementWhereInput = {
   AdSponsorName?: Prisma.StringFilter<"Advertisement"> | string
   isAdRunning?: Prisma.BoolFilter<"Advertisement"> | boolean
   AdType?: Prisma.EnumAdTypeFilter<"Advertisement"> | $Enums.AdType
+  createdAt?: Prisma.DateTimeFilter<"Advertisement"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Advertisement"> | Date | string
 }
 
 export type AdvertisementOrderByWithRelationInput = {
@@ -217,6 +233,8 @@ export type AdvertisementOrderByWithRelationInput = {
   AdSponsorName?: Prisma.SortOrder
   isAdRunning?: Prisma.SortOrder
   AdType?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type AdvertisementWhereUniqueInput = Prisma.AtLeast<{
@@ -231,6 +249,8 @@ export type AdvertisementWhereUniqueInput = Prisma.AtLeast<{
   AdSponsorName?: Prisma.StringFilter<"Advertisement"> | string
   isAdRunning?: Prisma.BoolFilter<"Advertisement"> | boolean
   AdType?: Prisma.EnumAdTypeFilter<"Advertisement"> | $Enums.AdType
+  createdAt?: Prisma.DateTimeFilter<"Advertisement"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Advertisement"> | Date | string
 }, "id">
 
 export type AdvertisementOrderByWithAggregationInput = {
@@ -242,6 +262,8 @@ export type AdvertisementOrderByWithAggregationInput = {
   AdSponsorName?: Prisma.SortOrder
   isAdRunning?: Prisma.SortOrder
   AdType?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.AdvertisementCountOrderByAggregateInput
   _max?: Prisma.AdvertisementMaxOrderByAggregateInput
   _min?: Prisma.AdvertisementMinOrderByAggregateInput
@@ -259,6 +281,8 @@ export type AdvertisementScalarWhereWithAggregatesInput = {
   AdSponsorName?: Prisma.StringWithAggregatesFilter<"Advertisement"> | string
   isAdRunning?: Prisma.BoolWithAggregatesFilter<"Advertisement"> | boolean
   AdType?: Prisma.EnumAdTypeWithAggregatesFilter<"Advertisement"> | $Enums.AdType
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Advertisement"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Advertisement"> | Date | string
 }
 
 export type AdvertisementCreateInput = {
@@ -270,6 +294,8 @@ export type AdvertisementCreateInput = {
   AdSponsorName: string
   isAdRunning?: boolean
   AdType?: $Enums.AdType
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type AdvertisementUncheckedCreateInput = {
@@ -281,6 +307,8 @@ export type AdvertisementUncheckedCreateInput = {
   AdSponsorName: string
   isAdRunning?: boolean
   AdType?: $Enums.AdType
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type AdvertisementUpdateInput = {
@@ -292,6 +320,8 @@ export type AdvertisementUpdateInput = {
   AdSponsorName?: Prisma.StringFieldUpdateOperationsInput | string
   isAdRunning?: Prisma.BoolFieldUpdateOperationsInput | boolean
   AdType?: Prisma.EnumAdTypeFieldUpdateOperationsInput | $Enums.AdType
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type AdvertisementUncheckedUpdateInput = {
@@ -303,6 +333,8 @@ export type AdvertisementUncheckedUpdateInput = {
   AdSponsorName?: Prisma.StringFieldUpdateOperationsInput | string
   isAdRunning?: Prisma.BoolFieldUpdateOperationsInput | boolean
   AdType?: Prisma.EnumAdTypeFieldUpdateOperationsInput | $Enums.AdType
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type AdvertisementCreateManyInput = {
@@ -314,6 +346,8 @@ export type AdvertisementCreateManyInput = {
   AdSponsorName: string
   isAdRunning?: boolean
   AdType?: $Enums.AdType
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type AdvertisementUpdateManyMutationInput = {
@@ -325,6 +359,8 @@ export type AdvertisementUpdateManyMutationInput = {
   AdSponsorName?: Prisma.StringFieldUpdateOperationsInput | string
   isAdRunning?: Prisma.BoolFieldUpdateOperationsInput | boolean
   AdType?: Prisma.EnumAdTypeFieldUpdateOperationsInput | $Enums.AdType
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type AdvertisementUncheckedUpdateManyInput = {
@@ -336,6 +372,8 @@ export type AdvertisementUncheckedUpdateManyInput = {
   AdSponsorName?: Prisma.StringFieldUpdateOperationsInput | string
   isAdRunning?: Prisma.BoolFieldUpdateOperationsInput | boolean
   AdType?: Prisma.EnumAdTypeFieldUpdateOperationsInput | $Enums.AdType
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type AdvertisementCountOrderByAggregateInput = {
@@ -347,6 +385,8 @@ export type AdvertisementCountOrderByAggregateInput = {
   AdSponsorName?: Prisma.SortOrder
   isAdRunning?: Prisma.SortOrder
   AdType?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type AdvertisementMaxOrderByAggregateInput = {
@@ -358,6 +398,8 @@ export type AdvertisementMaxOrderByAggregateInput = {
   AdSponsorName?: Prisma.SortOrder
   isAdRunning?: Prisma.SortOrder
   AdType?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type AdvertisementMinOrderByAggregateInput = {
@@ -369,6 +411,8 @@ export type AdvertisementMinOrderByAggregateInput = {
   AdSponsorName?: Prisma.SortOrder
   isAdRunning?: Prisma.SortOrder
   AdType?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type EnumAdTypeFieldUpdateOperationsInput = {
@@ -386,6 +430,8 @@ export type AdvertisementSelect<ExtArgs extends runtime.Types.Extensions.Interna
   AdSponsorName?: boolean
   isAdRunning?: boolean
   AdType?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }, ExtArgs["result"]["advertisement"]>
 
 export type AdvertisementSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -397,6 +443,8 @@ export type AdvertisementSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   AdSponsorName?: boolean
   isAdRunning?: boolean
   AdType?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }, ExtArgs["result"]["advertisement"]>
 
 export type AdvertisementSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -408,6 +456,8 @@ export type AdvertisementSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   AdSponsorName?: boolean
   isAdRunning?: boolean
   AdType?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }, ExtArgs["result"]["advertisement"]>
 
 export type AdvertisementSelectScalar = {
@@ -419,9 +469,11 @@ export type AdvertisementSelectScalar = {
   AdSponsorName?: boolean
   isAdRunning?: boolean
   AdType?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }
 
-export type AdvertisementOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "AdTitle" | "AdDescription" | "AdPoster" | "AdLink" | "AdSponsorName" | "isAdRunning" | "AdType", ExtArgs["result"]["advertisement"]>
+export type AdvertisementOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "AdTitle" | "AdDescription" | "AdPoster" | "AdLink" | "AdSponsorName" | "isAdRunning" | "AdType" | "createdAt" | "updatedAt", ExtArgs["result"]["advertisement"]>
 
 export type $AdvertisementPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Advertisement"
@@ -435,6 +487,8 @@ export type $AdvertisementPayload<ExtArgs extends runtime.Types.Extensions.Inter
     AdSponsorName: string
     isAdRunning: boolean
     AdType: $Enums.AdType
+    createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["advertisement"]>
   composites: {}
 }
@@ -866,6 +920,8 @@ export interface AdvertisementFieldRefs {
   readonly AdSponsorName: Prisma.FieldRef<"Advertisement", 'String'>
   readonly isAdRunning: Prisma.FieldRef<"Advertisement", 'Boolean'>
   readonly AdType: Prisma.FieldRef<"Advertisement", 'AdType'>
+  readonly createdAt: Prisma.FieldRef<"Advertisement", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"Advertisement", 'DateTime'>
 }
     
 

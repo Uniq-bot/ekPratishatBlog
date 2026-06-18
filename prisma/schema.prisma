@@ -82,6 +82,8 @@ model Advertisement{
   AdSponsorName String
   isAdRunning Boolean @default(true)
   AdType AdType @default(BANNER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum AdType{
