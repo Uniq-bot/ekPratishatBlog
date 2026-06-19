@@ -40,8 +40,8 @@ const NavBar = () => {
   return (
     <div
       className={`
-        w-full fixed top-0 left-0 right-0 z-100
-        flex items-center justify-between gap-5
+        w-full fixed   top-0 left-0 right-0 z-100
+      flex  items-center justify-between gap-5
         py-4 px-10 transition-all duration-500
         ${
           isScrolled
@@ -52,14 +52,14 @@ const NavBar = () => {
     >
       {/* Logo */}
      
-          <div className="flex items-center gap-3 w-50">
+          <div className="flex items-center gap-3 w-20 md:w-50">
         {
         isScrolled && ( <Image
           src="/logo.png"
           alt="Blog Logo"
-          width={150}
+          width={50}
           height={50}
-          className="w-auto h-15"
+          className=""
         />
          )
       }
@@ -67,14 +67,14 @@ const NavBar = () => {
        
 
       {/* Nav Links */}
-      <div className={`flex items-center p-2  ${
-        isScrolled?"":" rounded-full bg-black/70 backdrop-blur-md shadow-lg border-b border-white/10"
-      }  gap-5 flex-wrap`}>
+      <div className={`flex items-center text-sm   justify-center p-2 px-  ${
+        isScrolled?"":" rounded-full bg-black/70 backdrop-blur-md shadow-lg   border-b border-white/10"
+      } gap-2 md:gap-5 `}>
         {["Home", "Blogs", "About"].map((item) => (
           <Link
             key={item}
             href={navItems.find((i) => i.name === item)?.href || "#"}
-            className={`px-3 py-1 text-xl transition-all duration-300 ${
+            className={`px-3 py-1 md:text-xl transition-all duration-300 ${
               pathname === navItems.find((i) => i.name === item)?.href
                 ? "border-b-2 border-[#C9981A] text-white"
                 : "text-white"

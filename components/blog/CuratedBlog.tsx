@@ -41,9 +41,9 @@ const CuratedBlog = ({ curatedBlog }: { curatedBlog: BlogItem | any }) => {
   return (
     <div
       onClick={handleClick}
-      className="absolute  z-50 w-220 h-100 cursor-pointer group  flex left-1/2  top-30 transform -translate-x-1/2  text-black "
+      className="absolute w-full  lg:flex-row flex-col left-1/2  p-5 bottom-35   z-50 md:w-200 md:h-90 cursor-pointer group  flex md:left-1/2  md:top-30 transform -translate-x-1/2  text-black "
     >
-      <div className="w-[65%] h-full">
+      <div className="md:w-[60%] w-full  h-full">
         <Image
           src={curatedBlog?.coverImage || "/Ad1.png"}
           alt="Ad"
@@ -52,22 +52,17 @@ const CuratedBlog = ({ curatedBlog }: { curatedBlog: BlogItem | any }) => {
           className=" w-full h-full object-cover rounded-lg group-hover:opacity-80 transition-all"
         />
       </div>
-      <div className="w-[35%] h-full p-5 flex flex-col gap-3 justify-center">
-        <h1 className="text-2xl group-hover:underline transition-all font-bold">
+      <div className="md:w-[40%] w-full h-full md:p-5 flex flex-col md:gap-3 gap-1 justify-center">
+        <h1 className="md:text-2xl text-md group-hover:underline transition-all font-bold">
           {curatedBlog?.title || "Curated Blog"}
         </h1>
-        <h3 className="text-lg">
+        <h3 className="md:text-lg text-sm">
           {curatedBlog?.description ||
             "Discover our handpicked selection of insightful articles, expert tips, and market trends to help you navigate the world of real estate with confidence."}
         </h3>
-        <div className="overflow-hidden relative">
-          <span className="translate-y-20 flex gap-1 items-center group-hover:translate-y-0 group-hover:text-[#B8A555] transition-all text-2xl">
-            <p>Read more</p>{" "}
-            <span className="translate-x-0 group-hover:translate-x-2 delay-50 transition-all">
-              <ArrowRight />
-            </span>
-          </span>
-        </div>
+        
+         
+       
       </div>
     </div>
   );
