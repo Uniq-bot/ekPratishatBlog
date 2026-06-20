@@ -19,6 +19,7 @@ import Link from "next/link";
 import AsideAd from "@/components/blog/AsideAd";
 import BannerAd from "@/components/blog/BannerAds";
 import { prisma } from "@/libs/prisma";
+// import { X } from "lucide-react";
 
 interface PageProps {
   searchParams: Promise<{ [key: string]: string | undefined }>;
@@ -55,61 +56,40 @@ export default async function BlogPage({ searchParams }: PageProps) {
 
   return (
     <div className="w-full min-h-screen flex flex-col bg-[#FFFFFF]">
-      <div className="lg:w-full min-h-[100vh]  md:bg-[#FFFFFF] md:pb-2 flex relative  flex-col ">
-        <div className="w-full h-[calc(100vh-150px)]  relative">
-          <div className="w-full inset-0 ">
-          
-            <h1
-              className="md:text-6xl text-5xl  absolute md:top-80 md:left-60 left-1/2 top-30   transform md:-translate-y-1/2 -translate-x-1/2 font-black leading-[0.92] tracking-tighter 
-                z-50 
-                sm:text-8xl lg:text-[7rem]
-            "
-            >
-              REAL- <br />{" "}
-              <span className="text-outline-yellow clamp">ESTATE</span> <br />{" "}
-              MADE <br />{" "}
-              <span className="text-outline-silver clamp">CLEAR.</span>
-            </h1>
-         
-            <div className="lg:absolute hidden md:flex top-[55%] text-black/40 rotate-y-180 -rotate-z-25 left-10 w-100 h-100 z-20 ">
-              <svg viewBox="0 0 600 400" className="w-full h-full" fill="none">
-                <path
-                  d="M520 90
-                    C470 150 420 170 360 160
-                    C300 150 280 80 340 50
-                    C400 20 430 110 380 210
-                    C330 310 220 350 100 300"
-                  stroke="currentColor"
-                  strokeWidth="12"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M100 300 L130 295 M100 300 L115 330"
-                  stroke="currentColor"
-                  strokeWidth="12"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </div>
+      <div className="w-full min-h-[70vh] min-[768px]:min-h-[85vh] min-[1024px]:min-h-[110vh] min-[1250px]:min-h-[125vh] relative  ">
+        <div className="absolute inset-0 z-0 bg-[linear-gradient(90deg,rgba(248,246,240,1)_0%,rgba(245,242,236,0.95)_35%,rgba(235,231,225,0.85)_65%,rgba(216,213,208,0.7)_85%,rgba(192,191,186,0.9)_100%)]" />
+
+        <div className="w-full  ">
+          <h1 className="text-3xl w-full absolute  top-20 text-center font-black px-10 md:text-5xl md:px-20 md:mt-10 lg:text-7xl lg:px-40  min-[768px]:px-60 ">
+            REAL-ESTATE <span className="text-outline-yellow">MADE</span>{" "}
+            <span className="text-outline-silver">CLEAR</span>
+          </h1>
+        </div>
+        <div className="w-full min-[320px]:h-50  min-[768px]:h-70 px-5 absolute top-1/2 transform -translate-y-1/2 min-[320px]:top-40 min-[320px]:translate-y-0 min-[760px]:top-55 min-[1000px]:top-70 min-[768px]:py-2 min-[1280px]:h-120  min-[1024px]:w-5/6  min-[1024px]:left-1/2 min-[1024px]:-translate-x-1/2 left-0 min-[1440px]:top-55 flex gap-10">
+          <div className="min-[768px]:w-[65%]  h-full min-[320px]:w-full ">
             <CuratedBlog curatedBlog={curatedBlog} />
-            {AsideAds && <AsideAd AsideAds={AsideAds} />}
           </div>
 
-          <div className="w-full  absolute inset-0  h-full bg-[linear-gradient(90deg,rgba(248,246,240,1)_0%,rgba(245,242,236,0.95)_35%,rgba(235,231,225,0.85)_65%,rgba(216,213,208,0.7)_85%,rgba(192,191,186,0.9)_100%)]" />
-          <div className="absolute overflow-x-auto justify-center  min-h-30 w-full md:-bottom-35 -bottom-20  left-1/2 transform -translate-x-1/2   text-white p-5  flex  items-center  gap-5 rounded z-10">
-            <LatestBlogs latestBlogs={latestBlogs.posts} />
-          </div>
+          {AsideAds && <AsideAd AsideAds={AsideAds} />}
         </div>
-        {BannerAds && (
-          <div className="w-full h-50   md:h-70 relative bottom-0 md:left-1/2 transform md:-translate-x-1/2 ">
-            <BannerAd BannerAds={BannerAds} />
-          </div>
-        )}
+        <div className="w-full min-h-60 absolute flex gap-10  top-90 px-5 items-center justify-center min-[750px]:top-125 min-[750px]:left-1/2 transform min-[750px]:-translate-x-1/2 min-[1000px]:top-145 min-[1280px]:top-195 min-[1440px]:top-180   ">
+     
+            {latestBlogs?.posts.length > 0 && (
+              <LatestBlogs latestBlogs={latestBlogs?.posts ?? []} />
+            )}
+        </div>
       </div>
 
-      <div className="lg:mb-10 relative lg:top-10 pb-10 p-2 pt-10 w-full m-auto flex">
-        <div className="md:w-[70%] w-full mb-30  flex flex-col gap-5">
+      <div className="lg:mb-10 relative lg:top-10 pb-10 p-3  w-full m-auto flex flex-col">
+        {
+          BannerAds && (
+            <div className="w-full  h-40 mb-10">
+              <BannerAd BannerAds={BannerAds} />
+            </div>
+          )
+        }
+       <div className="w-full flex flex-col lg:flex-row gap-5 min-[768px]:gap-10">
+         <div className="lg:w-[70%] w-full mb-30  flex flex-col gap-5">
           <SearchFilter category={category} tag={tag} search={search} />
           <CategoryNav categories={categories} />
           <BlogList
@@ -124,10 +104,11 @@ export default async function BlogPage({ searchParams }: PageProps) {
           />
         </div>
 
-        <div className="w-1/3 hidden sticky top-18.75  h-fit md:flex flex-col gap-8  p-5">
+        <div className="w-1/3 hidden sticky top-18.75  h-fit lg:flex flex-col gap-8  p-5">
           <PopularBlogs popularBlogs={popularBlogs?.posts ?? []} />
           <NewsLetter />
         </div>
+       </div>
       </div>
     </div>
   );

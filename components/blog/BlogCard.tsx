@@ -11,7 +11,8 @@ const BlogCard = ({ blog }: { blog: any }) => {
     e.preventDefault();
 
     const sessionId =
-      localStorage.getItem("sessionId") || crypto.randomUUID();
+  localStorage.getItem("sessionId") ||
+  `${Date.now()}-${Math.random().toString(36).slice(2)}`;
     localStorage.setItem("sessionId", sessionId);
 
     const key = `viewed-${blog.id}`;

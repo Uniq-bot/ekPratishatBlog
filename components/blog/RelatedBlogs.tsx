@@ -14,9 +14,9 @@ const RelatedBlogs = ({ relatedBlogs }: { relatedBlogs: any }) => {
     const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, blog: BlogItem) => {
      e.preventDefault();
  
-     const sessionId =
-       localStorage.getItem("sessionId") || crypto.randomUUID();
-     localStorage.setItem("sessionId", sessionId);
+const sessionId =
+  localStorage.getItem("sessionId") ||
+  `${Date.now()}-${Math.random().toString(36).slice(2)}`;     localStorage.setItem("sessionId", sessionId);
  
      const key = `viewed-${blog.id}`;
      if (!sessionStorage.getItem(key)) {
