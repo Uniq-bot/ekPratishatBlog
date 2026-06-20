@@ -12,9 +12,9 @@ const CuratedBlog = ({ curatedBlog }: { curatedBlog: BlogItem | any }) => {
   const handleClick = async (e: React.MouseEvent) => {
     e.preventDefault();
 
-    const sessionId =
-      localStorage.getItem("sessionId") ?? window.crypto.randomUUID();
-
+const sessionId =
+  localStorage.getItem("sessionId") ||
+  `${Date.now()}-${Math.random().toString(36).slice(2)}`;
     localStorage.setItem("sessionId", sessionId);
 
     const key = `viewed-${curatedBlog.id}`;
@@ -39,31 +39,22 @@ const CuratedBlog = ({ curatedBlog }: { curatedBlog: BlogItem | any }) => {
   };
 
   return (
-    <div
-      onClick={handleClick}
-      className="absolute w-full  lg:flex-row flex-col left-1/2  p-5 bottom-35   z-50 md:w-200 md:h-90 cursor-pointer group  flex md:left-1/2  md:top-30 transform -translate-x-1/2  text-black "
-    >
-      <div className="md:w-[60%] w-full  h-full">
-        <Image
-          src={curatedBlog?.coverImage || "/Ad1.png"}
-          alt="Ad"
-          width={400}
-          height={400}
-          className=" w-full h-full object-cover rounded-lg group-hover:opacity-80 transition-all"
-        />
-      </div>
-      <div className="md:w-[40%] w-full h-full md:p-5 flex flex-col md:gap-3 gap-1 justify-center">
-        <h1 className="md:text-2xl text-md group-hover:underline transition-all font-bold">
-          {curatedBlog?.title || "Curated Blog"}
-        </h1>
-        <h3 className="md:text-lg text-sm">
-          {curatedBlog?.description ||
-            "Discover our handpicked selection of insightful articles, expert tips, and market trends to help you navigate the world of real estate with confidence."}
-        </h3>
-        
-         
-       
-      </div>
+    <div onClick={handleClick} className="w-full hover:opacity-80 transition-all cursor-pointer h-full relative rounded-lg overflow-hidden">
+<Image src={curatedBlog?.coverImage || "/Ad1.png"} alt="Ad" width={1000} height={1000} className="w-full h-full  group-hover:opacity-80 transition-all" />
+<div className="absolute bottom-0 left-0 right-0 p-4  z-10">
+  <h1 className="text-white text-2xl min-[1300px]:text-[3rem] font-black">
+    {curatedBlog?.title}
+  </h1>
+  <p className="text-gray-200 mt-2 text-sm min-[1300px]:text-[1.2rem]">
+    {
+      curatedBlog?.description.length > 100
+        ? curatedBlog.description.substring(0, 80) + "..."
+        : curatedBlog.description
+    }
+  </p>
+
+</div>
+      <div className="absolute top-0 bottom-0 left-0 right-0 w-full h-full bg-linear-to-t from-black/70 to-transparent" />
     </div>
   );
 };

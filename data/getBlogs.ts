@@ -65,9 +65,9 @@ export const getBlogs = async ({
 export const getLatestBlogs = async () => {
   try {
     const blogs = await prisma.blogPost.findMany({
-      where: { status: "PUBLISHED" },
+      where: { status: "PUBLISHED", isToggled: false },
       orderBy: { createdAt: "desc" },
-      take: 5,
+      take: 3,
       include: { tags: true, category: true },
     });
 

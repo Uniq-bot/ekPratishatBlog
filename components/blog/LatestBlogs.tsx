@@ -14,8 +14,10 @@ const LatestBlogs = ({ latestBlogs = [] }: { latestBlogs?: BlogItem[] }) => {
   ) => {
     e.preventDefault();
 
-    const sessionId = localStorage.getItem("sessionId") || crypto.randomUUID();
-    localStorage.setItem("sessionId", sessionId);
+const sessionId =
+  localStorage.getItem("sessionId") ||
+  `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      localStorage.setItem("sessionId", sessionId);
 
     const key = `viewed-${blog.id}`;
     if (!sessionStorage.getItem(key)) {
@@ -32,14 +34,14 @@ const LatestBlogs = ({ latestBlogs = [] }: { latestBlogs?: BlogItem[] }) => {
   };
   return (
     <>
-      {latestBlogs.slice(0, 2).map((blog) => (
+      {latestBlogs.slice(0, 3).map((blog) => (
         <Link
           href={`/blog/${blog.slug}`}
           key={blog.id}
           onClick={(e) => handleClick(e, blog)}
-          className="flex flex-col rounded-lg md:w-90 w-1/2   overflow-hidden shadow-sm  md:shadow-lg group h-50 md:h-90 bg-white"
+          className="flex flex-col rounded-lg lg:w-90 w-1/2   overflow-hidden shadow-sm  lg:shadow-lg group h-50 lg:h-90 bg-white"
         > 
-          <div className="w-full md:w-full relative h-24 md:h-48 overflow-hidden shrink-0">
+          <div className="w-full lg:w-full relative h-24 lg:h-48 overflow-hidden shrink-0">
             <Image
               src={blog?.coverImage ?? "/logo.png"}
               alt={blog?.title ?? "Blog cover"}
@@ -47,13 +49,13 @@ const LatestBlogs = ({ latestBlogs = [] }: { latestBlogs?: BlogItem[] }) => {
               height={320}
               className="w-full h-full object-cover"
             />
-            <span className="absolute top-4 left-0 bg-black font-semibold text-white md:px-3  py-1 text-xs md:py-2 md:text-md">
+            <span className="absolute top-4 left-0 bg-black font-semibold text-white lg:px-3  py-1 text-xs lg:py-2 lg:text-lg">
               {blog?.category?.name}
             </span>
           
           </div>
-          <div className="flex flex-col h-full gap-1 md:p-4 p-1">
-            <h3 className=" text-sm md:text-xl   text-black">{blog?.title}</h3>
+          <div className="flex flex-col h-full gap-1 lg:p-4 p-1">
+            <h3 className=" text-sm lg:text-xl   text-black">{blog?.title}</h3>
             <div className="flex items-center gap-1 text-xs text-gray-500">
               <Calendar size={12} />
               {new Date(blog?.createdAt).toLocaleDateString()}
