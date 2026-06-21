@@ -59,20 +59,27 @@ export default async function BlogPage({ searchParams }: PageProps) {
       <div className="w-full min-h-[70vh] min-[768px]:min-h-[85vh] min-[1024px]:min-h-[110vh] min-[1250px]:min-h-[125vh] relative  ">
         <div className="absolute inset-0 z-0 bg-[linear-gradient(90deg,rgba(248,246,240,1)_0%,rgba(245,242,236,0.95)_35%,rgba(235,231,225,0.85)_65%,rgba(216,213,208,0.7)_85%,rgba(192,191,186,0.9)_100%)]" />
 
-        <div className="w-full  ">
-          <h1 className="text-3xl w-full absolute  top-20 text-center font-black px-10 md:text-5xl md:px-20 md:mt-10 lg:text-7xl lg:px-40  min-[768px]:px-60 ">
-            REAL-ESTATE <span className="text-outline-yellow">MADE</span>{" "}
-            <span className="text-outline-silver">CLEAR</span>
+        <div className="  absolute w-full text-center  top-25 min-[1000px]:top-40 z-10 flex justify-center min-[1440px]:top-30 items-center leading-none min-[370px]:gap-4 ">
+          <h1 className="text-[2rem] min-[600px]:text-[4rem] min-[900px]:text-[5rem] min-[1440px]:text-[6rem]  font-black">
+            REAL-ESTATE
           </h1>
+          <span className="flex flex-col text-[2rem] min-[1440px]:text-[3rem] leading-none font-black" >
+            <h2 className="text-outline-yellow">
+              MADE
+            </h2>
+            <h2 className="text-outline-silver">
+              CLEAR
+            </h2>
+          </span>
         </div>
-        <div className="w-full min-[320px]:h-50  min-[768px]:h-70 px-5 absolute top-1/2 transform -translate-y-1/2 min-[320px]:top-40 min-[320px]:translate-y-0 min-[760px]:top-55 min-[1000px]:top-70 min-[768px]:py-2 min-[1280px]:h-120  min-[1024px]:w-5/6  min-[1024px]:left-1/2 min-[1024px]:-translate-x-1/2 left-0 min-[1440px]:top-55 flex gap-10">
+        <div className="w-full min-[320px]:h-40  z-20 min-[750px]:h-70 px-5 absolute top-1/2 mt-10 md:mt-0 transform -translate-y-1/2 min-[320px]:top-40 min-[320px]:translate-y-0 min-[760px]:top-55 min-[1000px]:top-70 min-[768px]:py-2 min-[1280px]:h-120  min-[1024px]:w-5/6  min-[1024px]:left-1/2 min-[1024px]:-translate-x-1/2 left-0 min-[1440px]:top-70 flex gap-10">
           <div className="min-[768px]:w-[65%]  h-full min-[320px]:w-full ">
             <CuratedBlog curatedBlog={curatedBlog} />
           </div>
 
           {AsideAds && <AsideAd AsideAds={AsideAds} />}
         </div>
-        <div className="w-full min-h-60 absolute flex gap-10  top-90 px-5 items-center justify-center min-[750px]:top-125 min-[750px]:left-1/2 transform min-[750px]:-translate-x-1/2 min-[1000px]:top-145 min-[1280px]:top-195 min-[1440px]:top-180   ">
+        <div className="w-full min-h-60 absolute flex gap-10  top-90 px-5 items-center justify-center min-[750px]:top-125 min-[750px]:left-1/2 transform min-[750px]:-translate-x-1/2 min-[1000px]:top-145 min-[1280px]:top-195 min-[1440px]:top-200   ">
      
             {latestBlogs?.posts.length > 0 && (
               <LatestBlogs latestBlogs={latestBlogs?.posts ?? []} />

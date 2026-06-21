@@ -34,12 +34,12 @@ const sessionId =
   };
   return (
     <>
-      {latestBlogs.slice(0, 3).map((blog) => (
+      {latestBlogs.map((blog, index) => (
         <Link
           href={`/blog/${blog.slug}`}
           key={blog.id}
           onClick={(e) => handleClick(e, blog)}
-          className="flex flex-col rounded-lg lg:w-90 w-1/2   overflow-hidden shadow-sm  lg:shadow-lg group h-50 lg:h-90 bg-white"
+          className={`flex flex-col rounded-lg min-[1000px]:w-70 w-1/2   overflow-hidden shadow-sm   ${index === 2 ? "hidden md:flex" : ""}  lg:shadow-lg group h-50  min-[1000px]:h-80 bg-white`}
         > 
           <div className="w-full lg:w-full relative h-24 lg:h-48 overflow-hidden shrink-0">
             <Image
