@@ -40,7 +40,7 @@ export const createAdvertisement = async (formData: FormData) => {
         AdSponsorName,
         AdLink,
         AdType,
-        // isAdRunning,
+        // isAdRunning:false,
       },
     });
     console.log(ad)

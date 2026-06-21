@@ -38,7 +38,7 @@ const CategoryNav = ({
       ))}
       </div>
 
-      <div className="absolute lg:hidden  w-12 pointer-events-none h-full right-0 top-0 bottom-0 bg-linear-to-l from-black/50 to-transparent" />
+      <div className="absolute lg:hidden  w-12 pointer-events-none h-full right-0 top-0 bottom-0 bg-linear-to-l from-gray-400/50 to-transparent" />
     
     </div>
   );

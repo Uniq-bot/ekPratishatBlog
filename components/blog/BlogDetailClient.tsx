@@ -13,15 +13,15 @@ const headingTag: Record<number, keyof React.JSX.IntrinsicElements> = {
   6: "h6",
 };
 
-const headingClass: Record<number, string> = {
-  1: "text-3xl sm:text-4xl lg:text-5xl font-bold mt-12 mb-6 text-black",
-  2: "text-2xl sm:text-3xl lg:text-4xl font-bold mt-10 mb-5 border-l-4 border-[#79570E] pl-4 text-black",
-  3: "text-xl sm:text-2xl lg:text-3xl font-semibold mt-8 mb-4 text-[#79570E]",
-  4: "text-lg sm:text-xl lg:text-2xl font-semibold mt-6 mb-3 text-gray-800",
-  5: "text-base sm:text-lg lg:text-xl font-medium mt-5 mb-2 text-gray-700",
-  6: "text-sm sm:text-base lg:text-lg font-medium mt-4 mb-2 text-gray-600",
-};
 
+const headingClass: Record<number, string> = {
+  1: "text-3xl sm:text-4xl lg:text-5xl font-black mt-8 sm:mt-10 lg:mt-12 mb-4 sm:mb-5 lg:mb-6 text-black",
+  2: "text-2xl sm:text-3xl lg:text-4xl font-bold mt-7 sm:mt-8 lg:mt-10 mb-4 sm:mb-5 border-l-4 border-[#79570E] pl-3 sm:pl-4 text-black",
+  3: "text-xl sm:text-2xl lg:text-3xl font-semibold mt-6 sm:mt-7 lg:mt-8 mb-3 sm:mb-4 text-[#79570E]",
+  4: "text-lg sm:text-xl lg:text-2xl font-semibold mt-5 sm:mt-6 mb-2 sm:mb-3 text-gray-800",
+  5: "text-base sm:text-lg lg:text-xl font-medium mt-4 sm:mt-5 mb-2 text-gray-700",
+  6: "text-sm sm:text-base lg:text-lg font-medium mt-3 sm:mt-4 mb-2 text-gray-600",
+};
 const parseBlocks = (raw: any): any[] => {
   if (!raw) return [];
   if (Array.isArray(raw)) return raw;
@@ -38,7 +38,7 @@ const parseBlocks = (raw: any): any[] => {
 
 const BlogDetailClient = ({ blog }: { blog: any }) => {
   const blocks = parseBlocks(blog?.content);
-  
+
   return (
     <div className="w-full lg:w-[65%] py-5 h-full bg-[#ffffff] text-black px-3 sm:px-6 lg:px-10">
       <div className="w-full flex flex-col border-b-3 pb-5 border-[#d8a92f] gap-2.5">

@@ -80,7 +80,7 @@ model Advertisement{
   AdPoster String
   AdLink String
   AdSponsorName String
-  isAdRunning Boolean @default(true)
+  isAdRunning Boolean @default(false)
   AdType AdType @default(BANNER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

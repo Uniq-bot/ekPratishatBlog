@@ -41,7 +41,7 @@ const NavBar = () => {
     <div
       className={`
         w-full fixed top-0 left-0 right-0 z-100
-      flex  items-center justify-center lg:justify-between gap-5
+       flex  items-center justify-center lg:justify-between gap-5
         py-4 px-10 transition-all duration-500
         ${
           isScrolled
@@ -52,21 +52,21 @@ const NavBar = () => {
     >
       {/* Logo */}
 
-      <div className="md:flex hidden items-center gap-3 w-20 md:w-50">
+      <div className="lg:flex hidden items-center gap-3 w-20 md:w-20">
         {isScrolled && (
           <Image
             src="/logo.png"
             alt="Blog Logo"
             width={50}
             height={50}
-            className=""
+            className=" w-full h-full"
           />
         )}
       </div>
 
       {/* Nav Links */}
       <div
-        className={`flex items-center text-sm   justify-center p-2 px-  ${
+        className={`flex items-center lg:mr-30 text-sm   justify-center p-2 px-  ${
           isScrolled
             ? ""
             : " rounded-full bg-black/70 backdrop-blur-md shadow-lg   border-b border-white/10"
@@ -101,35 +101,7 @@ const NavBar = () => {
           }
         `}
       >
-        <Link href="https://www.instagram.com/ek_pratishat/" target="_blank">
-          <Image
-            src="/insta.png"
-            alt="Instagram"
-            width={40}
-            height={40}
-            className="w-12 h-12 rounded-full object-cover"
-          />
-        </Link>
-
-        <Link href="https://www.instagram.com/ek_pratishat/" target="_blank">
-          <Image
-            src="/facebook.png"
-            alt="Facebook"
-            width={40}
-            height={40}
-            className="w-10 h-10 rounded-full object-cover"
-          />
-        </Link>
-
-        <Link href="https://www.instagram.com/ek_pratishat/" target="_blank">
-          <Image
-            src="/tiktok.png"
-            alt="TikTok"
-            width={40}
-            height={40}
-            className="w-12 h-12 rounded-full object-cover"
-          />
-        </Link>
+       
       </div>
     </div>
   );
