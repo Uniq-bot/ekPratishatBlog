@@ -21,7 +21,7 @@ const AsideAd = ({ AsideAds }: { AsideAds: any }) => {
         </p>
       </div>
        <Link href={AsideAds?.AdLink || "#"} target="_blank" className="w-full h-full flex flex-col gap-2">
-        <Image src={AsideAds?.AdPoster || "/Ad1.png"} alt="Ad" width={1000} height={1000} className="w-full h-2/3 " />
+        <Image src={AsideAds?.AdPoster || "/Ad1.png"} unoptimized alt="Ad" width={1000} height={1000} className="w-full h-2/3 " />
         <div className=" px-2 min-[1200px]:p-5">
           <h1 className="text-black text-sm md:text-md min-[1200px]:text-2xl font-bold ">{AsideAds?.AdTitle}</h1>
           <p className="text-gray-700 text-xs min-[1200px]:text-xl ">{AsideAds?.AdDescription.substring(0, 30)}...</p>
