@@ -55,7 +55,7 @@ const BlogCard = ({ blog }: { blog: any }) => {
             {new Date(blog?.createdAt).toLocaleDateString()}
           </span>
 
-          <h2 className="text-2xl group-hover:text-[#ad8408] transition-all leading-tight">
+          <h2 className="text-2xl group-hover:text-[#ad8408] font-bold transition-all leading-tight">
             {blog?.title}
           </h2>
 
