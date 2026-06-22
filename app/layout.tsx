@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className=" w-full bg-(--color-background) select-none font-sans">
-      <body cz-shortcut-listen="true">
+      <body cz-shortcut-listen="true" className="">
         <QueryProvider>
           {children}
         </QueryProvider>

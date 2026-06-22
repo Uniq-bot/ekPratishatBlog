@@ -14,7 +14,7 @@ const CategoryNav = ({
   const currentCategory = searchParams.get("category");
   const pathname = usePathname();
   return (
-    <div className="flex   items-center text-sm md:text-xl  relative px-2 inset-1.5 py-1 justify-between   gap-3 overflow-hidden">
+    <div className="flex   items-center text-sm md:text-xl mr-2  relative inset-1.5 py-1 justify-between   gap-3 overflow-hidden">
       {/* <span className="absolute right-0 bg-black/20 p-2 rounded-full">
         <MoveRight />
       </span> */}
