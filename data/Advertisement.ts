@@ -14,7 +14,7 @@ export const createAdvertisement = async (formData: FormData) => {
     const imageFile = formData.get("image") as File;
     // const isAdRunning = formData.get("isAdRunning") === "on";
 
-    console.log(formData)
+    console.log(formData);
     if (!title || !description || !imageFile) {
       throw new Error("Title, description and image are required");
     }
@@ -25,7 +25,14 @@ export const createAdvertisement = async (formData: FormData) => {
     const bytes = await imageFile.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    const ext = imageFile.name.split(".").pop();
+    const allowedTypes = ["jpg", "jpeg", "png", "webp", "gif"];
+
+    const ext = imageFile.name.split(".").pop()?.toLowerCase();
+
+    if (!ext || !allowedTypes.includes(ext)) {
+      throw new Error("Invalid file type. Only images are allowed.");
+    }
+
     const filename = `ad-${Date.now()}.${ext}`;
     const filepath = join(uploadDir, filename);
 
@@ -43,14 +50,13 @@ export const createAdvertisement = async (formData: FormData) => {
         // isAdRunning:false,
       },
     });
-    console.log(ad)
+    console.log(ad);
     revalidatePath("/admin");
     return ad;
   } catch (error) {
     console.log("Error creating the ad", error);
   }
 };
-
 
 export async function updateAdStatus({
   adId,
@@ -77,10 +83,7 @@ export const updateAd = async (formData: FormData) => {
     const description = formData.get("description") as string;
     const sponsorName = formData.get("AdSponsorName") as string;
     const adLink = formData.get("AdLink") as string;
-    const adType = formData.get("AdType") as
-      | "BANNER"
-      | "ASIDE"
-      | "POPUP";
+    const adType = formData.get("AdType") as "BANNER" | "ASIDE" | "POPUP";
 
     const imageFile = formData.get("image") as File | null;
 
@@ -125,21 +128,26 @@ export const updateAd = async (formData: FormData) => {
     throw error;
   }
 };
-export const deleteAd= async(adId:string)=>{
+export const deleteAd = async (adId: string) => {
   try {
-      await prisma.advertisement.delete({
-        where:{ id: adId }
-      })
-      console.log("deleted")
-      revalidatePath("/admin");
-      revalidatePath("/");
+    await prisma.advertisement.delete({
+      where: { id: adId },
+    });
+    console.log("deleted");
+    revalidatePath("/admin");
+    revalidatePath("/");
   } catch (error) {
-      console.log("Error deleting the ad", error);
+    console.log("Error deleting the ad", error);
   }
-}
+};
 
-
-export const setAdStatus = async ({adId, status}: { adId: string; status: boolean }) => {
+export const setAdStatus = async ({
+  adId,
+  status,
+}: {
+  adId: string;
+  status: boolean;
+}) => {
   try {
     await prisma.$transaction(async (tx) => {
       const currAd = await tx.advertisement.findUnique({
@@ -168,7 +176,7 @@ export const setAdStatus = async ({adId, status}: { adId: string; status: boolea
           isAdRunning: status,
         },
       });
-      console.log("succeed")
+      console.log("succeed");
     });
 
     revalidatePath("/admin");
