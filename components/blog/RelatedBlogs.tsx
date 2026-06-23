@@ -6,30 +6,15 @@ import Link from "next/link";
 import {motion} from "framer-motion";
 import { Calendar } from "lucide-react";
 import { BlogItem } from "@/types/blog";
+import { useTrackBlogView } from "@/hooks/useTrackViews";
 const RelatedBlogs = ({ relatedBlogs }: { relatedBlogs: any }) => {
   const [isHovered, setIsHovered] = useState<number | null>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
+const trackView = useTrackBlogView();
 
     const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, blog: BlogItem) => {
      e.preventDefault();
- 
-const sessionId =
-  localStorage.getItem("sessionId") ||
-  `${Date.now()}-${Math.random().toString(36).slice(2)}`;     localStorage.setItem("sessionId", sessionId);
- 
-     const key = `viewed-${blog.id}`;
-     if (!sessionStorage.getItem(key)) {
-       sessionStorage.setItem(key, "true");
-       fetch("/api/blogs/views", {
-         method: "POST",
-         keepalive: true,
-         headers: { "Content-Type": "application/json" },
-         body: JSON.stringify({ blogId: blog.id, sessionId }),
-       }).catch(() => {});
-     }
- 
-     router.push(`/blog/${blog.slug}`);
+    trackView(blog);
    };
 
   return (
@@ -46,7 +31,7 @@ const sessionId =
       <h1 className="text-lg sm:text-xl lg:text-2xl font-semibold hidden lg:block">
         Related Blogs
       </h1>
-      <div className="w-full flex flex-col gap-2 mt-3 lg:mt-5 hidden lg:flex">
+      <div className="w-full  flex-col gap-2 mt-3 lg:mt-5 hidden lg:flex">
         {relatedBlogs.length > 0 ? (
           relatedBlogs.slice(0, 3).map((blog: BlogItem) => {
             return (
@@ -102,10 +87,7 @@ const sessionId =
               relatedBlogs.slice(0, 6).map((blog: any) => (
                 <div
                   key={blog.id}
-                  onClick={() => {
-                    router.push(`/blog/${blog.slug ?? blog.id}`);
-                    setIsOpen(false);
-                  }}
+                 onClick={(e) => handleClick(e as any, blog)}
                   onMouseEnter={() => setIsHovered(blog.id)}
                   onMouseLeave={() => setIsHovered(null)}
                   className={`w-full h-30 transition-all cursor-pointer ${isHovered === blog.id ? "bg-amber-200" : "bg-white"}  flex items-center gap-2 p-2 justify-between`}

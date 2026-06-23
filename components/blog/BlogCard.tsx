@@ -3,30 +3,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { useTrackBlogView } from "@/hooks/useTrackViews";
 
 const BlogCard = ({ blog }: { blog: any }) => {
-  const router = useRouter();
+const trackView = useTrackBlogView();
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-
-    const sessionId =
-  localStorage.getItem("sessionId") ||
-  `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-    localStorage.setItem("sessionId", sessionId);
-
-    const key = `viewed-${blog.id}`;
-    if (!sessionStorage.getItem(key)) {
-      sessionStorage.setItem(key, "true");
-      fetch("/api/blogs/views", {
-        method: "POST",
-        keepalive: true,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ blogId: blog.id, sessionId }),
-      }).catch(() => {});
-    }
-
-    router.push(`/blog/${blog.slug}`);
+   trackView(blog);
   };
 
   return (

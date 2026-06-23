@@ -40,7 +40,7 @@ const BlogDetailClient = ({ blog }: { blog: any }) => {
   const blocks = parseBlocks(blog?.content);
 
   return (
-    <div className="w-full lg:w-[65%] py-5 h-full bg-[#ffffff] text-black px-3 sm:px-6 lg:px-10">
+    <div className="w-full lg:w-[65%] py-5 h-full bg-[#F4F1EC] text-black px-3 sm:px-6 lg:px-10">
       <div className="w-full flex flex-col border-b-3 pb-5 border-[#d8a92f] gap-2.5">
         <h1 className="text-2xl sm:text-3xl   lg:text-5xl font-semibold leading-tight">
           {blog?.title}
@@ -86,7 +86,7 @@ const BlogDetailClient = ({ blog }: { blog: any }) => {
         {blog?.description && (
           <p
             className="
-    bg-[#F5F5F5]
+    bg-[#b1b1b1]
     border-l-4
     border-[#79570E]
     text-gray-700

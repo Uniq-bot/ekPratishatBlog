@@ -10,39 +10,7 @@ interface Props {
 
 
 
-export async function generateMetadata({ params }: Props) {
-  const { slug } = await params;
 
-  const blog = await prisma.blogPost.findFirst({
-    where: { slug },
-  });
-
-  if (!blog) return {};
-
-  return {
-    title: blog.title,
-    description: blog.description,
-    openGraph: {
-      title: blog.title,
-      description: blog.description,
-      url: `https://localhost:3000/blog/${blog.slug}`,
-      type: "article",
-      images: [
-        {
-          url: `http://localhost:3000${blog.coverImage}`, 
-          width: 1200,
-          height: 630,
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: blog.title,
-      description: blog.description,
-      images: [`http://localhost:3000${blog.coverImage}`], 
-    },
-  };
-}
 
 
 
@@ -95,7 +63,7 @@ export default async function BlogDets({ params }: Props) {
   const relatedBlogs= await getRelatedBlogs(blog.categoryID, slug, blog.tags.map(t => t.id)); 
 
   return (
-    <div className="w-full min-h-screen text-white p-3 sm:p-6 lg:p-10 py-4 sm:py-5 lg:py-10 flex flex-col items-start">
+    <div className="w-full min-h-screen bg-[#F4F1EC] text-white p-3 sm:p-6 lg:p-10 py-4 sm:py-5 lg:py-10 flex flex-col items-start">
       <BackButton slug={slug} />
       <div className="w-full flex flex-col lg:flex-row justify-between px-0 sm:px-4 lg:px-6 py-4 sm:py-6 gap-4 sm:gap-6 lg:gap-8">
         <BlogDetailClient blog={blog} />

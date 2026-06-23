@@ -71,3 +71,8 @@ export type Tag = Prisma.TagModel
  * 
  */
 export type Advertisement = Prisma.AdvertisementModel
+/**
+ * Model NewsletterSubscriber
+ * 
+ */
+export type NewsletterSubscriber = Prisma.NewsletterSubscriberModel
