@@ -46,7 +46,7 @@ const SearchFilter = ({
       onChange={(e) => setQuery(e.target.value)}
       type="text"
       placeholder="Search blogs..."
-      className="md:w-1/2 w-full relative left-1/2 bottom-5 transform -translate-x-1/2 p-3 border-2 border-gray-500 rounded-full focus:outline-none focus:ring-2 focus:ring-[#f4c91b]"
+      className="md:w-1/2 w-full relative left-1/2 bottom-5 transform -translate-x-1/2 p-3 border-2 border-gray-500 rounded   focus:outline-none focus:ring-2 focus:ring-[#f4c91b]"
     />
   );
 };

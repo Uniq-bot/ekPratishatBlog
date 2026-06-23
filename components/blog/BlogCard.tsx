@@ -18,9 +18,9 @@ const trackView = useTrackBlogView();
       href={`/blog/${blog.slug}`}
       onClick={handleClick}
       title={blog.title}
-      className="w-full min-h-48 bg-[#FFFFFF] rounded-2xl overflow-hidden hover:bg-[#f0f0f0] transition-all group"
+      className="w-full min-h-48 bg-[#FFFFFF] overflow-hidden hover:bg-[#f0f0f0] transition-all group"
     >
-      <div className="w-full border-b-2 pb-5 text-black cursor-pointer group flex flex-col p-5 md:flex-row border-[#EBC044] rounded-2xl gap-5 overflow-hidden">
+      <div className="w-full border-b-2 pb-5 text-black cursor-pointer group flex flex-col p-5 md:flex-row border-[#EBC044]  gap-5 overflow-hidden">
         <div className="w-full md:w-60 relative h-48 md:h-50 overflow-hidden shrink-0">
           <Image
             src={blog?.coverImage ?? "/logo.png"}

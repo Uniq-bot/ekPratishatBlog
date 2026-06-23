@@ -13,7 +13,6 @@ const headingTag: Record<number, keyof React.JSX.IntrinsicElements> = {
   6: "h6",
 };
 
-
 const headingClass: Record<number, string> = {
   1: "text-3xl sm:text-4xl lg:text-5xl font-black mt-8 sm:mt-10 lg:mt-12 mb-4 sm:mb-5 lg:mb-6 text-black",
   2: "text-2xl sm:text-3xl lg:text-4xl font-bold mt-7 sm:mt-8 lg:mt-10 mb-4 sm:mb-5 border-l-4 border-[#79570E] pl-3 sm:pl-4 text-black",
@@ -227,42 +226,28 @@ const BlogDetailClient = ({ blog }: { blog: any }) => {
                   return (
                     <blockquote
                       key={block.id ?? index}
-                      className="
-                         my-8
-          border-l-4
-          border-[#79570E]
-          bg-[#FFF8EC]
-          px-6
-          py-5
-          italic
-          text-gray-700
-          
-        "
+                      className="my-8 border-l-4 border-[#79570E] bg-[#EDE7DC] px-6 py-5italic text-[#3D2F12] shadow-sm"
                     >
                       {block.content}
                     </blockquote>
                   );
+                  
 
                 case "callout":
                   return (
                     <div
                       key={block.id ?? index}
-                      className="
-          my-8
-                   border
-          border-[#FFD07E]
-          bg-[#FFF9E8]
-          p-5
-        "
-                    >
-                      <p className="font-bold flex text-[#79570E] mb-2">
-                        <Lightbulb /> Important
+                      className="my-8 border border-[#D6B06B] bg-[#FFF4DD] p-5 shadow-sm">
+                      <p className="font-bold flex items-center gap-2 text-[#79570E] mb-2">
+                        <Lightbulb />
+                        Important
                       </p>
 
-                      <p className="text-gray-700 leading-7">{block.content}</p>
+                      <p className="text-[#4A3A1A] leading-7">
+                        {block.content}
+                      </p>
                     </div>
                   );
-
                 case "separator":
                   return (
                     <div
