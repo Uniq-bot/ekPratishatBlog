@@ -3,6 +3,7 @@ import { Calendar, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import type { BlogItem, BlogItems } from "@/types/blog";
 import { useRouter } from "next/navigation";
+import { useTrackBlogView } from "@/hooks/useTrackViews";
 
 const PopularBlogs = ({
   popularBlogs = [],
@@ -10,26 +11,11 @@ const PopularBlogs = ({
   popularBlogs?: BlogItems[];
 }) => {
   if (popularBlogs.length === 0) return null;
-  const router = useRouter();
+const trackView = useTrackBlogView();
+
       const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, blog: BlogItem) => {
-       e.preventDefault();
-   
-       const sessionId =
-         localStorage.getItem("sessionId") || crypto.randomUUID();
-       localStorage.setItem("sessionId", sessionId);
-   
-       const key = `viewed-${blog.id}`;
-       if (!sessionStorage.getItem(key)) {
-         sessionStorage.setItem(key, "true");
-         fetch("/api/blogs/views", {
-           method: "POST",
-           keepalive: true,
-           headers: { "Content-Type": "application/json" },
-           body: JSON.stringify({ blogId: blog.id, sessionId }),
-         }).catch(() => {});
-       }
-   
-       router.push(`/blog/${blog.slug}`);
+      e.preventDefault();
+      trackView(blog);
      };
   return (
     <div className="w-full flex flex-col gap-3 border-l-5 border-[#EBC044] pl-5 py-2">

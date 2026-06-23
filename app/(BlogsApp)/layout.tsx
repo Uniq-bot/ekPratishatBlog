@@ -8,7 +8,7 @@ const BlogLayout = ({ children }: { children: React.ReactNode }) => {
     const pathName = usePathname();
   return (
     <div>
-      {/* {!pathName.includes("/blog/") && <NavBar />} */}
+      {!pathName.includes("/blog/") && <NavBar />}
       {children}
       <Footer />
     </div>

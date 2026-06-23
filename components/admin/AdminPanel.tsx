@@ -9,6 +9,7 @@ import { useGetCategory, useGetTags } from "@/hooks/useAdminBlogs";
 import Image from "next/image";
 import Advertisement from "./Advertisement";
 import ManageAds from "./ManageAds";
+import Subscriber from "./Subscriber";
 
 const AdminPanel = ({ advertisements }: { advertisements: any[] }) => {
   const { activeTab, setActiveTab, blocks, setBlocks, user } = useAdminUI();
@@ -33,7 +34,8 @@ const AdminPanel = ({ advertisements }: { advertisements: any[] }) => {
     ),
     "manage-blogs": <ManageBlogs />,
     "advertisement": <Advertisement  />,
-    "manage-ads": <ManageAds advertisements={advertisements} />
+    "manage-ads": <ManageAds advertisements={advertisements} />,
+    "subscribers": <Subscriber />
   };
 
   return (

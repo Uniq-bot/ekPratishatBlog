@@ -1,6 +1,4 @@
 import { prisma } from "@/libs/prisma";
-export const cache = new Map<string, any>();
-const TTL = 5 * 60 * 1000; // 5 minutes
 export const getBlogs = async ({
   page = 1,
   limit = 10,

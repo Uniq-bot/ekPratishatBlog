@@ -97,7 +97,9 @@ export default async function BlogPage({ searchParams }: PageProps) {
         }
        <div className="w-full  flex flex-col lg:flex-row gap-5 min-[768px]:gap-10">
          <div className="lg:w-[70%] w-full mb-30  flex flex-col gap-5">
-          <SearchFilter category={category} tag={tag} search={search} />
+         <div className="px-10 md:px-0">
+           <SearchFilter category={category} tag={tag} search={search} />
+         </div>
           <CategoryNav categories={categories} />
           <BlogList
             blogs={blogs.posts}

@@ -1,41 +1,19 @@
 "use client";
+import { useTrackBlogView } from "@/hooks/useTrackViews";
 import { BlogItem } from "@/types/blog";
 import { ArrowRight, ArrowRightIcon } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
 const CuratedBlog = ({ curatedBlog }: { curatedBlog: BlogItem | any }) => {
-  const router = useRouter();
 
   if (!curatedBlog) return null;
-
+  const trackView = useTrackBlogView();
+  
   const handleClick = async (e: React.MouseEvent) => {
     e.preventDefault();
 
-const sessionId =
-  localStorage.getItem("sessionId") ||
-  `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-    localStorage.setItem("sessionId", sessionId);
-
-    const key = `viewed-${curatedBlog.id}`;
-
-    if (!sessionStorage.getItem(key)) {
-      sessionStorage.setItem(key, "true");
-
-      fetch("/api/blogs/views", {
-        method: "POST",
-        keepalive: true,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          blogId: curatedBlog.id,
-          sessionId,
-        }),
-      }).catch(() => {});
-    }
-
-    router.push(`/blog/${curatedBlog.slug}`);
+    trackView(curatedBlog);
   };
 
   return (

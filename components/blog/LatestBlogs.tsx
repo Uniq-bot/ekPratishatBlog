@@ -5,32 +5,17 @@ import Link from "next/link";
 import type { BlogItem } from "@/types/blog";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useTrackBlogView } from "@/hooks/useTrackViews";
 
 const LatestBlogs = ({ latestBlogs = [] }: { latestBlogs?: BlogItem[] }) => {
-  const router = useRouter();
+  const trackView = useTrackBlogView();
+
   const handleClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
     blog: BlogItem,
   ) => {
     e.preventDefault();
-
-const sessionId =
-  localStorage.getItem("sessionId") ||
-  `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-      localStorage.setItem("sessionId", sessionId);
-
-    const key = `viewed-${blog.id}`;
-    if (!sessionStorage.getItem(key)) {
-      sessionStorage.setItem(key, "true");
-      fetch("/api/blogs/views", {
-        method: "POST",
-        keepalive: true,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ blogId: blog.id, sessionId }),
-      }).catch(() => {});
-    }
-
-    router.push(`/blog/${blog.slug}`);
+    trackView(blog);
   };
   return (
     <>
