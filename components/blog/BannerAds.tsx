@@ -11,7 +11,7 @@ const BannerAd = ({ BannerAds }:{BannerAds:any}) => {
             alt="Ad"
             width={1000}
             height={1000}
-            className=" w-full h-full object-fill rounded-2xl"
+            className=" w-full h-full object-cover "
           />
        
         </Link>

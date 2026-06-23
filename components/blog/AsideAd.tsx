@@ -2,32 +2,63 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
-import { motion } from "framer-motion";
-import { MoveRight, X } from "lucide-react";
+import { X } from "lucide-react";
+
 const AsideAd = ({ AsideAds }: { AsideAds: any }) => {
   const [hide, setHide] = useState(false);
 
-  const handleHideAd = () => {
-    setHide(true);
-  };
-  return (
-  <div className={hide ? "hidden" : `min-[768px]:w-[35%] max-[700px]:absolute right-0 max-[700px]:z-100 min-[768px]:block max-[700px]:h-60  h-full relative overflow-hidden rounded-lg bg-white `}>
-      <span onClick={handleHideAd} className="absolute min-[700px]:hidden z-101 bg-black text-white left-2 top-2 p-2 text-xs font-bold rounded-full">
-              <X />
-            </span>
-      <div className="absolute bg-black px-5 text-white  top-4 right-0 z-10 cursor-pointer" >
-        <p>
-          AD
-        </p>
-      </div>
-       <Link href={AsideAds?.AdLink || "#"} target="_blank" className="w-full h-full flex flex-col gap-2">
-        <Image src={AsideAds?.AdPoster || "/Ad1.png"} unoptimized alt="Ad" width={1000} height={1000} className="w-full h-2/3 " />
-        <div className=" px-2 min-[1200px]:p-5">
-          <h1 className="text-black text-sm md:text-md min-[1200px]:text-2xl font-bold ">{AsideAds?.AdTitle}</h1>
-          <p className="text-gray-700 text-xs min-[1200px]:text-xl ">{AsideAds?.AdDescription.substring(0, 30)}...</p>
+  if (hide) return null;
 
+  return (
+    <div
+      className="
+         overflow-hidden bg-white
+        absolute top-3 right-3 w-28 h-40 rounded-md shadow-md
+        sm:w-36 sm:h-48
+        md:static md:top-auto md:right-auto md:w-[40%] md:h-full md:rounded-none md:shadow-none
+        z-30
+      "
+    >
+      <button
+        onClick={() => setHide(true)}
+        aria-label="Close ad"
+        className="absolute md:hidden z-50 bg-black text-white left-1 top-1 p-1.5 text-xs font-bold rounded-full leading-none"
+      >
+        <X size={12} />
+      </button>
+
+      <div className="absolute bg-black px-2 py-0.5 text-white text-[10px] md:px-5 md:py-1 md:text-sm top-1 md:top-4 right-0 z-20 cursor-pointer">
+        <p>AD</p>
+      </div>
+
+      <Link
+        href={AsideAds?.AdLink || "#"}
+        target="_blank"
+        className="w-full h-full flex flex-col gap-1 md:gap-2"
+      >
+        {/* Fixed-ratio image box using `fill` instead of forcing w-full on a
+            box whose width was undefined — this was the source of the blowup */}
+        <div className="relative w-full h-2/3">
+          <Image
+            src={AsideAds?.AdPoster || "/Ad1.png"}
+            unoptimized
+            alt="Ad"
+            fill
+            className="object-cover"
+          />
         </div>
-       </Link>
+
+        <div className="px-2 min-[1200px]:px-5">
+          <h1 className="text-black text-[11px] sm:text-sm md:text-2xl font-bold ">
+            {AsideAds?.AdTitle}
+          </h1>
+          <p className="text-gray-700 text-[10px] sm:text-md min-[1200px]:text-xl">
+            {AsideAds?.AdDescription
+              ? `${AsideAds.AdDescription.substring(0, 30)}...`
+              : ""}
+          </p>
+        </div>
+      </Link>
     </div>
   );
 };
