@@ -33,7 +33,7 @@ const handleClick = async () => {
 };
   return (
     <div
-      className="w-full h-fit text-black    md:flex flex-col items-start  border-l-5 border-[#EBC044]  gap-5 p-5 "
+      className="w-full h-fit text-black  mt-4 lg:mt-0   md:flex flex-col items-start  border-l-5 border-[#EBC044]  gap-5 p-5 "
     >
       <h2 className="text-xl font-bold">
         Stay Updated with Real Estate Trends

@@ -90,13 +90,13 @@ export default async function BlogPage({ searchParams }: PageProps) {
       <div className=" md:px-20 lg:px-30 bg-[#F4F1EC] relative  pb-10 pt-10 border-t border-t-[#b1782e]/40  w-full m-auto flex flex-col">
         {
           BannerAds && (
-            <div className="w-full  h-40 mb-10">
+            <div className="w-full h-20  md:h-40 mb-10">
               <BannerAd BannerAds={BannerAds} />
             </div>
           )
         }
        <div className="w-full  flex flex-col lg:flex-row gap-5 min-[768px]:gap-10">
-         <div className="lg:w-[70%] w-full mb-30  flex flex-col gap-5">
+         <div className="lg:w-[60%] w-full mb-10  flex flex-col gap-5">
          <div className="px-10 md:px-0">
            <SearchFilter category={category} tag={tag} search={search} />
          </div>
@@ -113,7 +113,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
           />
         </div>
 
-        <div className="w-1/3 hidden sticky top-18.75  h-fit lg:flex flex-col gap-8  p-5">
+        <div className="lg:w-[40%] w-full   md:sticky md:top-18.75  h-fit lg:flex flex-col gap-8  p-5">
           <PopularBlogs popularBlogs={popularBlogs?.posts ?? []} />
           <NewsLetter />
         </div>
