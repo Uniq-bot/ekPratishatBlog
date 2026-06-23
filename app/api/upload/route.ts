@@ -1,7 +1,6 @@
-import {NextResponse} from "next/server";
+import { NextResponse } from "next/server";
 import { writeFile, mkdir } from "fs/promises";
 import { join } from "path";
-
 
 export async function POST(req: Request) {
   try {
@@ -11,7 +10,7 @@ export async function POST(req: Request) {
     if (!imageFile || imageFile.size === 0) {
       return NextResponse.json(
         { message: "No image file provided" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -20,11 +19,16 @@ export async function POST(req: Request) {
 
     const bytes = await imageFile.arrayBuffer();
     const buffer = Buffer.from(bytes);
+    const allowedTypes = ["jpg", "jpeg", "png", "webp", "gif"];
 
-    const ext = imageFile.name.split(".").pop();
-    const filename = `image-${Date.now()}.${ext}`;
+    const ext = imageFile.name.split(".").pop()?.toLowerCase();
+
+    if (!ext || !allowedTypes.includes(ext)) {
+      throw new Error("Invalid file type. Only images are allowed.");
+    }
+
+    const filename = `ad-${Date.now()}.${ext}`;
     const filepath = join(uploadDir, filename);
-
     await writeFile(filepath, buffer);
     const imagePath = `/uploads/${filename}`;
 
@@ -33,7 +37,7 @@ export async function POST(req: Request) {
     console.error("Image Upload Error:", error);
     return NextResponse.json(
       { message: "Failed to upload image" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -18,7 +18,6 @@ export async function proxy(request: NextRequest) {
       pathname === "/api/blogs/latest" ||
       pathname === "/api/categories" ||
       pathname === "/api/tags");
-
   if (isPublicReadEndpoint) {
     return NextResponse.next();
   }
@@ -28,7 +27,7 @@ export async function proxy(request: NextRequest) {
     if (!token) {
       return NextResponse.json(
         { message: "Unauthorized: No token provided" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -37,7 +36,7 @@ export async function proxy(request: NextRequest) {
       if (!secret) {
         return NextResponse.json(
           { message: "Unauthorized: JWT secret not configured" },
-          { status: 401 }
+          { status: 401 },
         );
       }
 
@@ -46,7 +45,7 @@ export async function proxy(request: NextRequest) {
       if (!userId) {
         return NextResponse.json(
           { message: "Unauthorized: Invalid or expired token" },
-          { status: 401 }
+          { status: 401 },
         );
       }
 
@@ -63,7 +62,7 @@ export async function proxy(request: NextRequest) {
       console.error("Token verification failed:", error);
       return NextResponse.json(
         { message: "Unauthorized: Token verification failed" },
-        { status: 401 }
+        { status: 401 },
       );
     }
   }

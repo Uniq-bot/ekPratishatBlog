@@ -42,10 +42,16 @@ export async function POST(req: Request) {
       const bytes = await imageFile.arrayBuffer();
       const buffer = Buffer.from(bytes);
 
-      const ext = imageFile.name.split(".").pop();
-      const filename = `cover-${Date.now()}.${ext}`;
-      const filepath = join(uploadDir, filename);
+      const allowedTypes = ["jpg", "jpeg", "png", "webp", "gif"];
 
+      const ext = imageFile.name.split(".").pop()?.toLowerCase();
+
+      if (!ext || !allowedTypes.includes(ext)) {
+        throw new Error("Invalid file type. Only images are allowed.");
+      }
+
+      const filename = `ad-${Date.now()}.${ext}`;
+      const filepath = join(uploadDir, filename);
       await writeFile(filepath, buffer);
       coverImagePath = `/uploads/${filename}`;
     }
