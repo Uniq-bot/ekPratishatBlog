@@ -92,15 +92,15 @@ export const BlogPostScalarFieldEnum = {
   id: 'id',
   title: 'title',
   slug: 'slug',
-  description: 'description',
-  content: 'content',
-  coverImage: 'coverImage',
-  status: 'status',
   authorID: 'authorID',
   categoryID: 'categoryID',
-  viewCount: 'viewCount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  coverImage: 'coverImage',
+  status: 'status',
+  viewCount: 'viewCount',
+  content: 'content',
+  description: 'description',
   isToggled: 'isToggled'
 } as const
 
@@ -121,8 +121,8 @@ export const CategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
   slug: 'slug',
-  description: 'description',
   createdAt: 'createdAt',
+  description: 'description',
   updatedAt: 'updatedAt'
 } as const
 
@@ -147,8 +147,8 @@ export const AdvertisementScalarFieldEnum = {
   AdPoster: 'AdPoster',
   AdLink: 'AdLink',
   AdSponsorName: 'AdSponsorName',
-  isAdRunning: 'isAdRunning',
   AdType: 'AdType',
+  isAdRunning: 'isAdRunning',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

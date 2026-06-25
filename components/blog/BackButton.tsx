@@ -39,7 +39,7 @@ export default function BackButton({ slug }: { slug: string }) {
         >
           <path d="m9 18 6-6-6-6" />
         </svg>
-        <p className="truncate text-[#453401]">{slug}</p>
+        <p className="truncate text-[#453401] whitespace-break-spaces">{slug.slice(0, 25)}...</p>
       </div>
     </button>
   );

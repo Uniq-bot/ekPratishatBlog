@@ -13,6 +13,10 @@ const AddBlock = ({
   setContent,
   image,
   setImage,
+  calloutTitle,
+  setCalloutTitle,
+  calloutDescription,
+  setCalloutDescription,
 }: {
   setBlocks: React.Dispatch<React.SetStateAction<any[]>>;
   blockType: string;
@@ -23,6 +27,10 @@ const AddBlock = ({
   setContent: React.Dispatch<React.SetStateAction<string>>;
   image: File | null;
   setImage: React.Dispatch<React.SetStateAction<File | null>>;
+  calloutTitle: string;
+setCalloutTitle: React.Dispatch<React.SetStateAction<string>>;
+calloutDescription: string;
+setCalloutDescription: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   const headingLevels = [1, 2, 3, 4, 5];
 
@@ -30,7 +38,19 @@ const AddBlock = ({
  const handleAddBlock = async (e: React.MouseEvent) => {
   e.preventDefault();
 
-  if (blockType !== "separator" && !content.trim() && !image) return;
+ if (blockType === "callout") {
+  if (!calloutTitle.trim() && !calloutDescription.trim()) {
+    return;
+  }
+} else if (
+  blockType !== "separator" &&
+  blockType !== "image" &&
+  !content.trim()
+) {
+  return;
+} else if (blockType === "image" && !image) {
+  return;
+}
 
   let imagePath = null;
 
@@ -47,23 +67,30 @@ const AddBlock = ({
       level: setLevel,
     }),
 
-    content:
-      blockType === "list"
-        ? content
-            .split("\n")
-            .map((s) => s.trim())
-            .filter(Boolean)
-        : blockType === "image"
-        ? imagePath
-        : blockType === "separator"
-        ? null
-        : content,
+   content:
+  blockType === "list"
+    ? content
+        .split("\n")
+        .map((s) => s.trim())
+        .filter(Boolean)
+    : blockType === "image"
+    ? imagePath
+    : blockType === "separator"
+    ? null
+    : blockType === "callout"
+    ? {
+        title: calloutTitle,
+        description: calloutDescription,
+      }
+    : content,
   };
 
   setBlocks((prev) => [...prev, newBlock]);
-
+  console.log(newBlock)
   setContent("");
   setImage(null);
+  setCalloutTitle("");
+setCalloutDescription("");
 };
 
   return (
@@ -179,14 +206,23 @@ List item 3`}
           />
         )}
 
-        {blockType === "callout" && (
-          <textarea
-            className="w-full h-24 outline-none p-2 border bg-yellow-50 text-xs lg:text-sm resize-y"
-            placeholder="Important note or tip..."
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          />
-        )}
+       {blockType === "callout" && (
+  <div className="flex flex-col gap-3">
+    <input
+      className="w-full h-10 outline-none p-2 border font-semibold text-xs lg:text-sm"
+      placeholder="Bold title..."
+      value={calloutTitle}
+      onChange={(e) => setCalloutTitle(e.target.value)}
+    />
+
+    <textarea
+      className="w-full h-24 outline-none p-2 border bg-yellow-50 text-xs lg:text-sm resize-y"
+      placeholder="Description..."
+      value={calloutDescription}
+      onChange={(e) => setCalloutDescription(e.target.value)}
+    />
+  </div>
+)}
 
         {blockType === "separator" && (
           <div className="border rounded p-4 text-center text-gray-400 text-sm">

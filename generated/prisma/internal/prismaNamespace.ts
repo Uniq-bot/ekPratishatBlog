@@ -983,15 +983,15 @@ export const BlogPostScalarFieldEnum = {
   id: 'id',
   title: 'title',
   slug: 'slug',
-  description: 'description',
-  content: 'content',
-  coverImage: 'coverImage',
-  status: 'status',
   authorID: 'authorID',
   categoryID: 'categoryID',
-  viewCount: 'viewCount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  coverImage: 'coverImage',
+  status: 'status',
+  viewCount: 'viewCount',
+  content: 'content',
+  description: 'description',
   isToggled: 'isToggled'
 } as const
 
@@ -1012,8 +1012,8 @@ export const CategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
   slug: 'slug',
-  description: 'description',
   createdAt: 'createdAt',
+  description: 'description',
   updatedAt: 'updatedAt'
 } as const
 
@@ -1038,8 +1038,8 @@ export const AdvertisementScalarFieldEnum = {
   AdPoster: 'AdPoster',
   AdLink: 'AdLink',
   AdSponsorName: 'AdSponsorName',
-  isAdRunning: 'isAdRunning',
   AdType: 'AdType',
+  isAdRunning: 'isAdRunning',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1131,20 +1131,6 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
- * Reference to a field of type 'Json'
- */
-export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
-    
-
-
-/**
- * Reference to a field of type 'QueryMode'
- */
-export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
-    
-
-
-/**
  * Reference to a field of type 'PostStatus'
  */
 export type EnumPostStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PostStatus'>
@@ -1169,6 +1155,20 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 

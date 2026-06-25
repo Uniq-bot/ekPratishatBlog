@@ -106,28 +106,22 @@ const PreviewBlog = ({ blocks }: { blocks: any[] }) => {
                 </blockquote>
               );
 
-            case "callout":
-              return (
-                <div
-                  key={block.id ?? index}
-                  className="
-                    my-6
-                    border
-                    border-[#FFD07E]
-                    bg-[#FFF9E8]
-                    p-5
-                  "
-                >
-                  <p className="font-semibold flex mb-2">
-                    <Lightbulb /> Important
-                  </p>
+    case "callout":
+  return (
+    <div
+      key={block.id ?? index}
+      className="my-8 border border-[#D6B06B] bg-[#FFF4DD] p-5 shadow-sm"
+    >
+      <p className="mb-2 flex items-center gap-2 font-bold text-[#79570E]">
+        <Lightbulb />
+        {block.content?.title || "Important"}
+      </p>
 
-                  <p className="text-gray-700">
-                    {block.content}
-                  </p>
-                </div>
-              );
-
+      <p className="leading-7 text-[#4A3A1A]">
+        {block.content?.description}
+      </p>
+    </div>
+  );
             case "separator":
               return (
                 <div

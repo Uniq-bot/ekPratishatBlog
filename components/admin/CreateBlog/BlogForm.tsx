@@ -11,7 +11,8 @@ import {
   Minus,
   Info,
 } from "lucide-react";
-import { useDeleteImage } from "@/hooks/useAdminBlogs";
+import { useImageUpload } from "@/hooks/useAdminBlogs";
+
 interface Block {
   id: string | number;
   type:
@@ -57,6 +58,11 @@ const BlogForm = ({
 }) => {
   const dragIndex = useRef<number | null>(null);
   const dragOverIndex = useRef<number | null>(null);
+  const fileInputRefs = useRef<Record<string | number, HTMLInputElement | null>>(
+    {},
+  );
+const [imageUrl, setImageUrl] = React.useState<string | null>(null);
+  const {mutateAsync:uploadImageMutate}= useImageUpload();
 
   // ── Drag handlers ────────────────────────────────────────────────
   const handleDragStart = (e: React.DragEvent, index: number) => {
@@ -89,20 +95,28 @@ const BlogForm = ({
       prev.map((b) => (b.id === id ? { ...b, ...patch } : b)),
     );
   };
-  const deleteImage = useDeleteImage();
 
-  const removeBlock = async (block: Block) => {
-    if (
-      block.type === "image" &&
-      typeof block.content === "string" &&
-      block.content.startsWith("/uploads/")
-    ) {
-      await deleteImage.mutateAsync(block.content);
-    }
-
+  const removeBlock = (block: Block) => {
     setBlocks((prev) => prev.filter((b) => b.id !== block.id));
   };
 
+const handleImageReplace = async (
+  block: Block,
+  file: File,
+) => {
+  try {
+    const image = await uploadImageMutate(file);
+console.log("Uploaded image:", image);
+    updateBlock(block.id, {
+      content: image.imagePath,
+    });
+  } catch (err) {
+    console.error(
+      "Failed to replace image:",
+      err,
+    );
+  }
+};
   const updateListItem = (
     blockId: string | number,
     itemIndex: number,
@@ -225,20 +239,81 @@ const BlogForm = ({
                 />
               )}
               {block.type === "callout" && (
-                <textarea
-                  className="w-full min-h-[80px] outline-none p-2 border bg-yellow-50 text-xs lg:text-sm"
-                  placeholder="Important tip..."
-                  value={block.content ?? ""}
-                  onChange={(e) =>
-                    updateBlock(block.id, {
-                      content: e.target.value,
-                    })
-                  }
-                />
+                <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4">
+                  <input
+                    className="w-full font-bold outline-none bg-transparent mb-2"
+                    value={block.content?.title ?? ""}
+                    placeholder="Callout title"
+                    onChange={(e) =>
+                      updateBlock(block.id, {
+                        content: {
+                          ...block.content,
+                          title: e.target.value,
+                        },
+                      })
+                    }
+                  />
+
+                  <textarea
+                    className="w-full outline-none bg-transparent resize-none"
+                    value={block.content?.description ?? ""}
+                    placeholder="Callout description"
+                    onChange={(e) =>
+                      updateBlock(block.id, {
+                        content: {
+                          ...block.content,
+                          description: e.target.value,
+                        },
+                      })
+                    }
+                  />
+                </div>
               )}
               {block.type === "separator" && (
                 <div className="py-3">
                   <hr />
+                </div>
+              )}
+
+              {block.type === "image" && (
+                <div className="flex items-start gap-3">
+                  <div
+                    onClick={() => fileInputRefs.current[block.id]?.click()}
+                    className="relative group w-24 h-24 sm:w-28 sm:h-28 shrink-0 border border-gray-200 overflow-hidden cursor-pointer bg-gray-50"
+                    title="Click to replace image"
+                  >
+                    {block.content ? (
+                      <img
+                        src={block.content}
+                        alt="Block preview"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-300">
+                        <ImageIcon size={20} />
+                      </div>
+                    )}
+
+                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <span className="text-white text-[10px] font-medium px-1">
+                        Click to replace
+                      </span>
+                    </div>
+
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      ref={(el) => {
+                        fileInputRefs.current[block.id] = el;
+                      }}
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) handleImageReplace(block, file);
+                        e.target.value = "";
+                      }}
+                    />
+                  </div>
                 </div>
               )}
 

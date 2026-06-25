@@ -6,11 +6,86 @@ import { useRouter } from "next/navigation";
 import { useTrackBlogView } from "@/hooks/useTrackViews";
 
 const BlogCard = ({ blog }: { blog: any }) => {
-const trackView = useTrackBlogView();
+  const trackView = useTrackBlogView();
+  const parseBlocks = (raw: any): any[] => {
+    if (!raw) return [];
 
+    if (Array.isArray(raw)) return raw;
+
+    if (raw?.blocks) return raw.blocks;
+
+    if (typeof raw === "string") {
+      try {
+        const parsed = JSON.parse(raw);
+
+        if (Array.isArray(parsed)) return parsed;
+        if (parsed?.blocks) return parsed.blocks;
+
+        return [];
+      } catch {
+        return [];
+      }
+    }
+
+    return [];
+  };
+  const blocks = parseBlocks(blog?.content);
+
+  const { readTime } = calculateReadTime(blocks);
+  function calculateReadTime(blocks: any[] = []) {
+    if (!Array.isArray(blocks)) {
+      return {
+        words: 0,
+        readTime: "1 min read",
+      };
+    }
+
+    let words = 0;
+    let images = 0;
+
+    blocks.forEach((block) => {
+      switch (block.type) {
+        case "paragraph":
+        case "heading":
+        case "quote":
+       case "callout": {
+  const text =
+    typeof block.content === "string"
+      ? block.content
+      : `${block.content?.title ?? ""} ${block.content?.description ?? ""}`;
+
+  words += text
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean).length;
+
+  break;
+}
+        case "list":
+          if (Array.isArray(block.content)) {
+            words += block.content
+              .join(" ")
+              .split(/\s+/)
+              .filter(Boolean).length;
+          }
+          break;
+
+        case "image":
+          images++;
+          break;
+      }
+    });
+
+    const totalMinutes = Math.max(1, Math.ceil(words / 200 + images * 0.2));
+
+    return {
+      words,
+      readTime: `${totalMinutes} min read`,
+    };
+  }
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-   trackView(blog);
+    trackView(blog);
   };
 
   return (
@@ -18,7 +93,7 @@ const trackView = useTrackBlogView();
       href={`/blog/${blog.slug}`}
       onClick={handleClick}
       title={blog.title}
-      className="w-full min-h-48 bg-[#FFFFFF] overflow-hidden hover:bg-[#f0f0f0] transition-all group"
+      className="w-full min-h-48  overflow-hidden hover:bg-[#f0f0f0] transition-all group"
     >
       <div className="w-full border-b-2 pb-5 text-black cursor-pointer group flex flex-col p-5 md:flex-row border-[#EBC044]  gap-5 overflow-hidden">
         <div className="w-full md:w-60 relative h-48 md:h-50 overflow-hidden shrink-0">
@@ -29,17 +104,21 @@ const trackView = useTrackBlogView();
             height={320}
             className="w-full h-full object-cover"
           />
-          <span className="absolute top-4 left-0 bg-black font-semibold text-white px-3 py-2 text-md">
+          {/* <span className="absolute top-4 left-0 bg-black font-semibold text-white px-3 py-2 text-md">
             {blog?.category?.name}
-          </span>
+          </span> */}
         </div>
 
         <div className="py-1 flex flex-col items-start flex-1 gap-2">
-          <span className="text-[12px] font-semibold bg-[rgba(154,106,0,0.07)] p-1 px-3 rounded-2xl text-[#977305]">
-            {new Date(blog?.createdAt).toLocaleDateString()}
-          </span>
+          <div>
+            <span className="text-[15px] font-semibold bg-[rgba(154,106,0,0.07)] p-1 px-3  text-[#080807]">
+              {/* {new Date(blog?.createdAt).toLocaleDateString()} */}
+              {blog?.category?.name}
+            </span>
+            <span>{` • ${readTime}`}</span>
+          </div>
 
-          <h2 className="text-2xl group-hover:text-[#ad8408] font-bold transition-all leading-tight">
+          <h2 className="text-2xl group-hover:text-[#B8914A] font-bold transition-all leading-tight">
             {blog?.title}
           </h2>
 
@@ -62,9 +141,15 @@ const trackView = useTrackBlogView();
             </div>
           )}
 
-          <motion.p whileHover={{ x: 5 }} transition={{ duration: 0.3 }}>
-            Read more <span>→</span>
-          </motion.p>
+          <div className="flex items-center justify-between w-full mt-3">
+            <span className="text-[15px] font-semibold bg-[rgba(154,106,0,0.07)] p-1 px-3  text-[#080807]">
+              {new Date(blog?.createdAt).toLocaleDateString()}
+              {/* {blog?.category?.name} */}
+            </span>
+            <motion.p whileHover={{ x: 5 }} transition={{ duration: 0.3 }}>
+              Read more <span>→</span>
+            </motion.p>
+          </div>
         </div>
       </div>
     </Link>

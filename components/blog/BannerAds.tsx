@@ -4,7 +4,7 @@ import React from 'react'
 
 const BannerAd = ({ BannerAds }:{BannerAds:any}) => {
   return (
-     <Link href={BannerAds.AdLink} target="_blank" className="">
+     <Link title={BannerAds.AdDescription} href={BannerAds.AdLink} target="_blank" className="">
        
              <Image
             src={BannerAds.AdPoster}

@@ -46,6 +46,8 @@ const BlogEditor = ({
   const [blockType, setBlockType] = useState("heading");
   const [setLevel, setSetLevel] = useState(1);
   const [content, setContent] = useState("");
+  const [calloutTitle, setCalloutTitle] = useState("");
+const [calloutDescription, setCalloutDescription] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [showModel, setShowModal] = useState(false);
 
@@ -348,6 +350,10 @@ const BlogEditor = ({
           setContent={setContent}
           image={image}
           setImage={setImage}
+           calloutTitle={calloutTitle}
+  setCalloutTitle={setCalloutTitle}
+  calloutDescription={calloutDescription}
+  setCalloutDescription={setCalloutDescription}
         />
         <PreviewBlog blocks={blocks} />
       </div>

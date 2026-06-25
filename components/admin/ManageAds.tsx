@@ -12,14 +12,12 @@ function ManageAds({ advertisements }: { advertisements: any[] }) {
   
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
-  // console.log(advertisements);
   const updateStatusMutation = useUpdateAdStatus();
   const deleteAdMutation = useDeleteAd();
   const handleAdStatusChange = async (adId: string, status: boolean) => {
     if(!confirm("Are you sure you want to change the status of this ad?")) return;
     try {
       const res = await updateStatusMutation.mutateAsync({ adId, status });
-      console.log("Ad status updated successfully", res);
       setSuccess("Ad status updated successfully");
     } catch (error) {
       console.error("Error updating ad status:", error);
@@ -35,7 +33,6 @@ function ManageAds({ advertisements }: { advertisements: any[] }) {
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this ad?")) return;
 
-    console.log("deleted success", id);
     try {
       await deleteAdMutation.mutateAsync(id);
       setSuccess("Ad deleted successfully");
@@ -71,7 +68,7 @@ function ManageAds({ advertisements }: { advertisements: any[] }) {
         </motion.div>
       )}
       <div className="overflow-x-auto w-full">
-        <table className="w-full min-w-[640px]">
+        <table className="w-full min-w-160">
           <thead className="bg-[#DBDBB8]">
             <tr>
               <th className="px-4 py-3 text-left">#</th>

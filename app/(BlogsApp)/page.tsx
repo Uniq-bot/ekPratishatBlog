@@ -66,7 +66,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
           </span>
         </div>
 
-        <div className="relative  w-full h-60  md:h-100 items-center justify-center flex flex-col md:flex-row  md:gap-10">
+        <div className="relative  w-full h-60 md:h-100  lg:h-150 items-center justify-center flex flex-col md:flex-row  md:gap-10">
           <div className="w-full h-full  overflow-hidden md:w-[60%] ">
             <CuratedBlog curatedBlog={curatedBlog} />
           </div>
