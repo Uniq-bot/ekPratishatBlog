@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import { mkdir, writeFile } from "fs/promises";
-import { join } from "path";
+// import { mkdir, writeFile } from "fs/promises";
+// import { join } from "path";
+import { uploadImage } from "@/hooks/useCloudinary";
 import { prisma } from "@/libs/prisma";
 import { revalidatePath } from "next/cache";
 import { getBlogByFilters } from "@/services/blogs.services";
@@ -36,24 +37,38 @@ export async function POST(req: Request) {
     let coverImagePath: string | null = null;
 
     if (imageFile && imageFile.size > 0) {
-      const uploadDir = join(process.cwd(), "public", "uploads");
-      await mkdir(uploadDir, { recursive: true });
+      // const uploadDir = join(process.cwd(), "public", "uploads");
+      // await mkdir(uploadDir, { recursive: true });
 
-      const bytes = await imageFile.arrayBuffer();
-      const buffer = Buffer.from(bytes);
+      // const bytes = await imageFile.arrayBuffer();
+      // const buffer = Buffer.from(bytes);
 
-      const allowedTypes = ["jpg", "jpeg", "png", "webp", "gif"];
+      // const allowedTypes = ["jpg", "jpeg", "png", "webp", "gif"];
 
-      const ext = imageFile.name.split(".").pop()?.toLowerCase();
+      // const ext = imageFile.name.split(".").pop()?.toLowerCase();
 
-      if (!ext || !allowedTypes.includes(ext)) {
-        throw new Error("Invalid file type. Only images are allowed.");
-      }
+      // if (!ext || !allowedTypes.includes(ext)) {
+      //   throw new Error("Invalid file type. Only images are allowed.");
+      // }
 
-      const filename = `ad-${Date.now()}.${ext}`;
-      const filepath = join(uploadDir, filename);
-      await writeFile(filepath, buffer);
-      coverImagePath = `/uploads/${filename}`;
+      // const filename = `ad-${Date.now()}.${ext}`;
+      // const filepath = join(uploadDir, filename);
+      // await writeFile(filepath, buffer);
+      // coverImagePath = `/uploads/${filename}`;
+        const bytes = await imageFile.arrayBuffer();
+  const buffer = Buffer.from(bytes);
+
+  const allowedTypes = ["jpg", "jpeg", "png", "webp", "gif"];
+
+  const ext = imageFile.name.split(".").pop()?.toLowerCase();
+
+  if (!ext || !allowedTypes.includes(ext)) {
+    throw new Error("Invalid file type. Only images are allowed.");
+  }
+
+  const uploadedImage = await uploadImage(buffer);
+
+  coverImagePath = uploadedImage.secure_url;
     }
 
     const generatedSlug = `${title
@@ -61,30 +76,32 @@ export async function POST(req: Request) {
       .replace(/\s+/g, "-")
       .replace(/[^\w-]+/g, "")}-${Date.now()}`;
 
-    const post = await prisma.$transaction(async (tx) => {
-      const existingCurated = await tx.blogPost.findFirst({
-        where: { isToggled: true },
-      });
-      return tx.blogPost.create({
-        data: {
-          title,
-          content,
-          coverImage: coverImagePath,
-          description,
-          status: "PUBLISHED",
-          authorID,
-          categoryID: categoryId,
-          tags: {
-            connect: tags.map((tag: any) => ({
-              id: tag.id,
-            })),
-          },
-          slug: generatedSlug,
+  const existingCurated = await prisma.blogPost.findFirst({
+  where: {
+    isToggled: true,
+  },
+});
 
-          isToggled: !existingCurated,
-        },
-      });
-    });
+const post = await prisma.blogPost.create({
+  data: {
+    title,
+    content,
+    coverImage: coverImagePath,
+    description,
+    status: "PUBLISHED",
+    authorID,
+    categoryID: categoryId,
+    slug: generatedSlug,
+
+    tags: {
+      connect: tags.map((tag: any) => ({
+        id: tag.id,
+      })),
+    },
+
+    isToggled: !existingCurated,
+  },
+});
 
     revalidatePath("/");
     revalidatePath(`/blog/${generatedSlug}`);

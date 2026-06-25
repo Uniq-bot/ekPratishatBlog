@@ -18,37 +18,31 @@ model User {
 }
 
 model BlogPost {
-  id          String     @id @default(cuid())
+  id          String      @id @default(cuid())
   title       String
-  slug        String     @unique
-  description String?
-  content     Json
-  coverImage  String?
-  status      PostStatus @default(DRAFT)
+  slug        String      @unique
   authorID    String
-  author      User       @relation(fields: [authorID], references: [id])
   categoryID  String
-  category    Category   @relation(fields: [categoryID], references: [id])
-  tags        Tag[]      @relation("PostTags")
-  viewCount   Int        @default(0)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  coverImage  String?
+  status      PostStatus  @default(DRAFT)
+  viewCount   Int         @default(0)
+  content     Json
+  description String?
+  isToggled   Boolean     @default(false)
+  author      User        @relation(fields: [authorID], references: [id])
+  category    Category    @relation(fields: [categoryID], references: [id])
   blogViews   BlogViews[]
-  isToggled  Boolean    @default(false)
-}
-
-enum PostStatus {
-  DRAFT
-  PUBLISHED
-  ARCHIVED
+  tags        Tag[]       @relation("PostTags")
 }
 
 model BlogViews {
   id         String   @id @default(cuid())
   blogPostId String
-  blogPost   BlogPost @relation(fields: [blogPostId], references: [id])
   sessionId  String
   createdAt  DateTime @default(now())
+  blogPost   BlogPost @relation(fields: [blogPostId], references: [id])
 
   @@unique([blogPostId, sessionId])
   @@index([blogPostId])
@@ -58,8 +52,8 @@ model Category {
   id          String     @id @default(cuid())
   name        String     @unique
   slug        String     @unique
-  description String?
   createdAt   DateTime   @default(now())
+  description String?
   updatedAt   DateTime   @updatedAt
   posts       BlogPost[]
 }
@@ -69,32 +63,37 @@ model Tag {
   name      String     @unique
   slug      String     @unique
   createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt @default(now())
+  updatedAt DateTime   @default(now()) @updatedAt
   blogPosts BlogPost[] @relation("PostTags")
 }
 
-model Advertisement{
-  id String @id @default(cuid())
-  AdTitle String
+model Advertisement {
+  id            String   @id @default(cuid())
+  AdTitle       String
   AdDescription String
-  AdPoster String
-  AdLink String
+  AdPoster      String
+  AdLink        String
   AdSponsorName String
-  isAdRunning Boolean @default(false)
-  AdType AdType @default(BANNER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  AdType        AdType   @default(BANNER)
+  isAdRunning   Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
-enum AdType{
+model NewsletterSubscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum AdType {
   BANNER
   ASIDE
   POPUP
-}
-
-
-model NewsletterSubscriber {
-  id String @id @default(cuid())
-  email String @unique
-  createdAt DateTime @default(now())
 }

@@ -11,6 +11,7 @@ const AsideAd = ({ AsideAds }: { AsideAds: any }) => {
 
   return (
     <div
+    title={AsideAds?.AdDescription}
       className="
          overflow-hidden bg-white
         absolute top-3 right-3 w-28 h-40 rounded-md shadow-md
@@ -49,7 +50,7 @@ const AsideAd = ({ AsideAds }: { AsideAds: any }) => {
         </div>
 
         <div className="px-2 min-[1200px]:px-5">
-          <h1 className="text-black text-[11px] sm:text-sm md:text-2xl font-bold ">
+          <h1 className="text-black text-[11px] sm:text-sm md:text-xl lg:text-2xl font-bold ">
             {AsideAds?.AdTitle}
           </h1>
           <p className="text-gray-700 text-[10px] sm:text-md min-[1200px]:text-xl">

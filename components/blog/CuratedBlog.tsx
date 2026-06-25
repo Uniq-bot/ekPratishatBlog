@@ -18,7 +18,7 @@
     return (
       <div
         onClick={handleClick}
-        className="w-full hover:opacity-80 transition-all cursor-pointer h-full bg-green-200 relative  overflow-hidden"
+        className="w-full hover:opacity-80 transition-all cursor-pointer h-full  relative  overflow-hidden"
       >
         <Image
           src={curatedBlog?.coverImage || "/Ad1.png"}

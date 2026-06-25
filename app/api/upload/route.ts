@@ -1,6 +1,7 @@
+import { uploadImage } from "@/hooks/useCloudinary";
 import { NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import { join } from "path";
+// import { writeFile, mkdir } from "fs/promises";
+// import { join } from "path";
 
 export async function POST(req: Request) {
   try {
@@ -14,8 +15,8 @@ export async function POST(req: Request) {
       );
     }
 
-    const uploadDir = join(process.cwd(), "public", "uploads");
-    await mkdir(uploadDir, { recursive: true });
+    // const uploadDir = join(process.cwd(), "public", "uploads");
+    // await mkdir(uploadDir, { recursive: true });
 
     const bytes = await imageFile.arrayBuffer();
     const buffer = Buffer.from(bytes);
@@ -27,10 +28,14 @@ export async function POST(req: Request) {
       throw new Error("Invalid file type. Only images are allowed.");
     }
 
-    const filename = `ad-${Date.now()}.${ext}`;
-    const filepath = join(uploadDir, filename);
-    await writeFile(filepath, buffer);
-    const imagePath = `/uploads/${filename}`;
+    // const filename = `ad-${Date.now()}.${ext}`;
+    // const filepath = join(uploadDir, filename);
+    // await writeFile(filepath, buffer);
+    // const imagePath = `/uploads/${filename}`;
+  
+  const uploadedImage = await uploadImage(buffer);
+
+  const imagePath = uploadedImage.secure_url;
 
     return NextResponse.json({ imagePath }, { status: 200 });
   } catch (error) {

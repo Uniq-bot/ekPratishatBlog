@@ -138,6 +138,7 @@ export const deleteAd = async (adId: string) => {
     revalidatePath("/");
   } catch (error) {
     console.log("Error deleting the ad", error);
+    throw error;
   }
 };
 
@@ -176,7 +177,6 @@ export const setAdStatus = async ({
           isAdRunning: status,
         },
       });
-      console.log("succeed");
     });
 
     revalidatePath("/admin");
