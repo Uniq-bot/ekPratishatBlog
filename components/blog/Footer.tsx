@@ -1,7 +1,7 @@
 import { Mail, PhoneCall, Verified } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { Suspense } from "react";
 
 const Footer = () => {
   return (
@@ -238,7 +238,9 @@ const Footer = () => {
   Ekpratishat Real-Estate Pvt. Ltd.
 </p>
         <p className="text-center text-[10px] sm:text-base text-gray-400">
-            &copy; {new Date().getFullYear()} 
+           <Suspense>
+             &copy; {new Date().getFullYear()} 
+           </Suspense>
         </p>
       </div>
     </div>
