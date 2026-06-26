@@ -129,6 +129,22 @@ export const uploadImage = async (file: File) => {
 
   return res.json(); // { imagePath }
 };
+
+export const toggleAarchiveBlog = async (id: string) => {
+  const res = await fetch(`${getBaseUrl()}/api/blogs/archive`, {
+    method: "PATCH",
+    body: JSON.stringify({ id }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || "Failed to archive blog");
+  }
+  return res.json();
+};
+
 export const deleteBlog = async (id: string) => {
   const res = await fetch(`${getBaseUrl()}/api/edit/${id}`, {
     method: "DELETE",

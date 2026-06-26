@@ -360,17 +360,10 @@ const [calloutDescription, setCalloutDescription] = useState("");
           <BlogForm blocks={blocks} setBlocks={setBlocks} />
 
          <div className="flex gap-5">
-           <button
-            type="button"
-            onClick={(e) => handleSaveDraft(e)}
-            className="px-4 lg:px-6 py-2 text-xs lg:text-sm bg-green-400 border shadow shadow-black hover:bg-gray-50 disabled:opacity-50 transition-colors w-full sm:w-auto"
-          >
-           Save as Draft
-          </button>
-           <button
+             <button
             type="submit"
             disabled={isBusy}
-            className="px-4 lg:px-6 py-2 text-xs lg:text-sm bg-white border shadow shadow-black hover:bg-gray-50 disabled:opacity-50 transition-colors w-full sm:w-auto"
+            className="px-4 lg:px-6 py-2 text-xs lg:text-sm  bg-green-400 border shadow shadow-black hover:bg-gray-50 disabled:opacity-50 transition-colors w-full sm:w-auto"
           >
             {isBusy
               ? mode === "edit"
@@ -380,6 +373,17 @@ const [calloutDescription, setCalloutDescription] = useState("");
                 ? "Update Blog"
                 : "Post Blog"}
           </button>
+           <button
+            type="button"
+            onClick={(e) => handleSaveDraft(e)}
+            className="px-4 lg:px-6 py-2 text-xs lg:text-sm bg-white  border shadow shadow-black hover:bg-gray-50 disabled:opacity-50 transition-colors w-full sm:w-auto"
+          >
+           {
+isSavingDraft? "Saving Draft...": "Save Draft"
+            }
+          </button>
+         
+        
          </div>
         </form>
       </div>

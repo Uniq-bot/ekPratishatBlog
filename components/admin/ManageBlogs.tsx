@@ -1,20 +1,20 @@
 "use client";
 
-import { useCurateBlog, useDeleteBlog, useGetAdminBlogs } from "@/hooks/useAdminBlogs";
-import { Edit, Trash } from "lucide-react";
+import {  useCurateBlog, useDeleteBlog, useGetAdminBlogs, useToggleArchiveBlog } from "@/hooks/useAdminBlogs";
+import { Archive, ArchiveRestore, Edit } from "lucide-react";
 import Link from "next/link";
 import { TableSkeleton } from "@/components/admin/skeleton/TableSkeleton";
 import { useState } from "react";
 
 const ManageBlogs = () => {
   const { data: blogs, isLoading } = useGetAdminBlogs();
-  const { mutate: deleteBlog, isPending: isDeleting } = useDeleteBlog();
-  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const { mutate: ToggleArchiveBlog, isPending: isArchiving } = useToggleArchiveBlog();
+  const [archivingId, setArchivingid] = useState<string | null>(null);
   const {mutateAsync:curateBlog}=useCurateBlog();
-  const handleDelete = (id: string) => {
-    if (!confirm("Are you sure you want to delete this blog?")) return;
-    setDeletingId(id);
-    deleteBlog(id, { onSettled: () => setDeletingId(null) });
+  const handleArchive = (id: string) => {
+    if (!confirm(`Are you sure you want to ${blogs?.posts.find((b: any) => b.id === id)?.status === "ARCHIVED" ? "restore" : "archive"} this blog?`)) return;
+    setArchivingid(id);
+    ToggleArchiveBlog(id, { onSettled: () => setArchivingid(null) });
   };
   
   const handleCurate = (id: string) => {
@@ -106,14 +106,27 @@ const ManageBlogs = () => {
                       >
                         <Edit size={18} />
                       </Link>
-                      <button
-                        onClick={() => handleDelete(blog.id)}
-                        disabled={deletingId === blog.id || isDeleting}
-                        className="p-2 border bg-white cursor-pointer hover:bg-red-500 hover:text-white disabled:opacity-50 transition-all"
-                        title="Delete"
+                     {
+                      blog.status !== "ARCHIVED" ? (
+                        <button
+                          onClick={() => handleArchive(blog.id)}
+                          className="p-2 bg-white cursor-pointer border hover:bg-gray-100 transition-all"
+                          title="Archive"
+                          disabled={isArchiving && archivingId === blog.id}
+                        >
+                          <Archive size={18} />
+                        </button>
+                      ):(
+                         <button
+                        onClick={() => handleArchive(blog.id)}
+                        disabled={archivingId === blog.id || isArchiving  }
+                        className="p-2 border bg-white cursor-pointer hover:bg-green-500 hover:text-white disabled:opacity-50 transition-all"
+                        title="Restore"
                       >
-                        <Trash size={18} />
+                        <ArchiveRestore size={18} />
                       </button>
+                      )
+                     }
                     </div>
                   </td>
                   <td className="px-4 py-4">

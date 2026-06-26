@@ -8,6 +8,7 @@ import {
   fetchCategory,
   fetchTags,
   saveTodraft,
+  toggleAarchiveBlog,
   updateBlog,
   uploadImage,
 } from "@/libs/fetch";
@@ -75,6 +76,17 @@ export const useDeleteImage=()=>{
         throw new Error(err.message || "Failed to delete image");
       }
       return res.json();
+    }
+  })
+}
+export const useToggleArchiveBlog=()=>{
+  const queryClient=useQueryClient();
+  return useMutation({
+    mutationFn: toggleAarchiveBlog,
+    onSuccess:()=>{
+      queryClient.invalidateQueries({ queryKey: ["blogs"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-blogs"] });
+      queryClient.invalidateQueries({ queryKey: ["latestBlogs"] });
     }
   })
 }
