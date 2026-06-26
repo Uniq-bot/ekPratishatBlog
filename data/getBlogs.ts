@@ -48,7 +48,28 @@ export const getBlogs = async ({
         orderBy,
         skip,
         take: limit,
-        include: { tags: true, category: true },
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          coverImage: true,
+          description: true,
+          createdAt: true,
+
+          category: {
+            select: {
+              name: true,
+              slug: true,
+            },
+          },
+
+          tags: {
+            select: {
+              name: true,
+              slug: true,
+            },
+          },
+        },
       }),
       prisma.blogPost.count({ where }),
     ]);
@@ -62,12 +83,34 @@ export const getBlogs = async ({
 
 export const getLatestBlogs = async () => {
   try {
-    const blogs = await prisma.blogPost.findMany({
-      where: { isToggled: false },
-      orderBy: { createdAt: "desc" },
-      take: 5,
-      include: { tags: true, category: true },
-    });
+      const blogs = await prisma.blogPost.findMany({
+  where:{isToggled:true},
+  orderBy: { createdAt: "desc" },
+ 
+  take: 4,
+  select: {
+    id: true,
+    title: true,
+    slug: true,
+    coverImage: true,
+    description: true,
+    createdAt: true,
+
+    category: {
+      select: {
+        name: true,
+        slug: true,
+      },
+    },
+
+    tags: {
+      select: {
+        name: true,
+        slug: true,
+      },
+    },
+  },
+});
 
     return { posts: blogs };
   } catch (err) {

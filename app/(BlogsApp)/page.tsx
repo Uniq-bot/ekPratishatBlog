@@ -3,7 +3,6 @@ import BlogList from "@/components/blog/BlogList";
 import LatestBlogs from "@/components/blog/LatestBlogs";
 import PopularBlogs from "@/components/blog/PopulatBlogs";
 import NewsLetter from "@/components/blog/NewsLetter";
-import BlogHeroImage from "@/public/BlogHero.png";
 import {
   getAds,
   getBlogs,
@@ -14,9 +13,7 @@ import {
 } from "@/data/getBlogs";
 import CategoryNav from "@/components/blog/CategoryNav";
 import SearchFilter from "@/components/blog/SearchFilter";
-import Image from "next/image";
 import CuratedBlog from "@/components/blog/CuratedBlog";
-import Link from "next/link";
 import AsideAd from "@/components/blog/AsideAd";
 import BannerAd from "@/components/blog/BannerAds";
 import { prisma } from "@/libs/prisma";
