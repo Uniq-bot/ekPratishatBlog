@@ -17,6 +17,7 @@ import CuratedBlog from "@/components/blog/CuratedBlog";
 import AsideAd from "@/components/blog/AsideAd";
 import BannerAd from "@/components/blog/BannerAds";
 import { prisma } from "@/libs/prisma";
+import { unstable_cache } from "next/cache";
 
 interface PageProps {
   searchParams: Promise<{ [key: string]: string | undefined }>;
@@ -42,12 +43,13 @@ export default async function BlogPage({ searchParams }: PageProps) {
     ]);
   const AsideAds = ads.find((ad) => ad.AdType === "ASIDE");
   const BannerAds = ads.find((ad) => ad.AdType === "BANNER");
-  const curatedBlog = await prisma.blogPost.findFirst({
-    where: {
-      isToggled: true,
-    },
-  });
-
+  const curatedBlog = unstable_cache(async () => {
+    return await prisma.blogPost.findFirst({
+      where: {
+        isToggled: true,
+      },
+    });
+  }, ["curated-blog"], { revalidate: 300 });
   return (
     <div className="w-full min-h-screen flex flex-col bg-[#FFFFFF]">
       {/* HERO */}
