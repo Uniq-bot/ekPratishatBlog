@@ -90,6 +90,7 @@ const BlogCard = ({ blog }: { blog: any }) => {
 
   return (
     <Link
+   
       href={`/blog/${blog.slug}`}
       onClick={handleClick}
       title={blog.title}
@@ -130,9 +131,9 @@ const BlogCard = ({ blog }: { blog: any }) => {
 
           {Array.isArray(blog?.tags) && blog.tags.length > 0 && (
             <div className="flex flex-wrap gap-1 mt-1">
-              {blog.tags.slice(0, 3).map((tag: any) => (
+              {blog.tags.slice(0, 3).map((tag: any, index: number)  => (
                 <span
-                  key={tag.id}
+                  key={index}
                   className="text-[11px] border rounded-xl border-[#1111] bg-[#FFD07E] p-1 text-[#36332e] uppercase font-semibold"
                 >
                   {tag.name}
