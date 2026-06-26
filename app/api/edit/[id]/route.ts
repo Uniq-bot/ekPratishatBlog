@@ -1,6 +1,6 @@
 import { prisma } from "@/libs/prisma";
-// import { writeFile, mkdir, unlink } from "fs/promises";
-// import { join } from "path";
+import { writeFile, mkdir, unlink } from "fs/promises";
+import { join } from "path";
 import { uploadImage } from "@/hooks/useCloudinary";
 import { NextResponse } from "next/server";
 import { revalidatePath, revalidateTag } from "next/cache";
@@ -59,19 +59,19 @@ export async function PUT(req: Request, { params }: RouteContext) {
     // Save new image only if a new file was uploaded
     let coverImagePath: string | undefined = undefined;
     if (imageFile && imageFile.size > 0) {
-      // const uploadDir = join(process.cwd(), "public", "uploads");
-      // await mkdir(uploadDir, { recursive: true });
-      // const bytes = await imageFile.arrayBuffer();
-      // const ext = imageFile.name.split(".").pop();
-      // const filename = `cover-${Date.now()}.${ext}`;
-      // await writeFile(join(uploadDir, filename), Buffer.from(bytes));
-      // coverImagePath = `/uploads/${filename}`;
+      const uploadDir = join(process.cwd(), "public", "uploads");
+      await mkdir(uploadDir, { recursive: true });
       const bytes = await imageFile.arrayBuffer();
+      const ext = imageFile.name.split(".").pop();
+      const filename = `cover-${Date.now()}.${ext}`;
+      await writeFile(join(uploadDir, filename), Buffer.from(bytes));
+      coverImagePath = `/uploads/${filename}`;
+      // const bytes = await imageFile.arrayBuffer();
       const buffer = Buffer.from(bytes);
 
-      const uploadedImage = await uploadImage(buffer);
+      // const uploadedImage = await uploadImage(buffer);
 
-      coverImagePath = uploadedImage.secure_url;
+      // coverImagePath = uploadedImage.secure_url;
     }
 
     const updated = await prisma.blogPost.update({
@@ -119,15 +119,15 @@ export async function DELETE(_req: Request, { params }: RouteContext) {
         coverImage: true,
       },
     });
-    // const deleteImagePath = blog?.coverImage;
-    // if (deleteImagePath) {
-    //   const filePath = join(process.cwd(), "public", deleteImagePath);
-    //   try {
-    //     await unlink(filePath);
-    //   } catch (err) {
-    //     console.error("Failed to delete cover image:", err);
-    //   }
-    // }
+    const deleteImagePath = blog?.coverImage;
+    if (deleteImagePath) {
+      const filePath = join(process.cwd(), "public", deleteImagePath);
+      try {
+        await unlink(filePath);
+      } catch (err) {
+        console.error("Failed to delete cover image:", err);
+      }
+    }
     await prisma.blogViews.deleteMany({ where: { blogPostId: id } });
     await prisma.blogPost.delete({ where: { id } });
 

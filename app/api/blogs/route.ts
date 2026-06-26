@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-// import { mkdir, writeFile } from "fs/promises";
-// import { join } from "path";
+import { mkdir, writeFile } from "fs/promises";
+import { join } from "path";
 import { uploadImage } from "@/hooks/useCloudinary";
 import { prisma } from "@/libs/prisma";
 import { revalidatePath, revalidateTag } from "next/cache";
@@ -9,7 +9,7 @@ import { getBlogByFilters } from "@/services/blogs.services";
 export async function POST(req: Request) {
   try {
     const formData = await req.formData();
-
+    const draftId = formData.get("draftId") as string | null;
     const title = formData.get("title") as string;
     const content = formData.get("content") as string;
     const description = formData.get("description") as string;
@@ -37,86 +37,118 @@ export async function POST(req: Request) {
     let coverImagePath: string | null = null;
 
     if (imageFile && imageFile.size > 0) {
-      // const uploadDir = join(process.cwd(), "public", "uploads");
-      // await mkdir(uploadDir, { recursive: true });
+      const uploadDir = join(process.cwd(), "public", "uploads");
+      await mkdir(uploadDir, { recursive: true });
 
-      // const bytes = await imageFile.arrayBuffer();
+      const bytes = await imageFile.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+
+      const allowedTypes = ["jpg", "jpeg", "png", "webp", "gif"];
+
+      const ext = imageFile.name.split(".").pop()?.toLowerCase();
+
+      if (!ext || !allowedTypes.includes(ext)) {
+        throw new Error("Invalid file type. Only images are allowed.");
+      }
+
+      const filename = `ad-${Date.now()}.${ext}`;
+      const filepath = join(uploadDir, filename);
+      await writeFile(filepath, buffer);
+      coverImagePath = `/uploads/${filename}`;
+      //       const bytes = await imageFile.arrayBuffer();
       // const buffer = Buffer.from(bytes);
 
       // const allowedTypes = ["jpg", "jpeg", "png", "webp", "gif"];
 
       // const ext = imageFile.name.split(".").pop()?.toLowerCase();
 
-      // if (!ext || !allowedTypes.includes(ext)) {
-      //   throw new Error("Invalid file type. Only images are allowed.");
-      // }
+      if (!ext || !allowedTypes.includes(ext)) {
+        throw new Error("Invalid file type. Only images are allowed.");
+      }
 
-      // const filename = `ad-${Date.now()}.${ext}`;
-      // const filepath = join(uploadDir, filename);
-      // await writeFile(filepath, buffer);
-      // coverImagePath = `/uploads/${filename}`;
-        const bytes = await imageFile.arrayBuffer();
-  const buffer = Buffer.from(bytes);
+      // const uploadedImage = await uploadImage(buffer);
 
-  const allowedTypes = ["jpg", "jpeg", "png", "webp", "gif"];
-
-  const ext = imageFile.name.split(".").pop()?.toLowerCase();
-
-  if (!ext || !allowedTypes.includes(ext)) {
-    throw new Error("Invalid file type. Only images are allowed.");
-  }
-
-  const uploadedImage = await uploadImage(buffer);
-
-  coverImagePath = uploadedImage.secure_url;
+      // coverImagePath = uploadedImage.secure_url;
     }
 
-    const generatedSlug = `${title
-      .toLowerCase()
-      .replace(/\s+/g, "-")
-      .replace(/[^\w-]+/g, "")}-${Date.now()}`;
+ const generatedSlug = `${title
+  .toLowerCase()
+  .replace(/\s+/g, "-")
+  .replace(/[^\w-]+/g, "")}-${Date.now()}`;
 
-  const existingCurated = await prisma.blogPost.findFirst({
+const existingCurated = await prisma.blogPost.findFirst({
   where: {
     isToggled: true,
   },
 });
 
-const post = await prisma.blogPost.create({
-  data: {
-    title,
-    content,
-    coverImage: coverImagePath,
-    description,
-    status: "PUBLISHED",
-    authorID,
-    categoryID: categoryId,
-    slug: generatedSlug,
+let post;
 
-    tags: {
-      connect: tags.map((tag: any) => ({
-        id: tag.id,
-      })),
+if (draftId) {
+  console.log("creating blog with draftId")
+  post = await prisma.blogPost.update({
+    where: {
+      id: draftId,
     },
+    data: {
+      title,
+      content,
+      description,
+      coverImage: coverImagePath,
+      categoryID: categoryId,
+      slug: generatedSlug,
+      status: "PUBLISHED",
 
-    isToggled: !existingCurated,
+      tags: {
+        set: [],
+        connect: tags.map((tag: any) => ({
+          id: tag.id,
+        })),
+      },
+    },
+  });
+} else {
+  console.log("no draft found creating new")
+  post = await prisma.blogPost.create({
+    data: {
+      title,
+      content,
+      description,
+      coverImage: coverImagePath,
+      status: "PUBLISHED",
+      authorID,
+      categoryID: categoryId,
+      slug: generatedSlug,
+
+      tags: {
+        connect: tags.map((tag: any) => ({
+          id: tag.id,
+        })),
+      },
+
+      isToggled: !existingCurated,
+    },
+  });
+}
+
+revalidateTag("blogs", "max");
+revalidateTag("latestBlogs", "max");
+revalidateTag("categories", "max");
+revalidateTag("tags", "max");
+revalidateTag("popularBlogs", "max");
+
+revalidatePath("/");
+revalidatePath(`/blog/${generatedSlug}`);
+
+return NextResponse.json(
+  {
+    message: draftId
+      ? "Draft published successfully"
+      : "Blog created successfully",
+    post,
   },
-});
-    revalidateTag("blogs", "max");
-    revalidateTag("latestBlogs", "max");
-    revalidateTag("categories", "max");
-    revalidateTag("tags", "max");
-    revalidateTag("popularBlogs", "max");
-    
-
-    
-    revalidatePath("/");
-    revalidatePath(`/blog/${generatedSlug}`);
-
-    return NextResponse.json(
-      { message: "Blog created successfully", post },
-      { status: 201 },
-    );
+  { status: draftId ? 200 : 201 }
+);
   } catch (err: any) {
     console.error("CREATE BLOG ERROR:", err);
 

@@ -70,7 +70,7 @@ export async function updateAdStatus({
     where: { id: adId },
     data: { isAdRunning: status },
   });
-revalidateTag("ads", "max");
+  revalidateTag("ads", "max");
   revalidatePath("/admin");
   revalidatePath("/");
 
@@ -119,7 +119,7 @@ export const updateAd = async (formData: FormData) => {
       },
       data: updateData,
     });
-revalidateTag("ads", "max");
+    revalidateTag("ads", "max");
 
     revalidatePath("/admin");
     revalidatePath("/");
@@ -136,7 +136,7 @@ export const deleteAd = async (adId: string) => {
       where: { id: adId },
     });
     console.log("deleted");
-revalidateTag("ads", "max");
+    revalidateTag("ads", "max");
 
     revalidatePath("/admin");
     revalidatePath("/");
@@ -182,7 +182,7 @@ export const setAdStatus = async ({
         },
       });
     });
-
+    revalidateTag("ads", "max");
     revalidatePath("/admin");
     revalidatePath("/");
   } catch (error) {
