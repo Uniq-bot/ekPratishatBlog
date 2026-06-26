@@ -72,6 +72,29 @@ export const createBlogs = async (newBlog: FormData) => {
   return res.json();
 };
 
+export const saveTodraft = async ({
+  id,
+  formData,
+}: {
+  id?: string;
+  formData: FormData;
+}) => {
+  const url = id
+    ? `${getBaseUrl()}/api/blogs/draft/${id}`
+    : `${getBaseUrl()}/api/blogs/draft`;
+
+  const res = await fetch(url, {
+    method: id ? "PATCH" : "POST",
+    body: formData,
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || "Failed to save draft");
+  }
+
+  return res.json();
+};
 export const updateBlog = async ({
   id,
   formData,

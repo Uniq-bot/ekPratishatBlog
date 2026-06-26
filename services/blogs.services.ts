@@ -22,7 +22,7 @@ export const getBlogByFilters = async ({
   searchQuery?: string;
 }) => {
   const where: any = {
-    status: "PUBLISHED",
+    // status: "PUBLISHED",
     ...(category && { categoryID: category }),
     ...(tags.length > 0 && {
       tags: {

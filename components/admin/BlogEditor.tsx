@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import AddBlock from "./CreateBlog/AddBlock";
 import BlogForm from "./CreateBlog/BlogForm";
 import PreviewBlog from "./CreateBlog/PreviewBlog";
-import { useCreateBlog, useUpdateBlog } from "@/hooks/useAdminBlogs";
+import { useCreateBlog, useSaveToDraft, useUpdateBlog } from "@/hooks/useAdminBlogs";
 import { useRouter } from "next/navigation";
 import { Image, Info } from "lucide-react";
 import { Category, Tag } from "@/types/blog";
@@ -50,10 +50,10 @@ const BlogEditor = ({
 const [calloutDescription, setCalloutDescription] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [showModel, setShowModal] = useState(false);
-
-  const { mutateAsync: createBlog, isPending: isCreating } = useCreateBlog();
+  const [draftId, setDraftId] = useState<string | null>(null);
+    const { mutateAsync: createBlog, isPending: isCreating } = useCreateBlog();
   const { mutateAsync: updateBlog, isPending: isUpdating } = useUpdateBlog();
-
+  const {mutateAsync: saveToDraft, isPending: isSavingDraft } = useSaveToDraft(); // Reuse the createBlog hook for saving drafts
   const slug = title
     .toLowerCase()
     .replace(/\s+/g, "-")
@@ -98,6 +98,42 @@ const [calloutDescription, setCalloutDescription] = useState("");
     setContent("");
     setCoverImage(null);
     if (coverImageRef.current) coverImageRef.current.value = "";
+  };
+    const buildFormData = (status: "draft" | "published") => {
+    const formData = new FormData();
+    formData.append("title", title.trim());
+    formData.append("description", description.trim());
+    formData.append("slug", slug);
+    formData.append("categoryId", categoryId);
+    formData.append("tags", JSON.stringify(tagsValue));
+    formData.append("authorID", user?.id ?? "");
+    formData.append("content", JSON.stringify(blocks));
+    formData.append("status", status);
+    if (coverImage) formData.append("coverImage", coverImage);
+    return formData;
+  };
+
+ const handleSaveDraft = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  e.preventDefault();
+    setSubmitError(null);
+    setSuccessMsg(null);
+
+    if (!title.trim()) {
+      setSubmitError("Title is required");
+      return;
+    }
+
+    const formData = buildFormData("draft");
+
+    try {
+      const result = await saveToDraft({ id: draftId ?? undefined, formData });
+      // Adjust this to match whatever shape your API actually returns
+      const newId = result?.data?.id ?? result?.id;
+      if (!draftId && newId) setDraftId(newId);
+      setSuccessMsg("Draft saved successfully!");
+    } catch (err: any) {
+      setSubmitError(err.message || "Something went wrong while saving draft");
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -323,7 +359,15 @@ const [calloutDescription, setCalloutDescription] = useState("");
 
           <BlogForm blocks={blocks} setBlocks={setBlocks} />
 
-          <button
+         <div className="flex gap-5">
+           <button
+            type="button"
+            onClick={(e) => handleSaveDraft(e)}
+            className="px-4 lg:px-6 py-2 text-xs lg:text-sm bg-green-400 border shadow shadow-black hover:bg-gray-50 disabled:opacity-50 transition-colors w-full sm:w-auto"
+          >
+           Save as Draft
+          </button>
+           <button
             type="submit"
             disabled={isBusy}
             className="px-4 lg:px-6 py-2 text-xs lg:text-sm bg-white border shadow shadow-black hover:bg-gray-50 disabled:opacity-50 transition-colors w-full sm:w-auto"
@@ -336,6 +380,7 @@ const [calloutDescription, setCalloutDescription] = useState("");
                 ? "Update Blog"
                 : "Post Blog"}
           </button>
+         </div>
         </form>
       </div>
 

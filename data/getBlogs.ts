@@ -97,7 +97,7 @@ export const getLatestBlogs = unstable_cache(
   async () => {
     try {
       const blogs = await prisma.blogPost.findMany({
-        where: { isToggled: false },
+        where: { isToggled: false, status: "PUBLISHED" },
         orderBy: { createdAt: "desc" },
 
   take: 5,
@@ -184,6 +184,7 @@ export const getCuratedBlog = unstable_cache(async () => {
     return await prisma.blogPost.findFirst({
       where: {
         isToggled: true,
+        status: "PUBLISHED",
       },
     });
   }, ["curated-blog"], { revalidate: 300 });

@@ -22,7 +22,7 @@ model BlogPost {
   title       String
   slug        String      @unique
   authorID    String
-  categoryID  String
+  categoryID  String?
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   coverImage  String?
@@ -32,7 +32,7 @@ model BlogPost {
   description String?
   isToggled   Boolean     @default(false)
   author      User        @relation(fields: [authorID], references: [id])
-  category    Category    @relation(fields: [categoryID], references: [id])
+  category    Category?    @relation(fields: [categoryID], references: [id])
   blogViews   BlogViews[]
   tags        Tag[]       @relation("PostTags")
 }

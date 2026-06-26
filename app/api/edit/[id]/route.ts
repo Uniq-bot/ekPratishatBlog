@@ -80,6 +80,7 @@ export async function PUT(req: Request, { params }: RouteContext) {
         title,
         description,
         content,
+        status: "PUBLISHED",
         category: {
           connect: { id: categoryId },
         },

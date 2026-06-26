@@ -34,6 +34,7 @@ const ManageBlogs = () => {
                 <th className="px-4 py-3 text-left">Title</th>
                 <th className="px-4 py-3 text-left">Category</th>
                 <th className="px-4 py-3 text-left">Tags</th>
+                <th className="px-4 py-3 text-left">Status</th>
                 <th className="px-4 py-3 text-center">Views</th>
                 <th className="px-4 py-3 text-center">Actions</th>
                 <th className="px-4 py-3 text-center">Curate</th>
@@ -80,6 +81,17 @@ const ManageBlogs = () => {
                         </span>
                       ))}
                     </div>
+                  </td>
+                  <td className="px-4 py-4">
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs ${
+                        blog.status === "PUBLISHED"
+                          ? "bg-green-100"
+                          : "bg-gray-100"
+                      } whitespace-nowrap`}
+                    >
+                      {blog.status}
+                    </span>
                   </td>
                   <td className="px-4 py-4 text-center text-sm">
                     {blog.viewCount ?? 0}

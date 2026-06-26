@@ -7,6 +7,7 @@ import {
   fetchBlogs,
   fetchCategory,
   fetchTags,
+  saveTodraft,
   updateBlog,
   uploadImage,
 } from "@/libs/fetch";
@@ -18,6 +19,18 @@ export const useCreateBlog = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: createBlogs,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["blogs"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-blogs"] });
+      queryClient.invalidateQueries({ queryKey: ["latestBlogs"] });
+    },
+  });
+};
+
+export const useSaveToDraft = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: saveTodraft,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["blogs"] });
       queryClient.invalidateQueries({ queryKey: ["admin-blogs"] });
