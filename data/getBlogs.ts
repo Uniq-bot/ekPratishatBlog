@@ -180,6 +180,15 @@ export const getPopularBlogs = unstable_cache(
 }
 );
 
+export const getCuratedBlog = unstable_cache(async () => {
+    return await prisma.blogPost.findFirst({
+      where: {
+        isToggled: true,
+      },
+    });
+  }, ["curated-blog"], { revalidate: 300 });
+
+
 export const getAds = unstable_cache(
   async () => {
     try {

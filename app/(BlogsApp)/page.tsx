@@ -7,6 +7,7 @@ import {
   getAds,
   getBlogs,
   getCategory,
+  getCuratedBlog,
   getLatestBlogs,
   getPopularBlogs,
   getTags,
@@ -17,7 +18,6 @@ import CuratedBlog from "@/components/blog/CuratedBlog";
 import AsideAd from "@/components/blog/AsideAd";
 import BannerAd from "@/components/blog/BannerAds";
 import { prisma } from "@/libs/prisma";
-import { unstable_cache } from "next/cache";
 
 interface PageProps {
   searchParams: Promise<{ [key: string]: string | undefined }>;
@@ -32,7 +32,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
   const sort = (params.sort as "latest" | "oldest") ?? "latest";
   const search = params.search;
 
-  const [blogs, latestBlogs, popularBlogs, categories, tags, ads] =
+  const [blogs, latestBlogs, popularBlogs, categories, tags, ads, curatedBlog] =
     await Promise.all([
       getBlogs({ page, category, tag, sort, search }),
       getLatestBlogs(),
@@ -40,16 +40,12 @@ export default async function BlogPage({ searchParams }: PageProps) {
       getCategory(),
       getTags(),
       getAds(),
+      getCuratedBlog(),
     ]);
   const AsideAds = ads.find((ad) => ad.AdType === "ASIDE");
   const BannerAds = ads.find((ad) => ad.AdType === "BANNER");
-  const curatedBlog = unstable_cache(async () => {
-    return await prisma.blogPost.findFirst({
-      where: {
-        isToggled: true,
-      },
-    });
-  }, ["curated-blog"], { revalidate: 300 });
+ 
+
   return (
     <div className="w-full min-h-screen flex flex-col bg-[#FFFFFF]">
       {/* HERO */}
