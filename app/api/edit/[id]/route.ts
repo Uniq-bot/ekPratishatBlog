@@ -3,7 +3,7 @@ import { prisma } from "@/libs/prisma";
 // import { join } from "path";
 import { uploadImage } from "@/hooks/useCloudinary";
 import { NextResponse } from "next/server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -133,7 +133,14 @@ export async function DELETE(_req: Request, { params }: RouteContext) {
 
     if (blog?.slug) {
       revalidatePath(`/blog/${blog.slug}`);
+      revalidateTag(`blog-${blog.slug}`, "max");
     }
+    revalidateTag("related", "max");
+
+revalidateTag("blogs", "max");
+revalidateTag("latestBlogs", "max");
+revalidateTag("popularBlogs", "max");
+revalidateTag("curatedBlog", "max");
     revalidatePath("/");
     revalidatePath("/blog");
 

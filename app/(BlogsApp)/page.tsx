@@ -1,4 +1,4 @@
-export const revalidate = 300; // revalidate this page every 60 seconds
+
 import BlogList from "@/components/blog/BlogList";
 import LatestBlogs from "@/components/blog/LatestBlogs";
 import PopularBlogs from "@/components/blog/PopulatBlogs";

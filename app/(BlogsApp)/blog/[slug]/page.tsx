@@ -12,29 +12,47 @@ interface Props {
 
 
 
-
+import { cacheTag } from "next/cache";
 
 async function getBlog(slug: string) {
+  "use cache";
+
+  cacheTag(`blog-${slug}`);
+
   return prisma.blogPost.findFirst({
     where: { slug },
-    include: { category: true, tags: true },
+    include: {
+      category: true,
+      tags: true,
+    },
   });
 }
+
 async function getRelatedBlogs(
   categoryId: string,
   excludeSlug: string,
   tagIds: string[] = []
 ) {
-  const posts = await prisma.blogPost.findMany({
+  "use cache";
+
+  cacheTag(`related`);
+
+  return prisma.blogPost.findMany({
     where: {
       status: "PUBLISHED",
-      slug: { not: excludeSlug },
+      slug: {
+        not: excludeSlug,
+      },
       OR: [
-        { categoryID: categoryId },
+        {
+          categoryID: categoryId,
+        },
         {
           tags: {
             some: {
-              id: { in: tagIds },
+              id: {
+                in: tagIds,
+              },
             },
           },
         },
@@ -49,8 +67,6 @@ async function getRelatedBlogs(
       tags: true,
     },
   });
-
-  return posts;
 }
 export default async function BlogDets({ params }: Props) {
   const { slug } = await params;
