@@ -1,5 +1,7 @@
+import { unstable_cache } from "next/cache";
 import { prisma } from "@/libs/prisma";
-export const getBlogs = async ({
+export const getBlogs = unstable_cache(
+  async ({
   page = 1,
   limit = 10,
   category,
@@ -15,6 +17,8 @@ export const getBlogs = async ({
   search?: string;
 } = {}) => {
   try {
+      const start = performance.now();
+
     const skip = (page - 1) * limit;
 
     const where: any = {
@@ -73,13 +77,21 @@ export const getBlogs = async ({
       }),
       prisma.blogPost.count({ where }),
     ]);
+  console.log("getBlogs:", performance.now() - start, "ms");
 
     return { posts: blogs, totalCount };
   } catch (err) {
     console.error("BLOG FETCH ERROR:", err);
     return { posts: [], totalCount: 0 };
   }
-};
+},
+["blogs"],
+{
+   tags: ["blogs"],
+  revalidate: 60 * 60 * 24, 
+}
+
+)
 
 export const getLatestBlogs = async () => {
   try {

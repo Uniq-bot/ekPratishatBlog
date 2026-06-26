@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 // import { join } from "path";
 import { uploadImage } from "@/hooks/useCloudinary";
 import { prisma } from "@/libs/prisma";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { getBlogByFilters } from "@/services/blogs.services";
 
 export async function POST(req: Request) {
@@ -102,7 +102,7 @@ const post = await prisma.blogPost.create({
     isToggled: !existingCurated,
   },
 });
-
+    revalidateTag("blogs", "max");
     revalidatePath("/");
     revalidatePath(`/blog/${generatedSlug}`);
 
