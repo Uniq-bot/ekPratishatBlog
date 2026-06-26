@@ -93,12 +93,13 @@ export const getBlogs = unstable_cache(
 
 )
 
-export const getLatestBlogs = async () => {
-  try {
+export const getLatestBlogs = unstable_cache(
+  async () => {
+    try {
       const blogs = await prisma.blogPost.findMany({
-  where:{isToggled:false},
-  orderBy: { createdAt: "desc" },
- 
+        where: { isToggled: false },
+        orderBy: { createdAt: "desc" },
+
   take: 5,
   select: {
     id: true,
@@ -122,42 +123,48 @@ export const getLatestBlogs = async () => {
       },
     },
   },
-});
+},
+  
+);
 
     return { posts: blogs };
   } catch (err) {
     console.error("INITIAL LATEST FETCH ERROR:", err);
     return { posts: [] };
   }
-};
-
-export const getCategory = async () => {
-  try {
-    const categories = await prisma.category.findMany({});
-
-    return categories;
-  } catch (err) {
-    console.error("INITIAL CATEGORY FETCH ERROR:", err);
-    return [];
+},
+["latestBlogs"],
+  {
+    tags: ["latestBlogs"],
+    revalidate: 60 * 60 * 24, 
   }
-};
+)
 
-export const getTags = async () => {
-  try {
-    const tags = await prisma.tag.findMany({});
-    return tags;
-  } catch (err) {
-    console.error("INITIAL TAG FETCH ERROR:", err);
-    return [];
+export const getCategory = unstable_cache(
+  async () => prisma.category.findMany(),
+  ["categories"],
+  {
+    tags: ["categories"],
+    revalidate: 86400,
   }
-};
+);
 
-export const getPopularBlogs = async () => {
-  try {
-    const blogs = await prisma.blogPost.findMany({
-      where: { status: "PUBLISHED" },
-      orderBy: [{ viewCount: "desc" }, { createdAt: "desc" }],
-      take: 3,
+export const getTags = unstable_cache(
+  async () => prisma.tag.findMany(),
+  ["tags"],
+  {
+    tags: ["tags"],
+    revalidate: 86400,
+  }
+);
+
+export const getPopularBlogs = unstable_cache(
+  async () => {
+    try {
+      const blogs = await prisma.blogPost.findMany({
+        where: { status: "PUBLISHED" },
+        orderBy: [{ viewCount: "desc" }, { createdAt: "desc" }],
+        take: 3,
       include: { tags: true, category: true },
     });
     return { posts: blogs };
@@ -165,18 +172,31 @@ export const getPopularBlogs = async () => {
     console.error("POPULAR BLOGS FETCH ERROR:", err);
     return { posts: [] };
   }
-};
+},
+["popularBlogs"],
+{
+  tags: ["popularBlogs"],
+  revalidate: 60 * 60 * 24,
+}
+);
 
-export const getAds = async () => {
-  try {
-    const threeAds = await prisma.advertisement.findMany({
-      where: { isAdRunning: true },
-      orderBy: { createdAt: "desc" },
-      // take: 3,
-    });
-    return threeAds;
-  } catch (error) {
-    console.error("ADS FETCH ERROR:", error);
-    return [];
+export const getAds = unstable_cache(
+  async () => {
+    try {
+      const threeAds = await prisma.advertisement.findMany({
+        where: { isAdRunning: true },
+        orderBy: { createdAt: "desc" },
+        // take: 3,
+      });
+      return threeAds;
+    } catch (error) {
+      console.error("ADS FETCH ERROR:", error);
+      return [];
+    }
+  },
+  ["ads"],
+  {
+    tags: ["ads"],
+    revalidate: 60 * 60 * 24,
   }
-};
+);

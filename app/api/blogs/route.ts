@@ -103,6 +103,13 @@ const post = await prisma.blogPost.create({
   },
 });
     revalidateTag("blogs", "max");
+    revalidateTag("latestBlogs", "max");
+    revalidateTag("categories", "max");
+    revalidateTag("tags", "max");
+    revalidateTag("popularBlogs", "max");
+    
+
+    
     revalidatePath("/");
     revalidatePath(`/blog/${generatedSlug}`);
 

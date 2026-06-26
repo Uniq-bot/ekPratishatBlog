@@ -1,7 +1,7 @@
 "use server";
 import { prisma } from "@/libs/prisma";
 import { mkdir, writeFile } from "fs/promises";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { join } from "path";
 
 export const createAdvertisement = async (formData: FormData) => {
@@ -52,6 +52,7 @@ export const createAdvertisement = async (formData: FormData) => {
     });
     console.log(ad);
     revalidatePath("/admin");
+    revalidateTag("ads", "max");
     return ad;
   } catch (error) {
     console.log("Error creating the ad", error);
@@ -69,7 +70,7 @@ export async function updateAdStatus({
     where: { id: adId },
     data: { isAdRunning: status },
   });
-
+revalidateTag("ads", "max");
   revalidatePath("/admin");
   revalidatePath("/");
 
@@ -118,6 +119,7 @@ export const updateAd = async (formData: FormData) => {
       },
       data: updateData,
     });
+revalidateTag("ads", "max");
 
     revalidatePath("/admin");
     revalidatePath("/");
@@ -134,6 +136,8 @@ export const deleteAd = async (adId: string) => {
       where: { id: adId },
     });
     console.log("deleted");
+revalidateTag("ads", "max");
+
     revalidatePath("/admin");
     revalidatePath("/");
   } catch (error) {
