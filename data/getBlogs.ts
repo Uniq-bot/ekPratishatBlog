@@ -100,7 +100,7 @@ export const getLatestBlogs = unstable_cache(
         where: { isToggled: false, status: "PUBLISHED" },
         orderBy: { createdAt: "desc" },
 
-  take: 5,
+  take: 4,
   select: {
     id: true,
     title: true,
