@@ -126,7 +126,7 @@ export const useGetAdminBlogs = () => {
         category: undefined,
         searchQuery: "",
       }),
-    staleTime: 0,
+    staleTime: 1000 * 60 * 5
   });
 };
 

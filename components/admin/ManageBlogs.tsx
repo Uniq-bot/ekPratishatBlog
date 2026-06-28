@@ -1,6 +1,11 @@
 "use client";
 
-import {  useCurateBlog, useDeleteBlog, useGetAdminBlogs, useToggleArchiveBlog } from "@/hooks/useAdminBlogs";
+import {
+  useCurateBlog,
+  useDeleteBlog,
+  useGetAdminBlogs,
+  useToggleArchiveBlog,
+} from "@/hooks/useAdminBlogs";
 import { Archive, ArchiveRestore, Edit } from "lucide-react";
 import Link from "next/link";
 import { TableSkeleton } from "@/components/admin/skeleton/TableSkeleton";
@@ -8,19 +13,42 @@ import { useState } from "react";
 
 const ManageBlogs = () => {
   const { data: blogs, isLoading } = useGetAdminBlogs();
-  const { mutate: ToggleArchiveBlog, isPending: isArchiving } = useToggleArchiveBlog();
-  const [archivingId, setArchivingid] = useState<string | null>(null);
-  const {mutateAsync:curateBlog}=useCurateBlog();
+  const { mutate: ToggleArchiveBlog, isPending: isArchiving } =
+    useToggleArchiveBlog();
+  const [actionId, setActionId] = useState<string | null>(null);
+  const { mutateAsync: curateBlog } = useCurateBlog();
   const handleArchive = (id: string) => {
-    if (!confirm(`Are you sure you want to ${blogs?.posts.find((b: any) => b.id === id)?.status === "ARCHIVED" ? "restore" : "archive"} this blog?`)) return;
-    setArchivingid(id);
-    ToggleArchiveBlog(id, { onSettled: () => setArchivingid(null) });
+    if (
+      !confirm(
+        `Are you sure you want to ${
+          blogs?.posts.find((b: any) => b.id === id)?.status === "ARCHIVED"
+            ? "restore"
+            : "archive"
+        } this blog?`,
+      )
+    )
+      return;
+
+    setActionId(id);
+
+    ToggleArchiveBlog(id, {
+      onSettled: () => setActionId(null),
+    });
   };
-  
-  const handleCurate = (id: string) => {
-    curateBlog(id);
-  }
-      
+
+  const handleCurate = async (id: string) => {
+    if (!confirm("Are you sure you want to toggle the curated status of this blog?")) {
+      return;
+    }
+    try {
+      setActionId(id);
+      await curateBlog(id);
+    } finally {
+      setActionId(null);
+    }
+  };
+
+
   return (
     <div className="bg-white relative z-20 shadow border overflow-hidden">
       {isLoading ? (
@@ -51,7 +79,11 @@ const ManageBlogs = () => {
                   </td>
                 </tr>
               )}
-              {blogs?.posts?.map((blog: any, index: number) => (
+              {blogs?.posts?.map((blog: any, index: number) => {
+  const isRowDisabled = actionId === blog.id;
+
+  return(
+                
                 <tr
                   key={blog.id}
                   className="border-t hover:bg-gray-50 transition-colors"
@@ -100,40 +132,47 @@ const ManageBlogs = () => {
                     <div className="flex justify-center gap-2">
                       {/* Link instead of router.push */}
                       <Link
-                        href={`/admin/edit/${blog.id}`}
-                        className="p-2 bg-white border hover:bg-gray-100 transition-all"
-                        title="Edit"
+                        href={isRowDisabled ? "#" : `/admin/edit/${blog.id}`}
+                        onClick={(e) => {
+                          if (isRowDisabled) e.preventDefault();
+                        }}
+                        className={`p-2 border transition-all ${
+                          isRowDisabled
+                            ? "pointer-events-none opacity-50"
+                            : "hover:bg-gray-100"
+                        }`}
                       >
-                        <Edit size={18} />
+                        <Edit />
                       </Link>
-                     {
-                      blog.status !== "ARCHIVED" ? (
+                      {blog.status !== "ARCHIVED" ? (
                         <button
+                          disabled={isRowDisabled}
                           onClick={() => handleArchive(blog.id)}
-                          className="p-2 bg-white cursor-pointer border hover:bg-gray-100 transition-all"
                           title="Archive"
-                          disabled={isArchiving && archivingId === blog.id}
                         >
                           <Archive size={18} />
                         </button>
-                      ):(
-                         <button
-                        onClick={() => handleArchive(blog.id)}
-                        disabled={archivingId === blog.id || isArchiving  }
-                        className="p-2 border bg-white cursor-pointer hover:bg-green-500 hover:text-white disabled:opacity-50 transition-all"
-                        title="Restore"
-                      >
-                        <ArchiveRestore size={18} />
-                      </button>
-                      )
-                     }
+                      ) : (
+                        <button
+                          title="Restore"
+                          disabled={isRowDisabled}
+                          onClick={() => handleArchive(blog.id)}
+                        >
+                          <ArchiveRestore size={18} />
+                        </button>
+                      )}
                     </div>
                   </td>
                   <td className="px-4 py-4">
-                   <input checked={blog.isToggled} onChange={()=>handleCurate(blog.id)} type="checkbox" />
+                    <input
+                      type="checkbox"
+                      checked={blog.isToggled}
+                      disabled={isRowDisabled}
+                      onChange={() => handleCurate(blog.id)}
+                    />
                   </td>
                 </tr>
-              ))}
+              )})}
             </tbody>
           </table>
         </div>

@@ -7,7 +7,7 @@ const BlogsLoading = () => {
       {/* 1. TOP HERO & SIDEBAR SECTION */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Large Hero Banner */}
-        <div className="lg:col-span-2 h-[350px] bg-gray-300 rounded-sm relative p-8 flex flex-col justify-end space-y-3">
+        <div className="lg:col-span-2 h-87.5 bg-gray-300 rounded-sm relative p-8 flex flex-col justify-end space-y-3">
           <div className="h-8 bg-gray-400 rounded w-2/3"></div>
           <div className="h-8 bg-gray-400 rounded w-1/2"></div>
           <div className="h-4 bg-gray-400 rounded w-3/4 mt-2"></div>
@@ -16,7 +16,7 @@ const BlogsLoading = () => {
         {/* Right Top Featured Column */}
         <div className="flex flex-col gap-4">
           {[1, 2].map((i) => (
-            <div key={i} className="h-[167px] bg-gray-200 p-6 flex flex-col justify-between border border-gray-300 rounded-sm">
+            <div key={i} className="h-41.75 bg-gray-200 p-6 flex flex-col justify-between border border-gray-300 rounded-sm">
               <div className="space-y-3">
                 <div className="h-4 bg-gray-300 w-20 rounded"></div>
                 <div className="h-5 bg-gray-300 w-full rounded"></div>

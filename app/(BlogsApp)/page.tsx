@@ -81,7 +81,6 @@ export default async function BlogPage({ searchParams }: PageProps) {
         </div>
       </div>
 
-      {/* MAIN CONTENT */}
       <div className="px-4 sm:px-6 md:px-20 lg:px-30 bg-[#F4F1EC] relative pb-10 pt-10 border-t border-t-[#b1782e]/40 w-full m-auto flex flex-col">
         {BannerAds && (
           <div className="w-full h-20 md:h-40 mb-10">

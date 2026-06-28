@@ -54,6 +54,20 @@ const [calloutDescription, setCalloutDescription] = useState("");
     const { mutateAsync: createBlog, isPending: isCreating } = useCreateBlog();
   const { mutateAsync: updateBlog, isPending: isUpdating } = useUpdateBlog();
   const {mutateAsync: saveToDraft, isPending: isSavingDraft } = useSaveToDraft(); // Reuse the createBlog hook for saving drafts
+  const [preview, setPreview] = useState("");
+
+useEffect(() => {
+    if (!coverImage) {
+        setPreview("");
+        return;
+    }
+
+    const url = URL.createObjectURL(coverImage);
+
+    setPreview(url);
+
+    return () => URL.revokeObjectURL(url);
+}, [coverImage]);
   const slug = title
     .toLowerCase()
     .replace(/\s+/g, "-")
@@ -154,16 +168,7 @@ const [calloutDescription, setCalloutDescription] = useState("");
       return;
     }
 
-    const formData = new FormData();
-    formData.append("title", title.trim());
-    formData.append("description", description.trim());
-    formData.append("slug", slug);
-    formData.append("categoryId", categoryId);
-    formData.append("tags", JSON.stringify(tagsValue));
-    formData.append("authorID", user?.id ?? "");
-    formData.append("content", JSON.stringify(blocks)); // blocks as JSON string
-    if (coverImage) formData.append("coverImage", coverImage);
-
+    const formData = buildFormData("published");
     try {
       if (mode === "edit") {
         const blogId = initialBlog?.data?.id;
@@ -308,7 +313,7 @@ const [calloutDescription, setCalloutDescription] = useState("");
             {coverImage ? (
               <div className="relative w-1/2 border bg-gray-50 overflow-hidden">
                 <img
-                  src={URL.createObjectURL(coverImage)}
+                  src={preview}
                   alt="Cover preview"
                   className="w-full h-32 sm:h-40 lg:h-60 object-cover"
                 />

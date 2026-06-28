@@ -50,7 +50,6 @@ const NavBar = () => {
         }
       `}
     >
-      {/* Logo */}
 
       <div className="lg:flex hidden items-center gap-3 w-20 md:w-20">
         {isScrolled && (
@@ -64,7 +63,6 @@ const NavBar = () => {
         )}
       </div>
 
-      {/* Nav Links */}
       <div
         className={`flex items-center lg:mr-30 text-sm   justify-center p-2 px-  ${
           isScrolled
@@ -87,7 +85,6 @@ const NavBar = () => {
         ))}
       </div>
 
-      {/* Social Icons */}
       <div
         className={`
            items-center gap-3

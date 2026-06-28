@@ -15,7 +15,6 @@ const Category = ({ categories, isLoading }: CategoryProp) => {
   const [catDesc, setCatDesc] = React.useState("");
   const { mutateAsync: createCategory, isPending: isCreating } = useCreateCategory();
   
-  // console.log("category of category: ", categories)
   const handleAddCategory = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!catName.trim()) return;
