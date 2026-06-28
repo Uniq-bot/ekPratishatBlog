@@ -40,7 +40,7 @@ const LatestBlogs = ({ latestBlogs = [] }: { latestBlogs?: BlogItem[] }) => {
           
           </div>
           <div className="flex flex-col h-fit gap-1 lg:p-4 p-1">
-            <h3 className=" text-sm  md:text-lg lg:text-xl line-clamp-4   text-black">{blog?.title}</h3>
+            <h3 className=" text-sm  md:text-lg lg:text-xl line-clamp-3   text-black">{blog?.title}</h3>
             <div className="flex items-center gap-1 text-xs text-gray-500">
               <Calendar size={12} />
               {new Date(blog?.createdAt).toLocaleDateString()}

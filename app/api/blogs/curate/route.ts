@@ -1,4 +1,5 @@
 import { prisma } from "@/libs/prisma";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 
 export async function PATCH(req: Request) {
@@ -24,6 +25,12 @@ export async function PATCH(req: Request) {
         data: { isToggled: true },
       });
     });
+    revalidateTag("blogs", "max");
+    revalidateTag("latestBlogs", "max");
+    revalidateTag("popularBlogs", "max");
+    revalidateTag("curatedBlog", "max");
+    revalidatePath("/");
+    revalidatePath("/blog");
 
     return NextResponse.json(
       { message: "Blog curated successfully" },
