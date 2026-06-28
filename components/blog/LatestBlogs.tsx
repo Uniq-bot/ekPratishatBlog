@@ -24,7 +24,7 @@ const LatestBlogs = ({ latestBlogs = [] }: { latestBlogs?: BlogItem[] }) => {
           href={`/blog/${blog.slug}`}
           key={blog.id}
           onClick={(e) => handleClick(e, blog)}
-          className={`flex flex-col     w-1/2   overflow-hidden shadow-sm   ${index >= 2 ? "hidden lg:flex" : ""}  lg:shadow-lg group h-full   min-[1000px]:h-90 bg-white`}
+          className={`flex flex-col      w-1/2   overflow-hidden shadow-sm   ${index >= 2 ? "hidden lg:flex" : ""}  lg:shadow-lg group min-h-10   min-[1000px]:h-90 bg-white`}
         > 
           <div className="w-full lg:w-full relative h-24 lg:h-48 overflow-hidden shrink-0">
             <Image
@@ -39,8 +39,8 @@ const LatestBlogs = ({ latestBlogs = [] }: { latestBlogs?: BlogItem[] }) => {
             </span>
           
           </div>
-          <div className="flex flex-col h-full gap-1 lg:p-4 p-1">
-            <h3 className=" text-xs md:text-lg lg:text-xl   text-black">{blog?.title}</h3>
+          <div className="flex flex-col h-fit gap-1 lg:p-4 p-1">
+            <h3 className=" text-sm  md:text-lg lg:text-xl line-clamp-4   text-black">{blog?.title}</h3>
             <div className="flex items-center gap-1 text-xs text-gray-500">
               <Calendar size={12} />
               {new Date(blog?.createdAt).toLocaleDateString()}

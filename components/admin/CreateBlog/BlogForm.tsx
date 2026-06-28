@@ -228,7 +228,7 @@ console.log("Uploaded image:", image);
               )}
               {block.type === "quote" && (
                 <textarea
-                  className="w-full min-h-[80px] outline-none p-2 border text-xs lg:text-sm italic"
+                  className="w-full min-h-20 outline-none p-2 border text-xs lg:text-sm italic"
                   placeholder="Quote..."
                   value={block.content ?? ""}
                   onChange={(e) =>

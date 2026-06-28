@@ -55,7 +55,7 @@ const ManageBlogs = () => {
         <TableSkeleton />
       ) : (
         <div className="overflow-x-auto w-full">
-          <table className="w-full min-w-[640px]">
+          <table className="w-full min-w-160">
             <thead className="bg-[#DBDBB8]">
               <tr>
                 <th className="px-4 py-3 text-left">#</th>
@@ -93,7 +93,7 @@ const ManageBlogs = () => {
                   </td>
                   <td className="px-4 py-4">
                     <div className="font-medium text-sm">{blog.title}</div>
-                    <div className="text-xs text-gray-400 mt-0.5 truncate max-w-[220px]">
+                    <div className="text-xs text-gray-400 mt-0.5 truncate max-w-55">
                       {blog.slug}
                     </div>
                   </td>
@@ -146,7 +146,7 @@ const ManageBlogs = () => {
                       </Link>
                       {blog.status !== "ARCHIVED" ? (
                         <button
-                          disabled={isRowDisabled}
+                          disabled={isArchiving && isRowDisabled}
                           onClick={() => handleArchive(blog.id)}
                           title="Archive"
                         >
@@ -155,7 +155,7 @@ const ManageBlogs = () => {
                       ) : (
                         <button
                           title="Restore"
-                          disabled={isRowDisabled}
+                          disabled={isArchiving && isRowDisabled}
                           onClick={() => handleArchive(blog.id)}
                         >
                           <ArchiveRestore size={18} />

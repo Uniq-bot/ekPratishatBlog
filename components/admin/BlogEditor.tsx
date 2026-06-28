@@ -3,7 +3,11 @@ import React, { useEffect, useRef, useState } from "react";
 import AddBlock from "./CreateBlog/AddBlock";
 import BlogForm from "./CreateBlog/BlogForm";
 import PreviewBlog from "./CreateBlog/PreviewBlog";
-import { useCreateBlog, useSaveToDraft, useUpdateBlog } from "@/hooks/useAdminBlogs";
+import {
+  useCreateBlog,
+  useSaveToDraft,
+  useUpdateBlog,
+} from "@/hooks/useAdminBlogs";
 import { useRouter } from "next/navigation";
 import { Image, Info } from "lucide-react";
 import { Category, Tag } from "@/types/blog";
@@ -47,19 +51,20 @@ const BlogEditor = ({
   const [setLevel, setSetLevel] = useState(1);
   const [content, setContent] = useState("");
   const [calloutTitle, setCalloutTitle] = useState("");
-const [calloutDescription, setCalloutDescription] = useState("");
+  const [calloutDescription, setCalloutDescription] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [showModel, setShowModal] = useState(false);
   const [draftId, setDraftId] = useState<string | null>(null);
-    const { mutateAsync: createBlog, isPending: isCreating } = useCreateBlog();
+  const { mutateAsync: createBlog, isPending: isCreating } = useCreateBlog();
   const { mutateAsync: updateBlog, isPending: isUpdating } = useUpdateBlog();
-  const {mutateAsync: saveToDraft, isPending: isSavingDraft } = useSaveToDraft(); // Reuse the createBlog hook for saving drafts
+  const { mutateAsync: saveToDraft, isPending: isSavingDraft } =
+    useSaveToDraft(); // Reuse the createBlog hook for saving drafts
   const [preview, setPreview] = useState("");
 
-useEffect(() => {
+  useEffect(() => {
     if (!coverImage) {
-        setPreview("");
-        return;
+      setPreview("");
+      return;
     }
 
     const url = URL.createObjectURL(coverImage);
@@ -67,7 +72,7 @@ useEffect(() => {
     setPreview(url);
 
     return () => URL.revokeObjectURL(url);
-}, [coverImage]);
+  }, [coverImage]);
   const slug = title
     .toLowerCase()
     .replace(/\s+/g, "-")
@@ -113,7 +118,7 @@ useEffect(() => {
     setCoverImage(null);
     if (coverImageRef.current) coverImageRef.current.value = "";
   };
-    const buildFormData = (status: "draft" | "published") => {
+  const buildFormData = (status: "draft" | "published") => {
     const formData = new FormData();
     formData.append("title", title.trim());
     formData.append("description", description.trim());
@@ -127,8 +132,14 @@ useEffect(() => {
     return formData;
   };
 
- const handleSaveDraft = async (e: React.MouseEvent<HTMLButtonElement>) => {
-  e.preventDefault();
+  const handleSaveDraft = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (
+      !draftId &&
+      !confirm("Are you sure you want to save this as a draft?")
+    ) {
+      return;
+    }
     setSubmitError(null);
     setSuccessMsg(null);
 
@@ -194,7 +205,7 @@ useEffect(() => {
 
   if (isLoading) {
     return (
-      <div className="w-full h-[500px] border shadow shadow-black bg-[#EBECD8]/50 p-5">
+      <div className="w-full h-125 border shadow shadow-black bg-[#EBECD8]/50 p-5">
         <div className="h-10 w-40 bg-gray-200 animate-pulse mb-8" />
         <div className="space-y-6 px-10">
           {[...Array(4)].map((_, i) => (
@@ -212,7 +223,9 @@ useEffect(() => {
   const isBusy = isCreating || isUpdating;
 
   return (
-    <div className={`w-full min-h-full relative flex flex-col lg:flex-row gap-4 lg:gap-5 ${showModel ? "overflow-hidden" : ""}`}>
+    <div
+      className={`w-full min-h-full relative flex flex-col lg:flex-row gap-4 lg:gap-5 ${showModel ? "overflow-hidden" : ""}`}
+    >
       {/* Editor panel */}
       <div className="w-full lg:flex-1 transition-all min-h-[calc(100%-5px)] border shadow shadow-black py-3 lg:py-5 bg-[#EBECD8]/50 relative z-20">
         <div className="w-full flex items-center justify-between pr-5">
@@ -220,13 +233,12 @@ useEffect(() => {
             {mode === "create" ? "Create" : "Edit"} Blog
           </h1>
           <span
-          onClick={()=>setShowModal(true)}
+            onClick={() => setShowModal(true)}
             title="Blog content support guide."
             className="text-gray-500 hover:text-gray-700 transition-colors cursor-pointer"
           >
             <Info />
           </span>
-
         </div>
         {submitError && (
           <div className="mx-3 lg:mx-10 mt-4 px-3 lg:px-4 py-2 bg-red-100 border border-red-400 text-red-700 text-xs lg:text-sm">
@@ -243,7 +255,7 @@ useEffect(() => {
           className="w-full lg:w-[90%] m-auto px-3 lg:px-10"
           onSubmit={handleSubmit}
         >
-            <div className="w-full flex flex-col gap-2 my-3 lg:my-5">
+          <div className="w-full flex flex-col gap-2 my-3 lg:my-5">
             <label className="text-xs lg:text-sm font-medium">Category *</label>
             <select
               value={categoryId}
@@ -258,7 +270,7 @@ useEffect(() => {
               ))}
             </select>
           </div>
-           <div className="w-full flex flex-col gap-2 my-3 lg:my-5">
+          <div className="w-full flex flex-col gap-2 my-3 lg:my-5">
             <label className="text-xs lg:text-sm font-medium">Tags</label>
             <div className="flex flex-wrap gap-1.5 lg:gap-2">
               {(tags ?? []).map((t: any) => (
@@ -354,42 +366,35 @@ useEffect(() => {
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full pl-2 border outline-none text-xs lg:text-sm p-2 resize-y min-h-[60px] lg:min-h-[80px]"
+              className="w-full pl-2 border outline-none text-xs lg:text-sm p-2 resize-y min-h-15 lg:min-h-20"
               placeholder="Short description shown in blog cards..."
             />
           </div>
 
-         
-        
-
           <BlogForm blocks={blocks} setBlocks={setBlocks} />
 
-         <div className="flex gap-5">
-             <button
-            type="submit"
-            disabled={isBusy}
-            className="px-4 lg:px-6 py-2 text-xs lg:text-sm  bg-green-400 border shadow shadow-black hover:bg-gray-50 disabled:opacity-50 transition-colors w-full sm:w-auto"
-          >
-            {isBusy
-              ? mode === "edit"
-                ? "Updating..."
-                : "Posting..."
-              : mode === "edit"
-                ? "Update Blog"
-                : "Post Blog"}
-          </button>
-           <button
-            type="button"
-            onClick={(e) => handleSaveDraft(e)}
-            className="px-4 lg:px-6 py-2 text-xs lg:text-sm bg-white  border shadow shadow-black hover:bg-gray-50 disabled:opacity-50 transition-colors w-full sm:w-auto"
-          >
-           {
-isSavingDraft? "Saving Draft...": "Save Draft"
-            }
-          </button>
-         
-        
-         </div>
+          <div className="flex gap-5">
+            <button
+              type="submit"
+              disabled={isBusy}
+              className="px-4 lg:px-6 py-2 text-xs lg:text-sm  bg-green-400 border shadow shadow-black hover:bg-gray-50 disabled:opacity-50 transition-colors w-full sm:w-auto"
+            >
+              {isBusy
+                ? mode === "edit"
+                  ? "Updating..."
+                  : "Posting..."
+                : mode === "edit"
+                  ? "Update Blog"
+                  : "Post Blog"}
+            </button>
+            <button
+              type="button"
+              onClick={(e) => handleSaveDraft(e)}
+              className="px-4 lg:px-6 py-2 text-xs lg:text-sm bg-white  border shadow shadow-black hover:bg-gray-50 disabled:opacity-50 transition-colors w-full sm:w-auto"
+            >
+              {isSavingDraft ? "Saving Draft..." : "Save Draft"}
+            </button>
+          </div>
         </form>
       </div>
 
@@ -404,10 +409,10 @@ isSavingDraft? "Saving Draft...": "Save Draft"
           setContent={setContent}
           image={image}
           setImage={setImage}
-           calloutTitle={calloutTitle}
-  setCalloutTitle={setCalloutTitle}
-  calloutDescription={calloutDescription}
-  setCalloutDescription={setCalloutDescription}
+          calloutTitle={calloutTitle}
+          setCalloutTitle={setCalloutTitle}
+          calloutDescription={calloutDescription}
+          setCalloutDescription={setCalloutDescription}
         />
         <PreviewBlog blocks={blocks} />
       </div>
