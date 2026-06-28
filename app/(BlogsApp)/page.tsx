@@ -17,7 +17,6 @@ import SearchFilter from "@/components/blog/SearchFilter";
 import CuratedBlog from "@/components/blog/CuratedBlog";
 import AsideAd from "@/components/blog/AsideAd";
 import BannerAd from "@/components/blog/BannerAds";
-import { prisma } from "@/libs/prisma";
 
 interface PageProps {
   searchParams: Promise<{ [key: string]: string | undefined }>;

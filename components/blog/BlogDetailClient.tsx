@@ -230,8 +230,8 @@ const BlogDetailClient = ({ blog }: { blog: any }) => {
                       <Image
                         src="/logo.png"
                         alt="Logo"
-                        width={70}
-                        height={40}
+                        width={50}
+                        height={50}
                       />
                       <div className="h-px flex-1 bg-gray-300" />
                     </div>
