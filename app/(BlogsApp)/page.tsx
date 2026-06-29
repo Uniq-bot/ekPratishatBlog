@@ -1,4 +1,5 @@
-
+export const dynamic = "force-static";
+export const revalidate = 3600;
 import BlogList from "@/components/blog/BlogList";
 import LatestBlogs from "@/components/blog/LatestBlogs";
 import PopularBlogs from "@/components/blog/PopulatBlogs";
