@@ -77,8 +77,6 @@ export const getBlogs = unstable_cache(
       }),
       prisma.blogPost.count({ where }),
     ]);
-  console.log("getBlogs:", performance.now() - start, "ms");
-    revalidatePath("/");
     return { posts: blogs, totalCount };
   } catch (err) {
     console.error("BLOG FETCH ERROR:", err);
