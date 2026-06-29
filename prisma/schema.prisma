@@ -35,6 +35,17 @@ model BlogPost {
   category    Category?    @relation(fields: [categoryID], references: [id])
   blogViews   BlogViews[]
   tags        Tag[]       @relation("PostTags")
+  comments     BlogComment[]
+}
+
+model BlogComment{
+  id String @id @default(cuid())
+  blogPostId String
+  BlogPost BlogPost @relation(fields: [blogPostId], references: [id])
+  userEmail String
+  userName String
+  commentText String
+  createdAt DateTime @default(now())
 }
 
 model BlogViews {

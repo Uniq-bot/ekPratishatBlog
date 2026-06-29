@@ -8,7 +8,7 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
-import { cacheTag, unstable_cache } from "next/cache";
+import {  unstable_cache } from "next/cache";
 
 export const getBlog = (slug: string) =>
   unstable_cache(

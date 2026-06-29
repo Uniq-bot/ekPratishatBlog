@@ -18,6 +18,8 @@ import CuratedBlog from "@/components/blog/CuratedBlog";
 import AsideAd from "@/components/blog/AsideAd";
 import BannerAd from "@/components/blog/BannerAds";
 import { prisma } from "@/libs/prisma";
+import Test from "@/components/Test";
+import Button from "@/components/Button";
 
 interface PageProps {
   searchParams: Promise<{ [key: string]: string | undefined }>;
@@ -66,7 +68,6 @@ export default async function BlogPage({ searchParams }: PageProps) {
           <div className="w-full h-full  overflow-hidden md:w-[60%] ">
             <CuratedBlog curatedBlog={curatedBlog} />
           </div>
-
           {AsideAds && (
            
               <AsideAd AsideAds={AsideAds} />
@@ -89,6 +90,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
         )}
         <div className="w-full flex flex-col lg:flex-row gap-8 lg:gap-10">
           <div className="lg:w-[60%] w-full mb-10 flex flex-col gap-5">
+            
             <SearchFilter category={category} tag={tag} search={search} />
             <CategoryNav categories={categories} />
             <BlogList

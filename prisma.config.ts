@@ -8,6 +8,6 @@ export default defineConfig({
   },
   datasource: {
     // Use DATABASE_URL — same as libs/prisma.ts
-    url: process.env["DIRECT_URL"],
+    url: process.env["DATABASE_URL"],
   },
 });
