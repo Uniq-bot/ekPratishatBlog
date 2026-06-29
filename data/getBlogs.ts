@@ -1,4 +1,4 @@
-import { unstable_cache } from "next/cache";
+import { revalidatePath, unstable_cache } from "next/cache";
 import { prisma } from "@/libs/prisma";
 export const getBlogs = unstable_cache(
   async ({
@@ -78,7 +78,7 @@ export const getBlogs = unstable_cache(
       prisma.blogPost.count({ where }),
     ]);
   console.log("getBlogs:", performance.now() - start, "ms");
-
+    revalidatePath("/");
     return { posts: blogs, totalCount };
   } catch (err) {
     console.error("BLOG FETCH ERROR:", err);
