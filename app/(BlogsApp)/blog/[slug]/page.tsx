@@ -8,7 +8,7 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
-import {  unstable_cache } from "next/cache";
+import { unstable_cache } from "next/cache";
 
 export const getBlog = (slug: string) =>
   unstable_cache(
@@ -19,7 +19,6 @@ export const getBlog = (slug: string) =>
           category: true,
           tags: true,
           comments: true,
-
         },
       });
     },
@@ -32,7 +31,7 @@ export const getBlog = (slug: string) =>
 export const getRelatedBlogs = (
   categoryId: string,
   excludeSlug: string,
-  tagIds: string[] = []
+  tagIds: string[] = [],
 ) =>
   unstable_cache(
     async () => {
@@ -71,17 +70,17 @@ export const getRelatedBlogs = (
     {
       tags: [`related-${excludeSlug}`],
       revalidate: 86400,
-    }
+    },
   )();
 export default async function BlogDets({ params }: Props) {
   const { slug } = await params;
   const blog = await getBlog(slug);
   if (!blog) {
     notFound();
-  } 
+  }
 
   const relatedBlogs = await getRelatedBlogs(
-    blog.categoryID,
+    blog.categoryID ?? blog.category?.id ?? "",
     slug,
     blog.tags.map((t) => t.id),
   );
