@@ -19,10 +19,16 @@ export const getBlog = (slug: string) =>
     async () => {
       return prisma.blogPost.findFirst({
         where: { slug },
+        
         include: {
           category: true,
           tags: true,
-          comments: true,
+          comments: {
+            orderBy: {
+              createdAt: "desc",
+            },
+          },
+         
         },
       });
     },

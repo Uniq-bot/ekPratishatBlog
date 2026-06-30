@@ -27,6 +27,7 @@ export const createComment = async (form: FormData) => {
         userImage: userImage ?? "",
       },
     });
+    revalidatePath(`/`);
     revalidatePath(`/blog/${slug}`);
     console.log(comment);
   } catch (error) {

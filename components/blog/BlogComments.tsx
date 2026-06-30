@@ -5,26 +5,46 @@ import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import React from "react";
 
-type Comment = {
+type BlogComment = {
   id: number;
-  text: string;
-  user: {
-    name: string;
-    email: string;
-    image: string;
-  };
-  createdAt: string;
+  commentText: string;
+  userName: string;
+  userEmail: string;
+  userImage: string;
+  createdAt: string | Date;
 };
-
-const BlogComments = ({blogId, slug, comments:blogComment}: {blogId: string, slug:string, comments: any[]}) => {
+const BlogComments = ({
+  blogId,
+  slug,
+  comments: blogComment,
+}: {
+  blogId: string;
+  slug: string;
+  comments: any[];
+}) => {
   const { data: session } = useSession();
 
   const [comment, setComment] = React.useState("");
-const [isSubmitting, setIsSubmitting] = React.useState(false);
- const handleSubmit = async (e: React.FormEvent) => {
+ const [comments, setComments] = React.useState<BlogComment[]>(
+  blogComment || []
+);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
 
-  if (!comment.trim()) return;
+  if (!comment.trim() || !session?.user) return;
+
+  const optimisticComment: BlogComment = {
+    id: Date.now(),
+    commentText: comment,
+    userName: session.user.name || "",
+    userEmail: session.user.email || "",
+    userImage: session.user.image || "",
+    createdAt: new Date(),
+  };
+
+  // Show immediately
+  setComments((prev) => [optimisticComment, ...prev]);
 
   try {
     setIsSubmitting(true);
@@ -32,14 +52,21 @@ const [isSubmitting, setIsSubmitting] = React.useState(false);
     const formData = new FormData();
     formData.append("content", comment);
     formData.append("postId", blogId);
-    formData.append("userEmail", session?.user?.email || "");
-    formData.append("userName", session?.user?.name || "");
-    formData.append("userImage", session?.user?.image || "");
+    formData.append("userEmail", session.user.email || "");
+    formData.append("userName", session.user.name || "");
+    formData.append("userImage", session.user.image || "");
     formData.append("slug", slug);
 
-    await createComment(formData);
-
     setComment("");
+
+    await createComment(formData);
+  } catch (err) {
+    // Remove optimistic comment if request fails
+    setComments((prev) =>
+      prev.filter((c) => c.id !== optimisticComment.id)
+    );
+
+    console.error(err);
   } finally {
     setIsSubmitting(false);
   }
@@ -48,7 +75,7 @@ const [isSubmitting, setIsSubmitting] = React.useState(false);
   return (
     <div className="w-full mx-auto mt-10">
       <h2 className="text-3xl font-bold mb-6">
-        Comments ({blogComment.length})
+    Comments ({comments.length})
       </h2>
 
       {session?.user ? (
@@ -67,12 +94,8 @@ const [isSubmitting, setIsSubmitting] = React.useState(false);
 
             <div className="flex-1">
               <div className="mb-3">
-                <h4 className="font-semibold text-lg">
-                  {session.user.name}
-                </h4>
-                <p className="text-sm text-gray-500">
-                  {session.user.email}
-                </p>
+                <h4 className="font-semibold text-lg">{session.user.name}</h4>
+                <p className="text-sm text-gray-500">{session.user.email}</p>
               </div>
 
               <textarea
@@ -83,22 +106,20 @@ const [isSubmitting, setIsSubmitting] = React.useState(false);
               />
 
               <div className="flex justify-end mt-4">
- <button
-  type="submit"
-  disabled={!comment.trim() || isSubmitting}
-  className="bg-black text-white px-6 py-2 hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed transition"
->
-  {isSubmitting ? "Posting..." : "Post Comment"}
-</button>
+                <button
+                  type="submit"
+                  disabled={!comment.trim() || isSubmitting}
+                  className="bg-black text-white px-6 py-2 hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed transition"
+                >
+                  {isSubmitting ? "Posting..." : "Post Comment"}
+                </button>
               </div>
             </div>
           </div>
         </form>
       ) : (
         <div className="border  p-10 text-center">
-          <p className="text-gray-500 mb-4">
-            Sign in to join the discussion.
-          </p>
+          <p className="text-gray-500 mb-4">Sign in to join the discussion.</p>
 
           <button
             onClick={() => signIn("google")}
@@ -109,20 +130,16 @@ const [isSubmitting, setIsSubmitting] = React.useState(false);
         </div>
       )}
 
-
       <div className="mt-8 space-y-5">
-        {blogComment.length === 0 ? (
+        {comments.length === 0 ? (
           <div className="text-center py-10 text-gray-500 border ">
             No comments yet.
             <br />
             Be the first to comment.
           </div>
         ) : (
-          blogComment.map((item) => (
-            <div
-              key={item.id}
-              className="border  p-5 bg-white shadow-sm"
-            >
+          comments.map((item) => (
+            <div key={item.id} className="border  p-5 bg-white shadow-sm">
               <div className="flex gap-4">
                 <Image
                   src={item.userImage}
@@ -135,12 +152,8 @@ const [isSubmitting, setIsSubmitting] = React.useState(false);
                 <div className="flex-1">
                   <div className="flex justify-between items-center">
                     <div>
-                      <h3 className="font-semibold">
-                        {item.userName}
-                      </h3>
-                      <p className="text-xs text-gray-500">
-                        {item.userEmail}
-                      </p>
+                      <h3 className="font-semibold">{item.userName}</h3>
+                      <p className="text-xs text-gray-500">{item.userEmail}</p>
                     </div>
 
                     <span className="text-xs text-gray-400">
