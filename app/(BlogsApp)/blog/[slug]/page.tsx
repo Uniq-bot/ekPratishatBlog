@@ -42,11 +42,11 @@ export const getBlog = (slug: string) =>
 
   const blog = await getBlog(slug);
 
-const url = `https://ek-pratishat-blog.vercel.app/blog/${slug}`;
+const url = `${process.env.NEXT_PUBLIC_BASE_URL}/${slug}`;
 const image =
   blog?.coverImage?.startsWith("http")
     ? blog.coverImage
-    : `https://ek-pratishat-blog.vercel.app${blog?.coverImage}`;
+    : `${process.env.NEXT_PUBLIC_BASE_URL}/${blog?.coverImage}`;
   return {
     title: blog?.title,
     description: blog?.description,
