@@ -20,26 +20,30 @@ const BlogComments = ({blogId, slug, comments:blogComment}: {blogId: string, slu
   const { data: session } = useSession();
 
   const [comment, setComment] = React.useState("");
-  const [comments, setComments] = React.useState<Comment[]>([]);
+const [isSubmitting, setIsSubmitting] = React.useState(false);
+ const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  if (!comment.trim()) return;
 
-    if (!comment.trim()) return;
+  try {
+    setIsSubmitting(true);
 
     const formData = new FormData();
     formData.append("content", comment);
-    formData.append("postId", blogId); 
+    formData.append("postId", blogId);
     formData.append("userEmail", session?.user?.email || "");
     formData.append("userName", session?.user?.name || "");
     formData.append("userImage", session?.user?.image || "");
     formData.append("slug", slug);
-   
+
     await createComment(formData);
-    
 
     setComment("");
-  };
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   return (
     <div className="w-full mx-auto mt-10">
@@ -79,13 +83,13 @@ const BlogComments = ({blogId, slug, comments:blogComment}: {blogId: string, slu
               />
 
               <div className="flex justify-end mt-4">
-                <button
-                  type="submit"
-                  disabled={!comment.trim()}
-                  className="bg-black text-white px-6 py-2  hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed transition"
-                >
-                  Post Comment
-                </button>
+ <button
+  type="submit"
+  disabled={!comment.trim() || isSubmitting}
+  className="bg-black text-white px-6 py-2 hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed transition"
+>
+  {isSubmitting ? "Posting..." : "Post Comment"}
+</button>
               </div>
             </div>
           </div>
