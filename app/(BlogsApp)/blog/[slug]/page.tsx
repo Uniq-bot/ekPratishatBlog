@@ -9,6 +9,10 @@ interface Props {
 }
 
 import { unstable_cache } from "next/cache";
+import { Metadata } from "next";
+
+
+
 
 export const getBlog = (slug: string) =>
   unstable_cache(
@@ -28,6 +32,48 @@ export const getBlog = (slug: string) =>
       revalidate: 86400,
     },
   )();
+
+  export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+
+  const blog = await getBlog(slug);
+
+const url = `https://ek-pratishat-blog.vercel.app/blog/${slug}`;
+const image =
+  blog?.coverImage?.startsWith("http")
+    ? blog.coverImage
+    : `https://ek-pratishat-blog.vercel.app${blog?.coverImage}`;
+  return {
+    title: blog?.title,
+    description: blog?.description,
+    
+    openGraph: {
+      title: blog?.title,
+      url,
+      type: "article",
+      images: [
+        {
+          url: image,
+          width: 1200,
+          height: 630,
+          alt: blog?.title,
+        },
+      ],
+    },
+
+    twitter: {
+      card: "summary_large_image",
+      title: blog?.title,
+      description: blog?.description,
+      // images: [blog?.coverImage],
+    },
+  };
+}
+
 export const getRelatedBlogs = (
   categoryId: string,
   excludeSlug: string,
@@ -72,6 +118,9 @@ export const getRelatedBlogs = (
       revalidate: 86400,
     },
   )();
+
+
+
 export default async function BlogDets({ params }: Props) {
   const { slug } = await params;
   const blog = await getBlog(slug);

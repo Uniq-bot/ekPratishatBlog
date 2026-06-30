@@ -1,9 +1,12 @@
 "use client";
 
-import { Dot, Lightbulb } from "lucide-react";
+import { Copy, Dot, Lightbulb, Share2 } from "lucide-react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import BlogComments from "./BlogComments";
+import { LiaLinkedinIn } from "react-icons/lia";
+import { BsTwitterX } from "react-icons/bs";
+import { FaFacebook } from "react-icons/fa";
 
 // Heading tag map: level → HTML tag
 const headingTag: Record<number, keyof React.JSX.IntrinsicElements> = {
@@ -45,7 +48,41 @@ const BlogDetailClient = ({ blog }: { blog: any }) => {
   console.log(session)
   console.log(blog.comments)
   const blocks = parseBlocks(blog?.content);
-   
+   const currentUrl =
+  typeof window !== "undefined" ? window.location.href : "";
+
+const share = (url: string) => {
+  window.open(url, "_blank", "width=600,height=600");
+};
+
+const shareFacebook = () => {
+  share(
+    `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+      currentUrl
+    )}`
+  );
+};
+
+const shareX = () => {
+  share(
+    `https://twitter.com/intent/tweet?url=${encodeURIComponent(
+      currentUrl
+    )}&text=${encodeURIComponent(blog.title)}`
+  );
+};
+
+const shareLinkedIn = () => {
+  share(
+    `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+      currentUrl
+    )}`
+  );
+};
+
+const copyLink = async () => {
+  await navigator.clipboard.writeText(currentUrl);
+  alert("Link copied!");
+};
   return (
     <div className="w-full lg:w-[65%] h-full bg-[#F4F1EC] px-3 py-5 text-black sm:px-6 lg:px-10">
       {/* <button onClick={() => signOut()}>Sign out</button> */}
@@ -249,6 +286,52 @@ const BlogDetailClient = ({ blog }: { blog: any }) => {
             });
           })()}
         </div>
+        <div className="mt-12 border-t pt-6">
+  <div className="mb-4 flex items-center gap-2">
+    <Share2 className="text-[#79570E]" size={20} />
+    <h3 className="font-semibold text-lg">Share this article</h3>
+  </div>
+
+  <div className="flex flex-wrap gap-3">
+    <button
+      onClick={shareFacebook}
+      className="flex items-center gap-2 rounded-md border px-4 py-2 transition hover:bg-blue-600 hover:text-white"
+    >
+      <FaFacebook size={18} />
+      Facebook
+    </button>
+
+    <button
+      onClick={shareX}
+      className="flex items-center gap-2 rounded-md border px-4 py-2 transition hover:bg-black hover:text-white"
+    >
+      <BsTwitterX size={18} />
+      X
+    </button>
+
+    <button
+      onClick={shareLinkedIn}
+      className="flex items-center gap-2 rounded-md border px-4 py-2 transition hover:bg-blue-700 hover:text-white"
+    >
+      <LiaLinkedinIn size={18} />
+      LinkedIn
+    </button>
+
+    <button
+      onClick={copyLink}
+      className="flex items-center gap-2 rounded-md border px-4 py-2 transition hover:bg-gray-200"
+    >
+      <Copy size={18} />
+      Copy Link
+    </button>
+  </div>
+</div>
+
+<BlogComments
+  blogId={blog.id}
+  slug={blog.slug}
+  comments={blog.comments}
+/>
           <BlogComments blogId={blog.id} slug={blog.slug} comments={blog.comments} />
 
       </div>
