@@ -36,7 +36,7 @@ const ShareComp = ({ blogTitle, blogSlug }: { blogTitle: string; blogSlug: strin
   };
 
   const copyLink = async () => {
-    await navigator.clipboard.writeText(currentUrl);
+    await navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_BASE_URL}/blog/${blogSlug}`);
     alert("Link copied!");
   };
   return (

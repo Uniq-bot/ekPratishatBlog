@@ -62,7 +62,7 @@ const [isSubmitting, setIsSubmitting] = React.useState(false);
               alt="user"
               width={50}
               height={50}
-              className="rounded-full h-[50px] w-[50px]"
+              className="rounded-full h-12.5 w-12.5"
             />
 
             <div className="flex-1">
@@ -79,7 +79,7 @@ const [isSubmitting, setIsSubmitting] = React.useState(false);
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
                 placeholder="Write your thoughts..."
-                className="w-full min-h-[120px]  border p-3 outline-none resize-none focus:ring-2 focus:ring-black"
+                className="w-full min-h-30  border p-3 outline-none resize-none focus:ring-2 focus:ring-black"
               />
 
               <div className="flex justify-end mt-4">
@@ -129,7 +129,7 @@ const [isSubmitting, setIsSubmitting] = React.useState(false);
                   alt={item.userName}
                   width={45}
                   height={45}
-                  className="rounded-full h-[45px] w-[45px]"
+                  className="rounded-full h-11.25 w-11.25"
                 />
 
                 <div className="flex-1">
