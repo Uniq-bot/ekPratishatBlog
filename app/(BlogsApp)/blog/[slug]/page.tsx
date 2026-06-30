@@ -18,6 +18,8 @@ export const getBlog = (slug: string) =>
         include: {
           category: true,
           tags: true,
+          comments: true,
+
         },
       });
     },
@@ -74,10 +76,9 @@ export const getRelatedBlogs = (
 export default async function BlogDets({ params }: Props) {
   const { slug } = await params;
   const blog = await getBlog(slug);
-
   if (!blog) {
     notFound();
-  }
+  } 
 
   const relatedBlogs = await getRelatedBlogs(
     blog.categoryID,

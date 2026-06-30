@@ -1,5 +1,6 @@
 "use client";
 
+import { createComment } from "@/data/Comment";
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import React from "react";
@@ -15,36 +16,35 @@ type Comment = {
   createdAt: string;
 };
 
-const BlogComments = () => {
+const BlogComments = ({blogId, slug, comments:blogComment}: {blogId: string, slug:string, comments: any[]}) => {
   const { data: session } = useSession();
 
   const [comment, setComment] = React.useState("");
   const [comments, setComments] = React.useState<Comment[]>([]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!comment.trim()) return;
 
-    const newComment: Comment = {
-      id: Date.now(),
-      text: comment,
-      user: {
-        name: session!.user!.name!,
-        email: session!.user!.email!,
-        image: session!.user!.image!,
-      },
-      createdAt: new Date().toLocaleString(),
-    };
+    const formData = new FormData();
+    formData.append("content", comment);
+    formData.append("postId", blogId); 
+    formData.append("userEmail", session?.user?.email || "");
+    formData.append("userName", session?.user?.name || "");
+    formData.append("userImage", session?.user?.image || "");
+    formData.append("slug", slug);
+   
+    await createComment(formData);
+    
 
-    setComments((prev) => [newComment, ...prev]);
     setComment("");
   };
 
   return (
     <div className="w-full mx-auto mt-10">
       <h2 className="text-3xl font-bold mb-6">
-        Comments ({comments.length})
+        Comments ({blogComment.length})
       </h2>
 
       {session?.user ? (
@@ -107,22 +107,22 @@ const BlogComments = () => {
 
 
       <div className="mt-8 space-y-5">
-        {comments.length === 0 ? (
+        {blogComment.length === 0 ? (
           <div className="text-center py-10 text-gray-500 border ">
             No comments yet.
             <br />
             Be the first to comment.
           </div>
         ) : (
-          comments.map((item) => (
+          blogComment.map((item) => (
             <div
               key={item.id}
               className="border  p-5 bg-white shadow-sm"
             >
               <div className="flex gap-4">
                 <Image
-                  src={item.user.image}
-                  alt={item.user.name}
+                  src={item.userImage}
+                  alt={item.userName}
                   width={45}
                   height={45}
                   className="rounded-full h-[45px] w-[45px]"
@@ -132,20 +132,20 @@ const BlogComments = () => {
                   <div className="flex justify-between items-center">
                     <div>
                       <h3 className="font-semibold">
-                        {item.user.name}
+                        {item.userName}
                       </h3>
                       <p className="text-xs text-gray-500">
-                        {item.user.email}
+                        {item.userEmail}
                       </p>
                     </div>
 
                     <span className="text-xs text-gray-400">
-                      {item.createdAt}
+                      {new Date(item.createdAt).toLocaleString()}
                     </span>
                   </div>
 
                   <p className="mt-3 whitespace-pre-wrap text-gray-700">
-                    {item.text}
+                    {item.commentText}
                   </p>
                 </div>
               </div>

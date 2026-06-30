@@ -43,11 +43,12 @@ const parseBlocks = (raw: any): any[] => {
 const BlogDetailClient = ({ blog }: { blog: any }) => {
   const { data: session } = useSession();
   console.log(session)
-
+  console.log(blog.comments)
   const blocks = parseBlocks(blog?.content);
    
   return (
     <div className="w-full lg:w-[65%] h-full bg-[#F4F1EC] px-3 py-5 text-black sm:px-6 lg:px-10">
+      {/* <button onClick={() => signOut()}>Sign out</button> */}
       {/* Header */}
       <div className="flex w-full flex-col gap-2.5 border-b-3 border-[#d8a92f] pb-5">
         <h1 className="text-2xl font-semibold leading-tight sm:text-3xl lg:text-5xl">
@@ -248,7 +249,7 @@ const BlogDetailClient = ({ blog }: { blog: any }) => {
             });
           })()}
         </div>
-          <BlogComments />
+          <BlogComments blogId={blog.id} slug={blog.slug} comments={blog.comments} />
 
       </div>
     </div>

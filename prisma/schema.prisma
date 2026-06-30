@@ -45,6 +45,7 @@ model BlogComment{
   userEmail String
   userName String
   commentText String
+  userImage String
   createdAt DateTime @default(now())
 }
 
