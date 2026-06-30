@@ -46,7 +46,7 @@ const url = `${process.env.NEXT_PUBLIC_BASE_URL}/${slug}`;
 const image =
   blog?.coverImage?.startsWith("http")
     ? blog.coverImage
-    : `${process.env.NEXT_PUBLIC_BASE_URL}/${blog?.coverImage}`;
+    : `${process.env.NEXT_PUBLIC_BASE_URL}${blog?.coverImage}`;
   return {
     title: blog?.title,
     description: blog?.description,
