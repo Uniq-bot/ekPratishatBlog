@@ -82,7 +82,17 @@ export async function POST(req: Request) {
   },
 });
 
-const post = await prisma.blogPost.create({
+const existingBlog = await prisma.blogPost.findFirst({
+  where: {
+    title,
+  },
+});
+
+if (existingBlog) {
+  await prisma.blogPost.update({
+  where: {
+    id: existingBlog.id,
+  },
   data: {
     title,
     content,
@@ -102,6 +112,31 @@ const post = await prisma.blogPost.create({
     isToggled: !existingCurated,
   },
 });
+}
+else{
+  const post = await prisma.blogPost.create({
+  data: {
+    title,
+    content,
+    coverImage: coverImagePath,
+    description,
+    status: "PUBLISHED",
+    authorID,
+    categoryID: categoryId,
+    slug: generatedSlug,
+
+    tags: {
+      connect: tags.map((tag: any) => ({
+        id: tag.id,
+      })),
+    },
+
+    isToggled: !existingCurated,
+  },
+});
+}
+
+
     revalidateTag("blogs", "max");
     revalidateTag("latestBlogs", "max");
     revalidateTag("categories", "max");
@@ -114,7 +149,7 @@ const post = await prisma.blogPost.create({
     revalidatePath(`/blog/${generatedSlug}`);
 
     return NextResponse.json(
-      { message: "Blog created successfully", post },
+      { message: "Blog created successfully" },
       { status: 201 },
     );
   } catch (err: any) {
