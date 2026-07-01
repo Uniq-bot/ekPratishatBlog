@@ -73,7 +73,7 @@ export async function PUT(req: Request, { params }: RouteContext) {
 
       // coverImagePath = uploadedImage.secure_url;
     }
-
+    
     const updated = await prisma.blogPost.update({
       where: { id },
       data: {

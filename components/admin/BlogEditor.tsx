@@ -86,6 +86,7 @@ const BlogEditor = ({
 
     const blog = initialBlog.data;
 
+    setDraftId(blog.id ?? null);
     setTitle(blog.title ?? "");
     setDescription(blog.description ?? "");
     setCategoryId(blog.categoryID ?? blog.categoryId ?? "");
@@ -151,7 +152,10 @@ const BlogEditor = ({
     const formData = buildFormData("draft");
 
     try {
-      const result = await saveToDraft({ id: draftId ?? undefined, formData });
+      const result = await saveToDraft({
+        id: draftId ?? initialBlog?.data?.id ?? undefined,
+        formData,
+      });
       // Adjust this to match whatever shape your API actually returns
       const newId = result?.data?.id ?? result?.id;
       if (!draftId && newId) setDraftId(newId);

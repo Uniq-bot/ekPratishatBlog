@@ -2,6 +2,7 @@ import { prisma } from "@/libs/prisma";
 import { mkdir, writeFile } from "fs/promises";
 import { NextResponse } from "next/server";
 import { join } from "path";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function PATCH(
   req: Request,
@@ -13,12 +14,13 @@ export async function PATCH(
     const formData = await req.formData();
 
     const title = (formData.get("title") as string) || "";
-    const content = (formData.get("content") as string) || "";
+    const contentRaw = (formData.get("content") as string) || "[]";
     const description = (formData.get("description") as string) || "";
     const categoryID = (formData.get("categoryId") as string) || null;
     const tagsRaw = formData.get("tags") as string;
     const imageFile = formData.get("coverImage") as File | null;
 
+    const content = contentRaw ? JSON.parse(contentRaw) : [];
     const tags = tagsRaw ? JSON.parse(tagsRaw) : [];
 
     let coverImagePath: string | undefined;
@@ -52,36 +54,43 @@ export async function PATCH(
             .replace(/[^\w-]+/g, "")}-${Date.now()}`
         : `draft-${Date.now()}`;
 
-    const post = await prisma.blogPost.update({
-      where: {
-        id,
-      },
+    const existingDraft = await prisma.blogPost.findUnique({
+      where: { id },
+      include: { tags: true },
+    });
+
+    if (!existingDraft) {
+      return NextResponse.json(
+        { message: "Draft not found", data: null },
+        { status: 404 }
+      );
+    }
+    const updatedDraft = await prisma.blogPost.update({
+      where: { id },
       data: {
-        title,
-        description,
+        title: title || existingDraft.title,
         content,
-         ...(categoryID && {
-    categoryID: categoryID,
-  }),
-
+        description,
         slug,
-
-        ...(coverImagePath && {
-          coverImage: coverImagePath,
-        }),
-
+        categoryID,
+        ...(coverImagePath ? { coverImage: coverImagePath } : {}),
+        status: "DRAFT",
         tags: {
-          set: [],
-          connect: tags.map((tag: any) => ({
-            id: tag.id,
-          })),
+          set: tags.map((tag: any) => ({ id: tag.id })),
         },
       },
+      include: { category: true, tags: true },
     });
+
+    revalidatePath(`/blog/${updatedDraft.slug}`);
+    revalidatePath("/");
+    revalidatePath("/blog");
+    revalidateTag("blogs", "max");
+    revalidateTag("latestBlogs", "max");
 
     return NextResponse.json({
       message: "Draft updated successfully",
-      post,
+      data: updatedDraft,
     });
   } catch (err: any) {
     console.error(err);
