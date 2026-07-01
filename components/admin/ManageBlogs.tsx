@@ -132,15 +132,12 @@ const ManageBlogs = () => {
                     <div className="flex justify-center gap-2">
                       {/* Link instead of router.push */}
                       <Link
-                        href={isRowDisabled ? "#" : `/admin/edit/${blog.id}`}
+                        href={isRowDisabled ? "#" : blog.status==="ARCHIVED"?"#": `/admin/edit/${blog.id}`}
+                        
                         onClick={(e) => {
                           if (isRowDisabled) e.preventDefault();
                         }}
-                        className={`p-2 border transition-all ${
-                          isRowDisabled
-                            ? "pointer-events-none opacity-50"
-                            : "hover:bg-gray-100"
-                        }`}
+                        className={`p-2 ${blog.status === "ARCHIVED" ? " cursor-not-allowed opacity-50" : "hover:bg-gray-100"} border transition-all`}
                       >
                         <Edit />
                       </Link>
