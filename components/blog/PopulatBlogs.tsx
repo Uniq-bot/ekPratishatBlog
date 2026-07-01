@@ -18,7 +18,13 @@ const trackView = useTrackBlogView();
       trackView(blog);
      };
   return (
-    <div className="w-full flex flex-col gap-3 border-l-5 border-[#EBC044] pl-5 py-2">
+    <div
+    style={
+      {
+        borderColor:"rgb(228 180 36)"
+      }
+    }
+    className="w-full flex flex-col gap-3 border-l-5  pl-5 py-2">
       <p className="text-lg font-bold flex items-center gap-2 text-black">
         <TrendingUp size={18} className="text-[#C9981A]" />
         Popular Posts

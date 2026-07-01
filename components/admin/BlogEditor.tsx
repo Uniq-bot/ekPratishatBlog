@@ -227,7 +227,7 @@ const BlogEditor = ({
       className={`w-full min-h-full relative flex flex-col lg:flex-row gap-4 lg:gap-5 ${showModel ? "overflow-hidden" : ""}`}
     >
       {/* Editor panel */}
-      <div className="w-full lg:flex-1 transition-all min-h-[calc(100%-5px)] border shadow shadow-black py-3 lg:py-5 bg-[#EBECD8]/50 relative z-20">
+      <div className="w-full  lg:flex-1 transition-all min-h-[calc(100%-5px)] h-fit border shadow shadow-black py-3 lg:py-5 bg-[#EBECD8]/50 relative z-20">
         <div className="w-full flex items-center justify-between pr-5">
           <h1 className="text-lg lg:text-xl border-r border border-l-0 bg-[#DBDBB8] w-fit px-4 lg:px-10 py-2">
             {mode === "create" ? "Create" : "Edit"} Blog
@@ -252,7 +252,7 @@ const BlogEditor = ({
         )}
 
         <form
-          className="w-full lg:w-[90%] m-auto px-3 lg:px-10"
+          className="w-full h-fit lg:w-[90%] m-auto px-3 lg:px-10"
           onSubmit={handleSubmit}
         >
           <div className="w-full flex flex-col gap-2 my-3 lg:my-5">
@@ -324,11 +324,15 @@ const BlogEditor = ({
 
             {coverImage ? (
               <div className="relative w-1/2 border bg-gray-50 overflow-hidden">
-                <img
+                {
+                  preview&&(
+                    <img
                   src={preview}
                   alt="Cover preview"
                   className="w-full h-32 sm:h-40 lg:h-60 object-cover"
                 />
+                  )
+                }
                 <button
                   type="button"
                   onClick={() => {

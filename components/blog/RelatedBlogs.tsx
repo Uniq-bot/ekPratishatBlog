@@ -48,13 +48,13 @@ const trackView = useTrackBlogView();
                 <Link
                   href={`/blog/${blog.slug ?? blog.id}`}
                   onClick={(e) => handleClick(e, blog)}
-                  className="flex gap-10 py-4 justify-between flex-col px-5 cursor-pointer border border-b-5 border-[#EBC044] transition-all group p-2 hover:border-[#FEE685] bg-[#21201C]/50 backdrop-blur-lg"
+                  className="flex gap-10 py-4 justify-between flex-col px-5 cursor-pointer border border-b-5 border-[#EBC044] transition-all group p-2  bg-[#0F172A] backdrop-blur-lg"
                 >
                   <div className="flex flex-col gap-4">
                     <p className="border border-[#FFD07E] bg-[rgba(255,253,248,0.94)] shadow-md ring-1 ring-[#36332e] backdrop-blur-sm uppercase font-semibold w-fit px-2 py-1 text-xs text-black">
                       {blog.category?.name || "Uncategorized"}
                     </p>
-                    <h2 className="text-xl text-white font-medium group-hover:text-[#d69406] transition-all line-clamp-2">
+                    <h2 className="text-xl text-white font-medium  transition-all line-clamp-2">
                       {blog.title}
                     </h2>
                   </div>

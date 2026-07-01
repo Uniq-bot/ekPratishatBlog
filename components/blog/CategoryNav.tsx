@@ -22,7 +22,7 @@ const CategoryNav = ({
         <Link
         scroll={false}
         href={pathname}
-        className={`px-3 py-1  rounded border ${!currentCategory ? "bg-amber-400 text-black" : "border-gray-500 text-black"}`}
+        className={`px-3 py-1  rounded border ${!currentCategory ? "bg-[linear-gradient(135deg,#EBC044,#F4CA3B_28%,#FFD33A_55%,#F4DC91_78%,#F4CA3B)] text-black" : "border-gray-500 text-black"}`}
       >
         All
       </Link>
@@ -31,7 +31,7 @@ const CategoryNav = ({
           key={category.id}
           scroll={false}
           href={`${pathname}?category=${category.slug}`}
-          className={`px-3 py-1 whitespace-nowrap rounded border ${currentCategory === category.slug ? "bg-amber-400 text-black" : "border-gray-500 text-black"}`}
+          className={`px-3 py-1 whitespace-nowrap rounded border ${currentCategory === category.slug ? "bg-[linear-gradient(135deg,#EBC044,#F4CA3B_28%,#FFD33A_55%,#F4DC91_78%,#F4CA3B)] text-black" : "border-gray-500 text-black"}`}
         >
           {category.name}
         </Link>

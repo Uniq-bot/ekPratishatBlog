@@ -33,7 +33,12 @@ const handleClick = async () => {
 };
   return (
     <div
-      className="w-full h-fit text-black  mt-4 lg:mt-0   md:flex flex-col items-start  border-l-5 border-[#EBC044]  gap-5 p-5 "
+    style={
+      {
+        borderColor:"rgb(228 180 36)"
+      }
+    }
+      className="w-full h-fit text-black  mt-4 lg:mt-0   md:flex flex-col items-start  border-l-5   gap-5 p-5 "
     >
       <h2 className="text-xl font-bold">
         Stay Updated with Real Estate Trends
@@ -49,7 +54,7 @@ const handleClick = async () => {
         placeholder="Enter your email"
         className="bg-white outline-none text-black border border-gray-300 w-[70%] h-10 px-3"
       />
-      <button onClick={handleClick} className="bg-[#d0aa3a] cursor-pointer transition-all hover:bg-[#EBC044] text-black/60 px-5 py-2 ">
+      <button onClick={handleClick} className="bg-[linear-gradient(135deg,#EBC044,#F4CA3B_28%,#FFD33A_55%,#F4DC91_78%,#F4CA3B)]  cursor-pointer transition-all hover:bg-[#EBC044] text-black font-bold px-5 py-2 ">
         Subscribe
       </button>
     </div>

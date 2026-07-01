@@ -32,7 +32,7 @@ setCalloutTitle: React.Dispatch<React.SetStateAction<string>>;
 calloutDescription: string;
 setCalloutDescription: React.Dispatch<React.SetStateAction<string>>;
 }) => {
-  const headingLevels = [1, 2, 3, 4, 5];
+  const headingLevels = [ 2, 3, 4, 5];
 
   const imageUpload = useImageUpload();
  const handleAddBlock = async (e: React.MouseEvent) => {

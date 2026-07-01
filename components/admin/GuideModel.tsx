@@ -2,7 +2,16 @@
 
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Type, Pilcrow, List, Image, Quote, Info, Minus } from "lucide-react";
+import {
+  X,
+  Type,
+  Pilcrow,
+  List,
+  Image,
+  Quote,
+  Info,
+  Minus,
+} from "lucide-react";
 
 const GuideModel = ({
   showModel,
@@ -19,10 +28,9 @@ const GuideModel = ({
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
           transition={{ duration: 0.2 }}
-          className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 p-4"
+          className="fixed inset-0 z-999 flex items-center justify-center bg-black/50 p-4"
         >
           <div className="w-full max-w-2xl max-h-[85vh] overflow-y-auto bg-white  shadow-xl relative p-6">
-
             {/* Header */}
             <div className="flex items-center justify-between border-b pb-3 mb-4">
               <h2 className="text-xl font-bold flex items-center gap-2">
@@ -39,13 +47,15 @@ const GuideModel = ({
 
             {/* Content */}
             <div className="space-y-5 text-sm text-gray-700">
-
               {/* Intro */}
               <div>
-                <h3 className="font-semibold text-base mb-1">How this editor works</h3>
+                <h3 className="font-semibold text-base mb-1">
+                  How this editor works
+                </h3>
                 <p>
-                  Your blog is built using <b>blocks</b>. Each block is a piece of content
-                  (paragraph, heading, image, etc). You can add, reorder, or delete blocks.
+                  Your blog is built using <b>blocks</b>. Each block is a piece
+                  of content (paragraph, heading, image, etc). You can add,
+                  reorder, edit, or delete blocks.
                 </p>
               </div>
 
@@ -55,21 +65,28 @@ const GuideModel = ({
                   <Pilcrow size={16} /> Paragraph
                 </h4>
                 <p className="text-gray-600 mt-1">
-                  Use for normal text content like explanations and descriptions.
+                  Use this for regular texts. Each paragraph is a separate
+                  block.
                 </p>
               </div>
 
               {/* Heading */}
               <div className="border  p-3">
                 <h4 className="font-semibold flex items-center gap-2">
-                  <Type size={16} /> Heading (H1–H5)
+                  <Type size={16} /> Heading (H2–H5)
                 </h4>
                 <p className="text-gray-600 mt-1">
-                  Use headings to structure your blog. H1 is largest, H5 is smallest.
+                  Use headings to structure your blog. H1 is largest, H5 is
+                  smallest.
                 </p>
                 <ul className="list-disc ml-5 mt-2 text-gray-600">
-                  <li>H1 → Main title (use rarely)</li>
-                  <li>H2 → Section title</li>
+                  <li>
+                    H1 → Main title (its is set by default for the main title
+                    only)
+                  </li>
+                  <li>
+                    H2 → Section title (the main headings for the contents)
+                  </li>
                   <li>H3–H5 → Subsections</li>
                 </ul>
               </div>
@@ -90,7 +107,8 @@ const GuideModel = ({
                   <Image size={16} /> Image
                 </h4>
                 <p className="text-gray-600 mt-1">
-                  Paste an image URL. Make sure it is publicly accessible.
+                  Choose the image related to the content. Make sure it is
+                  publicly accessible.
                 </p>
               </div>
 
@@ -120,7 +138,8 @@ const GuideModel = ({
                   <Minus size={16} /> Divider
                 </h4>
                 <p className="text-gray-600 mt-1">
-                  Adds a visual break between sections.
+                  Adds a visual break between sections. Don't overuse it; use it
+                  only when necessary.
                 </p>
               </div>
 
@@ -128,10 +147,42 @@ const GuideModel = ({
               <div className="bg-gray-100 p-3 ">
                 <h4 className="font-semibold mb-1">Pro Tips</h4>
                 <ul className="list-disc ml-5 text-gray-600">
-                  <li>Use headings to improve SEO</li>
-                  <li>Keep paragraphs short (2–4 lines)</li>
-                  <li>Use callouts only for important info</li>
-                  <li>Drag blocks to reorder content</li>
+                  <li>Craft headlines that inform first and attract second.</li>
+                  <li>
+                    Keep paragraphs concise to improve readability across all
+                    devices.
+                  </li>
+                  <li>
+                    Support every claim with credible sources whenever possible.
+                  </li>
+                  <li>
+                    Use clear headings and subheadings to guide readers
+                    naturally.
+                  </li>
+                  <li>
+                    Maintain a consistent tone, style, and formatting throughout
+                    the article.
+                  </li>
+                  <li>
+                    Proofread carefully for grammar, spelling, and factual
+                    accuracy before publishing.
+                  </li>
+                  <li>
+                    Optimize images with descriptive alt text and appropriate
+                    file sizes.
+                  </li>
+                  <li>
+                    Include internal and external links where they add genuine
+                    value.
+                  </li>
+                  <li>
+                    Write with the reader's intent in mind rather than search
+                    engines alone.
+                  </li>
+                  <li>
+                    Review the article once more after publishing to ensure
+                    everything renders correctly.
+                  </li>
                 </ul>
               </div>
             </div>

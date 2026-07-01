@@ -154,7 +154,7 @@ console.log("Uploaded image:", image);
   };
 
   return (
-    <div className="w-full p-2 lg:p-3 flex border border-dashed flex-col gap-2 my-3 lg:my-5">
+    <div className="w-full h-full p-2 lg:p-3 flex border border-dashed flex-col gap-2 my-3 lg:my-5">
       <div className="w-full flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1 sm:gap-0">
         <label className="text-xs lg:text-sm font-medium text-gray-700">
           Content Blocks

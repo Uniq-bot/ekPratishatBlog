@@ -94,10 +94,10 @@ const BlogCard = ({ blog }: { blog: any }) => {
       href={`/blog/${blog.slug}`}
       onClick={handleClick}
       title={blog.title}
-      className="w-full min-h-48  overflow-hidden hover:bg-[#f0f0f0] transition-all group"
+      className="w-full min-h-48   overflow-hidden hover:bg-[#f0f0f0] transition-all group"
     >
       <div className="w-full border-b-2 pb-5 text-black cursor-pointer group flex flex-col p-5 md:flex-row border-[#EBC044]  gap-5 overflow-hidden">
-        <div className="w-full md:w-60 relative h-48 md:h-50 overflow-hidden shrink-0">
+        <div className="w-full md:w-60 shadow-black/40 shadow-md relative h-48 md:h-50 overflow-hidden shrink-0">
           <Image
             src={blog?.coverImage ?? "/logo.png"}
             alt={blog?.title ?? "Blog cover"}
@@ -112,14 +112,14 @@ const BlogCard = ({ blog }: { blog: any }) => {
 
         <div className="py-1 flex flex-col items-start flex-1 gap-2">
           <div>
-            <span className="text-[15px] font-semibold bg-[rgba(154,106,0,0.07)] p-1 px-3  text-[#080807]">
+            <span className="text-[15px] font-semibold bg-[linear-gradient(135deg,#EBC044,#F4CA3B_28%,#FFD33A_55%,#F4DC91_78%,#F4CA3B)] p-1 px-3  text-[#080807]">
               {/* {new Date(blog?.createdAt).toLocaleDateString()} */}
               {blog?.category?.name}
             </span>
             <span>{` • ${readTime}`}</span>
           </div>
 
-          <h2 className="text-2xl group-hover:text-[#B8914A] font-bold transition-all leading-tight">
+          <h2 className="text-2xl  font-bold transition-all leading-tight">
             {blog?.title}
           </h2>
 
@@ -134,7 +134,7 @@ const BlogCard = ({ blog }: { blog: any }) => {
               {blog.tags.slice(0, 3).map((tag: any, index: number)  => (
                 <span
                   key={index}
-                  className="text-[11px] border rounded-xl border-[#1111] bg-[#FFD07E] p-1 text-[#36332e] uppercase font-semibold"
+                  className="text-[11px] border rounded-xl border-[#0001] bg-[#F8F2E6] p-1 text-[#475569] uppercase font-semibold"
                 >
                   {tag.name}
                 </span>
@@ -143,9 +143,8 @@ const BlogCard = ({ blog }: { blog: any }) => {
           )}
 
           <div className="flex items-center justify-between w-full mt-3">
-            <span className="text-[15px] font-semibold bg-[rgba(154,106,0,0.07)] p-1 px-3  text-[#080807]">
+            <span className="text-[15px] font-semibold  p-1 px-3  text-[#080807]">
               {new Date(blog?.createdAt).toLocaleDateString()}
-              {/* {blog?.category?.name} */}
             </span>
             <motion.p whileHover={{ x: 5 }} transition={{ duration: 0.3 }}>
               Read more <span>→</span>

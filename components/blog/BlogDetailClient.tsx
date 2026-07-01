@@ -1,17 +1,14 @@
 "use client";
 
-import { Copy, Dot, Lightbulb, Share2 } from "lucide-react";
-import { signIn, signOut, useSession } from "next-auth/react";
+import {  Dot, Lightbulb } from "lucide-react";
+import {  useSession } from "next-auth/react";
 import Image from "next/image";
 import BlogComments from "./BlogComments";
-import { LiaLinkedinIn } from "react-icons/lia";
-import { BsTwitterX } from "react-icons/bs";
-import { FaFacebook } from "react-icons/fa";
+
 import ShareComp from "./ShareComp";
 
 // Heading tag map: level → HTML tag
 const headingTag: Record<number, keyof React.JSX.IntrinsicElements> = {
-  1: "h1",
   2: "h2",
   3: "h3",
   4: "h4",
@@ -20,12 +17,11 @@ const headingTag: Record<number, keyof React.JSX.IntrinsicElements> = {
 };
 
 const headingClass: Record<number, string> = {
-  1: "text-3xl sm:text-4xl lg:text-5xl font-black mt-8 sm:mt-10 lg:mt-12 mb-4 sm:mb-5 lg:mb-6 text-black",
-  2: "text-2xl sm:text-3xl lg:text-4xl font-bold mt-7 sm:mt-8 lg:mt-10 mb-4 sm:mb-5 border-l-4 border-[#79570E] pl-3 sm:pl-4 text-black",
-  3: "text-xl sm:text-2xl lg:text-3xl font-semibold mt-6 sm:mt-7 lg:mt-8 mb-3 sm:mb-4 text-[#79570E]",
-  4: "text-lg sm:text-xl lg:text-2xl font-semibold mt-5 sm:mt-6 mb-2 sm:mb-3 text-gray-800",
-  5: "text-base sm:text-lg lg:text-xl font-medium mt-4 sm:mt-5 mb-2 text-gray-700",
-  6: "text-sm sm:text-base lg:text-lg font-medium mt-3 sm:mt-4 mb-2 text-gray-600",
+  2: "text-2xl sm:text-3xl lg:text-4xl font-bold mt-5 sm:mt-6 lg:mt-7 mb-3 sm:mb-4 border-l-4 border-[#79570E] pl-3 sm:pl-4 text-black",
+  3: "text-xl sm:text-2xl lg:text-3xl font-semibold mt-4 sm:mt-5 lg:mt-6 mb-2 sm:mb-3 text-[#79570E]",
+  4: "text-lg sm:text-xl lg:text-2xl font-semibold mt-4 sm:mt-2 mb-3 sm:mb-2 text-gray-800",
+  5: "text-base sm:text-lg lg:text-xl font-medium mt-2 sm:mt-3 mb-1 text-gray-700",
+  6: "text-sm sm:text-base lg:text-lg font-medium mt-1 sm:mt-2 mb-1 text-gray-600",
 };
 
 const parseBlocks = (raw: any): any[] => {
@@ -52,7 +48,7 @@ const BlogDetailClient = ({ blog }: { blog: any }) => {
 
  
   return (
-    <div className="w-full lg:w-[65%] h-full bg-[#F4F1EC] px-3 py-5 text-black sm:px-6 lg:px-10">
+    <div className="w-full lg:w-[65%] h-full  px-3 py-5 text-black sm:px-6 lg:px-10">
       {/* <button onClick={() => signOut()}>Sign out</button> */}
       {/* Header */}
       <div className="flex w-full flex-col gap-2.5 border-b-3 border-[#d8a92f] pb-5">
@@ -144,7 +140,7 @@ const BlogDetailClient = ({ blog }: { blog: any }) => {
                   return (
                     <p
                       key={block.id ?? index}
-                      className="mb-5 text-sm leading-8 text-gray-700 sm:text-base lg:text-lg"
+                      className=" text-sm py-2 leading-8 text-gray-700 sm:text-base lg:text-lg"
                     >
                       {block.content}
                     </p>
@@ -186,7 +182,7 @@ const BlogDetailClient = ({ blog }: { blog: any }) => {
                   return (
                     <ul
                       key={block.id ?? index}
-                      className="my-5 flex flex-col gap-3  border border-[#79570E] border-l-5 p-5"
+                      className="mb-5 flex flex-col gap-3  border border-[#79570E] border-l-5 px-3 py-2"
                     >
                       {(Array.isArray(block.content) ? block.content : []).map(
                         (item: string, i: number) => (
