@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
-import { Trash } from "lucide-react";
 import { useCreateCategory, useGetCategory } from "@/hooks/useAdminBlogs";
 import { Category as Cate } from "@/types/blog";
+import { notify } from "@/libs/notify";
 
 
 interface CategoryProp{
@@ -22,8 +22,8 @@ const Category = ({ categories, isLoading }: CategoryProp) => {
       await createCategory({ name: catName.trim(), description: catDesc.trim() });
       setCatName("");
       setCatDesc("");
-    } catch (err: any) {
-      alert(err.message || "Failed to create category");
+    } catch {
+      notify.error("Category creation failed", "We could not create the category right now.");
     }
   };
 

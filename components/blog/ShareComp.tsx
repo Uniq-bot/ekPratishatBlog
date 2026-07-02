@@ -3,6 +3,7 @@ import React from 'react'
 import { BsTwitterX } from 'react-icons/bs';
 import { FaFacebook } from 'react-icons/fa';
 import { LiaLinkedinIn } from 'react-icons/lia';
+import { notify } from "@/libs/notify";
 
 const ShareComp = ({ blogTitle, blogSlug }: { blogTitle: string; blogSlug: string }) => {
   const currentUrl = typeof window !== "undefined" ? window.location.href : "";
@@ -36,8 +37,12 @@ const ShareComp = ({ blogTitle, blogSlug }: { blogTitle: string; blogSlug: strin
   };
 
   const copyLink = async () => {
-    await navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_BASE_URL}/blog/${blogSlug}`);
-    alert("Link copied!");
+    try {
+      await navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_BASE_URL}/blog/${blogSlug}`);
+      notify.success("Link copied", "The article link was copied to your clipboard.");
+    } catch {
+      notify.error("Copy failed", "We could not copy the link right now.");
+    }
   };
   return (
      <div className="mt-12 border-t pt-6">

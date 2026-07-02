@@ -40,10 +40,8 @@ const parseBlocks = (raw: any): any[] => {
   return [];
 };
 
-const BlogDetailClient = ({ blog }: { blog: any }) => {
+const BlogDetailClient = ({ blog, comments }: { blog: any; comments: any[] }) => {
   const { data: session } = useSession();
-  console.log(session);
-  console.log(blog.comments);
   const blocks = parseBlocks(blog?.content);
 
  
@@ -255,7 +253,7 @@ const BlogDetailClient = ({ blog }: { blog: any }) => {
         <BlogComments
           blogId={blog.id}
           slug={blog.slug}
-          comments={blog.comments}
+          comments={comments}
         />
       </div>
     </div>

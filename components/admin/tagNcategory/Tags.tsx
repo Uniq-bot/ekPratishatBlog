@@ -1,8 +1,8 @@
 "use client";
 import { useCreateTag, useGetTags } from "@/hooks/useAdminBlogs";
 import { Tag as TagP } from "@/types/blog";
-import { Trash } from "lucide-react";
 import React from "react";
+import { notify } from "@/libs/notify";
 
 
 interface TagProp {
@@ -18,8 +18,8 @@ const Tag = ({ tags, isLoading }: { tags?: TagP[]; isLoading: boolean }) => {
     try {
       await createTag({ name: tagValue.trim() });
       setTagValue("");
-    } catch (err: any) {
-      alert(err.message || "Failed to create tag");
+    } catch {
+      notify.error("Tag creation failed", "We could not create the tag right now.");
     }
   };
 

@@ -55,7 +55,8 @@ export const createAdvertisement = async (formData: FormData) => {
     revalidateTag("ads", "max");
     return ad;
   } catch (error) {
-    console.log("Error creating the ad", error);
+    console.error("Error creating the ad", error);
+    throw new Error("We could not create the advertisement right now.");
   }
 };
 
@@ -127,7 +128,7 @@ export const updateAd = async (formData: FormData) => {
     return updatedAd;
   } catch (error) {
     console.error("Error updating ad:", error);
-    throw error;
+    throw new Error("We could not update the advertisement right now.");
   }
 };
 export const deleteAd = async (adId: string) => {
@@ -142,7 +143,7 @@ export const deleteAd = async (adId: string) => {
     revalidatePath("/");
   } catch (error) {
     console.log("Error deleting the ad", error);
-    throw error;
+    throw new Error("We could not delete the advertisement right now.");
   }
 };
 
@@ -187,6 +188,6 @@ export const setAdStatus = async ({
     revalidatePath("/");
   } catch (error) {
     console.error("Error setting ad status:", error);
-    throw error;
+    throw new Error("We could not update the advertisement status right now.");
   }
 };

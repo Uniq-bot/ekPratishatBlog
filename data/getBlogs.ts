@@ -1,95 +1,92 @@
-import { revalidatePath, unstable_cache } from "next/cache";
+import { unstable_cache } from "next/cache";
 import { prisma } from "@/libs/prisma";
+
 export const getBlogs = unstable_cache(
   async ({
-  page = 1,
-  limit = 10,
-  category,
-  tag,
-  sort = "latest",
-  search,
-}: {
-  page?: number;
-  limit?: number;
-  category?: string;
-  tag?: string;
-  sort?: "latest" | "oldest";
-  search?: string;
-} = {}) => {
-  try {
-      const start = performance.now();
+    page = 1,
+    limit = 10,
+    category,
+    tag,
+    sort = "latest",
+    search,
+  }: {
+    page?: number;
+    limit?: number;
+    category?: string;
+    tag?: string;
+    sort?: "latest" | "oldest";
+    search?: string;
+  } = {}) => {
+    try {
+      const skip = (page - 1) * limit;
 
-    const skip = (page - 1) * limit;
-
-    const where: any = {
-      status: "PUBLISHED",
-      ...(category && {
-        category: {
-          is: { slug: category },
-        },
-      }),
-      ...(tag && {
-        tags: {
-          some: { slug: tag },
-        },
-      }),
-      ...(search && {
-        OR: [
-          { title: { contains: search, mode: "insensitive" as const } },
-          { description: { contains: search, mode: "insensitive" as const } },
-        ],
-      }),
-    };
-
-    const orderBy =
-      sort === "oldest"
-        ? { createdAt: "asc" as const }
-        : { createdAt: "desc" as const };
-
-    const [blogs, totalCount] = await Promise.all([
-      prisma.blogPost.findMany({
-        where,
-        orderBy,
-        skip,
-        take: limit,
-        select: {
-          id: true,
-          title: true,
-          slug: true,
-          coverImage: true,
-          description: true,
-          createdAt: true,
-          content: true,
+      const where: any = {
+        status: "PUBLISHED",
+        ...(category && {
           category: {
-            select: {
-              name: true,
-              slug: true,
-            },
+            is: { slug: category },
           },
-
+        }),
+        ...(tag && {
           tags: {
-            select: {
-              name: true,
-              slug: true,
+            some: { slug: tag },
+          },
+        }),
+        ...(search && {
+          OR: [
+            { title: { contains: search, mode: "insensitive" as const } },
+            { description: { contains: search, mode: "insensitive" as const } },
+          ],
+        }),
+      };
+
+      const orderBy =
+        sort === "oldest"
+          ? { createdAt: "asc" as const }
+          : { createdAt: "desc" as const };
+
+      const [blogs, totalCount] = await Promise.all([
+        prisma.blogPost.findMany({
+          where,
+          orderBy,
+          skip,
+          take: limit,
+          select: {
+            id: true,
+            title: true,
+            slug: true,
+            coverImage: true,
+            description: true,
+            createdAt: true,
+            category: {
+              select: {
+                name: true,
+                slug: true,
+              },
+            },
+            tags: {
+              select: {
+                name: true,
+                slug: true,
+              },
             },
           },
-        },
-      }),
-      prisma.blogPost.count({ where }),
-    ]);
-    return { posts: blogs, totalCount };
-  } catch (err) {
-    console.error("BLOG FETCH ERROR:", err);
-    return { posts: [], totalCount: 0 };
-  }
-},
-["blogs"],
-{
-   tags: ["blogs"],
-  revalidate: 60 * 60 * 24, 
-}
+        }),
+        prisma.blogPost.count({ where }),
+      ]);
 
-)
+      return { posts: blogs, totalCount };
+    } catch (err) {
+      console.error("BLOG FETCH ERROR:", err);
+      return { posts: [], totalCount: 0 };
+    }
+  },
+  ["blogs"],
+  {
+    tags: ["blogs"],
+    revalidate: 60 * 60 * 24,
+  },
+);
 
 export const getLatestBlogs = unstable_cache(
   async () => {
@@ -97,46 +94,41 @@ export const getLatestBlogs = unstable_cache(
       const blogs = await prisma.blogPost.findMany({
         where: { isToggled: false, status: "PUBLISHED" },
         orderBy: { createdAt: "desc" },
+        take: 4,
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          coverImage: true,
+          description: true,
+          createdAt: true,
+          category: {
+            select: {
+              name: true,
+              slug: true,
+            },
+          },
+          tags: {
+            select: {
+              name: true,
+              slug: true,
+            },
+          },
+        },
+      });
 
-  take: 4,
-  select: {
-    id: true,
-    title: true,
-    slug: true,
-    coverImage: true,
-    description: true,
-    createdAt: true,
-
-    category: {
-      select: {
-        name: true,
-        slug: true,
-      },
-    },
-
-    tags: {
-      select: {
-        name: true,
-        slug: true,
-      },
-    },
+      return { posts: blogs };
+    } catch (err) {
+      console.error("INITIAL LATEST FETCH ERROR:", err);
+      return { posts: [] };
+    }
   },
-},
-  
-);
-
-    return { posts: blogs };
-  } catch (err) {
-    console.error("INITIAL LATEST FETCH ERROR:", err);
-    return { posts: [] };
-  }
-},
-["latestBlogs"],
+  ["latestBlogs"],
   {
     tags: ["latestBlogs"],
-    revalidate: 60 * 60 * 24, 
-  }
-)
+    revalidate: 60 * 60 * 24,
+  },
+);
 
 export const getCategory = unstable_cache(
   async () => prisma.category.findMany(),
@@ -163,19 +155,34 @@ export const getPopularBlogs = unstable_cache(
         where: { status: "PUBLISHED" },
         orderBy: [{ viewCount: "desc" }, { createdAt: "desc" }],
         take: 3,
-      include: { tags: true, category: true },
-    });
-    return { posts: blogs };
-  } catch (err) {
-    console.error("POPULAR BLOGS FETCH ERROR:", err);
-    return { posts: [] };
-  }
-},
-["popularBlogs"],
-{
-  tags: ["popularBlogs"],
-  revalidate: 60 * 60 * 24,
-}
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          coverImage: true,
+          description: true,
+          viewCount: true,
+          createdAt: true,
+          category: {
+            select: {
+              name: true,
+              slug: true,
+            },
+          },
+        },
+      });
+
+      return { posts: blogs };
+    } catch (err) {
+      console.error("POPULAR BLOGS FETCH ERROR:", err);
+      return { posts: [] };
+    }
+  },
+  ["popularBlogs"],
+  {
+    tags: ["popularBlogs"],
+    revalidate: 60 * 60 * 24,
+  },
 );
 
 export const getCuratedBlog = unstable_cache(async () => {
@@ -183,6 +190,20 @@ export const getCuratedBlog = unstable_cache(async () => {
       where: {
         isToggled: true,
         status: "PUBLISHED",
+      },
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        coverImage: true,
+        description: true,
+        createdAt: true,
+        category: {
+          select: {
+            name: true,
+            slug: true,
+          },
+        },
       },
     });
   }, ["curated-blog"], { revalidate: 300 });
@@ -194,7 +215,17 @@ export const getAds = unstable_cache(
       const threeAds = await prisma.advertisement.findMany({
         where: { isAdRunning: true },
         orderBy: { createdAt: "desc" },
-        // take: 3,
+        take: 6,
+        select: {
+          id: true,
+          AdTitle: true,
+          AdDescription: true,
+          AdPoster: true,
+          AdLink: true,
+          AdSponsorName: true,
+          AdType: true,
+          createdAt: true,
+        },
       });
       return threeAds;
     } catch (error) {

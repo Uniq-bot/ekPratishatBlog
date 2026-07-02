@@ -36,6 +36,11 @@ model BlogPost {
   blogViews   BlogViews[]
   tags        Tag[]       @relation("PostTags")
   comments     BlogComment[]
+
+  @@index([status, createdAt])
+  @@index([status, viewCount, createdAt])
+  @@index([isToggled, status])
+  @@index([categoryID])
 }
 
 model BlogComment{
@@ -47,6 +52,8 @@ model BlogComment{
   commentText String
   userImage String
   createdAt DateTime @default(now())
+
+  @@index([blogPostId])
 }
 
 model BlogViews {

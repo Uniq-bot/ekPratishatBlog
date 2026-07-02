@@ -1,9 +1,7 @@
-import React from 'react'
+import PageLoader from "@/components/shared/PageLoader";
 
 const AdminLoaidng = () => {
-  return (
-    <div>AdminLoaidng</div>
-  )
+  return <PageLoader title="Loading admin" subtitle="Fetching management views and actions." />;
 }
 
 export default AdminLoaidng

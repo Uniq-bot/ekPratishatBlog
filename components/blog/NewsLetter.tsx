@@ -2,9 +2,11 @@
 import { useNewsLetterMutate } from "@/hooks/useNewsLetter";
 import { motion } from "framer-motion";
 import React from "react";
+import { notify } from "@/libs/notify";
 
 const NewsLetter = () => {
   const [email, setEmail] = React.useState("");
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
   const {mutateAsync}=useNewsLetterMutate();
 const isValidEmail = (email: string) => {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -13,22 +15,23 @@ const handleClick = async () => {
   const trimmedEmail = email.trim();
 
   if (!trimmedEmail) {
-    alert("Email cannot be empty");
+    notify.error("Subscription blocked", "Email cannot be empty.");
     return;
   }
 
   if (!isValidEmail(trimmedEmail)) {
-    alert("Please enter a valid email address");
+    notify.error("Subscription blocked", "Please enter a valid email address.");
     return;
   }
 
   try {
+    setIsSubmitting(true);
     await mutateAsync(trimmedEmail);
-    alert("Subscribed successfully!");
     setEmail("");
-  } catch (err) {
-    console.error(err);
-    alert("Subscription failed");
+  } catch {
+    notify.error("Subscription failed", "We could not save your email right now.");
+  } finally {
+    setIsSubmitting(false);
   }
 };
   return (
@@ -54,8 +57,8 @@ const handleClick = async () => {
         placeholder="Enter your email"
         className="bg-white outline-none text-black border border-gray-300 w-[70%] h-10 px-3"
       />
-      <button onClick={handleClick} className="bg-[linear-gradient(135deg,#EBC044,#F4CA3B_28%,#FFD33A_55%,#F4DC91_78%,#F4CA3B)]  cursor-pointer transition-all hover:bg-[#EBC044] text-black font-bold px-5 py-2 ">
-        Subscribe
+      <button onClick={handleClick} disabled={isSubmitting} className="bg-[linear-gradient(135deg,#EBC044,#F4CA3B_28%,#FFD33A_55%,#F4DC91_78%,#F4CA3B)]  cursor-pointer transition-all hover:bg-[#EBC044] text-black font-bold px-5 py-2 disabled:opacity-60 disabled:cursor-not-allowed">
+        {isSubmitting ? "Subscribing..." : "Subscribe"}
       </button>
     </div>
   );

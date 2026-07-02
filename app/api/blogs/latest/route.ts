@@ -10,7 +10,20 @@ export async function GET(req: Request) {
       where: { status: "PUBLISHED" },
       orderBy: { createdAt: "desc" },
       take: limit,
-      include: { category: true, tags: true },
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        coverImage: true,
+        description: true,
+        createdAt: true,
+        category: {
+          select: {
+            name: true,
+            slug: true,
+          },
+        },
+      },
     });
 
     return NextResponse.json({ posts: blogs }, { status: 200 });

@@ -161,7 +161,7 @@ const BlogEditor = ({
       if (!draftId && newId) setDraftId(newId);
       setSuccessMsg("Draft saved successfully!");
     } catch (err: any) {
-      setSubmitError(err.message || "Something went wrong while saving draft");
+      setSubmitError("We could not save the draft right now.");
     }
   };
 
@@ -196,7 +196,7 @@ const BlogEditor = ({
         resetForm();
       }
     } catch (err: any) {
-      setSubmitError(err.message || "Something went wrong");
+      setSubmitError("We could not save the blog right now.");
     }
   };
 

@@ -1,36 +1,23 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Production Optimization Notes
 
-## Getting Started
+This repository now includes a focused production pass aimed at reducing slow Supabase/Prisma reads and trimming unnecessary payloads on the hottest blog routes.
 
-First, run the development server:
+## What changed
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+The main blog listing queries now fetch only the fields used by the UI. Heavy `content` payloads were removed from list views, and the latest/popular/curated/ad queries were narrowed to reduce transfer size and row hydration work.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The blog detail page now loads the article separately from the comment thread and limits comment hydration to the most recent 25 rows instead of pulling the entire thread eagerly.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The Prisma schema now includes indexes for the most common production filters and sort paths: published feeds, curated content, popular content, category filtering, and comment lookup by blog post.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The view-recording route was cleaned up by removing a stray log statement.
 
-## Learn More
+## Likely cause of the slow database call
 
-To learn more about Next.js, take a look at the following resources:
+The main slowdown was query shape, not Prisma client creation. The app already memoizes the Prisma client, so the problem was mostly from fetching too many fields and rows, especially on blog list and detail routes. On Supabase, those larger queries become more noticeable because each request pays network and query-planning cost.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Production follow-up
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Run a Prisma migration or equivalent SQL migration to apply the new indexes in `prisma/schema.prisma`.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+If your Supabase `DATABASE_URL` points at a direct connection string, keep using the pooled Supabase endpoint for runtime traffic in production. That is an environment-level setting rather than a code change.

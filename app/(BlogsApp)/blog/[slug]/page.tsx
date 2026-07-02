@@ -23,11 +23,6 @@ export const getBlog = (slug: string) =>
         include: {
           category: true,
           tags: true,
-          comments: {
-            orderBy: {
-              createdAt: "desc",
-            },
-          },
          
         },
       });
@@ -140,11 +135,25 @@ export default async function BlogDets({ params }: Props) {
     blog.tags.map((t) => t.id),
   );
 
+  const comments = await prisma.blogComment.findMany({
+    where: { blogPostId: blog.id },
+    orderBy: { createdAt: "desc" },
+    take: 25,
+    select: {
+      id: true,
+      userEmail: true,
+      userName: true,
+      userImage: true,
+      commentText: true,
+      createdAt: true,
+    },
+  });
+
   return (
     <div className="w-full min-h-screen bg-[#fbf7ef]/50 text-white p-3 sm:p-6 lg:p-10 py-4 sm:py-5 lg:py-10 flex flex-col items-start">
       <BackButton slug={slug} />
       <div className="w-full flex flex-col lg:flex-row justify-between px-0 sm:px-4 lg:px-6 py-4 sm:py-6 gap-4 sm:gap-6 lg:gap-8">
-        <BlogDetailClient blog={blog} />
+        <BlogDetailClient blog={blog} comments={comments} />
         <RelatedBlogs relatedBlogs={relatedBlogs ? relatedBlogs : []} />
       </div>
     </div>

@@ -1,12 +1,12 @@
 "use client";
 
-import { updateAd } from "@/data/Advertisement";
 import {
   useAddAdvertisement,
   useUpdateAd,
 } from "@/hooks/useAdminAdvertisement";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { notify } from "@/libs/notify";
 
 export default function Advertisement({ editAd }: { editAd?: any }) {
   const router = useRouter();
@@ -22,8 +22,10 @@ export default function Advertisement({ editAd }: { editAd?: any }) {
   // Existing image URL when editing — adjust the field name below to match
   // whatever your API returns (AdImage / image / imageUrl, etc).
   const [existingImageUrl, setExistingImageUrl] = useState<string | null>(null);
+  const createAdMutate = useAddAdvertisement();
   const { mutateAsync: updateAdMutate } = useUpdateAd();
   const mode = editAd ? "edit" : "create";
+  const isSubmitting = mode === "edit" ? updateAdMutate.isPending : createAdMutate.isPending;
 
   useEffect(() => {
     if (!editAd) return;
@@ -50,9 +52,6 @@ export default function Advertisement({ editAd }: { editAd?: any }) {
       imageRef.current.value = "";
     }
   };
-
-  const createAdMutate = useAddAdvertisement();
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -74,14 +73,12 @@ export default function Advertisement({ editAd }: { editAd?: any }) {
       }
       try {
         await updateAdMutate(formData);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        alert("Advertisement updated successfully!");
-        resetForm();
+        setSuccessMsg("Advertisement updated successfully!");
         router.push("/admin");
-        return;
+      } catch (error) {
+        setSubmitError("We could not update the advertisement right now.");
       }
+      return;
     }
 
     try {
@@ -90,7 +87,7 @@ export default function Advertisement({ editAd }: { editAd?: any }) {
       form.reset();
       resetForm();
     } catch (error: any) {
-      setSubmitError(error?.message || "Failed to create advertisement");
+      setSubmitError("We could not create the advertisement right now.");
     } finally {
       setTimeout(() => {
         setSubmitError(null);
@@ -106,7 +103,7 @@ export default function Advertisement({ editAd }: { editAd?: any }) {
     );
     if (!confirmed) return;
     // No delete mutation wired up yet.
-    alert(`Delete advertisement (not yet wired up): ${editAd.id ?? title}`);
+    notify.info("Delete advertisement", `Delete action is not wired up for ${editAd.id ?? title} yet.`);
   };
 
   return (
@@ -225,17 +222,19 @@ export default function Advertisement({ editAd }: { editAd?: any }) {
         <div className="flex items-center gap-3">
           <button
             type="submit"
-            disabled={mode === "create" && createAdMutate.isPending}
+            disabled={isSubmitting}
             className="px-4 py-2 bg-blue-500 text-white  disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           >
-            {mode === "create" && createAdMutate.isPending && (
+            {isSubmitting && (
               <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
             )}
 
-            {mode === "edit"
-              ? "Save Changes"
-              : createAdMutate.isPending
-                ? "Creating Advertisement..."
+            {isSubmitting
+              ? mode === "edit"
+                ? "Saving Changes..."
+                : "Creating Advertisement..."
+              : mode === "edit"
+                ? "Save Changes"
                 : "Create Advertisement"}
           </button>
 

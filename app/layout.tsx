@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import QueryProvider from "@/provider/QueryProvider";
+import NotificationCenter from "@/components/shared/NotificationCenter";
 // import QueryProvider from "@/provider/QueryProvider";
 // import NavBar from "@/components/blog/NavBar";
 
@@ -15,9 +16,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en"  >
-      <body >
+    <html lang="en">
+      <body>
         <QueryProvider>
+          <NotificationCenter />
           {children}
         </QueryProvider>
       </body>
