@@ -1,7 +1,7 @@
 "use client";
 
 import { TOAST_CHANNEL, ToastPayload, notify } from "@/libs/notify";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { AlertCircle, CheckCircle2, Info, Loader2, X } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -29,6 +29,7 @@ export default function NotificationCenter() {
   useEffect(() => {
     const handleToast = (event: Event) => {
       const detail = (event as CustomEvent<ToastPayload>).detail;
+        console.log(event)
       if (!detail?.title) return;
 
       setItems((current) => {
@@ -64,14 +65,12 @@ export default function NotificationCenter() {
     return () => timers.forEach((timer) => window.clearTimeout(timer));
   }, [items]);
 
-  const visibleItems = useMemo(() => items, [items]);
-
   return (
     <div
       className="fixed right-4 top-4 flex w-[min(100vw-2rem,24rem)] flex-col gap-3"
       style={{ zIndex: 9999 }}
     >
-      {visibleItems.map((item) => (
+      {items.map((item) => (
         <div
           key={item.id}
           className={`rounded-2xl border px-4 py-3 shadow-2xl backdrop-blur ${toneMap[item.kind]}`}
