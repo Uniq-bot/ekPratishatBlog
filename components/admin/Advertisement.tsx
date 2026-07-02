@@ -23,9 +23,9 @@ export default function Advertisement({ editAd }: { editAd?: any }) {
   // whatever your API returns (AdImage / image / imageUrl, etc).
   const [existingImageUrl, setExistingImageUrl] = useState<string | null>(null);
   const createAdMutate = useAddAdvertisement();
-  const { mutateAsync: updateAdMutate } = useUpdateAd();
+  const { mutateAsync: updateAdMutate, isPending } = useUpdateAd();
   const mode = editAd ? "edit" : "create";
-  const isSubmitting = mode === "edit" ? updateAdMutate.isPending : createAdMutate.isPending;
+  const isSubmitting = mode === "edit" ? isPending : createAdMutate.isPending;
 
   useEffect(() => {
     if (!editAd) return;
