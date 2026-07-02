@@ -58,6 +58,7 @@ export const getBlogs = unstable_cache(
             coverImage: true,
             description: true,
             createdAt: true,
+            content:true,
             category: {
               select: {
                 name: true,
