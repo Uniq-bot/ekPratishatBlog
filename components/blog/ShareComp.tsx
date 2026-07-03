@@ -1,7 +1,7 @@
 import { Copy, Share2 } from 'lucide-react';
 import React from 'react'
 import { BsTwitterX } from 'react-icons/bs';
-import { FaFacebook } from 'react-icons/fa';
+import { FaFacebook, FaWhatsapp } from 'react-icons/fa';
 import { LiaLinkedinIn } from 'react-icons/lia';
 import { notify } from "@/libs/notify";
 
@@ -27,6 +27,14 @@ const ShareComp = ({ blogTitle, blogSlug }: { blogTitle: string; blogSlug: strin
       )}&text=${encodeURIComponent(blogTitle)}`,
     );
   };
+
+ const shareWA = () => {
+  share(
+    `https://api.whatsapp.com/send?text=${encodeURIComponent(
+      `${blogTitle}\n\n${currentUrl}`
+    )}`
+  );
+};
 
   const shareLinkedIn = () => {
     share(
@@ -74,6 +82,14 @@ const ShareComp = ({ blogTitle, blogSlug }: { blogTitle: string; blogSlug: strin
     >
       <LiaLinkedinIn size={18} />
       LinkedIn
+    </button>
+
+     <button
+      onClick={shareWA}
+      className="flex items-center gap-2 rounded-md border px-4 py-2 transition hover:bg-green-500 hover:text-white"
+    >
+      <FaWhatsapp size={18} />
+      WhatsApp
     </button>
 
     <button
