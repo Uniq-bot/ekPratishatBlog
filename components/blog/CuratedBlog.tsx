@@ -35,10 +35,10 @@ const CuratedBlog = ({ curatedBlog }: { curatedBlog: BlogItem | any }) => {
         <p className="mb-3 inline-flex rounded-full border border-white/30 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-white backdrop-blur-sm">
           Curated Story
         </p>
-        <h1 className="max-w-2xl text-2xl font-black leading-tight text-white sm:text-3xl lg:text-5xl">
+        <h1 className="max-w-2xl text-2xl line-clamp-2 font-black leading-tight text-white sm:text-3xl lg:text-5xl">
           {curatedBlog?.title}
         </h1>
-        <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-100 sm:text-base">
+        <p className="mt-3 max-w-2xl text-sm leading-6  text-gray-100 sm:text-base">
           {curatedBlog?.description.length > 100
             ? curatedBlog.description.substring(0, 80) + "..."
             : curatedBlog.description}

@@ -74,10 +74,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-[minmax(0,1.65fr)_minmax(300px,0.85fr)] lg:gap-8">
             <div className="overflow-hidden rounded-3xl border border-[#eadcb4] bg-white shadow-[0_18px_50px_rgba(0,0,0,0.08)]">
-             
-              <div className="min-h-72 md:min-h-112">
                 <CuratedBlog curatedBlog={curatedBlog} />
-              </div>
             </div>
 
             {AsideAds && (
