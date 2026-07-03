@@ -65,12 +65,32 @@ const image =
         },
       ],
     },
+    // linkedin: {
+    //   title: blog?.title,
+    //   description: blog?.description,
+    //   url,
+    //   images: [
+    //     {
+    //       url: image,
+    //       width: 1200,
+    //       height: 630,
+    //       alt: blog?.title,
+    //     },
+    //   ],
+    // },
 
     twitter: {
       card: "summary_large_image",
       title: blog?.title,
       description: blog?.description,
-      // images: [blog?.coverImage],
+       images: [
+        {
+          url: image,
+          width: 1200,
+          height: 630,
+          alt: blog?.title,
+        },
+      ],
     },
   };
 }
