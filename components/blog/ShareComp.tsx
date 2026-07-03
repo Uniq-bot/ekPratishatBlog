@@ -1,7 +1,7 @@
 import { Copy, Share2 } from 'lucide-react';
 import React from 'react'
 import { BsTwitterX } from 'react-icons/bs';
-import { FaFacebook, FaWhatsapp } from 'react-icons/fa';
+import { FaFacebook, FaReddit, FaWhatsapp } from 'react-icons/fa';
 import { LiaLinkedinIn } from 'react-icons/lia';
 import { notify } from "@/libs/notify";
 
@@ -27,6 +27,13 @@ const ShareComp = ({ blogTitle, blogSlug }: { blogTitle: string; blogSlug: strin
       )}&text=${encodeURIComponent(blogTitle)}`,
     );
   };
+  const shareReddit = () => {
+  share(
+    `https://reddit.com/submit?url=${encodeURIComponent(
+      currentUrl
+    )}&title=${encodeURIComponent(blogTitle)}`
+  );
+};
 
  const shareWA = () => {
   share(
@@ -90,6 +97,13 @@ const ShareComp = ({ blogTitle, blogSlug }: { blogTitle: string; blogSlug: strin
     >
       <FaWhatsapp size={18} />
       WhatsApp
+    </button>
+     <button
+      onClick={shareReddit}
+      className="flex items-center gap-2 rounded-md border px-4 py-2 transition hover:bg-green-500 hover:text-white"
+    >
+      <FaReddit size={18} />
+      Reddit
     </button>
 
     <button
