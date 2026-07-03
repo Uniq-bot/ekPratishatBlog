@@ -1,7 +1,7 @@
 "use client";
 
-import {  Dot, Lightbulb } from "lucide-react";
-import {  useSession } from "next-auth/react";
+import { Dot, Lightbulb } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import BlogComments from "./BlogComments";
 
@@ -17,11 +17,11 @@ const headingTag: Record<number, keyof React.JSX.IntrinsicElements> = {
 };
 
 const headingClass: Record<number, string> = {
-  2: "text-2xl sm:text-3xl lg:text-4xl font-bold mt-5 sm:mt-6 lg:mt-7 mb-3 sm:mb-4 border-l-4 border-[#79570E] pl-3 sm:pl-4 text-black",
-  3: "text-xl sm:text-2xl lg:text-3xl font-semibold mt-4 sm:mt-5 lg:mt-6 mb-2 sm:mb-3 text-[#79570E]",
-  4: "text-lg sm:text-xl lg:text-2xl font-semibold mt-4 sm:mt-2 mb-3 sm:mb-2 text-gray-800",
-  5: "text-base sm:text-lg lg:text-xl font-medium mt-2 sm:mt-3 mb-1 text-gray-700",
-  6: "text-sm sm:text-base lg:text-lg font-medium mt-1 sm:mt-2 mb-1 text-gray-600",
+  2: "text-2xl sm:text-3xl lg:text-4xl font-black mt-6 sm:mt-7 lg:mt-8 mb-3 sm:mb-4 border-l-4 border-[#C9981A] pl-3 sm:pl-4 text-black",
+  3: "text-xl sm:text-2xl lg:text-3xl font-bold mt-5 sm:mt-6 lg:mt-7 mb-2 sm:mb-3 text-[#8a6b12]",
+  4: "text-lg sm:text-xl lg:text-2xl font-semibold mt-4 sm:mt-4 mb-3 sm:mb-2 text-black/85",
+  5: "text-base sm:text-lg lg:text-xl font-semibold mt-2 sm:mt-3 mb-1 text-black/75",
+  6: "text-sm sm:text-base lg:text-lg font-semibold mt-1 sm:mt-2 mb-1 text-black/60",
 };
 
 const parseBlocks = (raw: any): any[] => {
@@ -40,21 +40,29 @@ const parseBlocks = (raw: any): any[] => {
   return [];
 };
 
-const BlogDetailClient = ({ blog, comments }: { blog: any; comments: any[] }) => {
+const BlogDetailClient = ({
+  blog,
+  comments,
+}: {
+  blog: any;
+  comments: any[];
+}) => {
   const { data: session } = useSession();
   const blocks = parseBlocks(blog?.content);
 
- 
   return (
-    <div className="w-full lg:w-[65%] h-full  px-3 py-5 text-black sm:px-6 lg:px-10">
-      {/* <button onClick={() => signOut()}>Sign out</button> */}
+    <div className="w-full lg:w-[65%] h-full rounded-3xl border border-[#eadcb4] bg-white px-3 py-5 text-black shadow-[0_18px_50px_rgba(0,0,0,0.08)] sm:px-6 sm:py-6 lg:px-10 lg:py-8">
       {/* Header */}
-      <div className="flex w-full flex-col gap-2.5 border-b-3 border-[#d8a92f] pb-5">
-        <h1 className="text-2xl font-semibold leading-tight sm:text-3xl lg:text-5xl">
+      <div className="flex w-full flex-col gap-2.5 border-b border-[#eadcb4] pb-5">
+        <p className="mb-1 inline-flex w-fit items-center rounded-full border border-[#eadcb4] bg-[#fffaf0] px-4 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-[#8a6b12]">
+          {blog?.category?.name ?? "Blog / Guides"}
+        </p>
+
+        <h1 className="text-3xl font-black leading-tight text-black sm:text-4xl lg:text-5xl">
           {blog?.title}
         </h1>
 
-        <div className="relative mt-3 h-32 w-full overflow-hidden shadow-md shadow-black/50 sm:h-48 lg:h-140">
+        <div className="relative mt-3 h-32 w-full overflow-hidden rounded-2xl border border-[#eadcb4] shadow-[0_12px_32px_rgba(0,0,0,0.08)] sm:h-48 lg:h-140">
           <Image
             src={blog?.coverImage ?? "/logo.png"}
             alt={blog?.title ?? "Blog cover"}
@@ -63,11 +71,6 @@ const BlogDetailClient = ({ blog, comments }: { blog: any; comments: any[] }) =>
             className="h-full w-full object-cover"
             priority
           />
-          {blog?.category?.name && (
-            <span className="absolute right-0 top-0 bg-black px-2 py-1 text-xs text-white sm:px-4 sm:py-2 sm:text-sm lg:text-base">
-              {blog.category.name}
-            </span>
-          )}
         </div>
 
         <div className="mt-4 flex w-full flex-wrap items-start justify-between gap-2 sm:items-center">
@@ -76,14 +79,14 @@ const BlogDetailClient = ({ blog, comments }: { blog: any; comments: any[] }) =>
               blog.tags.map((tag: any) => (
                 <span
                   key={tag?.id ?? tag}
-                  className="w-fit border border-[#FFD07E] bg-[rgba(255,253,248,0.94)] px-2 py-1 text-xs font-semibold uppercase text-black shadow-md ring-1 ring-[#36332e] backdrop-blur-sm"
+                  className="w-fit rounded-full border border-[#eadcb4] bg-[#fffaf0] px-3 py-1 text-xs font-semibold uppercase tracking-[0.1em] text-[#8a6b12]"
                 >
                   {typeof tag === "string" ? tag : tag.name}
                 </span>
               ))}
           </div>
 
-          <span className="whitespace-nowrap text-xs text-black sm:text-sm">
+          <span className="whitespace-nowrap text-xs font-semibold text-black/50 sm:text-sm">
             {blog?.createdAt
               ? new Date(blog.createdAt).toLocaleDateString()
               : ""}
@@ -92,17 +95,20 @@ const BlogDetailClient = ({ blog, comments }: { blog: any; comments: any[] }) =>
       </div>
 
       {/* Body */}
-      <div className="flex w-full flex-col px-5 pb-5 pt-6">
+      <div className="flex w-full flex-col px-1 pb-5 pt-6 sm:px-4">
         {blog?.description && (
-          <p className="mt-6 border-l-4 border-[#79570E] bg-[#b1b1b1] p-5 text-base italic leading-8 text-gray-700">
+          <p className="mt-2 rounded-2xl border-l-4 border-[#C9981A] bg-[#fffaf0] p-5 text-base italic leading-8 text-black/70 shadow-sm">
             "{blog.description}"
           </p>
         )}
 
         {/* Table of Contents */}
         {blocks.some((b) => b.type === "heading") && (
-          <div className="mt-10 w-full bg-[#1D1D1D] p-5 text-white">
-            <p className="text-lg font-bold sm:text-xl lg:text-2xl">
+          <div className="mt-10 rounded-3xl border border-[#eadcb4] bg-[linear-gradient(180deg,#fff_0%,#faf6ec_100%)] p-6 shadow-[0_12px_32px_rgba(0,0,0,0.05)]">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#8a6b12]">
+              On this page
+            </p>
+            <p className="text-lg font-black text-black sm:text-xl lg:text-2xl">
               Table of Contents
             </p>
 
@@ -111,14 +117,15 @@ const BlogDetailClient = ({ blog, comments }: { blog: any; comments: any[] }) =>
               .map((b, i) => (
                 <div
                   key={i}
-                  className={`flex items-center py-2 font-semibold transition-all hover:translate-x-1 hover:text-[#79570E] ${
+                  className={`flex items-center py-2 font-semibold text-black/70 transition-all hover:translate-x-1 hover:text-[#8a6b12] ${
                     b.level === 2 ? "pl-0" : b.level === 3 ? "pl-4" : "hidden"
                   }`}
                 >
-                  <Dot size={18} className="mt-1 shrink-0 sm:mt-0.5" />
-                  <a
+                 
+                  <Dot size={18} className="mt-1 shrink-0 text-[#C9981A] sm:mt-0.5" />
+                   <a
                     href={`#heading-${i}`}
-                    className="font-semibold transition-all hover:text-[#79570E]"
+                    className="flex items-center gap-2 rounded-lg px-2 py-2 transition hover:bg-[#fff4d6] hover:text-[#8a6b12]"
                   >
                     {b.content}
                   </a>
@@ -138,7 +145,7 @@ const BlogDetailClient = ({ blog, comments }: { blog: any; comments: any[] }) =>
                   return (
                     <p
                       key={block.id ?? index}
-                      className=" text-sm py-2 leading-8 text-gray-700 sm:text-base lg:text-lg"
+                      className="py-2 text-base leading-8 text-black/70 sm:text-base lg:text-lg"
                     >
                       {block.content}
                     </p>
@@ -165,7 +172,7 @@ const BlogDetailClient = ({ blog, comments }: { blog: any; comments: any[] }) =>
                   return block.content ? (
                     <div
                       key={block.id ?? index}
-                      className="my-8 h-fit overflow-hidden shadow-lg"
+                      className="my-8 h-fit overflow-hidden rounded-2xl border border-[#eadcb4] shadow-[0_12px_32px_rgba(0,0,0,0.08)]"
                     >
                       <img
                         src={block.content}
@@ -180,17 +187,17 @@ const BlogDetailClient = ({ blog, comments }: { blog: any; comments: any[] }) =>
                   return (
                     <ul
                       key={block.id ?? index}
-                      className="mb-5 flex flex-col gap-3  border border-[#79570E] border-l-5 px-3 py-2"
+                      className="mb-5 flex flex-col gap-3 rounded-2xl border border-[#eadcb4] bg-[#fffdf7] p-6 space-y-3 px-3 py-2 shadow-sm"
                     >
                       {(Array.isArray(block.content) ? block.content : []).map(
                         (item: string, i: number) => (
                           <li
                             key={i}
-                            className="flex items-start gap-2 text-gray-700"
+                            className="flex items-start gap-2 text-black/75"
                           >
                             <Dot
                               size={20}
-                              className="mt-1 shrink-0 text-[#79570E]"
+                              className="mt-1 shrink-0 text-[#C9981A]"
                             />
                             <span>{item}</span>
                           </li>
@@ -203,7 +210,7 @@ const BlogDetailClient = ({ blog, comments }: { blog: any; comments: any[] }) =>
                   return (
                     <blockquote
                       key={block.id ?? index}
-                      className="my-8 border-l-4 border-[#79570E] bg-[#EDE7DC] px-6 py-5 italic text-[#3D2F12] shadow-sm"
+                      className="my-8 rounded-r-2xl border-l-4 border-[#C9981A] bg-[#fffaf0] px-6 py-5 italic text-black/75 shadow-sm"
                     >
                       {block.content}
                     </blockquote>
@@ -213,14 +220,14 @@ const BlogDetailClient = ({ blog, comments }: { blog: any; comments: any[] }) =>
                   return (
                     <div
                       key={block.id ?? index}
-                      className="my-8 border border-[#D6B06B] bg-[#FFF4DD] p-5 shadow-sm"
+                      className="my-8 rounded-2xl border border-[#eadcb4] bg-[#fffaf0] p-5 shadow-sm"
                     >
-                      <p className="mb-2 flex items-center gap-2 font-bold text-[#79570E]">
-                        <Lightbulb />
+                      <p className="mb-2 flex items-center gap-2 font-bold text-[#8a6b12]">
+                        <Lightbulb size={20} />
                         {block.content?.title || "Important"}
                       </p>
 
-                      <p className="leading-7 text-[#4A3A1A]">
+                      <p className="leading-7 text-black/70">
                         {block.content?.description}
                       </p>
                     </div>
@@ -231,14 +238,14 @@ const BlogDetailClient = ({ blog, comments }: { blog: any; comments: any[] }) =>
                       key={block.id ?? index}
                       className="my-12 flex items-center gap-4"
                     >
-                      <div className="h-px flex-1 bg-gray-300" />
+                      <div className="h-px flex-1 bg-[#eadcb4]" />
                       <Image
                         src="/logo.png"
                         alt="Logo"
                         width={70}
                         height={40}
                       />
-                      <div className="h-px flex-1 bg-gray-300" />
+                      <div className="h-px flex-1 bg-[#eadcb4]" />
                     </div>
                   );
 
@@ -249,12 +256,8 @@ const BlogDetailClient = ({ blog, comments }: { blog: any; comments: any[] }) =>
           })()}
         </div>
 
-<ShareComp blogTitle={blog.title} blogSlug={blog.slug} />
-        <BlogComments
-          blogId={blog.id}
-          slug={blog.slug}
-          comments={comments}
-        />
+        <ShareComp blogTitle={blog.title} blogSlug={blog.slug} />
+        <BlogComments blogId={blog.id} slug={blog.slug} comments={comments} />
       </div>
     </div>
   );

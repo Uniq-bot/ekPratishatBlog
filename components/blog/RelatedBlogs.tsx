@@ -1,114 +1,123 @@
 "use client";
-import Image from "next/image";
+
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import {motion} from "framer-motion";
-import { Calendar } from "lucide-react";
+import { Link2 } from "lucide-react";
+
 import { BlogItem } from "@/types/blog";
 import { useTrackBlogView } from "@/hooks/useTrackViews";
-const RelatedBlogs = ({ relatedBlogs }: { relatedBlogs: any }) => {
-  const [isHovered, setIsHovered] = useState<number | null>(null);
-  const [isOpen, setIsOpen] = useState(false);
-const trackView = useTrackBlogView();
 
-    const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, blog: BlogItem) => {
-     e.preventDefault();
+interface Props {
+  relatedBlogs: BlogItem[];
+}
+
+const RelatedBlogs = ({ relatedBlogs }: Props) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const trackView = useTrackBlogView();
+
+  const handleClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    blog: BlogItem
+  ) => {
+    e.preventDefault();
     trackView(blog);
-   };
+  };
 
   return (
-    <div className="w-full sticky top-0 lg:w-[35%] h-full text-black">
-      {/* Mobile toggle button */}
+    <div className="w-full h-full lg:w-[35%] lg:sticky lg:top-5 text-black">
+      {/* Mobile Toggle */}
       <button
-        aria-label={isOpen ? "Close related" : "Open related"}
-        onClick={() => setIsOpen((s) => !s)}
-        className="fixed top-4 right-3 z-110 p-2 bg-white border shadow-md lg:hidden text-sm"
+        aria-label={isOpen ? "Close related blogs" : "Open related blogs"}
+        onClick={() => setIsOpen((prev) => !prev)}
+        className="fixed top-4 right-3 z-110 rounded-md border bg-white p-2 shadow-md lg:hidden"
       >
         {isOpen ? "✕" : "☰"}
       </button>
 
-      <h1 className="text-lg sm:text-xl lg:text-2xl font-semibold hidden lg:block">
-        Related Blogs
-      </h1>
-      <div className="w-full  flex-col gap-2 mt-3 lg:mt-5 hidden lg:flex">
-        {relatedBlogs.length > 0 ? (
-          relatedBlogs.slice(0, 3).map((blog: BlogItem) => {
-            return (
-           <motion.div
-                key={blog.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-               whileHover={{
-                x:10
-                
-               }}
-              >
-                <Link
-                  href={`/blog/${blog.slug ?? blog.id}`}
-                  onClick={(e) => handleClick(e, blog)}
-                  className="flex gap-10 py-4 justify-between flex-col px-5 cursor-pointer border border-b-5 border-[#EBC044] transition-all group p-2  bg-[#0F172A] backdrop-blur-lg"
-                >
-                  <div className="flex flex-col gap-4">
-                    <p className="border border-[#FFD07E] bg-[rgba(255,253,248,0.94)] shadow-md ring-1 ring-[#36332e] backdrop-blur-sm uppercase font-semibold w-fit px-2 py-1 text-xs text-black">
-                      {blog.category?.name || "Uncategorized"}
-                    </p>
-                    <h2 className="text-xl text-white font-medium  transition-all line-clamp-2">
-                      {blog.title}
-                    </h2>
-                  </div>
-                  <p className="flex items-center gap-1 text-sm text-white/70">
-                    <Calendar size={16} /> {new Date(blog.createdAt).toLocaleDateString() }
-                  </p>
-                </Link>
-              </motion.div>
-            );
-          })
-        ) : (
-          <p>No related blogs found.</p>
-        )}
-      </div>
+      {/* Desktop */}
+      <section className="hidden lg:block rounded-2xl border border-[#e7d6ab] bg-white/90 p-6 shadow-[0_16px_40px_rgba(0,0,0,0.06)]">
+        <div className="flex items-center gap-3 border-b border-[#f0e3bd] pb-4">
+          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#f9efc5] text-[#c9981a]">
+            <Link2 size={18} />
+          </span>
 
-      {/* Mobile sliding panel */}
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#8a6b12]">
+              Related
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-4 flex flex-col gap-3">
+          {relatedBlogs.map((blog) => (
+            <Link
+              key={blog.id}
+              href={`/blog/${blog.slug}`}
+              onClick={(e) => handleClick(e, blog)}
+              className="group rounded-xl border border-[#eadcb4] bg-[linear-gradient(180deg,rgba(255,255,255,0.96)_0%,rgba(250,246,236,0.92)_100%)] p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#d8b24a] hover:shadow-[0_14px_30px_rgba(201,152,26,0.12)]"
+            >
+              <div className="flex flex-col gap-3">
+                <span className="w-fit rounded-full border border-[#f0d98c] bg-[#fffaf0] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] shadow-sm">
+                  {blog.category?.name}
+                </span>
+
+                <h3 className="line-clamp-2 text-base font-semibold leading-snug transition-colors group-hover:text-[#7a5a09] sm:text-lg">
+                  {blog.title}
+                </h3>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-40 z-30 md:hidden"
+          className="fixed inset-0 z-30 bg-black/40 lg:hidden"
           onClick={() => setIsOpen(false)}
         />
       )}
-      <div
-        className={`fixed top-0 right-0 h-full w-72 bg-white z-100 transform transition-transform duration-300 shadow-lg lg:hidden ${isOpen ? "translate-x-0" : "translate-x-full"}`}
+
+      {/* Mobile Drawer */}
+      <aside
+        className={`fixed top-0 right-0 z-[100] h-full w-72 bg-white shadow-xl transition-transform duration-300 lg:hidden ${
+          isOpen ? "translate-x-0" : "translate-x-full"
+        }`}
       >
-        <div className="p-4">
-          <h1 className="text-2xl mb-4">Related Blogs</h1>
-          <div className="w-full flex flex-col gap-2">
-            {relatedBlogs.length > 0 ? (
-              relatedBlogs.slice(0, 6).map((blog: any) => (
-                <div
+        <div className="p-5">
+          <h2 className="mb-5 text-2xl font-bold">Related Blogs</h2>
+
+          <div className="space-y-3">
+            {relatedBlogs.length ? (
+              relatedBlogs.slice(0, 6).map((blog) => (
+                <Link
                   key={blog.id}
-                 onClick={(e) => handleClick(e as any, blog)}
-                  onMouseEnter={() => setIsHovered(blog.id)}
-                  onMouseLeave={() => setIsHovered(null)}
-                  className={`w-full h-30 transition-all cursor-pointer ${isHovered === blog.id ? "bg-amber-200" : "bg-white"}  flex items-center gap-2 p-2 justify-between`}
+                  href={`/blog/${blog.slug}`}
+                  onClick={(e) => handleClick(e, blog)}
+                  className="group block rounded-lg border p-3 transition-all hover:border-amber-400 hover:bg-amber-50"
                 >
-                 
-                  <div className="flex-1 flex flex-col justify-between">
-                    <div>
-                      <h1 className="text-base font-semibold">{blog.title}</h1>
-                    </div>
-                    <span className="text-xs text-gray-600">
-                      {new Date(blog.createdAt).toLocaleDateString()}
-                    </span>
-                  </div>
-                </div>
+                  <p className="mb-2 text-xs font-semibold uppercase text-amber-700">
+                    {blog.category?.name}
+                  </p>
+
+                  <h3 className="line-clamp-2 font-semibold group-hover:text-amber-700">
+                    {blog.title}
+                  </h3>
+
+                  <p className="mt-3 text-xs text-gray-500">
+                    {new Date(blog.createdAt).toLocaleDateString()}
+                  </p>
+                </Link>
               ))
             ) : (
-              <p>No related blogs found.</p>
+              <p className="text-sm text-gray-500">
+                No related blogs found.
+              </p>
             )}
           </div>
         </div>
-      </div>
+      </aside>
     </div>
   );
 };

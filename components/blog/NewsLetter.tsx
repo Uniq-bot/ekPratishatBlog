@@ -1,66 +1,75 @@
 "use client";
 import { useNewsLetterMutate } from "@/hooks/useNewsLetter";
-import { motion } from "framer-motion";
 import React from "react";
 import { notify } from "@/libs/notify";
 
 const NewsLetter = () => {
   const [email, setEmail] = React.useState("");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const {mutateAsync}=useNewsLetterMutate();
-const isValidEmail = (email: string) => {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-};
-const handleClick = async () => {
-  const trimmedEmail = email.trim();
+  const { mutateAsync } = useNewsLetterMutate();
 
-  if (!trimmedEmail) {
-    notify.error("Subscription blocked", "Email cannot be empty.");
-    return;
-  }
+  const isValidEmail = (value: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  };
 
-  if (!isValidEmail(trimmedEmail)) {
-    notify.error("Subscription blocked", "Please enter a valid email address.");
-    return;
-  }
+  const handleClick = async () => {
+    const trimmedEmail = email.trim();
 
-  try {
-    setIsSubmitting(true);
-    await mutateAsync(trimmedEmail);
-    setEmail("");
-  } catch {
-    notify.error("Subscription failed", "We could not save your email right now.");
-  } finally {
-    setIsSubmitting(false);
-  }
-};
-  return (
-    <div
-    style={
-      {
-        borderColor:"rgb(228 180 36)"
-      }
+    if (!trimmedEmail) {
+      notify.error("Subscription blocked", "Email cannot be empty.");
+      return;
     }
-      className="w-full h-fit text-black  mt-4 lg:mt-0   md:flex flex-col items-start  border-l-5   gap-5 p-5 "
-    >
-      <h2 className="text-xl font-bold">
-        Stay Updated with Real Estate Trends
-      </h2>
-      <p className="italic">
-        "Get weekly property insights, <br /> market updates, and investment{" "}
-        <br /> opportunities delivered to your inbox."
-      </p>
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Enter your email"
-        className="bg-white outline-none text-black border border-gray-300 w-[70%] h-10 px-3"
-      />
-      <button onClick={handleClick} disabled={isSubmitting} className="bg-[linear-gradient(135deg,#EBC044,#F4CA3B_28%,#FFD33A_55%,#F4DC91_78%,#F4CA3B)]  cursor-pointer transition-all hover:bg-[#EBC044] text-black font-bold px-5 py-2 disabled:opacity-60 disabled:cursor-not-allowed">
-        {isSubmitting ? "Subscribing..." : "Subscribe"}
-      </button>
-    </div>
+
+    if (!isValidEmail(trimmedEmail)) {
+      notify.error("Subscription blocked", "Please enter a valid email address.");
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      await mutateAsync(trimmedEmail);
+      setEmail("");
+    } catch {
+      notify.error("Subscription failed", "We could not save your email right now.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <section className="w-full rounded-2xl border border-[#e7d6ab] bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(248,242,229,0.96)_100%)] p-4 sm:p-5 lg:p-6 text-black shadow-[0_16px_40px_rgba(0,0,0,0.06)]">
+      <div className="flex flex-col gap-4">
+        <div className="space-y-2">
+          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#8a6b12]">
+            Newsletter
+          </p>
+          <h2 className="text-lg font-bold leading-tight sm:text-xl">
+            Stay Updated with Real Estate Trends
+          </h2>
+        </div>
+
+        <p className="max-w-md text-sm leading-6 text-black/75 sm:text-[0.95rem]">
+          Get weekly property insights, market updates, and investment opportunities delivered to your inbox.
+        </p>
+
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email"
+            className="h-11 w-full rounded-lg border border-[#dbc88d] bg-white px-4 text-black outline-none transition-colors placeholder:text-black/40 focus:border-[#c9981a]"
+          />
+          <button
+            onClick={handleClick}
+            disabled={isSubmitting}
+            className="inline-flex h-11 items-center justify-center rounded-lg bg-[linear-gradient(135deg,#EBC044,#F4CA3B_28%,#FFD33A_55%,#F4DC91_78%,#F4CA3B)] px-5 font-bold text-black transition-all hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+          >
+            {isSubmitting ? "Subscribing..." : "Subscribe"}
+          </button>
+        </div>
+      </div>
+    </section>
   );
 };
 

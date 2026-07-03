@@ -1,8 +1,7 @@
 "use client"
-import { Calendar, TrendingUp } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 import Link from "next/link";
 import type { BlogItem, BlogItems } from "@/types/blog";
-import { useRouter } from "next/navigation";
 import { useTrackBlogView } from "@/hooks/useTrackViews";
 
 const PopularBlogs = ({
@@ -11,47 +10,49 @@ const PopularBlogs = ({
   popularBlogs?: BlogItems[];
 }) => {
   if (popularBlogs.length === 0) return null;
-const trackView = useTrackBlogView();
 
-      const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, blog: BlogItem) => {
-      e.preventDefault();
-      trackView(blog);
-     };
+  const trackView = useTrackBlogView();
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, blog: BlogItem) => {
+    e.preventDefault();
+    trackView(blog);
+  };
   return (
-    <div
-    style={
-      {
-        borderColor:"rgb(228 180 36)"
-      }
-    }
-    className="w-full flex flex-col gap-3 border-l-5  pl-5 py-2">
-      <p className="text-lg font-bold flex items-center gap-2 text-black">
-        <TrendingUp size={18} className="text-[#C9981A]" />
-        Popular Posts
-      </p>
+    <section className="w-full rounded-2xl border border-[#e7d6ab] bg-white/90 p-4 sm:p-5 lg:p-6 shadow-[0_16px_40px_rgba(0,0,0,0.06)]">
+      <div className="flex items-center gap-3 border-b border-[#f0e3bd] pb-4">
+        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#f9efc5] text-[#c9981a]">
+          <TrendingUp size={18} />
+        </span>
+        <div>
+          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#8a6b12]">
+            Trending
+          </p>
+          <h2 className="text-lg font-bold text-black">Popular Posts</h2>
+        </div>
+      </div>
 
-      <div className="flex flex-col gap-3">
+      <div className="mt-4 flex flex-col gap-3">
         {popularBlogs.map((blog, index) => (
-          <div key={blog.id} className="w-full ">
+          <div key={blog.id} className="w-full">
             <Link
               href={`/blog/${blog.slug}`}
               onClick={(e) => handleClick(e, blog)}
-              className="flex  gap-10 py-10 justify-between flex-col px-5 cursor-pointer border border-gray-300 rounded-md  shadow-sm shadow-[#EBC044] transition-all group p-2 hover:border-[#f2d253] bg-[F6F6F4]/50 backdrop-blur-lg"
+              className="group flex h-full w-full flex-col justify-between gap-4 rounded-xl border border-[#eadcb4] bg-[linear-gradient(180deg,rgba(255,255,255,0.96)_0%,rgba(250,246,236,0.92)_100%)] p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#d8b24a] hover:shadow-[0_14px_30px_rgba(201,152,26,0.12)]"
             >
-              <div className="flex flex-col gap-4">
-                <p className="border border-[#FFD07E] bg-[rgba(255,253,248,0.94)] shadow-md ring-1 ring-[#36332e] uppercase font-semibold w-fit px-2 py-1 text-xs text-black">
+              <div className="flex flex-col gap-3">
+                <p className="w-fit rounded-full border border-[#f0d98c] bg-[#fffaf0] px-3 py-1 text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-black shadow-sm">
                   {blog.category?.name}
                 </p>
 
-                <h2 className="text-xl text-black font-medium group-hover:text-[#281c02b7] transition-all line-clamp-2">
+                <h3 className="text-base font-semibold leading-snug text-black transition-colors group-hover:text-[#7a5a09] sm:text-lg line-clamp-2">
                   {blog.title}
-                </h2>
+                </h3>
               </div>
             </Link>
           </div>
         ))}
       </div>
-    </div>
+    </section>
   );
 };
 

@@ -2,7 +2,6 @@
 import Link from "next/link";
 import React from "react";
 import { usePathname, useSearchParams } from "next/navigation";
-import { MoveRight } from "lucide-react";
 
 const CategoryNav = ({
   categories,
@@ -14,33 +13,39 @@ const CategoryNav = ({
   const currentCategory = searchParams.get("category");
   const pathname = usePathname();
   return (
-    <div className="flex   items-center text-sm md:text-xl mr-2  relative inset-1.5 py-1 justify-between   gap-3 overflow-hidden">
-      {/* <span className="absolute right-0 bg-black/20 p-2 rounded-full">
-        <MoveRight />
-      </span> */}
-      <div className="flex overflow-x-auto gap-2">
-        <Link
-        scroll={false}
-        href={pathname}
-        className={`px-3 py-1  rounded border ${!currentCategory ? "bg-[linear-gradient(135deg,#EBC044,#F4CA3B_28%,#FFD33A_55%,#F4DC91_78%,#F4CA3B)] text-black" : "border-gray-500 text-black"}`}
-      >
-        All
-      </Link>
-      {categories.map((category) => (
-        <Link
-          key={category.id}
-          scroll={false}
-          href={`${pathname}?category=${category.slug}`}
-          className={`px-3 py-1 whitespace-nowrap rounded border ${currentCategory === category.slug ? "bg-[linear-gradient(135deg,#EBC044,#F4CA3B_28%,#FFD33A_55%,#F4DC91_78%,#F4CA3B)] text-black" : "border-gray-500 text-black"}`}
-        >
-          {category.name}
-        </Link>
-      ))}
+    <section className="rounded-2xl border border-[#e7d6ab] bg-white/95 p-4 shadow-[0_10px_30px_rgba(0,0,0,0.04)] sm:p-5">
+      <div className="mb-3 flex items-center justify-between gap-3">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8a6b12]">
+            Categories
+          </p>
+          <h3 className="text-base font-bold text-black">Browse by topic</h3>
+        </div>
+        <span className="rounded-full border border-[#eadcb4] bg-[#fffaf0] px-3 py-1 text-xs font-semibold text-black">
+          {categories.length} topics
+        </span>
       </div>
 
-      <div className={`absolute ${categories.length > 4 ? "flex" : "hidden"}   w-12 pointer-events-none h-full right-0 top-0 bottom-0 bg-linear-to-l from-gray-400/50 to-transparent`} />
-    
-    </div>
+      <div className="flex gap-2 overflow-x-auto pb-1">
+        <Link
+          scroll={false}
+          href={pathname}
+          className={`shrink-0 rounded-full border px-4 py-2 text-sm font-semibold transition-colors ${!currentCategory ? "border-[#f2cf67] bg-[linear-gradient(135deg,#EBC044,#F4CA3B_28%,#FFD33A_55%,#F4DC91_78%,#F4CA3B)] text-black" : "border-[#d9c8a0] bg-[#fffdf6] text-black hover:border-[#c9981a]"}`}
+        >
+          All
+        </Link>
+        {categories.map((category) => (
+          <Link
+            key={category.id}
+            scroll={false}
+            href={`${pathname}?category=${category.slug}`}
+            className={`shrink-0 whitespace-nowrap rounded-full border px-4 py-2 text-sm font-semibold transition-colors ${currentCategory === category.slug ? "border-[#f2cf67] bg-[linear-gradient(135deg,#EBC044,#F4CA3B_28%,#FFD33A_55%,#F4DC91_78%,#F4CA3B)] text-black" : "border-[#d9c8a0] bg-[#fffdf6] text-black hover:border-[#c9981a]"}`}
+          >
+            {category.name}
+          </Link>
+        ))}
+      </div>
+    </section>
   );
 };
 

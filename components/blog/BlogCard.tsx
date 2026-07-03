@@ -2,7 +2,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
 import { useTrackBlogView } from "@/hooks/useTrackViews";
 
 const BlogCard = ({ blog }: { blog: any }) => {
@@ -90,51 +89,46 @@ const BlogCard = ({ blog }: { blog: any }) => {
 
   return (
     <Link
-   
       href={`/blog/${blog.slug}`}
       onClick={handleClick}
       title={blog.title}
-      className="w-full min-h-48   overflow-hidden hover:bg-[#f0f0f0] transition-all group"
+      className="group block w-full overflow-hidden rounded-2xl border border-[#eadcb4] bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(251,247,239,0.96)_100%)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[#d8b24a] hover:shadow-[0_18px_40px_rgba(201,152,26,0.12)]"
     >
-      <div className="w-full border-b-2 pb-5 text-black cursor-pointer group flex flex-col p-5 md:flex-row border-[#EBC044]  gap-5 overflow-hidden">
-        <div className="w-full md:w-60 shadow-black/40 shadow-md relative h-48 md:h-50 overflow-hidden shrink-0">
+      <div className="flex flex-col gap-4 p-4 sm:p-5 md:flex-row md:gap-5">
+        <div className="relative h-48 w-full shrink-0 overflow-hidden rounded-xl border border-[#f0e3bd] shadow-[0_10px_24px_rgba(0,0,0,0.08)] md:h-40 md:w-56 lg:w-60">
           <Image
             src={blog?.coverImage ?? "/logo.png"}
             alt={blog?.title ?? "Blog cover"}
             width={320}
             height={320}
-            className="w-full h-full object-cover"
+            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
-          {/* <span className="absolute top-4 left-0 bg-black font-semibold text-white px-3 py-2 text-md">
-            {blog?.category?.name}
-          </span> */}
         </div>
 
-        <div className="py-1 flex flex-col items-start flex-1 gap-2">
-          <div>
-            <span className="text-[15px] font-semibold bg-[linear-gradient(135deg,#EBC044,#F4CA3B_28%,#FFD33A_55%,#F4DC91_78%,#F4CA3B)] p-1 px-3  text-[#080807]">
-              {/* {new Date(blog?.createdAt).toLocaleDateString()} */}
+        <div className="flex flex-1 flex-col gap-3 text-black">
+          <div className="flex flex-wrap items-center gap-2 text-sm">
+            <span className="rounded-full bg-[linear-gradient(135deg,#EBC044,#F4CA3B_28%,#FFD33A_55%,#F4DC91_78%,#F4CA3B)] px-3 py-1 font-semibold text-[#080807]">
               {blog?.category?.name}
             </span>
-            <span>{` • ${readTime}`}</span>
+            <span className="text-black/60">• {readTime}</span>
           </div>
 
-          <h2 className="text-2xl  font-bold transition-all leading-tight">
+          <h2 className="text-xl font-bold leading-tight transition-colors group-hover:text-[#7a5a09] sm:text-2xl">
             {blog?.title}
           </h2>
 
           {blog?.description && (
-            <p className="text-sm text-black/50 line-clamp-2">
+            <p className="max-w-3xl text-sm leading-6 text-black/60 line-clamp-2">
               {blog.description}
             </p>
           )}
 
           {Array.isArray(blog?.tags) && blog.tags.length > 0 && (
-            <div className="flex flex-wrap gap-1 mt-1">
+            <div className="flex flex-wrap gap-2 pt-1">
               {blog.tags.slice(0, 3).map((tag: any, index: number)  => (
                 <span
                   key={index}
-                  className="text-[11px] border rounded-xl border-[#0001] bg-[#F8F2E6] p-1 text-[#475569] uppercase font-semibold"
+                  className="rounded-full border border-[#eadcb4] bg-[#fffaf0] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#5d5d5d]"
                 >
                   {tag.name}
                 </span>
@@ -142,8 +136,8 @@ const BlogCard = ({ blog }: { blog: any }) => {
             </div>
           )}
 
-          <div className="flex items-center justify-between w-full mt-3">
-            <span className="text-[15px] font-semibold  p-1 px-3  text-[#080807]">
+          <div className="mt-auto flex w-full items-center justify-between gap-4 pt-2">
+            <span className="text-sm font-semibold text-black/65">
               {new Date(blog?.createdAt).toLocaleDateString()}
             </span>
             <motion.p whileHover={{ x: 5 }} transition={{ duration: 0.3 }}>

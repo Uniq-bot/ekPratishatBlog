@@ -41,13 +41,26 @@ const SearchFilter = ({
   }, [query, category, tag, router]);
 
   return (
-    <input
-      value={query}
-      onChange={(e) => setQuery(e.target.value)}
-      type="text"
-      placeholder="Search blogs..."
-      className="md:w-1/2 w-full relative left-1/2 bottom-5 transform -translate-x-1/2 p-3 border-2 border-gray-500 rounded   focus:outline-none focus:ring-2 focus:ring-[#f4c91b]"
-    />
+    <section className="rounded-2xl border border-[#e7d6ab] bg-white/95 p-4 shadow-[0_10px_30px_rgba(0,0,0,0.04)] sm:p-5">
+      <div className="mb-3 flex items-center justify-between gap-3">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8a6b12]">
+            Search
+          </p>
+          <h3 className="text-base font-bold text-black">Find an article</h3>
+        </div>
+        <span className="rounded-full bg-[#fff7dc] px-3 py-1 text-xs font-semibold text-black">
+          Live
+        </span>
+      </div>
+      <input
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        type="text"
+        placeholder="Search blogs..."
+        className="h-12 w-full rounded-xl border border-[#d8c58e] bg-[#fffdf7] px-4 text-sm text-black outline-none transition-colors placeholder:text-black/35 focus:border-[#c9981a] focus:ring-2 focus:ring-[#f4c91b]/20"
+      />
+    </section>
   );
 };
 

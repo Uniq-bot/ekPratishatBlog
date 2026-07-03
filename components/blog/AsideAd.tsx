@@ -11,12 +11,12 @@ const AsideAd = ({ AsideAds }: { AsideAds: any }) => {
 
   return (
     <div
-    title={AsideAds?.AdDescription}
+      title={AsideAds?.AdDescription}
       className="
          overflow-hidden bg-white
-        absolute top-3 right-3 w-28 h-40 rounded-md shadow-md
+        absolute top-3 right-3 w-60 h-40 rounded-md shadow-md
         sm:w-36 sm:h-48
-        md:static md:top-auto md:right-auto md:w-[40%] md:h-full md:rounded-none md:shadow-none
+        md:static md:top-auto md:right-auto md:w-full md:h-full md:rounded-none md:shadow-none
         z-30
       "
     >
@@ -27,10 +27,6 @@ const AsideAd = ({ AsideAds }: { AsideAds: any }) => {
       >
         <X size={12} />
       </button>
-
-      <div className="absolute bg-black px-2 py-0.5 text-white text-[10px] md:px-5 md:py-1 md:text-sm top-1 md:top-4 right-0 z-20 cursor-pointer">
-        <p>AD</p>
-      </div>
 
       <Link
         href={AsideAds?.AdLink || "#"}
@@ -47,7 +43,11 @@ const AsideAd = ({ AsideAds }: { AsideAds: any }) => {
             fill
             className="object-cover"
           />
+             <div className="absolute bg-black px-2 py-0.5 text-white text-[10px] md:px-5 md:py-1 md:text-sm top-1 md:top-4 right-0 z-20 cursor-pointer">
+          <p>AD</p>
         </div>
+        </div>
+     
 
         <div className="px-2 min-[1200px]:px-5">
           <h1 className="text-black text-[11px] sm:text-sm md:text-xl lg:text-2xl font-bold ">

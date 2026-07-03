@@ -1,9 +1,8 @@
 "use client";
 import { useTrackBlogView } from "@/hooks/useTrackViews";
 import { BlogItem } from "@/types/blog";
-import { ArrowRight, ArrowRightIcon } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import React from "react";
 
 import { useSession } from "next-auth/react";
@@ -22,26 +21,32 @@ const CuratedBlog = ({ curatedBlog }: { curatedBlog: BlogItem | any }) => {
   return (
     <div
       onClick={handleClick}
-      className="w-full hover:opacity-80 transition-all cursor-pointer h-full  relative  overflow-hidden"
+      className="group relative h-full w-full cursor-pointer overflow-hidden bg-black"
     >
       <Image
         src={curatedBlog?.coverImage || "/Ad1.png"}
         alt="Ad"
         width={1000}
         height={1000}
-        className="w-full h-full   group-hover:opacity-80 transition-all"
+        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
       />
-      <div className="absolute bottom-0 left-0 right-0 p-4  z-10">
-        <h1 className="text-white text-xl min-[1300px]:text-[3rem] font-black">
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.04)_0%,rgba(0,0,0,0.08)_42%,rgba(0,0,0,0.72)_100%)]" />
+      <div className="absolute bottom-0 left-0 right-0 z-10 p-4 sm:p-5 lg:p-6">
+        <p className="mb-3 inline-flex rounded-full border border-white/30 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-white backdrop-blur-sm">
+          Curated Story
+        </p>
+        <h1 className="max-w-2xl text-2xl font-black leading-tight text-white sm:text-3xl lg:text-5xl">
           {curatedBlog?.title}
         </h1>
-        <p className="text-gray-200 mt-2 text-sm min-[1300px]:text-[1.2rem]">
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-100 sm:text-base">
           {curatedBlog?.description.length > 100
             ? curatedBlog.description.substring(0, 80) + "..."
             : curatedBlog.description}
         </p>
+        <div className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-white">
+          Read feature <ArrowRight size={16} />
+        </div>
       </div>
-      <div className="absolute top-0 bottom-0 left-0 right-0 w-full h-full bg-linear-to-t from-black/70 to-transparent" />
     </div>
   );
 };
