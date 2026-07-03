@@ -69,11 +69,7 @@
     display: none;
 }
 
-*,
-*::before,
-*::after {
-  border-radius: 0 !important;
-}
+/*  */
 
 
 /* letter clamp */

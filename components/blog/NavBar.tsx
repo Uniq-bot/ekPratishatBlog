@@ -41,12 +41,13 @@ const NavBar = () => {
     <div
       className={`
         w-full fixed top-0 left-0 right-0 z-100
+        
        flex  items-center justify-center lg:justify-between gap-5
         py-4 px-10 transition-all duration-500
         ${
           isScrolled
-            ? "bg-black/70 backdrop-blur-md shadow-lg "
-            : "bg-transparent"
+            ? "bg-black/70 backdrop-blur-md  shadow-lg "
+            : "bg-transparent "
         }
       `}
     >
@@ -64,7 +65,7 @@ const NavBar = () => {
       </div>
 
       <div
-        className={`flex items-center lg:mr-30 text-sm   justify-center p-2 px-  ${
+        className={`flex items-center lg:mr-30 text-sm    justify-center p-2 px-  ${
           isScrolled
             ? ""
             : " rounded-full bg-black/70 backdrop-blur-md shadow-lg   border-b border-white/10"
