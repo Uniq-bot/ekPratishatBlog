@@ -50,10 +50,10 @@ export default async function BlogPage({ searchParams }: PageProps) {
     <div className="w-full min-h-screen flex flex-col bg-[#FFFFFF]">
       
       {/* HERO */}
-      <div className="relative w-full overflow-hidden bg-[linear-gradient(180deg,rgba(255,255,255,1)_0%,rgba(252,248,240,0.98)_100%)] px-4 pt-24 pb-12 sm:px-6 sm:pt-28 md:px-16 lg:px-30 lg:pt-30">
+      <div className="relative w-full overflow-hidden bg-[linear-gradient(180deg,rgba(255,255,255,1)_0%,rgba(252,248,240,0.98)_100%)] px-4 pt-24 pb-12 sm:px-6 sm:pt-28 md:px-16 lg:px-10 lg:pt-30">
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(248,246,240,1)_0%,rgba(245,242,236,0.95)_35%,rgba(235,231,225,0.85)_65%,rgba(216,213,208,0.7)_85%,rgba(192,191,186,0.9)_100%)]" />
 
-        <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-6 lg:gap-8">
+        <div className="relative z-10 mx-auto flex w-full max-w-10/11 flex-col gap-6 lg:gap-8">
           <div className="text-center">
             <p className="mx-auto mb-3 inline-flex rounded-full border border-[#eadcb4] bg-[#fffaf0] px-4 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-[#8a6b12]">
               Blog / Guides
@@ -93,11 +93,14 @@ export default async function BlogPage({ searchParams }: PageProps) {
                   </p>
                   <h2 className="text-xl font-bold text-black">Fresh reads</h2>
                 </div>
-                <span className="text-sm font-semibold text-black/60">
+                <span className="text-sm hidden lg:flex  font-semibold text-black/60">
                   {latestBlogs.posts.length} posts
                 </span>
+                 <span className="text-sm lg:hidden  font-semibold text-black/60">
+                  {latestBlogs.posts.slice(0,2).length} posts
+                </span>
               </div>
-              <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+              <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
                 <LatestBlogs latestBlogs={latestBlogs?.posts ?? []} />
               </div>
             </div>
