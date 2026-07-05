@@ -7,7 +7,7 @@ import Image from "next/image";
 import { useTrackBlogView } from "@/hooks/useTrackViews";
 import AsideAd from "./AsideAd";
 
-const LatestBlogs = ({ latestBlogs = [], ads }: { latestBlogs?: BlogItem[], ads: any }) => {
+const LatestBlogs = ({ latestBlogs = [], ads }: { latestBlogs?: BlogItem[], ads: any[] }) => {
   const trackView = useTrackBlogView();
 
   if (!latestBlogs.length) return null;
