@@ -41,7 +41,7 @@ const SearchFilter = ({
   }, [query, category, tag, router]);
 
   return (
-    <section className="rounded-2xl border border-[#e7d6ab] bg-white/95 p-4 shadow-[0_10px_30px_rgba(0,0,0,0.04)] sm:p-5">
+    <section className=" border-b border-[#e7d6ab] p-4 sm:p-5">
       <div className="mb-3 flex items-center justify-between gap-3">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8a6b12]">

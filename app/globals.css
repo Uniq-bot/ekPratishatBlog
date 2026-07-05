@@ -65,6 +65,10 @@
     src: url("/fonts/PerfectGirl-SansSerif.otf") format("opentype");
 }
 
+@font-face{
+    font-family:"Tungsten";
+    src: url("/fonts/Tungsten-Book.otf") format("opentype");
+}
 ::-webkit-scrollbar {
     display: none;
 }
@@ -86,3 +90,37 @@
   color: transparent; /* Makes the fill transparent so only the outline shows */
   /* OR use a specific color for the fill, e.g., color: white; */
 }
+/* Hide the Google Translate widget */
+.goog-te-gadget {
+  display: none !important;
+}
+
+.goog-te-gadget-simple {
+  display: none !important;
+}
+
+#google_translate_element {
+  display: none !important;
+}
+.skiptranslate {
+  display: none !important;
+}
+
+body {
+  top: 0 !important;
+}
+
+
+
+
+/* @media (min-width: 1024px) {
+  .sorting::before {
+    content: "";
+    display: block;
+    width: 300px;
+    height: 1px;
+    background: black;
+    flex-shrink: 0;
+    margin-right: 45px;
+  }
+} */

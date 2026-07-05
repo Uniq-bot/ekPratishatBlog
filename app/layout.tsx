@@ -20,6 +20,7 @@ export default function RootLayout({
       <body>
         <QueryProvider>
           <NotificationCenter />
+          
           {children}
         </QueryProvider>
       </body>

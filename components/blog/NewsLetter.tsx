@@ -37,7 +37,7 @@ const NewsLetter = () => {
   };
 
   return (
-    <section className="w-full rounded-2xl border border-[#e7d6ab] bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(248,242,229,0.96)_100%)] p-4 sm:p-5 lg:p-6 text-black shadow-[0_16px_40px_rgba(0,0,0,0.06)]">
+    <section className="w-full border border-[#e7d6ab] bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(248,242,229,0.96)_100%)] p-4 sm:p-5 lg:p-6 text-black shadow-[0_16px_40px_rgba(0,0,0,0.06)]">
       <div className="flex flex-col gap-4">
         <div className="space-y-2">
           <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#8a6b12]">
