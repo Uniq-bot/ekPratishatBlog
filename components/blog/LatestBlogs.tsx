@@ -51,7 +51,7 @@ const LatestBlogs = ({ latestBlogs = [], ads }: { latestBlogs?: BlogItem[], ads:
               year: "numeric",
             })}
           </div>
-          <h3 className="text-lg font-semibold leading-tight text-black transition-colors group-hover:text-[#7a5a09] sm:text-[1.65rem]">
+          <h3 className="text-lg font-semibold font-[Nunito] leading-tight text-black transition-colors group-hover:text-[#7a5a09] sm:text-[1.65rem]">
             {featuredBlog?.title}
           </h3>
           <p className="max-w-2xl text-sm leading-7 text-[#5f5743] sm:text-[15px]">
@@ -92,7 +92,7 @@ const LatestBlogs = ({ latestBlogs = [], ads }: { latestBlogs?: BlogItem[], ads:
               <span className="w-fit rounded-full border border-[#f0d98c] bg-[#fffaf0] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#6f5a12]">
                 {blog?.category?.name || "Blog"}
               </span>
-              <h4 className="line-clamp-2 text-sm font-semibold leading-snug text-black transition-colors group-hover:text-[#7a5a09]">
+              <h4 className="line-clamp-2 text-sm font-[Nunito] leading-snug text-black transition-colors group-hover:text-[#7a5a09]">
                 {blog.title}
               </h4>
               <div className="flex items-center gap-1.5 text-xs text-[#8a7a4a]">

@@ -71,8 +71,9 @@
 }
 
 @font-face{
-    font-family:"Nutino";
+    font-family:"Nunito";
     src: url("/fonts/NunitoSans-VariableFont_YTLC,opsz,wdth,wght.ttf") format("truetype");
+    font-weight: 400;
 }
 ::-webkit-scrollbar {
     display: none;

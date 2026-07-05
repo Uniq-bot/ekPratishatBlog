@@ -43,7 +43,7 @@ const PopularBlogs = ({ popularBlogs = [] }: { popularBlogs?: BlogItems[] }) => 
             <div className="flex min-w-0 flex-1 flex-col gap-2">
             
 
-              <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-black transition-colors group-hover:text-[#7a5a09] sm:text-[15px]">
+              <h3 className="line-clamp-2 text-sm font-[Nonito] leading-snug text-black transition-colors group-hover:text-[#7a5a09] sm:text-[15px]">
                 {blog.title}
               </h3>
             </div>

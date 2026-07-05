@@ -122,7 +122,7 @@ const BlogCard = ({ blog }: { blog: any }) => {
           </span>
         </div>
 
-        <h2 className="sm:text-xl text-sm   font-[Nutino] hover:underline underline-offset-4 mb-4 font-semibold leading-tight text-[#1D1D1D] transition-all duration-200 hover:text-[#444442] ">
+        <h2 className="sm:text-xl text-sm   font-[Nunito] hover:underline underline-offset-4 mb-4 font-semibold leading-tight text-[#1D1D1D] transition-all duration-200 hover:text-[#444442] ">
           {blog.title}
         </h2>
       </div>
