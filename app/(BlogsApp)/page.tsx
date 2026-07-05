@@ -105,7 +105,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
       </div>
 
     <div >
-        <div className="relative  lg:w-[80%] m-auto   px-4 pb-12 pt-10 sm:px-6  lg:px-30">
+        <div className="relative  lg:w-[80%] m-auto   px-4 pb-12  sm:px-6  lg:px-30">
         {BannerAds && (
           <div className="relative z-10 mb-8 h-20 w-full overflow-hidden  shadow-xl shadow-black/30  bg-white/90  md:h-40">
             <BannerAd BannerAds={BannerAds} />
