@@ -42,7 +42,7 @@ const LatestBlogs = ({ latestBlogs = [], ads }: { latestBlogs?: BlogItem[], ads:
           </span>
         </div>
 
-        <div className="flex flex-col gap-3 p-5 sm:p-6">
+        <div className="flex flex-col gap-3 p-3 sm:p-6">
           <div className="flex items-center gap-2 text-sm text-[#8a7a4a]">
             <Calendar size={14} />
             {new Date(featuredBlog?.createdAt).toLocaleDateString("en-US", {
@@ -51,7 +51,7 @@ const LatestBlogs = ({ latestBlogs = [], ads }: { latestBlogs?: BlogItem[], ads:
               year: "numeric",
             })}
           </div>
-          <h3 className="text-2xl font-semibold leading-tight text-black transition-colors group-hover:text-[#7a5a09] sm:text-[1.65rem]">
+          <h3 className="text-lg font-semibold leading-tight text-black transition-colors group-hover:text-[#7a5a09] sm:text-[1.65rem]">
             {featuredBlog?.title}
           </h3>
           <p className="max-w-2xl text-sm leading-7 text-[#5f5743] sm:text-[15px]">

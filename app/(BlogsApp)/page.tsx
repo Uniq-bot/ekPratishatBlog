@@ -50,10 +50,10 @@ export default async function BlogPage({ searchParams }: PageProps) {
     <div className="w-full min-h-screen flex flex-col bg-[#FFFFFF]">
       
       {/* HERO */}
-      <div className="relative w-full overflow-hidden  px-4 pt-24 pb-12 sm:px-6 sm:pt-28 md:px-16 lg:px-10 lg:pt-30">
+      <div className="relative w-full overflow-hidden   pt-24 pb-12  sm:pt-28 md:px-16 lg:px-10 lg:pt-30">
         {/* <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(248,246,240,1)_0%,rgba(245,242,236,0.95)_35%,rgba(235,231,225,0.85)_65%,rgba(216,213,208,0.7)_85%,rgba(192,191,186,0.9)_100%)]" /> */}
 
-        <div className="relative z-10  w-[70%] m-auto flex  flex-col gap-6 lg:gap-8">
+        <div className="relative z-10 w-full px-4  lg:w-[70%] m-auto flex  flex-col gap-6 lg:gap-8">
           <div className="text-center">
             <p className="mx-auto rounded-2xl mb-3 inline-flex -full border border-[#eadcb4] bg-[#fffaf0] px-4 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-[#8a6b12]">
               Blog / Guides
@@ -72,8 +72,8 @@ export default async function BlogPage({ searchParams }: PageProps) {
             </p> */}
           </div>
 
-          <div className=" h-130 grid grid-cols-1 lg:gap-8">
-            <div className="overflow-hidden -3xl border border-[#eadcb4] bg-white ">
+          <div className=" h-50 lg:h-130 grid grid-cols-1 lg:gap-8">
+            <div className="overflow-hidden  border border-[#eadcb4] bg-white ">
                 <CuratedBlog curatedBlog={curatedBlog} />
             </div>
 
@@ -105,7 +105,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
       </div>
 
     <div >
-        <div className="relative  w-[80%] m-auto   px-4 pb-12 pt-10 sm:px-6  lg:px-30">
+        <div className="relative  lg:w-[80%] m-auto   px-4 pb-12 pt-10 sm:px-6  lg:px-30">
         {BannerAds && (
           <div className="relative z-10 mb-8 h-20 w-full overflow-hidden  shadow-xl shadow-black/30  bg-white/90  md:h-40">
             <BannerAd BannerAds={BannerAds} />

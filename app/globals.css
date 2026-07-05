@@ -110,6 +110,13 @@ body {
   top: 0 !important;
 }
 
+/* Responsive root font size so rem-based Tailwind typography scales on devices */
+html {
+  font-size: clamp(14px, 1.2vw + 12px, 18px);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 
 
 

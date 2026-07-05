@@ -31,19 +31,19 @@ const CuratedBlog = ({ curatedBlog }: { curatedBlog: BlogItem | any }) => {
         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
       />
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.04)_0%,rgba(0,0,0,0.08)_42%,rgba(0,0,0,0.72)_100%)]" />
-      <div className="absolute bottom-0 left-0 right-0 z-10 p-4 sm:p-5 lg:p-6">
-        <p className="mb-3 inline-flex rounded-full border border-white/30 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-white backdrop-blur-sm">
+      <div className="absolute bottom-0 left-0 right-0 z-10 p-2 flex flex-col gap-1 sm:p-5 lg:p-6">
+        <p className=" inline-flex w-fit  rounded-full border border-white/30 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-white backdrop-blur-sm">
           Curated Story
         </p>
-        <h1 className="max-w-2xl text-2xl line-clamp-2 font-black leading-tight text-white sm:text-3xl lg:text-5xl">
+        <h1 className="max-w-2xl text-md line-clamp-2 font-black leading-tight text-white sm:text-3xl lg:text-5xl">
           {curatedBlog?.title}
         </h1>
-        <p className="mt-3 max-w-2xl text-sm leading-6 line-clamp-4 lg:line-clamp-10  text-gray-100 sm:text-base">
+        <p className=" max-w-2xl text-sm leading-6 line-clamp-2 lg:line-clamp-10  text-gray-100 sm:text-base">
           {curatedBlog?.description.length > 100
             ? curatedBlog.description.substring(0, 300) + "..."
             : curatedBlog.description}
         </p>
-        <div className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-white">
+        <div className="mt-4 lg:inline-flex hidden  items-center gap-2 text-sm font-semibold text-white">
           Read feature <ArrowRight size={16} />
         </div>
       </div>
