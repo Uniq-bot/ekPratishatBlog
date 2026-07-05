@@ -69,6 +69,11 @@
     font-family:"Tungsten";
     src: url("/fonts/Tungsten-Book.otf") format("opentype");
 }
+
+@font-face{
+    font-family:"Nutino";
+    src: url("/fonts/NunitoSans-VariableFont_YTLC,opsz,wdth,wght.ttf") format("truetype");
+}
 ::-webkit-scrollbar {
     display: none;
 }
