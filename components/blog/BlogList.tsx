@@ -87,7 +87,7 @@ const BlogList = ({
 
       <div className="flex w-full flex-col gap-4">
         {blogs?.length > 0 ? (
-          blogs.map((blog) => <BlogCard key={blog.id} blog={blog} />)
+          blogs.map((blog, index) => <BlogCard key={blog.id} index={index} blog={blog} />)
         ) : (
           <p className="w-full py-10 text-center text-gray-400">No blogs found.</p>
         )}

@@ -170,8 +170,9 @@ export default async function BlogDets({ params }: Props) {
   });
 
   return (
-<div className="rounded-2xl border border-[#eadcb4] bg-[linear-gradient(180deg,#ffffff_0%,#fbf8ef_100%)] p-6 shadow-[0_16px_40px_rgba(0,0,0,0.06)]">      <BackButton slug={slug} />
-      <div className="w-full flex flex-col lg:flex-row justify-between px-0 sm:px-4 lg:px-6 py-4 sm:py-6 gap-4 sm:gap-6 lg:gap-8">
+<div className="rounded-2xl border border-[#eadcb4] bg-[linear-gradient(180deg,#ffffff_0%,#fbf8ef_100%)] p-3 shadow-[0_16px_40px_rgba(0,0,0,0.06)] sm:p-5 lg:p-6">
+      <BackButton slug={slug} />
+      <div className="w-full relative flex flex-col lg:flex-row justify-between px-0 sm:px-2 lg:px-2 py-3 sm:py-5 gap-4 sm:gap-6 lg:gap-8">
         <BlogDetailClient blog={blog} comments={comments} />
         <RelatedBlogs relatedBlogs={relatedBlogs ? relatedBlogs : []} />
       </div>

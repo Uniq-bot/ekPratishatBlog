@@ -28,22 +28,20 @@ const PopularBlogs = ({ popularBlogs = [] }: { popularBlogs?: BlogItems[] }) => 
         </div>
       </div>
 
-      <div className="mt-4 flex flex-col gap-2.5">
+      <div className="mt-4 flex flex-col gap-2">
         {popularBlogs.map((blog, index) => (
           <Link
             key={blog.id}
             href={`/blog/${blog.slug}`}
             onClick={(e) => handleClick(e, blog)}
-            className="group flex items-start gap-3  border border-transparent px-2 py-3 transition-all duration-300 hover:border-[#eadcb4] hover:bg-[#fffdf8]"
+            className="group flex items-start gap-3 rounded-xl border border-transparent px-2 py-3 transition-all duration-300 hover:border-[#eadcb4] hover:bg-[#fffdf8]"
           >
             <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#f9efc5] text-sm font-semibold text-[#8a6b12]">
               {index + 1}
             </span>
 
-            <div className="flex min-w-0 flex-1 flex-col gap-2">
-            
-
-              <h3 className="line-clamp-2 text-sm font-[Nonito] leading-snug text-black transition-colors group-hover:text-[#7a5a09] sm:text-[15px]">
+            <div className="flex min-w-0 flex-1 flex-col">
+              <h3 className="line-clamp-2 text-sm leading-snug text-black transition-colors group-hover:text-[#7a5a09] sm:text-[15px]">
                 {blog.title}
               </h3>
             </div>

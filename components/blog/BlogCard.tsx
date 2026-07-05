@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useTrackBlogView } from "@/hooks/useTrackViews";
 import { TimerIcon } from "lucide-react";
 
-const BlogCard = ({ blog }: { blog: any }) => {
+const BlogCard = ({ blog, index }: { blog: any, index:number }) => {
   const trackView = useTrackBlogView();
 
   const parseBlocks = (raw: any): any[] => {
@@ -98,7 +98,9 @@ const BlogCard = ({ blog }: { blog: any }) => {
       href={`/blog/${blog.slug}`}
       onClick={handleClick}
       title={blog.title}
-      className="group h-full flex flex-col gap-4  border-b-2 border-[#eadcb4] transition-all duration-300  sm:flex-row sm:items-start sm:gap-6 sm:p-5"
+      className={`group h-full flex flex-col gap-4  border-b-2 border-[#eadcb4] transition-all duration-300  sm:flex-row   sm:items-start sm:gap-6 sm:p-5`}
+      // className={`group h-full flex flex-col gap-4  border-b-2 border-[#eadcb4] transition-all duration-300  sm:flex-row ${index % 2 === 0 ? "sm:flex-row-reverse text-right" : ""}  sm:items-start sm:gap-6 sm:p-5`}
+
     >
       <div className="relative h-48 w-full shrink-0 overflow-hidden  bg-[#1D1D1D] sm:h-36 sm:w-56">
         <Image

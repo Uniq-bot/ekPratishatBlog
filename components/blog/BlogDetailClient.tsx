@@ -51,18 +51,18 @@ const BlogDetailClient = ({
   const blocks = parseBlocks(blog?.content);
 
   return (
-    <div className="w-full lg:w-[65%] h-full rounded-3xl border border-[#eadcb4] bg-white px-3 py-5 text-black shadow-[0_18px_50px_rgba(0,0,0,0.08)] sm:px-6 sm:py-6 lg:px-10 lg:py-8">
+    <div className="w-full lg:w-[70%] h-full   px-3 py-5 text-black  sm:px-5 sm:py-6 lg:px-8 lg:py-8">
       {/* Header */}
       <div className="flex w-full flex-col gap-2.5 border-b border-[#eadcb4] pb-5">
-        <p className="mb-1 inline-flex w-fit items-center rounded-full border border-[#eadcb4] bg-[#fffaf0] px-4 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-[#8a6b12]">
+        <p className="mb-1 inline-flex w-fit items-center  border border-[#eadcb4] bg-[#fffaf0] px-4 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-[#8a6b12]">
           {blog?.category?.name ?? "Blog / Guides"}
         </p>
 
-        <h1 className="text-3xl font-black leading-tight text-black sm:text-4xl lg:text-5xl">
+        <h1 className="text-2xl font-[Nunito] font-bold leading-tight text-black sm:text-3xl lg:text-4xl xl:text-5xl">
           {blog?.title}
         </h1>
 
-        <div className="relative mt-3 h-32 w-full overflow-hidden rounded-2xl border border-[#eadcb4] shadow-[0_12px_32px_rgba(0,0,0,0.08)] sm:h-48 lg:h-140">
+        <div className="relative mt-3 aspect-video w-full overflow-hidden border border-[#eadcb4] shadow-[0_12px_32px_rgba(0,0,0,0.08)] sm:aspect-[16/8] lg:aspect-[16/7]">
           <Image
             src={blog?.coverImage ?? "/logo.png"}
             alt={blog?.title ?? "Blog cover"}
@@ -79,7 +79,7 @@ const BlogDetailClient = ({
               blog.tags.map((tag: any) => (
                 <span
                   key={tag?.id ?? tag}
-                  className="w-fit rounded-full border border-[#eadcb4] bg-[#fffaf0] px-3 py-1 text-xs font-semibold uppercase tracking-[0.1em] text-[#8a6b12]"
+                  className="w-fit  border border-[#eadcb4] bg-[#fffaf0] px-3 py-1 text-xs font-semibold uppercase tracking-[0.1em] text-[#8a6b12]"
                 >
                   {typeof tag === "string" ? tag : tag.name}
                 </span>
@@ -95,16 +95,16 @@ const BlogDetailClient = ({
       </div>
 
       {/* Body */}
-      <div className="flex w-full flex-col px-1 pb-5 pt-6 sm:px-4">
+      <div className="flex w-full flex-col px-1 pb-5 pt-5 sm:px-2 lg:px-3">
         {blog?.description && (
-          <p className="mt-2 rounded-2xl border-l-4 border-[#C9981A] bg-[#fffaf0] p-5 text-base italic leading-8 text-black/70 shadow-sm">
+          <p className="mt-2  border-l-4 border-[#C9981A] bg-[#fffaf0] p-4 text-sm leading-7 italic text-black/70 shadow-sm sm:p-5 sm:text-base sm:leading-8">
             "{blog.description}"
           </p>
         )}
 
         {/* Table of Contents */}
         {blocks.some((b) => b.type === "heading") && (
-          <div className="mt-10 rounded-3xl border border-[#eadcb4] bg-[linear-gradient(180deg,#fff_0%,#faf6ec_100%)] p-6 shadow-[0_12px_32px_rgba(0,0,0,0.05)]">
+          <div className="mt-8  border border-[#eadcb4] bg-[linear-gradient(180deg,#fff_0%,#faf6ec_100%)] p-4 shadow-[0_12px_32px_rgba(0,0,0,0.05)] sm:p-6">
             <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#8a6b12]">
               On this page
             </p>
@@ -125,7 +125,7 @@ const BlogDetailClient = ({
                   <Dot size={18} className="mt-1 shrink-0 text-[#C9981A] sm:mt-0.5" />
                    <a
                     href={`#heading-${i}`}
-                    className="flex items-center gap-2 rounded-lg px-2 py-2 transition hover:bg-[#fff4d6] hover:text-[#8a6b12]"
+                    className="flex items-center gap-2  px-2 py-2 transition hover:bg-[#fff4d6] hover:text-[#8a6b12]"
                   >
                     {b.content}
                   </a>
@@ -145,7 +145,7 @@ const BlogDetailClient = ({
                   return (
                     <p
                       key={block.id ?? index}
-                      className="py-2 text-base leading-8 text-black/70 sm:text-base lg:text-lg"
+                      className="py-2 text-sm leading-7 text-black/70 sm:text-base sm:leading-8 lg:text-lg"
                     >
                       {block.content}
                     </p>
@@ -172,7 +172,7 @@ const BlogDetailClient = ({
                   return block.content ? (
                     <div
                       key={block.id ?? index}
-                      className="my-8 h-fit overflow-hidden rounded-2xl border border-[#eadcb4] shadow-[0_12px_32px_rgba(0,0,0,0.08)]"
+                      className="my-6 h-fit overflow-hidden  border border-[#eadcb4] shadow-[0_12px_32px_rgba(0,0,0,0.08)] sm:my-8"
                     >
                       <img
                         src={block.content}
@@ -187,7 +187,7 @@ const BlogDetailClient = ({
                   return (
                     <ul
                       key={block.id ?? index}
-                      className="mb-5 flex flex-col gap-3 rounded-2xl border border-[#eadcb4] bg-[#fffdf7] p-6 space-y-3 px-3 py-2 shadow-sm"
+                      className="mb-5 flex flex-col gap-3  border border-[#eadcb4] bg-[#fffdf7] p-4 space-y-3 px-3 py-3 shadow-sm sm:p-5"
                     >
                       {(Array.isArray(block.content) ? block.content : []).map(
                         (item: string, i: number) => (
@@ -210,7 +210,7 @@ const BlogDetailClient = ({
                   return (
                     <blockquote
                       key={block.id ?? index}
-                      className="my-8 rounded-r-2xl border-l-4 border-[#C9981A] bg-[#fffaf0] px-6 py-5 italic text-black/75 shadow-sm"
+                      className="my-6  border-l-4 border-[#C9981A] bg-[#fffaf0] px-4 py-4 italic text-black/75 shadow-sm sm:my-8 sm:px-6 sm:py-5"
                     >
                       {block.content}
                     </blockquote>
@@ -220,7 +220,7 @@ const BlogDetailClient = ({
                   return (
                     <div
                       key={block.id ?? index}
-                      className="my-8 rounded-2xl border border-[#eadcb4] bg-[#fffaf0] p-5 shadow-sm"
+                      className="my-6  border border-[#eadcb4] bg-[#fffaf0] p-4 shadow-sm sm:my-8 sm:p-5"
                     >
                       <p className="mb-2 flex items-center gap-2 font-bold text-[#8a6b12]">
                         <Lightbulb size={20} />

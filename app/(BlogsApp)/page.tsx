@@ -68,9 +68,12 @@ export default async function BlogPage({ searchParams }: PageProps) {
             </p> */}
           </div>
 
-          <div className=" h-50 lg:h-130 grid grid-cols-1 lg:gap-8">
-            <div className="overflow-hidden  border border-[#eadcb4] bg-white ">
+          <div className="grid gap-4 md:gap-6 lg:grid-cols-[1.35fr_0.8fr] lg:items-stretch">
+            <div className="overflow-hidden  border border-[#eadcb4] bg-white shadow-sm">
               <CuratedBlog curatedBlog={curatedBlog} />
+            </div>
+            <div className=" border border-[#eadcb4] bg-white/95 shadow-sm">
+              <PopularBlogs popularBlogs={popularBlogs?.posts ?? []} />
             </div>
           </div>
 
@@ -127,7 +130,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
             </div>
           </div>
 
-          <div className="relative  grid z-10 gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(320px,0.6fr)] lg:gap-10 items-start">
+          <div className="relative   z-10 gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(320px,0.6fr)] lg:gap-10 items-start">
             <div className="min-w-0 flex flex-col gap-5">
               <SearchFilter category={category} tag={tag} search={search} />
               <CategoryNav categories={categories} />
@@ -143,11 +146,11 @@ export default async function BlogPage({ searchParams }: PageProps) {
               />
             </div>
 
-            <div className="min-w-0 w-full lg:sticky lg:top-24 self-start h-fit border border-[#e7d6ab] bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(248,244,234,0.96)_100%)] p-4 sm:p-5 lg:p-3 shadow-[0_20px_60px_rgba(201,152,26,0.08)]">
+            {/* <div className="min-w-0 w-full lg:sticky lg:top-24 self-start h-fit border border-[#e7d6ab] bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(248,244,234,0.96)_100%)] p-4 sm:p-5 lg:p-3 shadow-[0_20px_60px_rgba(201,152,26,0.08)]">
               <div className="flex flex-col gap-6">
                 <PopularBlogs popularBlogs={popularBlogs?.posts ?? []} />
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
