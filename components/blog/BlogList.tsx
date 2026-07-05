@@ -56,7 +56,7 @@ const BlogList = ({
 
   return (
     <section className="w-full  p-4  sm:p-6 lg:px-8 lg:py-7">
-      <div className="mb-7 flex flex-col gap-4 border-b border-[#f0e3bd] pb-5 sm:flex-row sm:items-end sm:justify-between">
+      <div className="mb-7 flex flex-col gap-4 border-b-2 border-[#f0e3bd] pb-5 sm:flex-row sm:items-end sm:justify-between">
         <div className="space-y-1.5">
           <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#8a6b12]">
             Articles

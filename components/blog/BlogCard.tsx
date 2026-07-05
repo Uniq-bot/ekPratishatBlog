@@ -98,9 +98,9 @@ const BlogCard = ({ blog }: { blog: any }) => {
       href={`/blog/${blog.slug}`}
       onClick={handleClick}
       title={blog.title}
-      className="group flex flex-col gap-4  border-b border-[#eadcb4] transition-all duration-300  sm:flex-row sm:items-start sm:gap-6 sm:p-5"
+      className="group flex flex-col gap-4  border-b-2 border-[#eadcb4] transition-all duration-300  sm:flex-row sm:items-start sm:gap-6 sm:p-5"
     >
-      <div className="relative h-48 w-full shrink-0 overflow-hidden  bg-[#1D1D1D] sm:h-36 sm:w-56">
+      <div className="relative h-40 w-full shrink-0 overflow-hidden  bg-[#1D1D1D] sm:h-36 sm:w-56">
         <Image
           src={thumbnail}
           alt={blog.title}
@@ -122,7 +122,7 @@ const BlogCard = ({ blog }: { blog: any }) => {
           </span>
         </div>
 
-        <h2 className="text-xl hover:underline underline-offset-4 mb-4 font-semibold leading-tight text-[#1D1D1D] transition-all duration-200 hover:text-[#444442] sm:text-2xl">
+        <h2 className="text-lg hover:underline underline-offset-4 mb-4 font-semibold leading-tight text-[#1D1D1D] transition-all duration-200 hover:text-[#444442] sm:text-2xl">
           {blog.title}
         </h2>
       </div>
