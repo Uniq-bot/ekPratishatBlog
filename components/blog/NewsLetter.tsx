@@ -16,7 +16,7 @@ const NewsLetter = () => {
     const trimmedEmail = email.trim();
 
     if (!trimmedEmail) {
-      notify.error("Subscription blocked", "Email cannot be empty.");
+      notify.error("Subscription blocked", "Please enter your email address.");
       return;
     }
 
@@ -30,7 +30,7 @@ const NewsLetter = () => {
       await mutateAsync(trimmedEmail);
       setEmail("");
     } catch {
-      notify.error("Subscription failed", "We could not save your email right now.");
+      notify.error("Subscription failed", "We could not save your subscription right now.");
     } finally {
       setIsSubmitting(false);
     }
@@ -41,15 +41,15 @@ const NewsLetter = () => {
       <div className="flex flex-col gap-4">
         <div className="space-y-2">
           <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#8a6b12]">
-            Newsletter
+            NEWSLETTER
           </p>
           <h2 className="text-lg font-bold leading-tight sm:text-xl">
-            Stay Updated with Real Estate Trends
+            Stay in the loop
           </h2>
         </div>
 
         <p className="max-w-md text-sm leading-6 text-black/75 sm:text-[0.95rem]">
-          Get weekly property insights, market updates, and investment opportunities delivered to your inbox.
+          Get the latest articles and stories delivered straight to your inbox.
         </p>
 
         <div className="flex flex-col gap-3 sm:flex-row">
@@ -65,7 +65,7 @@ const NewsLetter = () => {
             disabled={isSubmitting}
             className="inline-flex h-11 items-center justify-center rounded-lg bg-[linear-gradient(135deg,#EBC044,#F4CA3B_28%,#FFD33A_55%,#F4DC91_78%,#F4CA3B)] px-5 font-bold text-black transition-all hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
           >
-            {isSubmitting ? "Subscribing..." : "Subscribe"}
+            {isSubmitting ? "Submitting..." : "Subscribe"}
           </button>
         </div>
       </div>

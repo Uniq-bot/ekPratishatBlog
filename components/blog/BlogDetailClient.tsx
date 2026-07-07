@@ -55,7 +55,7 @@ const BlogDetailClient = ({
       {/* Header */}
       <div className="flex w-full flex-col gap-2.5 border-b border-[#eadcb4] pb-5">
         <p className="mb-1 inline-flex w-fit items-center  border border-[#eadcb4] bg-[#fffaf0] px-4 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-[#8a6b12]">
-          {blog?.category?.name ?? "Blog / Guides"}
+          {blog?.category?.name ?? "Category"}
         </p>
 
         <h1 className="text-2xl font-[Nunito] font-bold leading-tight text-black sm:text-3xl lg:text-4xl xl:text-5xl">
@@ -106,10 +106,10 @@ const BlogDetailClient = ({
         {blocks.some((b) => b.type === "heading") && (
           <div className="mt-8  border border-[#eadcb4] bg-[linear-gradient(180deg,#fff_0%,#faf6ec_100%)] p-4 shadow-[0_12px_32px_rgba(0,0,0,0.05)] sm:p-6">
             <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#8a6b12]">
-              On this page
+              Table of contents
             </p>
             <p className="text-lg font-black text-black sm:text-xl lg:text-2xl">
-              Table of Contents
+              On this page
             </p>
 
             {blocks
@@ -176,7 +176,7 @@ const BlogDetailClient = ({
                     >
                       <img
                         src={block.content}
-                        alt="Blog content"
+                        alt="Blog illustration"
                         className="h-full w-full object-cover"
                         loading="lazy"
                       />
@@ -241,7 +241,7 @@ const BlogDetailClient = ({
                       <div className="h-px flex-1 bg-[#eadcb4]" />
                       <Image
                         src="/logo.png"
-                        alt="Logo"
+                        alt="Blog logo"
                         width={70}
                         height={40}
                       />

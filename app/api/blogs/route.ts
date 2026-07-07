@@ -1,24 +1,23 @@
 import { NextResponse } from "next/server";
 import { mkdir, writeFile } from "fs/promises";
 import { join } from "path";
-import { uploadImage } from "@/hooks/useCloudinary";
 import { prisma } from "@/libs/prisma";
 import { revalidatePath, revalidateTag } from "next/cache";
-import { getBlogByFilters } from "@/services/blogs.services";
+import { getBlogByFilters, extractTranslationsFromFormData, extractTagsFromFormData, serializeBlogPost } from "@/services/blogs.services";
 
 export async function POST(req: Request) {
   try {
     const formData = await req.formData();
-
-    const title = formData.get("title") as string;
-    const content = formData.get("content") as string;
-    const description = formData.get("description") as string;
     const authorID = formData.get("authorID") as string;
     const categoryId = formData.get("categoryId") as string;
-    const tagsRaw = formData.get("tags") as string;
     const imageFile = formData.get("coverImage") as File | null;
+    const translations = extractTranslationsFromFormData(formData);
+    const tags = extractTagsFromFormData(formData);
 
-    const tags = tagsRaw ? JSON.parse(tagsRaw) : [];
+    const english = translations.find((translation: any) => translation.language === "en") || translations[0];
+    const title = english?.title?.trim();
+    const content = english?.content;
+    const description = english?.description ?? "";
 
     if (!title || !content || !categoryId) {
       return NextResponse.json(
@@ -42,33 +41,17 @@ export async function POST(req: Request) {
 
       const bytes = await imageFile.arrayBuffer();
       const buffer = Buffer.from(bytes);
-
       const allowedTypes = ["jpg", "jpeg", "png", "webp", "gif"];
-
       const ext = imageFile.name.split(".").pop()?.toLowerCase();
 
       if (!ext || !allowedTypes.includes(ext)) {
         throw new Error("Invalid file type. Only images are allowed.");
       }
 
-      const filename = `ad-${Date.now()}.${ext}`;
+      const filename = `blog-${Date.now()}.${ext}`;
       const filepath = join(uploadDir, filename);
       await writeFile(filepath, buffer);
       coverImagePath = `/uploads/${filename}`;
-  //       const bytes = await imageFile.arrayBuffer();
-  // const buffer = Buffer.from(bytes);
-
-  // const allowedTypes = ["jpg", "jpeg", "png", "webp", "gif"];
-
-  // const ext = imageFile.name.split(".").pop()?.toLowerCase();
-
-  if (!ext || !allowedTypes.includes(ext)) {
-    throw new Error("Invalid file type. Only images are allowed.");
-  }
-
-  // const uploadedImage = await uploadImage(buffer);
-
-  // coverImagePath = uploadedImage.secure_url;
     }
 
     const generatedSlug = `${title
@@ -76,80 +59,49 @@ export async function POST(req: Request) {
       .replace(/\s+/g, "-")
       .replace(/[^\w-]+/g, "")}-${Date.now()}`;
 
-  const existingCurated = await prisma.blogPost.findFirst({
-  where: {
-    isToggled: true,
-  },
-});
+    const existingCurated = await prisma.blogPost.findFirst({
+      where: { isToggled: true },
+    });
 
-const existingBlog = await prisma.blogPost.findFirst({
-  where: {
-    title,
-  },
-});
-
-if (existingBlog) {
-  await prisma.blogPost.update({
-  where: {
-    id: existingBlog.id,
-  },
-  data: {
-    title,
-    content,
-    coverImage: coverImagePath,
-    description,
-    status: "PUBLISHED",
-    authorID,
-    categoryID: categoryId,
-    slug: generatedSlug,
-
-    tags: {
-      connect: tags.map((tag: any) => ({
-        id: tag.id,
-      })),
-    },
-
-    isToggled: !existingCurated,
-  },
-});
-}
-else{
-  const post = await prisma.blogPost.create({
-  data: {
-    title,
-    content,
-    coverImage: coverImagePath,
-    description,
-    status: "PUBLISHED",
-    authorID,
-    categoryID: categoryId,
-    slug: generatedSlug,
-
-    tags: {
-      connect: tags.map((tag: any) => ({
-        id: tag.id,
-      })),
-    },
-
-    isToggled: !existingCurated,
-  },
-});
-}
-
+    const post = await prisma.blogPost.create({
+      data: {
+        slug: generatedSlug,
+        coverImage: coverImagePath,
+        status: "ONBOARDING",
+        author: { connect: { id: authorID } },
+        category: { connect: { id: categoryId } },
+        isToggled: !existingCurated,
+        translations: {
+          create: translations.map((translation: any) => ({
+            language: translation.language ?? "en",
+            title: translation.title ?? "",
+            description: translation.description ?? "",
+            content: translation.content ?? [],
+          })),
+        },
+        tagLinks: {
+          create: tags.map((tagId: string) => ({
+            tag: { connect: { id: tagId } },
+          })),
+        },
+      },
+      include: {
+        category: true,
+        translations: true,
+        tagLinks: { include: { tag: true } },
+      },
+    });
 
     revalidateTag("blogs", "max");
     revalidateTag("latestBlogs", "max");
     revalidateTag("categories", "max");
     revalidateTag("tags", "max");
     revalidateTag("popularBlogs", "max");
-
-
-    
     revalidatePath("/");
     revalidatePath(`/blog/${generatedSlug}`);
 
     return NextResponse.json(
-      { message: "Blog created successfully" },
+      { message: "Blog created successfully", data: serializeBlogPost(post) },
       { status: 201 },
     );
   } catch (err: any) {
@@ -173,7 +125,6 @@ export async function GET(req: Request) {
     const category = searchParams.get("category") || undefined;
     const tags = searchParams.get("tags")?.split(",").filter(Boolean) || [];
     const searchQuery = searchParams.get("query") || undefined;
-    // const sort        = (searchParams.get("sort") as "latest" | "oldest") || "latest";
 
     const { posts, totalCount } = await getBlogByFilters({
       offset,

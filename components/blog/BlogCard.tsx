@@ -115,7 +115,7 @@ const BlogCard = ({ blog, index }: { blog: any, index:number }) => {
       <div className="flex min-w-0 flex-1 flex-col justify-between gap-3">
         <div className="flex flex-wrap items-center gap-3 text-sm text-[#8a7a4a]">
           <span className=" border border-[#f0d98c] bg-[#fffaf0] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#6f5a12]">
-            {blog.category?.name || "Article"}
+            {blog.category?.name || "Category"}
           </span>
           <span>{publishedDate}</span>
           <span className="flex items-center gap-1.5">

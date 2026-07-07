@@ -53,10 +53,14 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   BlogPost: 'BlogPost',
+  BlogTranslation: 'BlogTranslation',
+  Category: 'Category',
+  CategoryTranslation: 'CategoryTranslation',
+  Tag: 'Tag',
+  TagTranslation: 'TagTranslation',
+  TagOnPost: 'TagOnPost',
   BlogComment: 'BlogComment',
   BlogViews: 'BlogViews',
-  Category: 'Category',
-  Tag: 'Tag',
   Advertisement: 'Advertisement',
   NewsletterSubscriber: 'NewsletterSubscriber'
 } as const
@@ -91,21 +95,85 @@ export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof User
 
 export const BlogPostScalarFieldEnum = {
   id: 'id',
-  title: 'title',
   slug: 'slug',
   authorID: 'authorID',
   categoryID: 'categoryID',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
   coverImage: 'coverImage',
   status: 'status',
   viewCount: 'viewCount',
-  content: 'content',
-  description: 'description',
-  isToggled: 'isToggled'
+  isToggled: 'isToggled',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type BlogPostScalarFieldEnum = (typeof BlogPostScalarFieldEnum)[keyof typeof BlogPostScalarFieldEnum]
+
+
+export const BlogTranslationScalarFieldEnum = {
+  id: 'id',
+  blogPostId: 'blogPostId',
+  language: 'language',
+  title: 'title',
+  description: 'description',
+  content: 'content',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BlogTranslationScalarFieldEnum = (typeof BlogTranslationScalarFieldEnum)[keyof typeof BlogTranslationScalarFieldEnum]
+
+
+export const CategoryScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
+
+
+export const CategoryTranslationScalarFieldEnum = {
+  id: 'id',
+  categoryId: 'categoryId',
+  language: 'language',
+  name: 'name',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CategoryTranslationScalarFieldEnum = (typeof CategoryTranslationScalarFieldEnum)[keyof typeof CategoryTranslationScalarFieldEnum]
+
+
+export const TagScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TagScalarFieldEnum = (typeof TagScalarFieldEnum)[keyof typeof TagScalarFieldEnum]
+
+
+export const TagTranslationScalarFieldEnum = {
+  id: 'id',
+  tagId: 'tagId',
+  language: 'language',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TagTranslationScalarFieldEnum = (typeof TagTranslationScalarFieldEnum)[keyof typeof TagTranslationScalarFieldEnum]
+
+
+export const TagOnPostScalarFieldEnum = {
+  blogPostId: 'blogPostId',
+  tagId: 'tagId'
+} as const
+
+export type TagOnPostScalarFieldEnum = (typeof TagOnPostScalarFieldEnum)[keyof typeof TagOnPostScalarFieldEnum]
 
 
 export const BlogCommentScalarFieldEnum = {
@@ -113,8 +181,8 @@ export const BlogCommentScalarFieldEnum = {
   blogPostId: 'blogPostId',
   userEmail: 'userEmail',
   userName: 'userName',
-  commentText: 'commentText',
   userImage: 'userImage',
+  commentText: 'commentText',
   createdAt: 'createdAt'
 } as const
 
@@ -129,29 +197,6 @@ export const BlogViewsScalarFieldEnum = {
 } as const
 
 export type BlogViewsScalarFieldEnum = (typeof BlogViewsScalarFieldEnum)[keyof typeof BlogViewsScalarFieldEnum]
-
-
-export const CategoryScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  slug: 'slug',
-  createdAt: 'createdAt',
-  description: 'description',
-  updatedAt: 'updatedAt'
-} as const
-
-export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
-
-
-export const TagScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  slug: 'slug',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type TagScalarFieldEnum = (typeof TagScalarFieldEnum)[keyof typeof TagScalarFieldEnum]
 
 
 export const AdvertisementScalarFieldEnum = {

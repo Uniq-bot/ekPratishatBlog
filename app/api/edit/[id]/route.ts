@@ -1,9 +1,9 @@
 import { prisma } from "@/libs/prisma";
 import { writeFile, mkdir, unlink } from "fs/promises";
 import { join } from "path";
-import { uploadImage } from "@/hooks/useCloudinary";
 import { NextResponse } from "next/server";
 import { revalidatePath, revalidateTag } from "next/cache";
+import { extractTranslationsFromFormData, extractTagsFromFormData, serializeBlogPost } from "@/services/blogs.services";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -12,7 +12,11 @@ export async function GET(_req: Request, { params }: RouteContext) {
   try {
     const blog = await prisma.blogPost.findFirst({
       where: { id },
-      include: { category: true, tags: true },
+      include: {
+        category: { include: { translations: true } },
+        translations: true,
+        tagLinks: { include: { tag: { include: { translations: true } } } },
+      },
     });
     if (!blog) {
       return NextResponse.json(
@@ -21,7 +25,7 @@ export async function GET(_req: Request, { params }: RouteContext) {
       );
     }
     return NextResponse.json(
-      { message: "Fetched blog successfully", data: blog },
+      { message: "Fetched blog successfully", data: serializeBlogPost(blog) },
       { status: 200 },
     );
   } catch (err: any) {
@@ -37,17 +41,13 @@ export async function PUT(req: Request, { params }: RouteContext) {
   try {
     const formData = await req.formData();
 
-    const title = formData.get("title") as string;
-    const contentRaw = formData.get("content") as string;
-    const description = formData.get("description") as string;
     const categoryId = formData.get("categoryId") as string;
-    const tagsRaw = formData.get("tags") as string;
     const imageFile = formData.get("coverImage") as File | null;
-
-    const content = contentRaw ? JSON.parse(contentRaw) : [];
-    const tags: string[] = tagsRaw
-      ? JSON.parse(tagsRaw).map((t: any) => (typeof t === "string" ? t : t.id))
-      : [];
+    const translations = extractTranslationsFromFormData(formData);
+    const tags = extractTagsFromFormData(formData);
+    const english = translations.find((translation: any) => translation.language === "en") || translations[0];
+    const title = english?.title?.trim();
+    const description = english?.description ?? "";
 
     if (!title || !categoryId) {
       return NextResponse.json(
@@ -56,7 +56,6 @@ export async function PUT(req: Request, { params }: RouteContext) {
       );
     }
 
-    // Save new image only if a new file was uploaded
     let coverImagePath: string | undefined = undefined;
     if (imageFile && imageFile.size > 0) {
       const uploadDir = join(process.cwd(), "public", "uploads");
@@ -66,39 +65,57 @@ export async function PUT(req: Request, { params }: RouteContext) {
       const filename = `cover-${Date.now()}.${ext}`;
       await writeFile(join(uploadDir, filename), Buffer.from(bytes));
       coverImagePath = `/uploads/${filename}`;
-      // const bytes = await imageFile.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-
-      // const uploadedImage = await uploadImage(buffer);
-
-      // coverImagePath = uploadedImage.secure_url;
     }
-    
+
     const updated = await prisma.blogPost.update({
       where: { id },
       data: {
-        title,
-        description,
-        content,
-        status: "PUBLISHED",
+        ...(coverImagePath ? { coverImage: coverImagePath } : {}),
+        status: "ONBOARDING",
         category: {
           connect: { id: categoryId },
         },
-        ...(coverImagePath && { coverImage: coverImagePath }),
-        tags: {
-          set: tags.map((tagId: string) => ({ id: tagId })),
+        translations: {
+          upsert: translations.map((translation: any) => ({
+            where: {
+              blogPostId_language: {
+                blogPostId: id,
+                language: translation.language ?? "en",
+              },
+            },
+            create: {
+              language: translation.language ?? "en",
+              title: translation.title ?? "",
+              description: translation.description ?? "",
+              content: translation.content ?? [],
+            },
+            update: {
+              title: translation.title ?? "",
+              description: translation.description ?? "",
+              content: translation.content ?? [],
+            },
+          })),
+        },
+        tagLinks: {
+          deleteMany: {},
+          create: tags.map((tagId: string) => ({
+            tag: { connect: { id: tagId } },
+          })),
         },
       },
-      include: { category: true, tags: true },
+      include: {
+        category: { include: { translations: true } },
+        translations: true,
+        tagLinks: { include: { tag: { include: { translations: true } } } },
+      },
     });
 
-    // Revalidate the updated blog's detail page and all listing pages
     revalidatePath(`/blog/${updated.slug}`);
     revalidatePath("/");
     revalidatePath("/blog");
 
     return NextResponse.json(
-      { message: "Blog updated successfully", data: updated },
+      { message: "Blog updated successfully", data: serializeBlogPost(updated) },
       { status: 200 },
     );
   } catch (err: any) {
@@ -120,6 +137,7 @@ export async function DELETE(_req: Request, { params }: RouteContext) {
         coverImage: true,
       },
     });
+
     const deleteImagePath = blog?.coverImage;
     if (deleteImagePath) {
       const filePath = join(process.cwd(), "public", deleteImagePath);
@@ -129,7 +147,9 @@ export async function DELETE(_req: Request, { params }: RouteContext) {
         console.error("Failed to delete cover image:", err);
       }
     }
+
     await prisma.blogViews.deleteMany({ where: { blogPostId: id } });
+    await prisma.blogComment.deleteMany({ where: { blogPostId: id } });
     await prisma.blogPost.delete({ where: { id } });
 
     if (blog?.slug) {
@@ -137,11 +157,10 @@ export async function DELETE(_req: Request, { params }: RouteContext) {
       revalidateTag(`blog-${blog.slug}`, "max");
     }
     revalidateTag("related", "max");
-
-revalidateTag("blogs", "max");
-revalidateTag("latestBlogs", "max");
-revalidateTag("popularBlogs", "max");
-revalidateTag("curatedBlog", "max");
+    revalidateTag("blogs", "max");
+    revalidateTag("latestBlogs", "max");
+    revalidateTag("popularBlogs", "max");
+    revalidateTag("curatedBlog", "max");
     revalidatePath("/");
     revalidatePath("/blog");
 

@@ -7,34 +7,59 @@ datasource db {
   provider = "postgresql"
 }
 
+enum Language {
+  en
+  ne
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+  ONBOARDING
+}
+
+enum AdType {
+  BANNER
+  ASIDE
+  POPUP
+}
+
 model User {
   id        String     @id @default(cuid())
   email     String     @unique
   name      String?
   password  String
+
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
-  posts     BlogPost[]
+
+  posts      BlogPost[]
 }
 
 model BlogPost {
   id          String      @id @default(cuid())
-  title       String
   slug        String      @unique
+
   authorID    String
   categoryID  String?
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+
   coverImage  String?
   status      PostStatus  @default(DRAFT)
   viewCount   Int         @default(0)
-  content     Json
-  description String?
   isToggled   Boolean     @default(false)
-  author      User        @relation(fields: [authorID], references: [id])
-  category    Category?    @relation(fields: [categoryID], references: [id])
-  blogViews   BlogViews[]
-  tags        Tag[]       @relation("PostTags")
+
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  author       User       @relation(fields: [authorID], references: [id])
+  category     Category?  @relation(fields: [categoryID], references: [id])
+
+  translations BlogTranslation[]
+
+  tagLinks     TagOnPost[]
+
+  blogViews    BlogViews[]
   comments     BlogComment[]
 
   @@index([status, createdAt])
@@ -43,76 +68,144 @@ model BlogPost {
   @@index([categoryID])
 }
 
-model BlogComment{
-  id String @id @default(cuid())
-  blogPostId String
-  BlogPost BlogPost @relation(fields: [blogPostId], references: [id])
-  userEmail String
-  userName String
-  commentText String
-  userImage String
-  createdAt DateTime @default(now())
+model BlogTranslation {
+  id              String   @id @default(cuid())
+
+  blogPostId      String
+  blogPost        BlogPost @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
+
+  language        Language
+
+  title           String
+  description     String?
+  content         Json
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([blogPostId, language])
+}
+
+model Category {
+  id          String    @id @default(cuid())
+
+  slug        String    @unique
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  posts        BlogPost[]
+  translations CategoryTranslation[]
+}
+
+model CategoryTranslation {
+  id            String    @id @default(cuid())
+
+  categoryId    String
+  category      Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  language      Language
+
+  name          String
+  description   String?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([categoryId, language])
+}
+
+model Tag {
+  id          String   @id @default(cuid())
+
+  slug        String   @unique
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  blogPosts   TagOnPost[]
+
+  translations TagTranslation[]
+}
+
+model TagTranslation {
+  id          String   @id @default(cuid())
+
+  tagId       String
+  tag         Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  language    Language
+
+  name        String
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([tagId, language])
+}
+
+model TagOnPost {
+  blogPostId  String
+  tagId        String
+
+  blogPost     BlogPost @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
+  tag          Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([blogPostId, tagId])
+
+  @@index([tagId])
+}
+
+model BlogComment {
+  id            String   @id @default(cuid())
+
+  blogPostId    String
+  blogPost      BlogPost @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
+
+  userEmail     String
+  userName      String
+  userImage     String
+  commentText   String
+
+  createdAt     DateTime @default(now())
 
   @@index([blogPostId])
 }
 
 model BlogViews {
-  id         String   @id @default(cuid())
-  blogPostId String
-  sessionId  String
-  createdAt  DateTime @default(now())
-  blogPost   BlogPost @relation(fields: [blogPostId], references: [id])
+  id            String   @id @default(cuid())
+
+  blogPostId    String
+  sessionId     String
+
+  createdAt     DateTime @default(now())
+
+  blogPost      BlogPost @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
 
   @@unique([blogPostId, sessionId])
   @@index([blogPostId])
 }
 
-model Category {
-  id          String     @id @default(cuid())
-  name        String     @unique
-  slug        String     @unique
-  createdAt   DateTime   @default(now())
-  description String?
-  updatedAt   DateTime   @updatedAt
-  posts       BlogPost[]
-}
-
-model Tag {
-  id        String     @id @default(cuid())
-  name      String     @unique
-  slug      String     @unique
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @default(now()) @updatedAt
-  blogPosts BlogPost[] @relation("PostTags")
-}
-
 model Advertisement {
-  id            String   @id @default(cuid())
-  AdTitle       String
-  AdDescription String
-  AdPoster      String
-  AdLink        String
-  AdSponsorName String
-  AdType        AdType   @default(BANNER)
-  isAdRunning   Boolean  @default(false)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id              String   @id @default(cuid())
+
+  AdTitle         String
+  AdDescription   String
+  AdPoster        String
+  AdLink          String
+  AdSponsorName   String
+
+  AdType          AdType   @default(BANNER)
+  isAdRunning     Boolean  @default(false)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
 model NewsletterSubscriber {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  createdAt DateTime @default(now())
-}
+  id          String   @id @default(cuid())
 
-enum PostStatus {
-  DRAFT
-  PUBLISHED
-  ARCHIVED
-}
+  email       String   @unique
 
-enum AdType {
-  BANNER
-  ASIDE
-  POPUP
+  createdAt   DateTime @default(now())
 }

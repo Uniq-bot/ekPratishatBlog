@@ -1,16 +1,23 @@
 import Editor from "@/components/admin/editPage/Editor";
 import { prisma } from "@/libs/prisma";
 import { notFound } from "next/navigation";
+import { serializeBlogPost } from "@/services/blogs.services";
 
 interface Props {
   params: Promise<{ id: string }>;
 }
 
 async function getBlogForEdit(id: string) {
-  return prisma.blogPost.findUnique({
+  const blog = await prisma.blogPost.findUnique({
     where: { id },
-    include: { category: true, tags: true },
+    include: {
+      category: true,
+      translations: true,
+      tagLinks: { include: { tag: true } },
+    },
   });
+
+  return blog ? serializeBlogPost(blog) : null;
 }
 
 export default async function Page({ params }: Props) {

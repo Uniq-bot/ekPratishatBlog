@@ -17,7 +17,7 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { name } = body;
+    const { name, nameNp } = body;
 
     if (!name || name.trim() === "") {
       return NextResponse.json(
@@ -26,7 +26,14 @@ export async function POST(req: Request) {
       );
     }
 
-    const tag = await createTag(name);
+    if (!nameNp || nameNp.trim() === "") {
+      return NextResponse.json(
+        { message: "Tag name in Nepali is required" },
+        { status: 400 },
+      );
+    }
+
+    const tag = await createTag({ name: name.trim(), nameNp: nameNp?.trim() });
 
     return NextResponse.json(
       {

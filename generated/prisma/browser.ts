@@ -28,6 +28,36 @@ export type User = Prisma.UserModel
  */
 export type BlogPost = Prisma.BlogPostModel
 /**
+ * Model BlogTranslation
+ * 
+ */
+export type BlogTranslation = Prisma.BlogTranslationModel
+/**
+ * Model Category
+ * 
+ */
+export type Category = Prisma.CategoryModel
+/**
+ * Model CategoryTranslation
+ * 
+ */
+export type CategoryTranslation = Prisma.CategoryTranslationModel
+/**
+ * Model Tag
+ * 
+ */
+export type Tag = Prisma.TagModel
+/**
+ * Model TagTranslation
+ * 
+ */
+export type TagTranslation = Prisma.TagTranslationModel
+/**
+ * Model TagOnPost
+ * 
+ */
+export type TagOnPost = Prisma.TagOnPostModel
+/**
  * Model BlogComment
  * 
  */
@@ -37,16 +67,6 @@ export type BlogComment = Prisma.BlogCommentModel
  * 
  */
 export type BlogViews = Prisma.BlogViewsModel
-/**
- * Model Category
- * 
- */
-export type Category = Prisma.CategoryModel
-/**
- * Model Tag
- * 
- */
-export type Tag = Prisma.TagModel
 /**
  * Model Advertisement
  * 

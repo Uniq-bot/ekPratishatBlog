@@ -75,7 +75,7 @@ const handleSubmit = async (e: React.FormEvent) => {
   return (
     <div className="w-full mx-auto mt-10">
       <h2 className="text-3xl font-bold mb-6">
-    Comments ({comments.length})
+        Comments ({comments.length})
       </h2>
 
       {session?.user ? (
@@ -101,7 +101,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               <textarea
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
-                placeholder="Write your thoughts..."
+                placeholder="Write a comment..."
                 className="w-full min-h-30  border p-3 outline-none resize-none focus:ring-2 focus:ring-black"
               />
 
@@ -111,7 +111,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                   disabled={!comment.trim() || isSubmitting}
                   className="bg-black text-white px-6 py-2 hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed transition"
                 >
-                  {isSubmitting ? "Posting..." : "Post Comment"}
+                  {isSubmitting ? "Submitting..." : "Post comment"}
                 </button>
               </div>
             </div>
@@ -119,7 +119,7 @@ const handleSubmit = async (e: React.FormEvent) => {
         </form>
       ) : (
         <div className="border  p-10 text-center">
-          <p className="text-gray-500 mb-4">Sign in to join the discussion.</p>
+          <p className="text-gray-500 mb-4">Please sign in to join the conversation.</p>
 
           <button
             onClick={() => signIn("google")}
@@ -133,9 +133,7 @@ const handleSubmit = async (e: React.FormEvent) => {
       <div className="mt-8 space-y-5">
         {comments.length === 0 ? (
           <div className="text-center py-10 text-gray-500 border ">
-            No comments yet.
-            <br />
-            Be the first to comment.
+            No comments yet. Be the first to share your thoughts.
           </div>
         ) : (
           comments.map((item) => (

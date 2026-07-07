@@ -6,6 +6,7 @@ export type AdminTab =
   | "tags";
 
 export interface Category {
+  translations: any;
   id: string;
   name: string;
   slug: string;

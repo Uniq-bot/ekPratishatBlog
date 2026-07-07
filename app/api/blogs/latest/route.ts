@@ -1,5 +1,6 @@
 import { prisma } from "@/libs/prisma";
 import { NextResponse } from "next/server";
+import { serializeBlogList } from "@/services/blogs.services";
 
 export async function GET(req: Request) {
   try {
@@ -10,23 +11,14 @@ export async function GET(req: Request) {
       where: { status: "PUBLISHED" },
       orderBy: { createdAt: "desc" },
       take: limit,
-      select: {
-        id: true,
-        title: true,
-        slug: true,
-        coverImage: true,
-        description: true,
-        createdAt: true,
-        category: {
-          select: {
-            name: true,
-            slug: true,
-          },
-        },
+      include: {
+        category: true,
+        translations: true,
+        tagLinks: { include: { tag: true } },
       },
     });
 
-    return NextResponse.json({ posts: blogs }, { status: 200 });
+    return NextResponse.json({ posts: serializeBlogList(blogs) }, { status: 200 });
   } catch (err: any) {
     return NextResponse.json({ message: "Failed to fetch latest blogs", error: err?.message }, { status: 500 });
   }

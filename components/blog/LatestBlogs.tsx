@@ -55,7 +55,7 @@ const LatestBlogs = ({ latestBlogs = [], ads }: { latestBlogs?: BlogItem[], ads:
             {featuredBlog?.title}
           </h3>
           <p className="max-w-2xl text-sm leading-7 text-[#5f5743] sm:text-[15px]">
-            {featuredBlog?.discription || "A concise read with practical guidance, fresh perspective, and useful takeaways."}
+            {featuredBlog?.discription || "A fresh story from our latest collection."}
           </p>
           <div className="mt-1 flex items-center gap-2 text-sm font-semibold text-[#8a6b12]">
             Read story
@@ -90,7 +90,7 @@ const LatestBlogs = ({ latestBlogs = [], ads }: { latestBlogs?: BlogItem[], ads:
 
             <div className="flex min-w-0 flex-1 flex-col gap-2">
               <span className="w-fit rounded-full border border-[#f0d98c] bg-[#fffaf0] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#6f5a12]">
-                {blog?.category?.name || "Blog"}
+                {blog?.category?.name || "Category"}
               </span>
               <h4 className="line-clamp-2 text-sm font-[Nunito] leading-snug text-black transition-colors group-hover:text-[#7a5a09]">
                 {blog.title}

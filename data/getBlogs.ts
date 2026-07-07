@@ -1,5 +1,33 @@
 import { unstable_cache } from "next/cache";
 import { prisma } from "@/libs/prisma";
+import { serializeBlogList } from "@/services/blogs.services";
+
+const normalizeLanguage = (value: string | null | undefined) => {
+  return value === "ne" ? "ne" : "en";
+};
+
+const serializeCategory = (category: any, language = "en") => {
+  const translation = Array.isArray(category?.translations)
+    ? category.translations.find((item: any) => item?.language === normalizeLanguage(language)) || category.translations[0]
+    : null;
+
+  return {
+    ...category,
+    name: translation?.name ?? "",
+    description: translation?.description ?? null,
+  };
+};
+
+const serializeTag = (tag: any, language = "en") => {
+  const translation = Array.isArray(tag?.translations)
+    ? tag.translations.find((item: any) => item?.language === normalizeLanguage(language)) || tag.translations[0]
+    : null;
+
+  return {
+    ...tag,
+    name: translation?.name ?? "",
+  };
+};
 
 export const getBlogs = unstable_cache(
   async ({
@@ -28,15 +56,23 @@ export const getBlogs = unstable_cache(
           },
         }),
         ...(tag && {
-          tags: {
-            some: { slug: tag },
+          tagLinks: {
+            some: {
+              tag: {
+                slug: tag,
+              },
+            },
           },
         }),
         ...(search && {
-          OR: [
-            { title: { contains: search, mode: "insensitive" as const } },
-            { description: { contains: search, mode: "insensitive" as const } },
-          ],
+          translations: {
+            some: {
+              OR: [
+                { title: { contains: search, mode: "insensitive" as const } },
+                { description: { contains: search, mode: "insensitive" as const } },
+              ],
+            },
+          },
         }),
       };
 
@@ -51,32 +87,16 @@ export const getBlogs = unstable_cache(
           orderBy,
           skip,
           take: limit,
-          select: {
-            id: true,
-            title: true,
-            slug: true,
-            coverImage: true,
-            description: true,
-            createdAt: true,
-            content:true,
-            category: {
-              select: {
-                name: true,
-                slug: true,
-              },
-            },
-            tags: {
-              select: {
-                name: true,
-                slug: true,
-              },
-            },
+          include: {
+            category: { include: { translations: true } },
+            translations: true,
+            tagLinks: { include: { tag: { include: { translations: true } } } },
           },
         }),
         prisma.blogPost.count({ where }),
       ]);
 
-      return { posts: blogs, totalCount };
+      return { posts: serializeBlogList(blogs), totalCount };
     } catch (err) {
       console.error("BLOG FETCH ERROR:", err);
       return { posts: [], totalCount: 0 };
@@ -96,29 +116,14 @@ export const getLatestBlogs = unstable_cache(
         where: { isToggled: false, status: "PUBLISHED" },
         orderBy: { createdAt: "desc" },
         take: 4,
-        select: {
-          id: true,
-          title: true,
-          slug: true,
-          coverImage: true,
-          description: true,
-          createdAt: true,
-          category: {
-            select: {
-              name: true,
-              slug: true,
-            },
-          },
-          tags: {
-            select: {
-              name: true,
-              slug: true,
-            },
-          },
+        include: {
+          category: { include: { translations: true } },
+          translations: true,
+          tagLinks: { include: { tag: { include: { translations: true } } } },
         },
       });
 
-      return { posts: blogs };
+      return { posts: serializeBlogList(blogs) };
     } catch (err) {
       console.error("INITIAL LATEST FETCH ERROR:", err);
       return { posts: [] };
@@ -132,7 +137,13 @@ export const getLatestBlogs = unstable_cache(
 );
 
 export const getCategory = unstable_cache(
-  async () => prisma.category.findMany(),
+  async () => {
+    const categories = await prisma.category.findMany({
+      include: { translations: true },
+    });
+
+    return categories.map((category: any) => serializeCategory(category));
+  },
   ["categories"],
   {
     tags: ["categories"],
@@ -141,7 +152,13 @@ export const getCategory = unstable_cache(
 );
 
 export const getTags = unstable_cache(
-  async () => prisma.tag.findMany(),
+  async () => {
+    const tags = await prisma.tag.findMany({
+      include: { translations: true },
+    });
+
+    return tags.map((tag: any) => serializeTag(tag));
+  },
   ["tags"],
   {
     tags: ["tags"],
@@ -156,24 +173,14 @@ export const getPopularBlogs = unstable_cache(
         where: { status: "PUBLISHED" },
         orderBy: [{ viewCount: "desc" }, { createdAt: "desc" }],
         take: 3,
-        select: {
-          id: true,
-          title: true,
-          slug: true,
-          coverImage: true,
-          description: true,
-          viewCount: true,
-          createdAt: true,
-          category: {
-            select: {
-              name: true,
-              slug: true,
-            },
-          },
+        include: {
+          category: { include: { translations: true } },
+          translations: true,
+          tagLinks: { include: { tag: { include: { translations: true } } } },
         },
       });
 
-      return { posts: blogs };
+      return { posts: serializeBlogList(blogs) };
     } catch (err) {
       console.error("POPULAR BLOGS FETCH ERROR:", err);
       return { posts: [] };
@@ -187,26 +194,19 @@ export const getPopularBlogs = unstable_cache(
 );
 
 export const getCuratedBlog = unstable_cache(async () => {
-    return await prisma.blogPost.findFirst({
+    const blog = await prisma.blogPost.findFirst({
       where: {
         isToggled: true,
         status: "PUBLISHED",
       },
-      select: {
-        id: true,
-        title: true,
-        slug: true,
-        coverImage: true,
-        description: true,
-        createdAt: true,
-        category: {
-          select: {
-            name: true,
-            slug: true,
-          },
-        },
+      include: {
+        category: { include: { translations: true } },
+        translations: true,
+        tagLinks: { include: { tag: { include: { translations: true } } } },
       },
     });
+
+    return blog ? serializeBlogList([blog])[0] : null;
   }, ["curated-blog"], { revalidate: 300 });
 
 

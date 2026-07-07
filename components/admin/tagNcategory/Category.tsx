@@ -12,16 +12,17 @@ interface CategoryProp{
 
 const Category = ({ categories, isLoading }: CategoryProp) => {
   const [catName, setCatName] = React.useState("");
-  const [catDesc, setCatDesc] = React.useState("");
+  const [catNameNp, setCatNameNp] = React.useState("");
+
   const { mutateAsync: createCategory, isPending: isCreating } = useCreateCategory();
   
   const handleAddCategory = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!catName.trim()) return;
     try {
-      await createCategory({ name: catName.trim(), description: catDesc.trim() });
+      await createCategory({ name: catName.trim(), nameNp: catNameNp.trim() });
       setCatName("");
-      setCatDesc("");
+      setCatNameNp("");
     } catch {
       notify.error("Category creation failed", "We could not create the category right now.");
     }
@@ -45,18 +46,19 @@ const Category = ({ categories, isLoading }: CategoryProp) => {
         <div className="flex items-center flex-col lg:flex-row gap-3">
           <input
             type="text"
-            placeholder="Category name *"
+            placeholder="Category name (English) *"
             value={catName}
             onChange={(e) => setCatName(e.target.value)}
-            className="flex-1 bg-transparent outline-none border border-gray-400 px-2 py-1"
+            className="flex-1 w-full bg-transparent outline-none border border-gray-400 px-2 py-1"
+
             required
           />
            <input
           type="text"
-          placeholder="Description (optional)"
-          value={catDesc}
-          onChange={(e) => setCatDesc(e.target.value)}
-          className="bg-transparent w-full lg:hidden outline-none border border-gray-400 px-2 py-1 text-sm"
+          placeholder="Category Name (Nepali) *"
+          value={catNameNp}
+          onChange={(e) => setCatNameNp(e.target.value)}
+            className="flex-1 w-full bg-transparent outline-none border border-gray-400 px-2 py-1"
         />
           <button
             type="submit"
@@ -66,13 +68,7 @@ const Category = ({ categories, isLoading }: CategoryProp) => {
             {isCreating ? "Adding..." : "Add +"}
           </button>
         </div>
-         <input
-          type="text"
-          placeholder="Description (optional)"
-          value={catDesc}
-          onChange={(e) => setCatDesc(e.target.value)}
-          className="bg-transparent hidden lg:block outline-none border border-gray-400 px-2 py-1 text-sm"
-        />
+        
       </form>
 
       <div className="mt-4 space-y-2">
@@ -85,7 +81,7 @@ const Category = ({ categories, isLoading }: CategoryProp) => {
               className="flex justify-between items-center border-b border-gray-400 py-2 px-1"
             >
               <div>
-                <span className="font-medium">{category.name}</span>
+                <span className="font-medium">{category.name}{category?.translations[1]&&` / ${category.translations[1]?.name}`}</span>
                 {category.description && (
                   <p className="text-xs text-gray-500">{category.description}</p>
                 )}

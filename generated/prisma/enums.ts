@@ -9,10 +9,19 @@
 * 🟢 You can import this file directly.
 */
 
+export const Language = {
+  en: 'en',
+  ne: 'ne'
+} as const
+
+export type Language = (typeof Language)[keyof typeof Language]
+
+
 export const PostStatus = {
   DRAFT: 'DRAFT',
   PUBLISHED: 'PUBLISHED',
-  ARCHIVED: 'ARCHIVED'
+  ARCHIVED: 'ARCHIVED',
+  ONBOARDING: 'ONBOARDING'
 } as const
 
 export type PostStatus = (typeof PostStatus)[keyof typeof PostStatus]

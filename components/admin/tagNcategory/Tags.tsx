@@ -11,13 +11,15 @@ interface TagProp {
 
 const Tag = ({ tags, isLoading }: { tags?: TagP[]; isLoading: boolean }) => {
   const [tagValue, setTagValue] = React.useState("");
+  const [tagValueNep, setTagValueNep] = React.useState("");
   const { mutateAsync: createTag, isPending: isCreating } = useCreateTag();
   const handleAddTags = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!tagValue.trim()) return;
     try {
-      await createTag({ name: tagValue.trim() });
+      await createTag({ name: tagValue.trim(), nameNp: tagValueNep.trim() });
       setTagValue("");
+      setTagValueNep("");
     } catch {
       notify.error("Tag creation failed", "We could not create the tag right now.");
     }
@@ -38,10 +40,18 @@ const Tag = ({ tags, isLoading }: { tags?: TagP[]; isLoading: boolean }) => {
       >
         <input
           type="text"
-          placeholder="Tag name"
+          placeholder="Tag name (English) *"
           value={tagValue}
           onChange={(e) => setTagValue(e.target.value)}
-          className="flex-1  bg-transparent outline-none border border-gray-400 px-2 py-1"
+          className="flex-1 w-full  bg-transparent outline-none border border-gray-400 px-2 py-1"
+          required
+        />
+         <input
+          type="text"
+          placeholder="Tag name (Nepali)"
+          value={tagValueNep}
+          onChange={(e) => setTagValueNep(e.target.value)}
+          className="flex-1 w-full  bg-transparent outline-none border border-gray-400 px-2 py-1"
           required
         />
         <button

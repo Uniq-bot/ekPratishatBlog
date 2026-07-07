@@ -177,7 +177,7 @@ export const fetchCategory = async () => {
 
 export const createCategory = async (newCat: {
   name: string;
-  description?: string;
+  nameNp?: string;
 }) => {
   const res = await fetch(`${getBaseUrl()}/api/categories`, {
     method: "POST",
@@ -197,7 +197,7 @@ export const fetchTags = async () => {
   return res.json();
 };
 
-export const createTag = async (newTag: { name: string }) => {
+export const createTag = async (newTag: { name: string; nameNp?: string }) => {
   const res = await fetch(`${getBaseUrl()}/api/tags`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },

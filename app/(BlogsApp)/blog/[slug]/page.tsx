@@ -3,6 +3,7 @@ import RelatedBlogs from "@/components/blog/RelatedBlogs";
 import BackButton from "@/components/blog/BackButton";
 import { prisma } from "@/libs/prisma";
 import { notFound } from "next/navigation";
+import { serializeBlogPost } from "@/services/blogs.services";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -17,15 +18,16 @@ import { Metadata } from "next";
 export const getBlog = (slug: string) =>
   unstable_cache(
     async () => {
-      return prisma.blogPost.findFirst({
+      const blog = await prisma.blogPost.findFirst({
         where: { slug },
-        
         include: {
           category: true,
-          tags: true,
-         
+          translations: true,
+          tagLinks: { include: { tag: true } },
         },
       });
+
+      return blog ? serializeBlogPost(blog) : null;
     },
     [`blog-${slug}`],
     {
@@ -113,10 +115,12 @@ export const getRelatedBlogs = (
               categoryID: categoryId,
             },
             {
-              tags: {
+              tagLinks: {
                 some: {
-                  id: {
-                    in: tagIds,
+                  tag: {
+                    id: {
+                      in: tagIds,
+                    },
                   },
                 },
               },
@@ -129,7 +133,8 @@ export const getRelatedBlogs = (
         },
         include: {
           category: true,
-          tags: true,
+          translations: true,
+          tagLinks: { include: { tag: true } },
         },
       });
     },
@@ -149,11 +154,11 @@ export default async function BlogDets({ params }: Props) {
     notFound();
   }
 
-  const relatedBlogs = await getRelatedBlogs(
+  const relatedBlogs = (await getRelatedBlogs(
     blog.categoryID ?? blog.category?.id ?? "",
     slug,
-    blog.tags.map((t) => t.id),
-  );
+    blog.tags.map((t: any) => t.id),
+  )).map((item: any) => serializeBlogPost(item));
 
   const comments = await prisma.blogComment.findMany({
     where: { blogPostId: blog.id },

@@ -1,6 +1,7 @@
 import { prisma } from "@/libs/prisma";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
+import { serializeBlogPost } from "@/services/blogs.services";
 
 
 
@@ -25,6 +26,11 @@ export async function PATCH(req: Request) {
             data: {
                 status: isArchived.status === "ARCHIVED" ? "DRAFT" : "ARCHIVED",
             },
+            include: {
+                category: { include: { translations: true } },
+                translations: true,
+                tagLinks: { include: { tag: { include: { translations: true } } } },
+            },
         });
 
 
@@ -38,7 +44,7 @@ export async function PATCH(req: Request) {
 
         revalidatePath("/");
         revalidatePath(`/blog/${updatedBlog.slug}`);
-        return NextResponse.json({ message: "Blog archived successfully" });
+        return NextResponse.json({ message: "Blog archived successfully", data: serializeBlogPost(updatedBlog) });
     } catch (error) {
         return NextResponse.json(
             { error: "Failed to archive blog" },

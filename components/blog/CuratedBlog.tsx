@@ -5,12 +5,9 @@ import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 
-import { useSession } from "next-auth/react";
-
 const CuratedBlog = ({ curatedBlog }: { curatedBlog: BlogItem | any }) => {
   if (!curatedBlog) return null;
   const trackView = useTrackBlogView();
-  const { data: session } = useSession();
 
   const handleClick = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -33,7 +30,7 @@ const CuratedBlog = ({ curatedBlog }: { curatedBlog: BlogItem | any }) => {
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.04)_0%,rgba(0,0,0,0.08)_42%,rgba(0,0,0,0.72)_100%)]" />
       <div className="absolute bottom-0 left-0 right-0 z-10 p-2 flex flex-col gap-1 sm:p-5 lg:p-6">
         <p className=" inline-flex w-fit  rounded-full border border-white/30 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-white backdrop-blur-sm">
-          Curated Story
+          FEATURED STORY
         </p>
         <h1 className="max-w-2xl text-md line-clamp-2 font-black leading-tight text-white sm:text-3xl lg:text-5xl">
           {curatedBlog?.title}

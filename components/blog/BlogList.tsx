@@ -59,13 +59,10 @@ const BlogList = ({
       <div className="mb-7 flex flex-col gap-4 border-b-2 border-[#f0e3bd] pb-5 sm:flex-row sm:items-end sm:justify-between">
         <div className="space-y-1.5">
           <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#8a6b12]">
-            Articles
+            BLOGS
           </p>
           <h2 className="text-2xl font-black text-black sm:text-3xl">
-            Blogs of your{" "}
-            <span className="bg-[linear-gradient(135deg,#EBC044,#F4CA3B_28%,#FFD33A_55%,#F4DC91_78%,#F4CA3B)] px-2 py-1 font-[Girls] text-black underline underline-offset-4">
-              Interest
-            </span>
+            Read the latest posts
           </h2>
         </div>
 
@@ -89,7 +86,7 @@ const BlogList = ({
         {blogs?.length > 0 ? (
           blogs.map((blog, index) => <BlogCard key={blog.id} index={index} blog={blog} />)
         ) : (
-          <p className="w-full py-10 text-center text-gray-400">No blogs found.</p>
+          <p className="w-full py-10 text-center text-gray-400">No posts found.</p>
         )}
       </div>
 
@@ -100,7 +97,7 @@ const BlogList = ({
               href={buildUrl(page - 1)}
               className="rounded-full border border-[#C9981A] px-4 py-2 text-sm font-semibold transition-colors hover:bg-[#C9981A] hover:text-black"
             >
-              ← Prev
+              Previous
             </Link>
           )}
 
@@ -126,7 +123,7 @@ const BlogList = ({
               href={buildUrl(page + 1)}
               className="rounded-full border border-[#C9981A] px-4 py-2 text-sm font-semibold transition-colors hover:bg-[#C9981A] hover:text-black"
             >
-              Next →
+              Next
             </Link>
           )}
         </div>

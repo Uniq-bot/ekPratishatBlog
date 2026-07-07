@@ -1,8 +1,57 @@
 import { prisma } from "@/libs/prisma";
-import { mkdir, writeFile } from "fs/promises";
+import { mkdir, writeFile, unlink } from "fs/promises";
 import { NextResponse } from "next/server";
 import { join } from "path";
 import { revalidatePath, revalidateTag } from "next/cache";
+import { extractTranslationsFromFormData, extractTagsFromFormData, serializeBlogPost } from "@/services/blogs.services";
+
+export async function DELETE(
+  _req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params;
+    const draft = await prisma.blogPost.findUnique({
+      where: { id },
+      select: {
+        slug: true,
+        coverImage: true,
+      },
+    });
+
+    if (!draft) {
+      return NextResponse.json(
+        { message: "Draft not found", data: null },
+        { status: 404 }
+      );
+    }
+
+    if (draft.coverImage) {
+      const filePath = join(process.cwd(), "public", draft.coverImage);
+      try {
+        await unlink(filePath);
+      } catch (err) {
+        console.error("Failed to delete draft cover image:", err);
+      }
+    }
+
+    await prisma.blogPost.delete({ where: { id } });
+
+    revalidatePath("/admin");
+    revalidateTag("blogs", "max");
+
+    return NextResponse.json(
+      { message: "Draft deleted successfully" },
+      { status: 200 }
+    );
+  } catch (err: any) {
+    console.error("DELETE DRAFT ERROR:", err);
+    return NextResponse.json(
+      { message: "Internal server error", error: err?.message },
+      { status: 500 }
+    );
+  }
+}
 
 export async function PATCH(
   req: Request,
@@ -10,18 +59,14 @@ export async function PATCH(
 ) {
   try {
     const { id } = await params;
-
     const formData = await req.formData();
 
-    const title = (formData.get("title") as string) || "";
-    const contentRaw = (formData.get("content") as string) || "[]";
-    const description = (formData.get("description") as string) || "";
     const categoryID = (formData.get("categoryId") as string) || null;
-    const tagsRaw = formData.get("tags") as string;
     const imageFile = formData.get("coverImage") as File | null;
-
-    const content = contentRaw ? JSON.parse(contentRaw) : [];
-    const tags = tagsRaw ? JSON.parse(tagsRaw) : [];
+    const translations = extractTranslationsFromFormData(formData);
+    const tags = extractTagsFromFormData(formData);
+    const english = translations.find((translation: any) => translation.language === "en") || translations[0];
+    const title = english?.title?.trim() || "";
 
     let coverImagePath: string | undefined;
 
@@ -31,7 +76,6 @@ export async function PATCH(
 
       const bytes = await imageFile.arrayBuffer();
       const buffer = Buffer.from(bytes);
-
       const ext = imageFile.name.split(".").pop()?.toLowerCase();
       const allowedTypes = ["jpg", "jpeg", "png", "webp", "gif"];
 
@@ -40,9 +84,7 @@ export async function PATCH(
       }
 
       const filename = `draft-${Date.now()}.${ext}`;
-
       await writeFile(join(uploadDir, filename), buffer);
-
       coverImagePath = `/uploads/${filename}`;
     }
 
@@ -56,7 +98,7 @@ export async function PATCH(
 
     const existingDraft = await prisma.blogPost.findUnique({
       where: { id },
-      include: { tags: true },
+      include: { translations: true },
     });
 
     if (!existingDraft) {
@@ -65,21 +107,35 @@ export async function PATCH(
         { status: 404 }
       );
     }
+
     const updatedDraft = await prisma.blogPost.update({
       where: { id },
       data: {
-        title: title || existingDraft.title,
-        content,
-        description,
         slug,
-        categoryID,
+        category: categoryID ? { connect: { id: categoryID } } : undefined,
         ...(coverImagePath ? { coverImage: coverImagePath } : {}),
         status: "DRAFT",
-        tags: {
-          set: tags.map((tag: any) => ({ id: tag.id })),
+        translations: {
+          deleteMany: {},
+          create: translations.map((translation: any) => ({
+            language: translation.language ?? "en",
+            title: translation.title ?? "",
+            description: translation.description ?? "",
+            content: translation.content ?? [],
+          })),
+        },
+        tagLinks: {
+          deleteMany: {},
+          create: tags.map((tagId: string) => ({
+            tag: { connect: { id: tagId } },
+          })),
         },
       },
-      include: { category: true, tags: true },
+      include: {
+        category: { include: { translations: true } },
+        translations: true,
+        tagLinks: { include: { tag: { include: { translations: true } } } },
+      },
     });
 
     revalidatePath(`/blog/${updatedDraft.slug}`);
@@ -90,7 +146,7 @@ export async function PATCH(
 
     return NextResponse.json({
       message: "Draft updated successfully",
-      data: updatedDraft,
+      data: serializeBlogPost(updatedDraft),
     });
   } catch (err: any) {
     console.error(err);

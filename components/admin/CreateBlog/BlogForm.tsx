@@ -12,6 +12,7 @@ import {
   Info,
 } from "lucide-react";
 import { useImageUpload } from "@/hooks/useAdminBlogs";
+import ConfirmDialog from "@/components/admin/ConfirmDialog";
 
 interface Block {
   id: string | number;
@@ -61,7 +62,9 @@ const BlogForm = ({
   const fileInputRefs = useRef<Record<string | number, HTMLInputElement | null>>(
     {},
   );
-const [imageUrl, setImageUrl] = React.useState<string | null>(null);
+  const [pendingBlock, setPendingBlock] = React.useState<Block | null>(null);
+  const [showBlockDeleteConfirm, setShowBlockDeleteConfirm] = React.useState(false);
+  const [imageUrl, setImageUrl] = React.useState<string | null>(null);
   const {mutateAsync:uploadImageMutate}= useImageUpload();
 
   // ── Drag handlers ────────────────────────────────────────────────
@@ -97,7 +100,15 @@ const [imageUrl, setImageUrl] = React.useState<string | null>(null);
   };
 
   const removeBlock = (block: Block) => {
-    setBlocks((prev) => prev.filter((b) => b.id !== block.id));
+    setPendingBlock(block);
+    setShowBlockDeleteConfirm(true);
+  };
+
+  const confirmRemoveBlock = () => {
+    if (!pendingBlock) return;
+    setBlocks((prev) => prev.filter((b) => b.id !== pendingBlock.id));
+    setPendingBlock(null);
+    setShowBlockDeleteConfirm(false);
   };
 
 const handleImageReplace = async (
@@ -372,6 +383,19 @@ console.log("Uploaded image:", image);
           </p>
         )}
       </div>
+
+      <ConfirmDialog
+        open={showBlockDeleteConfirm}
+        title="Delete this block?"
+        message="Deleting this block will also remove its translated content from the translation flow. This action cannot be undone."
+        confirmText="Delete block"
+        variant="warning"
+        onConfirm={confirmRemoveBlock}
+        onCancel={() => {
+          setPendingBlock(null);
+          setShowBlockDeleteConfirm(false);
+        }}
+      />
     </div>
   );
 };

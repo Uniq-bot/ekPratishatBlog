@@ -22,9 +22,9 @@ const PopularBlogs = ({ popularBlogs = [] }: { popularBlogs?: BlogItems[] }) => 
         </span>
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#8a6b12]">
-            Trending
+            TRENDING
           </p>
-          <h2 className="text-lg font-bold text-black">Popular Posts</h2>
+          <h2 className="text-lg font-bold text-black">Popular posts</h2>
         </div>
       </div>
 

@@ -29,8 +29,8 @@ export type BlogCommentMinAggregateOutputType = {
   blogPostId: string | null
   userEmail: string | null
   userName: string | null
-  commentText: string | null
   userImage: string | null
+  commentText: string | null
   createdAt: Date | null
 }
 
@@ -39,8 +39,8 @@ export type BlogCommentMaxAggregateOutputType = {
   blogPostId: string | null
   userEmail: string | null
   userName: string | null
-  commentText: string | null
   userImage: string | null
+  commentText: string | null
   createdAt: Date | null
 }
 
@@ -49,8 +49,8 @@ export type BlogCommentCountAggregateOutputType = {
   blogPostId: number
   userEmail: number
   userName: number
-  commentText: number
   userImage: number
+  commentText: number
   createdAt: number
   _all: number
 }
@@ -61,8 +61,8 @@ export type BlogCommentMinAggregateInputType = {
   blogPostId?: true
   userEmail?: true
   userName?: true
-  commentText?: true
   userImage?: true
+  commentText?: true
   createdAt?: true
 }
 
@@ -71,8 +71,8 @@ export type BlogCommentMaxAggregateInputType = {
   blogPostId?: true
   userEmail?: true
   userName?: true
-  commentText?: true
   userImage?: true
+  commentText?: true
   createdAt?: true
 }
 
@@ -81,8 +81,8 @@ export type BlogCommentCountAggregateInputType = {
   blogPostId?: true
   userEmail?: true
   userName?: true
-  commentText?: true
   userImage?: true
+  commentText?: true
   createdAt?: true
   _all?: true
 }
@@ -164,8 +164,8 @@ export type BlogCommentGroupByOutputType = {
   blogPostId: string
   userEmail: string
   userName: string
-  commentText: string
   userImage: string
+  commentText: string
   createdAt: Date
   _count: BlogCommentCountAggregateOutputType | null
   _min: BlogCommentMinAggregateOutputType | null
@@ -195,10 +195,10 @@ export type BlogCommentWhereInput = {
   blogPostId?: Prisma.StringFilter<"BlogComment"> | string
   userEmail?: Prisma.StringFilter<"BlogComment"> | string
   userName?: Prisma.StringFilter<"BlogComment"> | string
-  commentText?: Prisma.StringFilter<"BlogComment"> | string
   userImage?: Prisma.StringFilter<"BlogComment"> | string
+  commentText?: Prisma.StringFilter<"BlogComment"> | string
   createdAt?: Prisma.DateTimeFilter<"BlogComment"> | Date | string
-  BlogPost?: Prisma.XOR<Prisma.BlogPostScalarRelationFilter, Prisma.BlogPostWhereInput>
+  blogPost?: Prisma.XOR<Prisma.BlogPostScalarRelationFilter, Prisma.BlogPostWhereInput>
 }
 
 export type BlogCommentOrderByWithRelationInput = {
@@ -206,10 +206,10 @@ export type BlogCommentOrderByWithRelationInput = {
   blogPostId?: Prisma.SortOrder
   userEmail?: Prisma.SortOrder
   userName?: Prisma.SortOrder
-  commentText?: Prisma.SortOrder
   userImage?: Prisma.SortOrder
+  commentText?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  BlogPost?: Prisma.BlogPostOrderByWithRelationInput
+  blogPost?: Prisma.BlogPostOrderByWithRelationInput
 }
 
 export type BlogCommentWhereUniqueInput = Prisma.AtLeast<{
@@ -220,10 +220,10 @@ export type BlogCommentWhereUniqueInput = Prisma.AtLeast<{
   blogPostId?: Prisma.StringFilter<"BlogComment"> | string
   userEmail?: Prisma.StringFilter<"BlogComment"> | string
   userName?: Prisma.StringFilter<"BlogComment"> | string
-  commentText?: Prisma.StringFilter<"BlogComment"> | string
   userImage?: Prisma.StringFilter<"BlogComment"> | string
+  commentText?: Prisma.StringFilter<"BlogComment"> | string
   createdAt?: Prisma.DateTimeFilter<"BlogComment"> | Date | string
-  BlogPost?: Prisma.XOR<Prisma.BlogPostScalarRelationFilter, Prisma.BlogPostWhereInput>
+  blogPost?: Prisma.XOR<Prisma.BlogPostScalarRelationFilter, Prisma.BlogPostWhereInput>
 }, "id">
 
 export type BlogCommentOrderByWithAggregationInput = {
@@ -231,8 +231,8 @@ export type BlogCommentOrderByWithAggregationInput = {
   blogPostId?: Prisma.SortOrder
   userEmail?: Prisma.SortOrder
   userName?: Prisma.SortOrder
-  commentText?: Prisma.SortOrder
   userImage?: Prisma.SortOrder
+  commentText?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.BlogCommentCountOrderByAggregateInput
   _max?: Prisma.BlogCommentMaxOrderByAggregateInput
@@ -247,8 +247,8 @@ export type BlogCommentScalarWhereWithAggregatesInput = {
   blogPostId?: Prisma.StringWithAggregatesFilter<"BlogComment"> | string
   userEmail?: Prisma.StringWithAggregatesFilter<"BlogComment"> | string
   userName?: Prisma.StringWithAggregatesFilter<"BlogComment"> | string
-  commentText?: Prisma.StringWithAggregatesFilter<"BlogComment"> | string
   userImage?: Prisma.StringWithAggregatesFilter<"BlogComment"> | string
+  commentText?: Prisma.StringWithAggregatesFilter<"BlogComment"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"BlogComment"> | Date | string
 }
 
@@ -256,10 +256,10 @@ export type BlogCommentCreateInput = {
   id?: string
   userEmail: string
   userName: string
-  commentText: string
   userImage: string
+  commentText: string
   createdAt?: Date | string
-  BlogPost: Prisma.BlogPostCreateNestedOneWithoutCommentsInput
+  blogPost: Prisma.BlogPostCreateNestedOneWithoutCommentsInput
 }
 
 export type BlogCommentUncheckedCreateInput = {
@@ -267,8 +267,8 @@ export type BlogCommentUncheckedCreateInput = {
   blogPostId: string
   userEmail: string
   userName: string
-  commentText: string
   userImage: string
+  commentText: string
   createdAt?: Date | string
 }
 
@@ -276,10 +276,10 @@ export type BlogCommentUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userEmail?: Prisma.StringFieldUpdateOperationsInput | string
   userName?: Prisma.StringFieldUpdateOperationsInput | string
-  commentText?: Prisma.StringFieldUpdateOperationsInput | string
   userImage?: Prisma.StringFieldUpdateOperationsInput | string
+  commentText?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  BlogPost?: Prisma.BlogPostUpdateOneRequiredWithoutCommentsNestedInput
+  blogPost?: Prisma.BlogPostUpdateOneRequiredWithoutCommentsNestedInput
 }
 
 export type BlogCommentUncheckedUpdateInput = {
@@ -287,8 +287,8 @@ export type BlogCommentUncheckedUpdateInput = {
   blogPostId?: Prisma.StringFieldUpdateOperationsInput | string
   userEmail?: Prisma.StringFieldUpdateOperationsInput | string
   userName?: Prisma.StringFieldUpdateOperationsInput | string
-  commentText?: Prisma.StringFieldUpdateOperationsInput | string
   userImage?: Prisma.StringFieldUpdateOperationsInput | string
+  commentText?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -297,8 +297,8 @@ export type BlogCommentCreateManyInput = {
   blogPostId: string
   userEmail: string
   userName: string
-  commentText: string
   userImage: string
+  commentText: string
   createdAt?: Date | string
 }
 
@@ -306,8 +306,8 @@ export type BlogCommentUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userEmail?: Prisma.StringFieldUpdateOperationsInput | string
   userName?: Prisma.StringFieldUpdateOperationsInput | string
-  commentText?: Prisma.StringFieldUpdateOperationsInput | string
   userImage?: Prisma.StringFieldUpdateOperationsInput | string
+  commentText?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -316,8 +316,8 @@ export type BlogCommentUncheckedUpdateManyInput = {
   blogPostId?: Prisma.StringFieldUpdateOperationsInput | string
   userEmail?: Prisma.StringFieldUpdateOperationsInput | string
   userName?: Prisma.StringFieldUpdateOperationsInput | string
-  commentText?: Prisma.StringFieldUpdateOperationsInput | string
   userImage?: Prisma.StringFieldUpdateOperationsInput | string
+  commentText?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -336,8 +336,8 @@ export type BlogCommentCountOrderByAggregateInput = {
   blogPostId?: Prisma.SortOrder
   userEmail?: Prisma.SortOrder
   userName?: Prisma.SortOrder
-  commentText?: Prisma.SortOrder
   userImage?: Prisma.SortOrder
+  commentText?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -346,8 +346,8 @@ export type BlogCommentMaxOrderByAggregateInput = {
   blogPostId?: Prisma.SortOrder
   userEmail?: Prisma.SortOrder
   userName?: Prisma.SortOrder
-  commentText?: Prisma.SortOrder
   userImage?: Prisma.SortOrder
+  commentText?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -356,8 +356,8 @@ export type BlogCommentMinOrderByAggregateInput = {
   blogPostId?: Prisma.SortOrder
   userEmail?: Prisma.SortOrder
   userName?: Prisma.SortOrder
-  commentText?: Prisma.SortOrder
   userImage?: Prisma.SortOrder
+  commentText?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -407,8 +407,8 @@ export type BlogCommentCreateWithoutBlogPostInput = {
   id?: string
   userEmail: string
   userName: string
-  commentText: string
   userImage: string
+  commentText: string
   createdAt?: Date | string
 }
 
@@ -416,8 +416,8 @@ export type BlogCommentUncheckedCreateWithoutBlogPostInput = {
   id?: string
   userEmail: string
   userName: string
-  commentText: string
   userImage: string
+  commentText: string
   createdAt?: Date | string
 }
 
@@ -455,8 +455,8 @@ export type BlogCommentScalarWhereInput = {
   blogPostId?: Prisma.StringFilter<"BlogComment"> | string
   userEmail?: Prisma.StringFilter<"BlogComment"> | string
   userName?: Prisma.StringFilter<"BlogComment"> | string
-  commentText?: Prisma.StringFilter<"BlogComment"> | string
   userImage?: Prisma.StringFilter<"BlogComment"> | string
+  commentText?: Prisma.StringFilter<"BlogComment"> | string
   createdAt?: Prisma.DateTimeFilter<"BlogComment"> | Date | string
 }
 
@@ -464,8 +464,8 @@ export type BlogCommentCreateManyBlogPostInput = {
   id?: string
   userEmail: string
   userName: string
-  commentText: string
   userImage: string
+  commentText: string
   createdAt?: Date | string
 }
 
@@ -473,8 +473,8 @@ export type BlogCommentUpdateWithoutBlogPostInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userEmail?: Prisma.StringFieldUpdateOperationsInput | string
   userName?: Prisma.StringFieldUpdateOperationsInput | string
-  commentText?: Prisma.StringFieldUpdateOperationsInput | string
   userImage?: Prisma.StringFieldUpdateOperationsInput | string
+  commentText?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -482,8 +482,8 @@ export type BlogCommentUncheckedUpdateWithoutBlogPostInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userEmail?: Prisma.StringFieldUpdateOperationsInput | string
   userName?: Prisma.StringFieldUpdateOperationsInput | string
-  commentText?: Prisma.StringFieldUpdateOperationsInput | string
   userImage?: Prisma.StringFieldUpdateOperationsInput | string
+  commentText?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -491,8 +491,8 @@ export type BlogCommentUncheckedUpdateManyWithoutBlogPostInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userEmail?: Prisma.StringFieldUpdateOperationsInput | string
   userName?: Prisma.StringFieldUpdateOperationsInput | string
-  commentText?: Prisma.StringFieldUpdateOperationsInput | string
   userImage?: Prisma.StringFieldUpdateOperationsInput | string
+  commentText?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -503,10 +503,10 @@ export type BlogCommentSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   blogPostId?: boolean
   userEmail?: boolean
   userName?: boolean
-  commentText?: boolean
   userImage?: boolean
+  commentText?: boolean
   createdAt?: boolean
-  BlogPost?: boolean | Prisma.BlogPostDefaultArgs<ExtArgs>
+  blogPost?: boolean | Prisma.BlogPostDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["blogComment"]>
 
 export type BlogCommentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -514,10 +514,10 @@ export type BlogCommentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   blogPostId?: boolean
   userEmail?: boolean
   userName?: boolean
-  commentText?: boolean
   userImage?: boolean
+  commentText?: boolean
   createdAt?: boolean
-  BlogPost?: boolean | Prisma.BlogPostDefaultArgs<ExtArgs>
+  blogPost?: boolean | Prisma.BlogPostDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["blogComment"]>
 
 export type BlogCommentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -525,10 +525,10 @@ export type BlogCommentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   blogPostId?: boolean
   userEmail?: boolean
   userName?: boolean
-  commentText?: boolean
   userImage?: boolean
+  commentText?: boolean
   createdAt?: boolean
-  BlogPost?: boolean | Prisma.BlogPostDefaultArgs<ExtArgs>
+  blogPost?: boolean | Prisma.BlogPostDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["blogComment"]>
 
 export type BlogCommentSelectScalar = {
@@ -536,34 +536,34 @@ export type BlogCommentSelectScalar = {
   blogPostId?: boolean
   userEmail?: boolean
   userName?: boolean
-  commentText?: boolean
   userImage?: boolean
+  commentText?: boolean
   createdAt?: boolean
 }
 
-export type BlogCommentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "blogPostId" | "userEmail" | "userName" | "commentText" | "userImage" | "createdAt", ExtArgs["result"]["blogComment"]>
+export type BlogCommentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "blogPostId" | "userEmail" | "userName" | "userImage" | "commentText" | "createdAt", ExtArgs["result"]["blogComment"]>
 export type BlogCommentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  BlogPost?: boolean | Prisma.BlogPostDefaultArgs<ExtArgs>
+  blogPost?: boolean | Prisma.BlogPostDefaultArgs<ExtArgs>
 }
 export type BlogCommentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  BlogPost?: boolean | Prisma.BlogPostDefaultArgs<ExtArgs>
+  blogPost?: boolean | Prisma.BlogPostDefaultArgs<ExtArgs>
 }
 export type BlogCommentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  BlogPost?: boolean | Prisma.BlogPostDefaultArgs<ExtArgs>
+  blogPost?: boolean | Prisma.BlogPostDefaultArgs<ExtArgs>
 }
 
 export type $BlogCommentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "BlogComment"
   objects: {
-    BlogPost: Prisma.$BlogPostPayload<ExtArgs>
+    blogPost: Prisma.$BlogPostPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     blogPostId: string
     userEmail: string
     userName: string
-    commentText: string
     userImage: string
+    commentText: string
     createdAt: Date
   }, ExtArgs["result"]["blogComment"]>
   composites: {}
@@ -959,7 +959,7 @@ readonly fields: BlogCommentFieldRefs;
  */
 export interface Prisma__BlogCommentClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  BlogPost<T extends Prisma.BlogPostDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BlogPostDefaultArgs<ExtArgs>>): Prisma.Prisma__BlogPostClient<runtime.Types.Result.GetResult<Prisma.$BlogPostPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  blogPost<T extends Prisma.BlogPostDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BlogPostDefaultArgs<ExtArgs>>): Prisma.Prisma__BlogPostClient<runtime.Types.Result.GetResult<Prisma.$BlogPostPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -993,8 +993,8 @@ export interface BlogCommentFieldRefs {
   readonly blogPostId: Prisma.FieldRef<"BlogComment", 'String'>
   readonly userEmail: Prisma.FieldRef<"BlogComment", 'String'>
   readonly userName: Prisma.FieldRef<"BlogComment", 'String'>
-  readonly commentText: Prisma.FieldRef<"BlogComment", 'String'>
   readonly userImage: Prisma.FieldRef<"BlogComment", 'String'>
+  readonly commentText: Prisma.FieldRef<"BlogComment", 'String'>
   readonly createdAt: Prisma.FieldRef<"BlogComment", 'DateTime'>
 }
     

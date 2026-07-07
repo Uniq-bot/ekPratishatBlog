@@ -42,7 +42,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
     ]);
   const AsideAds = ads.find((ad) => ad.AdType === "ASIDE");
   const BannerAds = ads.find((ad) => ad.AdType === "BANNER");
-
+    console.log("latest", latestBlogs)
   return (
     <div className="w-full min-h-screen flex flex-col bg-[#FFFFFF]">
       {/* HERO */}

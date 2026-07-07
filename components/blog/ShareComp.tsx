@@ -54,7 +54,7 @@ const ShareComp = ({ blogTitle, blogSlug }: { blogTitle: string; blogSlug: strin
   const copyLink = async () => {
     try {
       await navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_BASE_URL}/blog/${blogSlug}`);
-      notify.success("Link copied", "The article link was copied to your clipboard.");
+      notify.success("Link copied", "The blog link has been copied to your clipboard.");
     } catch {
       notify.error("Copy failed", "We could not copy the link right now.");
     }
@@ -63,7 +63,7 @@ const ShareComp = ({ blogTitle, blogSlug }: { blogTitle: string; blogSlug: strin
      <div className="mt-12 border-t pt-6">
   <div className="mb-4 flex items-center gap-2">
     <Share2 className="text-[#79570E]" size={20} />
-    <h3 className="font-semibold text-lg">Share this article</h3>
+    <h3 className="font-semibold text-lg">Share this post</h3>
   </div>
 
   <div className="flex flex-wrap gap-3">

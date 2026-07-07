@@ -12,7 +12,7 @@ import ManageAds from "./ManageAds";
 import Subscriber from "./Subscriber";
 
 const AdminPanel = ({ advertisements }: { advertisements: any[] }) => {
-  const { activeTab, setActiveTab, blocks, setBlocks, user } = useAdminUI();
+  const { activeTab, setActiveTab, blocks, setBlocks, user, activeEditor, setActiveEditor, setOnBoardingBlog } = useAdminUI();
   const {data:categories, isLoading:isCategoryLoading}=useGetCategory();
     const {data:tags, isLoading:isTagLoading}=useGetTags()
   const tabComponents: Record<string, React.ReactNode> = {
@@ -30,6 +30,9 @@ const AdminPanel = ({ advertisements }: { advertisements: any[] }) => {
         user={user}
         setBlocks={setBlocks}
         blocks={blocks}
+        activeEditor={activeEditor}
+        setActiveEditor={setActiveEditor}
+        setOnBoardingBlog={setOnBoardingBlog}
       />
     ),
     "manage-blogs": <ManageBlogs />,

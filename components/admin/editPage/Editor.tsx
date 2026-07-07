@@ -14,7 +14,7 @@ interface Props {
 }
 
 const Editor = ({ id, initialBlog }: Props) => {
-  const { blocks, setBlocks, user } = useAdminUI();
+  const { blocks, setBlocks, user, activeEditor, setActiveEditor, setOnBoardingBlog } = useAdminUI();
 
     const {data:tags, isLoading:isTagLoading}= useGetTags();
     const {data:categories, isLoading:isCategoryLoading}= useGetCategory();
@@ -46,6 +46,9 @@ const Editor = ({ id, initialBlog }: Props) => {
         isTagLoading={isTagLoading}
         categories={categories}
         isCategoryLoading={isCategoryLoading}
+        activeEditor={activeEditor}
+        setActiveEditor={setActiveEditor}
+        setOnBoardingBlog={setOnBoardingBlog}
       />
     </div>
   );

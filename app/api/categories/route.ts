@@ -14,11 +14,14 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { name, description } = body;
+    const { name, nameNp } = body;
     if (!name?.trim()) {
       return NextResponse.json({ message: "Category name is required" }, { status: 400 });
     }
-    const category = await createCategory(name, description);
+    if (!nameNp?.trim()) {
+      return NextResponse.json({ message: "Category name in Nepali is required" }, { status: 400 });
+    }
+    const category = await createCategory(name, nameNp);
     return NextResponse.json({ message: "Category created successfully", category }, { status: 201 });
   } catch (err) {
     const error = err as { code?: string };

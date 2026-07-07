@@ -26,7 +26,6 @@ export type AggregateTag = {
 
 export type TagMinAggregateOutputType = {
   id: string | null
-  name: string | null
   slug: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -34,7 +33,6 @@ export type TagMinAggregateOutputType = {
 
 export type TagMaxAggregateOutputType = {
   id: string | null
-  name: string | null
   slug: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -42,7 +40,6 @@ export type TagMaxAggregateOutputType = {
 
 export type TagCountAggregateOutputType = {
   id: number
-  name: number
   slug: number
   createdAt: number
   updatedAt: number
@@ -52,7 +49,6 @@ export type TagCountAggregateOutputType = {
 
 export type TagMinAggregateInputType = {
   id?: true
-  name?: true
   slug?: true
   createdAt?: true
   updatedAt?: true
@@ -60,7 +56,6 @@ export type TagMinAggregateInputType = {
 
 export type TagMaxAggregateInputType = {
   id?: true
-  name?: true
   slug?: true
   createdAt?: true
   updatedAt?: true
@@ -68,7 +63,6 @@ export type TagMaxAggregateInputType = {
 
 export type TagCountAggregateInputType = {
   id?: true
-  name?: true
   slug?: true
   createdAt?: true
   updatedAt?: true
@@ -149,7 +143,6 @@ export type TagGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
 
 export type TagGroupByOutputType = {
   id: string
-  name: string
   slug: string
   createdAt: Date
   updatedAt: Date
@@ -178,37 +171,36 @@ export type TagWhereInput = {
   OR?: Prisma.TagWhereInput[]
   NOT?: Prisma.TagWhereInput | Prisma.TagWhereInput[]
   id?: Prisma.StringFilter<"Tag"> | string
-  name?: Prisma.StringFilter<"Tag"> | string
   slug?: Prisma.StringFilter<"Tag"> | string
   createdAt?: Prisma.DateTimeFilter<"Tag"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Tag"> | Date | string
-  blogPosts?: Prisma.BlogPostListRelationFilter
+  blogPosts?: Prisma.TagOnPostListRelationFilter
+  translations?: Prisma.TagTranslationListRelationFilter
 }
 
 export type TagOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  blogPosts?: Prisma.BlogPostOrderByRelationAggregateInput
+  blogPosts?: Prisma.TagOnPostOrderByRelationAggregateInput
+  translations?: Prisma.TagTranslationOrderByRelationAggregateInput
 }
 
 export type TagWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  name?: string
   slug?: string
   AND?: Prisma.TagWhereInput | Prisma.TagWhereInput[]
   OR?: Prisma.TagWhereInput[]
   NOT?: Prisma.TagWhereInput | Prisma.TagWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"Tag"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Tag"> | Date | string
-  blogPosts?: Prisma.BlogPostListRelationFilter
-}, "id" | "name" | "slug">
+  blogPosts?: Prisma.TagOnPostListRelationFilter
+  translations?: Prisma.TagTranslationListRelationFilter
+}, "id" | "slug">
 
 export type TagOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -222,7 +214,6 @@ export type TagScalarWhereWithAggregatesInput = {
   OR?: Prisma.TagScalarWhereWithAggregatesInput[]
   NOT?: Prisma.TagScalarWhereWithAggregatesInput | Prisma.TagScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Tag"> | string
-  name?: Prisma.StringWithAggregatesFilter<"Tag"> | string
   slug?: Prisma.StringWithAggregatesFilter<"Tag"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Tag"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Tag"> | Date | string
@@ -230,43 +221,42 @@ export type TagScalarWhereWithAggregatesInput = {
 
 export type TagCreateInput = {
   id?: string
-  name: string
   slug: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  blogPosts?: Prisma.BlogPostCreateNestedManyWithoutTagsInput
+  blogPosts?: Prisma.TagOnPostCreateNestedManyWithoutTagInput
+  translations?: Prisma.TagTranslationCreateNestedManyWithoutTagInput
 }
 
 export type TagUncheckedCreateInput = {
   id?: string
-  name: string
   slug: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  blogPosts?: Prisma.BlogPostUncheckedCreateNestedManyWithoutTagsInput
+  blogPosts?: Prisma.TagOnPostUncheckedCreateNestedManyWithoutTagInput
+  translations?: Prisma.TagTranslationUncheckedCreateNestedManyWithoutTagInput
 }
 
 export type TagUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  blogPosts?: Prisma.BlogPostUpdateManyWithoutTagsNestedInput
+  blogPosts?: Prisma.TagOnPostUpdateManyWithoutTagNestedInput
+  translations?: Prisma.TagTranslationUpdateManyWithoutTagNestedInput
 }
 
 export type TagUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  blogPosts?: Prisma.BlogPostUncheckedUpdateManyWithoutTagsNestedInput
+  blogPosts?: Prisma.TagOnPostUncheckedUpdateManyWithoutTagNestedInput
+  translations?: Prisma.TagTranslationUncheckedUpdateManyWithoutTagNestedInput
 }
 
 export type TagCreateManyInput = {
   id?: string
-  name: string
   slug: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -274,7 +264,6 @@ export type TagCreateManyInput = {
 
 export type TagUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -282,25 +271,13 @@ export type TagUpdateManyMutationInput = {
 
 export type TagUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type TagListRelationFilter = {
-  every?: Prisma.TagWhereInput
-  some?: Prisma.TagWhereInput
-  none?: Prisma.TagWhereInput
-}
-
-export type TagOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
-}
-
 export type TagCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -308,7 +285,6 @@ export type TagCountOrderByAggregateInput = {
 
 export type TagMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -316,64 +292,106 @@ export type TagMaxOrderByAggregateInput = {
 
 export type TagMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
-export type TagCreateNestedManyWithoutBlogPostsInput = {
-  create?: Prisma.XOR<Prisma.TagCreateWithoutBlogPostsInput, Prisma.TagUncheckedCreateWithoutBlogPostsInput> | Prisma.TagCreateWithoutBlogPostsInput[] | Prisma.TagUncheckedCreateWithoutBlogPostsInput[]
-  connectOrCreate?: Prisma.TagCreateOrConnectWithoutBlogPostsInput | Prisma.TagCreateOrConnectWithoutBlogPostsInput[]
-  connect?: Prisma.TagWhereUniqueInput | Prisma.TagWhereUniqueInput[]
+export type TagScalarRelationFilter = {
+  is?: Prisma.TagWhereInput
+  isNot?: Prisma.TagWhereInput
 }
 
-export type TagUncheckedCreateNestedManyWithoutBlogPostsInput = {
-  create?: Prisma.XOR<Prisma.TagCreateWithoutBlogPostsInput, Prisma.TagUncheckedCreateWithoutBlogPostsInput> | Prisma.TagCreateWithoutBlogPostsInput[] | Prisma.TagUncheckedCreateWithoutBlogPostsInput[]
-  connectOrCreate?: Prisma.TagCreateOrConnectWithoutBlogPostsInput | Prisma.TagCreateOrConnectWithoutBlogPostsInput[]
-  connect?: Prisma.TagWhereUniqueInput | Prisma.TagWhereUniqueInput[]
+export type TagCreateNestedOneWithoutTranslationsInput = {
+  create?: Prisma.XOR<Prisma.TagCreateWithoutTranslationsInput, Prisma.TagUncheckedCreateWithoutTranslationsInput>
+  connectOrCreate?: Prisma.TagCreateOrConnectWithoutTranslationsInput
+  connect?: Prisma.TagWhereUniqueInput
 }
 
-export type TagUpdateManyWithoutBlogPostsNestedInput = {
-  create?: Prisma.XOR<Prisma.TagCreateWithoutBlogPostsInput, Prisma.TagUncheckedCreateWithoutBlogPostsInput> | Prisma.TagCreateWithoutBlogPostsInput[] | Prisma.TagUncheckedCreateWithoutBlogPostsInput[]
-  connectOrCreate?: Prisma.TagCreateOrConnectWithoutBlogPostsInput | Prisma.TagCreateOrConnectWithoutBlogPostsInput[]
-  upsert?: Prisma.TagUpsertWithWhereUniqueWithoutBlogPostsInput | Prisma.TagUpsertWithWhereUniqueWithoutBlogPostsInput[]
-  set?: Prisma.TagWhereUniqueInput | Prisma.TagWhereUniqueInput[]
-  disconnect?: Prisma.TagWhereUniqueInput | Prisma.TagWhereUniqueInput[]
-  delete?: Prisma.TagWhereUniqueInput | Prisma.TagWhereUniqueInput[]
-  connect?: Prisma.TagWhereUniqueInput | Prisma.TagWhereUniqueInput[]
-  update?: Prisma.TagUpdateWithWhereUniqueWithoutBlogPostsInput | Prisma.TagUpdateWithWhereUniqueWithoutBlogPostsInput[]
-  updateMany?: Prisma.TagUpdateManyWithWhereWithoutBlogPostsInput | Prisma.TagUpdateManyWithWhereWithoutBlogPostsInput[]
-  deleteMany?: Prisma.TagScalarWhereInput | Prisma.TagScalarWhereInput[]
+export type TagUpdateOneRequiredWithoutTranslationsNestedInput = {
+  create?: Prisma.XOR<Prisma.TagCreateWithoutTranslationsInput, Prisma.TagUncheckedCreateWithoutTranslationsInput>
+  connectOrCreate?: Prisma.TagCreateOrConnectWithoutTranslationsInput
+  upsert?: Prisma.TagUpsertWithoutTranslationsInput
+  connect?: Prisma.TagWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TagUpdateToOneWithWhereWithoutTranslationsInput, Prisma.TagUpdateWithoutTranslationsInput>, Prisma.TagUncheckedUpdateWithoutTranslationsInput>
 }
 
-export type TagUncheckedUpdateManyWithoutBlogPostsNestedInput = {
-  create?: Prisma.XOR<Prisma.TagCreateWithoutBlogPostsInput, Prisma.TagUncheckedCreateWithoutBlogPostsInput> | Prisma.TagCreateWithoutBlogPostsInput[] | Prisma.TagUncheckedCreateWithoutBlogPostsInput[]
-  connectOrCreate?: Prisma.TagCreateOrConnectWithoutBlogPostsInput | Prisma.TagCreateOrConnectWithoutBlogPostsInput[]
-  upsert?: Prisma.TagUpsertWithWhereUniqueWithoutBlogPostsInput | Prisma.TagUpsertWithWhereUniqueWithoutBlogPostsInput[]
-  set?: Prisma.TagWhereUniqueInput | Prisma.TagWhereUniqueInput[]
-  disconnect?: Prisma.TagWhereUniqueInput | Prisma.TagWhereUniqueInput[]
-  delete?: Prisma.TagWhereUniqueInput | Prisma.TagWhereUniqueInput[]
-  connect?: Prisma.TagWhereUniqueInput | Prisma.TagWhereUniqueInput[]
-  update?: Prisma.TagUpdateWithWhereUniqueWithoutBlogPostsInput | Prisma.TagUpdateWithWhereUniqueWithoutBlogPostsInput[]
-  updateMany?: Prisma.TagUpdateManyWithWhereWithoutBlogPostsInput | Prisma.TagUpdateManyWithWhereWithoutBlogPostsInput[]
-  deleteMany?: Prisma.TagScalarWhereInput | Prisma.TagScalarWhereInput[]
+export type TagCreateNestedOneWithoutBlogPostsInput = {
+  create?: Prisma.XOR<Prisma.TagCreateWithoutBlogPostsInput, Prisma.TagUncheckedCreateWithoutBlogPostsInput>
+  connectOrCreate?: Prisma.TagCreateOrConnectWithoutBlogPostsInput
+  connect?: Prisma.TagWhereUniqueInput
+}
+
+export type TagUpdateOneRequiredWithoutBlogPostsNestedInput = {
+  create?: Prisma.XOR<Prisma.TagCreateWithoutBlogPostsInput, Prisma.TagUncheckedCreateWithoutBlogPostsInput>
+  connectOrCreate?: Prisma.TagCreateOrConnectWithoutBlogPostsInput
+  upsert?: Prisma.TagUpsertWithoutBlogPostsInput
+  connect?: Prisma.TagWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TagUpdateToOneWithWhereWithoutBlogPostsInput, Prisma.TagUpdateWithoutBlogPostsInput>, Prisma.TagUncheckedUpdateWithoutBlogPostsInput>
+}
+
+export type TagCreateWithoutTranslationsInput = {
+  id?: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  blogPosts?: Prisma.TagOnPostCreateNestedManyWithoutTagInput
+}
+
+export type TagUncheckedCreateWithoutTranslationsInput = {
+  id?: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  blogPosts?: Prisma.TagOnPostUncheckedCreateNestedManyWithoutTagInput
+}
+
+export type TagCreateOrConnectWithoutTranslationsInput = {
+  where: Prisma.TagWhereUniqueInput
+  create: Prisma.XOR<Prisma.TagCreateWithoutTranslationsInput, Prisma.TagUncheckedCreateWithoutTranslationsInput>
+}
+
+export type TagUpsertWithoutTranslationsInput = {
+  update: Prisma.XOR<Prisma.TagUpdateWithoutTranslationsInput, Prisma.TagUncheckedUpdateWithoutTranslationsInput>
+  create: Prisma.XOR<Prisma.TagCreateWithoutTranslationsInput, Prisma.TagUncheckedCreateWithoutTranslationsInput>
+  where?: Prisma.TagWhereInput
+}
+
+export type TagUpdateToOneWithWhereWithoutTranslationsInput = {
+  where?: Prisma.TagWhereInput
+  data: Prisma.XOR<Prisma.TagUpdateWithoutTranslationsInput, Prisma.TagUncheckedUpdateWithoutTranslationsInput>
+}
+
+export type TagUpdateWithoutTranslationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  blogPosts?: Prisma.TagOnPostUpdateManyWithoutTagNestedInput
+}
+
+export type TagUncheckedUpdateWithoutTranslationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  blogPosts?: Prisma.TagOnPostUncheckedUpdateManyWithoutTagNestedInput
 }
 
 export type TagCreateWithoutBlogPostsInput = {
   id?: string
-  name: string
   slug: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  translations?: Prisma.TagTranslationCreateNestedManyWithoutTagInput
 }
 
 export type TagUncheckedCreateWithoutBlogPostsInput = {
   id?: string
-  name: string
   slug: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  translations?: Prisma.TagTranslationUncheckedCreateNestedManyWithoutTagInput
 }
 
 export type TagCreateOrConnectWithoutBlogPostsInput = {
@@ -381,55 +399,31 @@ export type TagCreateOrConnectWithoutBlogPostsInput = {
   create: Prisma.XOR<Prisma.TagCreateWithoutBlogPostsInput, Prisma.TagUncheckedCreateWithoutBlogPostsInput>
 }
 
-export type TagUpsertWithWhereUniqueWithoutBlogPostsInput = {
-  where: Prisma.TagWhereUniqueInput
+export type TagUpsertWithoutBlogPostsInput = {
   update: Prisma.XOR<Prisma.TagUpdateWithoutBlogPostsInput, Prisma.TagUncheckedUpdateWithoutBlogPostsInput>
   create: Prisma.XOR<Prisma.TagCreateWithoutBlogPostsInput, Prisma.TagUncheckedCreateWithoutBlogPostsInput>
+  where?: Prisma.TagWhereInput
 }
 
-export type TagUpdateWithWhereUniqueWithoutBlogPostsInput = {
-  where: Prisma.TagWhereUniqueInput
+export type TagUpdateToOneWithWhereWithoutBlogPostsInput = {
+  where?: Prisma.TagWhereInput
   data: Prisma.XOR<Prisma.TagUpdateWithoutBlogPostsInput, Prisma.TagUncheckedUpdateWithoutBlogPostsInput>
-}
-
-export type TagUpdateManyWithWhereWithoutBlogPostsInput = {
-  where: Prisma.TagScalarWhereInput
-  data: Prisma.XOR<Prisma.TagUpdateManyMutationInput, Prisma.TagUncheckedUpdateManyWithoutBlogPostsInput>
-}
-
-export type TagScalarWhereInput = {
-  AND?: Prisma.TagScalarWhereInput | Prisma.TagScalarWhereInput[]
-  OR?: Prisma.TagScalarWhereInput[]
-  NOT?: Prisma.TagScalarWhereInput | Prisma.TagScalarWhereInput[]
-  id?: Prisma.StringFilter<"Tag"> | string
-  name?: Prisma.StringFilter<"Tag"> | string
-  slug?: Prisma.StringFilter<"Tag"> | string
-  createdAt?: Prisma.DateTimeFilter<"Tag"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Tag"> | Date | string
 }
 
 export type TagUpdateWithoutBlogPostsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  translations?: Prisma.TagTranslationUpdateManyWithoutTagNestedInput
 }
 
 export type TagUncheckedUpdateWithoutBlogPostsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type TagUncheckedUpdateManyWithoutBlogPostsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  slug?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  translations?: Prisma.TagTranslationUncheckedUpdateManyWithoutTagNestedInput
 }
 
 
@@ -439,10 +433,12 @@ export type TagUncheckedUpdateManyWithoutBlogPostsInput = {
 
 export type TagCountOutputType = {
   blogPosts: number
+  translations: number
 }
 
 export type TagCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   blogPosts?: boolean | TagCountOutputTypeCountBlogPostsArgs
+  translations?: boolean | TagCountOutputTypeCountTranslationsArgs
 }
 
 /**
@@ -459,23 +455,29 @@ export type TagCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensio
  * TagCountOutputType without action
  */
 export type TagCountOutputTypeCountBlogPostsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.BlogPostWhereInput
+  where?: Prisma.TagOnPostWhereInput
+}
+
+/**
+ * TagCountOutputType without action
+ */
+export type TagCountOutputTypeCountTranslationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TagTranslationWhereInput
 }
 
 
 export type TagSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  name?: boolean
   slug?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   blogPosts?: boolean | Prisma.Tag$blogPostsArgs<ExtArgs>
+  translations?: boolean | Prisma.Tag$translationsArgs<ExtArgs>
   _count?: boolean | Prisma.TagCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tag"]>
 
 export type TagSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  name?: boolean
   slug?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -483,7 +485,6 @@ export type TagSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extension
 
 export type TagSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  name?: boolean
   slug?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -491,15 +492,15 @@ export type TagSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extension
 
 export type TagSelectScalar = {
   id?: boolean
-  name?: boolean
   slug?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type TagOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "createdAt" | "updatedAt", ExtArgs["result"]["tag"]>
+export type TagOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "createdAt" | "updatedAt", ExtArgs["result"]["tag"]>
 export type TagInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   blogPosts?: boolean | Prisma.Tag$blogPostsArgs<ExtArgs>
+  translations?: boolean | Prisma.Tag$translationsArgs<ExtArgs>
   _count?: boolean | Prisma.TagCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TagIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -508,11 +509,11 @@ export type TagIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 export type $TagPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Tag"
   objects: {
-    blogPosts: Prisma.$BlogPostPayload<ExtArgs>[]
+    blogPosts: Prisma.$TagOnPostPayload<ExtArgs>[]
+    translations: Prisma.$TagTranslationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    name: string
     slug: string
     createdAt: Date
     updatedAt: Date
@@ -910,7 +911,8 @@ readonly fields: TagFieldRefs;
  */
 export interface Prisma__TagClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  blogPosts<T extends Prisma.Tag$blogPostsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tag$blogPostsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlogPostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  blogPosts<T extends Prisma.Tag$blogPostsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tag$blogPostsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TagOnPostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  translations<T extends Prisma.Tag$translationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tag$translationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TagTranslationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -941,7 +943,6 @@ export interface Prisma__TagClient<T, Null = never, ExtArgs extends runtime.Type
  */
 export interface TagFieldRefs {
   readonly id: Prisma.FieldRef<"Tag", 'String'>
-  readonly name: Prisma.FieldRef<"Tag", 'String'>
   readonly slug: Prisma.FieldRef<"Tag", 'String'>
   readonly createdAt: Prisma.FieldRef<"Tag", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Tag", 'DateTime'>
@@ -1342,23 +1343,47 @@ export type TagDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.InternalA
  */
 export type Tag$blogPostsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the BlogPost
+   * Select specific fields to fetch from the TagOnPost
    */
-  select?: Prisma.BlogPostSelect<ExtArgs> | null
+  select?: Prisma.TagOnPostSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the BlogPost
+   * Omit specific fields from the TagOnPost
    */
-  omit?: Prisma.BlogPostOmit<ExtArgs> | null
+  omit?: Prisma.TagOnPostOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.BlogPostInclude<ExtArgs> | null
-  where?: Prisma.BlogPostWhereInput
-  orderBy?: Prisma.BlogPostOrderByWithRelationInput | Prisma.BlogPostOrderByWithRelationInput[]
-  cursor?: Prisma.BlogPostWhereUniqueInput
+  include?: Prisma.TagOnPostInclude<ExtArgs> | null
+  where?: Prisma.TagOnPostWhereInput
+  orderBy?: Prisma.TagOnPostOrderByWithRelationInput | Prisma.TagOnPostOrderByWithRelationInput[]
+  cursor?: Prisma.TagOnPostWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.BlogPostScalarFieldEnum | Prisma.BlogPostScalarFieldEnum[]
+  distinct?: Prisma.TagOnPostScalarFieldEnum | Prisma.TagOnPostScalarFieldEnum[]
+}
+
+/**
+ * Tag.translations
+ */
+export type Tag$translationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TagTranslation
+   */
+  select?: Prisma.TagTranslationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TagTranslation
+   */
+  omit?: Prisma.TagTranslationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TagTranslationInclude<ExtArgs> | null
+  where?: Prisma.TagTranslationWhereInput
+  orderBy?: Prisma.TagTranslationOrderByWithRelationInput | Prisma.TagTranslationOrderByWithRelationInput[]
+  cursor?: Prisma.TagTranslationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TagTranslationScalarFieldEnum | Prisma.TagTranslationScalarFieldEnum[]
 }
 
 /**

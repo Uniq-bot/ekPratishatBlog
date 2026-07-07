@@ -45,19 +45,19 @@ const SearchFilter = ({
       <div className="mb-3 flex items-center justify-between gap-3">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8a6b12]">
-            Search
+            SEARCH
           </p>
-          <h3 className="text-base font-bold text-black">Find an article</h3>
+          <h3 className="text-base font-bold text-black">Find articles</h3>
         </div>
         <span className="rounded-full bg-[#fff7dc] px-3 py-1 text-xs font-semibold text-black">
-          Live
+          Quick search
         </span>
       </div>
       <input
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         type="text"
-        placeholder="Search blogs..."
+        placeholder="Search posts"
         className="h-12 w-full rounded-xl border border-[#d8c58e] bg-[#fffdf7] px-4 text-sm text-black outline-none transition-colors placeholder:text-black/35 focus:border-[#c9981a] focus:ring-2 focus:ring-[#f4c91b]/20"
       />
     </section>

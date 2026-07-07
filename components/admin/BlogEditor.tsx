@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { Image, Info } from "lucide-react";
 import { Category, Tag } from "@/types/blog";
 import GuideModel from "./GuideModel";
+import ConfirmDialog from "./ConfirmDialog";
 
 const BlogEditor = ({
   mode = "create",
@@ -24,6 +25,9 @@ const BlogEditor = ({
   categories,
   isCategoryLoading,
   user,
+  activeEditor,
+  setActiveEditor,
+  setOnBoardingBlog
 }: {
   mode?: "create" | "edit";
   initialBlog?: any;
@@ -35,6 +39,9 @@ const BlogEditor = ({
   categories: Category[];
   isCategoryLoading: boolean;
   user: any;
+  activeEditor:string;
+  setActiveEditor:React.Dispatch<React.SetStateAction<string>>;
+  setOnBoardingBlog: React.Dispatch<React.SetStateAction<any>>;
 }) => {
   const router = useRouter();
   const [title, setTitle] = useState("");
@@ -55,11 +62,13 @@ const BlogEditor = ({
   const [image, setImage] = useState<File | null>(null);
   const [showModel, setShowModal] = useState(false);
   const [draftId, setDraftId] = useState<string | null>(null);
-  const { mutateAsync: createBlog, isPending: isCreating } = useCreateBlog();
+  const { mutateAsync: createBlog, isPending: isCreating, data } = useCreateBlog();
   const { mutateAsync: updateBlog, isPending: isUpdating } = useUpdateBlog();
   const { mutateAsync: saveToDraft, isPending: isSavingDraft } =
     useSaveToDraft(); // Reuse the createBlog hook for saving drafts
   const [preview, setPreview] = useState("");
+  const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
+  const [pendingAction, setPendingAction] = useState<"next" | "draft" | null>(null);
 
   useEffect(() => {
     if (!coverImage) {
@@ -79,7 +88,7 @@ const BlogEditor = ({
     .replace(/[^\w-]+/g, "")
     .replace(/--+/g, "-")
     .replace(/(^-|-$)/g, "");
-
+  // console.log(data)
   // Populate fields when editing
   useEffect(() => {
     if (!initialBlog?.data) return;
@@ -133,19 +142,28 @@ const BlogEditor = ({
     return formData;
   };
 
-  const handleSaveDraft = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    if (
-      !draftId &&
-      !confirm("Are you sure you want to save this as a draft?")
-    ) {
-      return;
+  const validateRequiredFields = () => {
+    if (!title.trim()) {
+      setSubmitError("Title is required");
+      return false;
     }
+    if (!categoryId) {
+      setSubmitError("Please select a category");
+      return false;
+    }
+    if (blocks.length === 0) {
+      setSubmitError("Add at least one content block before continuing");
+      return false;
+    }
+    return true;
+  };
+
+  const handleSaveDraft = async (e?: React.MouseEvent<HTMLButtonElement>) => {
+    e?.preventDefault();
     setSubmitError(null);
     setSuccessMsg(null);
 
-    if (!title.trim()) {
-      setSubmitError("Title is required");
+    if (!validateRequiredFields()) {
       return;
     }
 
@@ -160,26 +178,19 @@ const BlogEditor = ({
       const newId = result?.data?.id ?? result?.id;
       if (!draftId && newId) setDraftId(newId);
       setSuccessMsg("Draft saved successfully!");
+
     } catch (err: any) {
       setSubmitError("We could not save the draft right now.");
+      
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e?: React.FormEvent) => {
+    e?.preventDefault();
     setSubmitError(null);
     setSuccessMsg(null);
 
-    if (!title.trim()) {
-      setSubmitError("Title is required");
-      return;
-    }
-    if (!categoryId) {
-      setSubmitError("Please select a category");
-      return;
-    }
-    if (blocks.length === 0) {
-      setSubmitError("Add at least one content block");
+    if (!validateRequiredFields()) {
       return;
     }
 
@@ -187,11 +198,16 @@ const BlogEditor = ({
     try {
       if (mode === "edit") {
         const blogId = initialBlog?.data?.id;
-        await updateBlog({ id: blogId, formData }); // update your hook to accept formData
+        const result = await updateBlog({ id: blogId, formData });
+        const payload = result?.data ?? result ?? null;
+        setOnBoardingBlog(payload);
         setSuccessMsg("Blog updated successfully!");
-        setTimeout(() => router.push("/admin"), 1500);
+        router.push(`/admin/Translate?id=${payload?.id ?? blogId}`);
       } else {
-        await createBlog(formData); // update your hook to accept formData
+        const result = await createBlog(formData);
+        const payload = result?.data ?? result ?? null;
+        setOnBoardingBlog(payload);
+        router.push(`/admin/Translate?id=${payload?.id ?? result?.id}`);
         setSuccessMsg("Blog created successfully!");
         resetForm();
       }
@@ -225,6 +241,17 @@ const BlogEditor = ({
   }
 
   const isBusy = isCreating || isUpdating;
+
+  const confirmPendingAction = async () => {
+    setShowLeaveConfirm(false);
+    if (pendingAction === "draft") {
+      await handleSaveDraft();
+      return;
+    }
+    if (pendingAction === "next") {
+      await handleSubmit();
+    }
+  };
 
   return (
     <div
@@ -383,17 +410,16 @@ const BlogEditor = ({
 
           <div className="flex gap-5">
             <button
-              type="submit"
+              type="button"
               disabled={isBusy}
+              onClick={() => {
+                if (!validateRequiredFields()) return;
+                setPendingAction("next");
+                setShowLeaveConfirm(true);
+              }}
               className="px-4 lg:px-6 py-2 text-xs lg:text-sm  bg-green-400 border shadow shadow-black hover:bg-gray-50 disabled:opacity-50 transition-colors w-full sm:w-auto"
             >
-              {isBusy
-                ? mode === "edit"
-                  ? "Updating..."
-                  : "Posting..."
-                : mode === "edit"
-                  ? "Update Blog"
-                  : "Post Blog"}
+             Next
             </button>
             <button
               type="button"
@@ -427,6 +453,18 @@ const BlogEditor = ({
       {showModel && (
         <GuideModel showModel={showModel} setShowModel={setShowModal} />
       )}
+      <ConfirmDialog
+        open={showLeaveConfirm}
+        title={pendingAction === "draft" ? "Save as draft?" : "Continue to translation?"}
+        message={
+          pendingAction === "draft"
+            ? "This will save the current blog as a draft. Continue?"
+            : "This will move the blog to the translation step. Make sure the title, category, and content are correct before continuing."
+        }
+        confirmText={pendingAction === "draft" ? "Save draft" : "Continue"}
+        onConfirm={confirmPendingAction}
+        onCancel={() => setShowLeaveConfirm(false)}
+      />
     </div>
   );
 };
