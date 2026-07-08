@@ -10,9 +10,9 @@ export async function GET(_req: Request, { params }: RouteContext) {
     const blog = await prisma.blogPost.findFirst({
       where: { slug },
       include: {
-        category: true,
+        category: { include: { translations: true } },
         translations: true,
-        tagLinks: { include: { tag: true } },
+        tagLinks: { include: { tag: { include: { translations: true } } } },
       },
     });
     if (!blog) {

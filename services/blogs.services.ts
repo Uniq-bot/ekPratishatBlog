@@ -1,4 +1,5 @@
 import { prisma } from "@/libs/prisma";
+import { unwrapApiResponse } from "@/libs/api";
 
 const toSlug = (value: string) => {
   return value
@@ -12,10 +13,20 @@ const normalizeLanguage = (value: string | null | undefined) => {
   return value === "ne" ? "ne" : "en";
 };
 
-const parseContentValue = (value: unknown) => {
+const normalizeContentBlocks = (value: unknown) => {
+  if (Array.isArray(value)) {
+    return value.map((item: any) => {
+      if (!item || typeof item !== "object") return item;
+      if (item.content === undefined && item.value !== undefined) {
+        return { ...item, content: item.value };
+      }
+      return item;
+    });
+  }
+
   if (typeof value === "string") {
     try {
-      return JSON.parse(value);
+      return normalizeContentBlocks(JSON.parse(value));
     } catch {
       return value;
     }
@@ -23,6 +34,8 @@ const parseContentValue = (value: unknown) => {
 
   return value ?? [];
 };
+
+const parseContentValue = (value: unknown) => normalizeContentBlocks(value);
 
 const getPrimaryTranslation = (post: any, language = "en") => {
   const translations = Array.isArray(post?.translations) ? post.translations : [];
@@ -33,7 +46,7 @@ const getPrimaryTranslation = (post: any, language = "en") => {
   return {
     title: translation?.title ?? "",
     description: translation?.description ?? "",
-    content: translation?.content ?? [],
+    content: normalizeContentBlocks(translation?.content) ?? [],
     language: translation?.language ?? currentLanguage,
   };
 };
@@ -43,6 +56,7 @@ export const serializeBlogPost = (post: any, language = "en") => {
   const categoryTranslation = Array.isArray(post?.category?.translations)
     ? post.category.translations.find((item: any) => item?.language === normalizeLanguage(language)) || post.category.translations[0]
     : null;
+  const categoryName = categoryTranslation?.name ?? post?.category?.name ?? post?.category?.slug ?? "";
 
   const tags = (post?.tagLinks ?? []).map((link: any) => {
     const tag = link?.tag ?? link;
@@ -53,7 +67,7 @@ export const serializeBlogPost = (post: any, language = "en") => {
     return {
       ...(tag ?? {}),
       id: tag?.id ?? link?.id,
-      name: tagTranslation?.name ?? tag?.name ?? "",
+      name: tagTranslation?.name ?? tag?.name ?? tag?.slug ?? "",
       slug: tag?.slug ?? null,
     };
   });
@@ -68,8 +82,8 @@ export const serializeBlogPost = (post: any, language = "en") => {
     category: post?.category
       ? {
           ...post.category,
-          name: categoryTranslation?.name ?? "",
-          description: categoryTranslation?.description ?? null,
+          name: categoryName,
+          description: categoryTranslation?.description ?? post?.category?.description ?? null,
         }
       : null,
     tags,

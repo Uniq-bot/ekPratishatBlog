@@ -2,6 +2,7 @@
 
 import { SessionProvider } from "next-auth/react";
 import QueryProvider from "@/provider/QueryProvider";
+import { LanguageProvider } from "@/context/ClientLanguageContext";
 
 export default function Providers({
   children,
@@ -10,7 +11,9 @@ export default function Providers({
 }) {
   return (
     <SessionProvider>
-      <QueryProvider>{children}</QueryProvider>
+      <LanguageProvider>
+        <QueryProvider>{children}</QueryProvider>
+      </LanguageProvider>
     </SessionProvider>
   );
 }

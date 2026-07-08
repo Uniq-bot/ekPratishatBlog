@@ -4,12 +4,23 @@ import Link from "next/link";
 import type { BlogItem, BlogItems } from "@/types/blog";
 import { useTrackBlogView } from "@/hooks/useTrackViews";
 
-const PopularBlogs = ({ popularBlogs = [] }: { popularBlogs?: BlogItems[] }) => {
+const PopularBlogs = ({
+  idx,
+  currentLanguage,
+  popularBlogs = [],
+}: {
+  idx: number;
+  currentLanguage: string;
+  popularBlogs?: BlogItem[];
+}) => {
   if (popularBlogs.length === 0) return null;
 
   const trackView = useTrackBlogView();
 
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, blog: BlogItem) => {
+  const handleClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    blog: BlogItem,
+  ) => {
     e.preventDefault();
     trackView(blog);
   };
@@ -21,10 +32,23 @@ const PopularBlogs = ({ popularBlogs = [] }: { popularBlogs?: BlogItems[] }) => 
           <TrendingUp size={18} />
         </span>
         <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#8a6b12]">
-            TRENDING
+          <p
+            className={
+              currentLanguage === "en"
+                ? "text-xs font-semibold uppercase tracking-[0.18em] text-[#8a6b12]"
+                : "text-base font-semibold uppercase  text-[#8a6b12]"
+            }
+          >
+            {currentLanguage === "en" ? "Trending Posts" : "ट्रेन्डिङ पोस्टहरू"}
           </p>
-          <h2 className="text-lg font-bold text-black">Popular posts</h2>
+          <h2 className={
+            currentLanguage === "en"
+              ? "text-lg font-bold text-black"
+              : "text-xl font-bold text-black"
+          }>
+            {" "}
+            {currentLanguage === "en" ? "Popular Posts" : "लोकप्रिय पोस्टहरू"}
+          </h2>
         </div>
       </div>
 
@@ -41,8 +65,12 @@ const PopularBlogs = ({ popularBlogs = [] }: { popularBlogs?: BlogItems[] }) => 
             </span>
 
             <div className="flex min-w-0 flex-1 flex-col">
-              <h3 className="line-clamp-2 text-sm leading-snug text-black transition-colors group-hover:text-[#7a5a09] sm:text-[15px]">
-                {blog.title}
+              <h3 className={
+                currentLanguage === "en"
+                  ? "line-clamp-2 text-sm leading-snug text-black transition-colors group-hover:text-[#7a5a09] sm:text-[15px]"
+                  : "line-clamp-2 text-base leading-snug text-black transition-colors group-hover:text-[#7a5a09] sm:text-[20px]"
+              }>
+                {blog.translations?.[idx]?.title || blog.title}
               </h3>
             </div>
           </Link>

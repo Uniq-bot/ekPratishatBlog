@@ -1,7 +1,9 @@
 "use client";
+import { useLanguage } from "@/context/ClientLanguageContext";
 import { useRouter } from "next/navigation";
 
 export default function BackButton({ slug }: { slug: string }) {
+  const {idx, currentLanguage} = useLanguage()
   const router = useRouter();
   return (
     <button
@@ -24,7 +26,9 @@ export default function BackButton({ slug }: { slug: string }) {
         <path d="M2 12H22" />
       </svg>
       <div className="group-hover:underline flex items-center leading-none gap-0.5 sm:gap-1 min-w-0">
-        <p className="text-black hidden sm:block">Blogs</p>
+        <p className="text-black hidden sm:block">{
+currentLanguage === "en" ? "blogs" : "ब्लगहरू"
+          }</p>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"

@@ -4,6 +4,7 @@ import BackButton from "@/components/blog/BackButton";
 import { prisma } from "@/libs/prisma";
 import { notFound } from "next/navigation";
 import { serializeBlogPost } from "@/services/blogs.services";
+import { unwrapApiResponse } from "@/libs/api";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -21,9 +22,9 @@ export const getBlog = (slug: string) =>
       const blog = await prisma.blogPost.findFirst({
         where: { slug },
         include: {
-          category: true,
+          category: { include: { translations: true } },
           translations: true,
-          tagLinks: { include: { tag: true } },
+          tagLinks: { include: { tag: { include: { translations: true } } } },
         },
       });
 
@@ -149,19 +150,21 @@ export const getRelatedBlogs = (
 
 export default async function BlogDets({ params }: Props) {
   const { slug } = await params;
-  const blog = await getBlog(slug);
+  const blog = unwrapApiResponse<any>(await getBlog(slug));
   if (!blog) {
     notFound();
   }
 
+  const resolvedBlog = blog as any;
+
   const relatedBlogs = (await getRelatedBlogs(
-    blog.categoryID ?? blog.category?.id ?? "",
+    resolvedBlog.categoryID ?? resolvedBlog.category?.id ?? "",
     slug,
-    blog.tags.map((t: any) => t.id),
+    Array.isArray(resolvedBlog.tags) ? resolvedBlog.tags.map((t: any) => t.id) : [],
   )).map((item: any) => serializeBlogPost(item));
 
   const comments = await prisma.blogComment.findMany({
-    where: { blogPostId: blog.id },
+    where: { blogPostId: resolvedBlog.id },
     orderBy: { createdAt: "desc" },
     take: 25,
     select: {
@@ -178,7 +181,7 @@ export default async function BlogDets({ params }: Props) {
 <div className="rounded-2xl border border-[#eadcb4] bg-[linear-gradient(180deg,#ffffff_0%,#fbf8ef_100%)] p-3 shadow-[0_16px_40px_rgba(0,0,0,0.06)] sm:p-5 lg:p-6">
       <BackButton slug={slug} />
       <div className="w-full relative flex flex-col lg:flex-row justify-between px-0 sm:px-2 lg:px-2 py-3 sm:py-5 gap-4 sm:gap-6 lg:gap-8">
-        <BlogDetailClient blog={blog} comments={comments} />
+        <BlogDetailClient blog={resolvedBlog} comments={comments} />
         <RelatedBlogs relatedBlogs={relatedBlogs ? relatedBlogs : []} />
       </div>
     </div>

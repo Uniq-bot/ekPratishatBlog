@@ -21,6 +21,7 @@ export type BlogItems = {
   coverImage: string | null;
   createdAt: Date;
   category: { name: string } | null;
+  translations: { title: string; content: string }[];
   viewCount?: number;
 };
 export interface Tag {
@@ -40,13 +41,38 @@ export interface Blog {
 
 
 // types/blog.ts
+// types/blog.ts
+
+export type BlogTranslation = {
+  id?: string;
+  language: string; // e.g. "en" | "ne"
+  title: string;
+  description?: string | null;
+  content?: string;
+};
+
+export type CategoryTranslation = {
+  id?: string;
+  categoryId?: string;
+  language: string;
+  name: string;
+  description?: string | null;
+};
+
+export type BlogCategory = {
+  id?: string;
+  name: string;
+  slug?: string;
+  translations?: CategoryTranslation[];
+};
+
 export type BlogItem = {
   id: string;
   title: string;
   slug: string | null;
   coverImage: string | null;
   createdAt: Date;
-  discription?: string | null;
-  category: { name: string } | null;
+  discription?: string | null; // legacy/typo field, kept for fallback used in component
+  category: BlogCategory | null;
+  translations?: BlogTranslation[];
 };
-

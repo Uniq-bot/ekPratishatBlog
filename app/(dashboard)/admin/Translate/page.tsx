@@ -350,7 +350,7 @@ const TranslatePage = () => {
       id: block.id,
       type: block.type,
       ...(block.type === "heading" && { level: block.level ?? 1 }),
-      value: nepaliValues[index],
+      content: nepaliValues[index],
     }));
   };
 
@@ -426,7 +426,7 @@ const TranslatePage = () => {
       });
 
       const data = await response.json().catch(() => ({}));
-
+      console.log(data)
       if (!response.ok) {
         throw new Error(data.message || "Failed to save translation");
       }

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useTrackBlogView } from "@/hooks/useTrackViews";
 import { TimerIcon } from "lucide-react";
 
-const BlogCard = ({ blog, index }: { blog: any, index:number }) => {
+const BlogCard = ({ blog, index, idx = 0, currentLanguage = "en" }: { blog: any, index: number, idx?: number, currentLanguage?: string }) => {
   const trackView = useTrackBlogView();
 
   const parseBlocks = (raw: any): any[] => {
@@ -69,11 +69,11 @@ const BlogCard = ({ blog, index }: { blog: any, index:number }) => {
       }
     });
 
-    const totalMinutes = Math.max(1, Math.ceil(words / 200 + images * 0.2));
+    const totaTranslatelMinutes = Math.max(1, Math.ceil(words / 200 + images * 0.2));
 
     return {
       words,
-      readTime: `${totalMinutes} min read`,
+      readTime: `${totaTranslatelMinutes} min read`,
     };
   }
 
@@ -99,8 +99,6 @@ const BlogCard = ({ blog, index }: { blog: any, index:number }) => {
       onClick={handleClick}
       title={blog.title}
       className={`group h-full flex flex-col gap-4  border-b-2 border-[#eadcb4] transition-all duration-300  sm:flex-row   sm:items-start sm:gap-6 sm:p-5`}
-      // className={`group h-full flex flex-col gap-4  border-b-2 border-[#eadcb4] transition-all duration-300  sm:flex-row ${index % 2 === 0 ? "sm:flex-row-reverse text-right" : ""}  sm:items-start sm:gap-6 sm:p-5`}
-
     >
       <div className="relative h-48 w-full shrink-0 overflow-hidden  bg-[#1D1D1D] sm:h-36 sm:w-56">
         <Image
@@ -114,8 +112,12 @@ const BlogCard = ({ blog, index }: { blog: any, index:number }) => {
 
       <div className="flex min-w-0 flex-1 flex-col justify-between gap-3">
         <div className="flex flex-wrap items-center gap-3 text-sm text-[#8a7a4a]">
-          <span className=" border border-[#f0d98c] bg-[#fffaf0] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#6f5a12]">
-            {blog.category?.name || "Category"}
+          <span className={
+              currentLanguage === "en"?
+              " border border-[#f0d98c] bg-[#fffaf0] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#6f5a12]"
+              : " border border-[#f0d98c] bg-[#fffaf0] px-2.5 py-1 text-[15px] font-semibold uppercase  text-[#6f5a12]"
+          }>
+            {blog.category?.translations?.[idx]?.name || "Category"}
           </span>
           <span>{publishedDate}</span>
           <span className="flex items-center gap-1.5">
@@ -125,7 +127,7 @@ const BlogCard = ({ blog, index }: { blog: any, index:number }) => {
         </div>
 
         <h2 className="sm:text-xl text-sm   font-[Nunito] hover:underline underline-offset-4 mb-4 font-semibold leading-tight text-[#1D1D1D] transition-all duration-200 hover:text-[#444442] ">
-          {blog.title}
+          {blog.translations?.[idx]?.title || blog.title || "Untitled"}
         </h2>
       </div>
     </Link>

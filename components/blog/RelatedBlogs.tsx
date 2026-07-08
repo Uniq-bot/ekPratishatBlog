@@ -6,6 +6,7 @@ import { Link2 } from "lucide-react";
 
 import { BlogItem } from "@/types/blog";
 import { useTrackBlogView } from "@/hooks/useTrackViews";
+import { useLanguage } from "@/context/ClientLanguageContext";
 
 interface Props {
   relatedBlogs: BlogItem[];
@@ -13,7 +14,7 @@ interface Props {
 
 const RelatedBlogs = ({ relatedBlogs }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const {idx, currentLanguage} = useLanguage()
   const trackView = useTrackBlogView();
 
   const handleClick = (
@@ -42,14 +43,16 @@ const RelatedBlogs = ({ relatedBlogs }: Props) => {
           <Link2 size={18} />
         </span>
         <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#8a6b12]">
-            Related
-          </p>
-          <h2 className="text-lg font-bold text-black">Popular Posts</h2>
+        
+          <h2 className="text-lg font-bold text-black">
+            {currentLanguage === "en" ? "Related Blogs" : "सम्बन्धित ब्लगहरू"}
+          </h2>
         </div>
       </div>
 
-      <div className="mt-4 flex flex-col gap-2">
+      {
+        relatedBlogs.length ? (
+          <div className="mt-4 flex flex-col gap-2">
         {relatedBlogs.map((blog, index) => (
           <Link
             key={blog.id}
@@ -63,12 +66,18 @@ const RelatedBlogs = ({ relatedBlogs }: Props) => {
 
             <div className="flex min-w-0 flex-1 flex-col">
               <h3 className="line-clamp-2 text-sm leading-snug text-black transition-colors group-hover:text-[#7a5a09] sm:text-[15px]">
-                {blog.title}
+                {blog.translations?.[idx]?.title || blog?.title}
               </h3>
             </div>
           </Link>
         ))}
       </div>
+        )
+        :
+        <p className="mt-4 text-sm text-gray-500">
+          {currentLanguage === "en" ? "No related blogs found." : "सम्बन्धित ब्लगहरू फेला परेन।"}
+        </p>
+      }
     </section>
 
       {/* Overlay */}
@@ -86,7 +95,9 @@ const RelatedBlogs = ({ relatedBlogs }: Props) => {
         }`}
       >
         <div className="p-5">
-          <h2 className="mb-5 text-2xl font-bold">Related Blogs</h2>
+          <h2 className="mb-5 text-2xl font-bold">
+            {currentLanguage === "en" ? "Related Blogs" : "सम्बन्धित ब्लगहरू"}
+          </h2>
 
           <div className="space-y-3">
             {relatedBlogs.length ? (
@@ -98,7 +109,7 @@ const RelatedBlogs = ({ relatedBlogs }: Props) => {
                   className="group block rounded-lg border p-3 transition-all hover:border-amber-400 hover:bg-amber-50"
                 >
                   <p className="mb-2 text-xs font-semibold uppercase text-amber-700">
-                    {blog.category?.name}
+                    {blog.category?.translations?.[idx]?.name || blog?.category?.name}
                   </p>
 
                   <h3 className="line-clamp-2 font-semibold group-hover:text-amber-700">
@@ -112,7 +123,9 @@ const RelatedBlogs = ({ relatedBlogs }: Props) => {
               ))
             ) : (
               <p className="text-sm text-gray-500">
-                No related blogs found.
+               {
+                currentLanguage === "en"? "No related blogs found." : "सम्बन्धित ब्लगहरू फेला परेन।"
+               }
               </p>
             )}
           </div>

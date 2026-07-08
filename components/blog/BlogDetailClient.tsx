@@ -6,6 +6,8 @@ import Image from "next/image";
 import BlogComments from "./BlogComments";
 
 import ShareComp from "./ShareComp";
+import { useState } from "react";
+import { useLanguage } from "@/context/ClientLanguageContext";
 
 // Heading tag map: level → HTML tag
 const headingTag: Record<number, keyof React.JSX.IntrinsicElements> = {
@@ -14,14 +16,6 @@ const headingTag: Record<number, keyof React.JSX.IntrinsicElements> = {
   4: "h4",
   5: "h5",
   6: "h6",
-};
-
-const headingClass: Record<number, string> = {
-  2: "text-2xl sm:text-3xl lg:text-4xl font-black mt-6 sm:mt-7 lg:mt-8 mb-3 sm:mb-4 border-l-4 border-[#C9981A] pl-3 sm:pl-4 text-black",
-  3: "text-xl sm:text-2xl lg:text-3xl font-bold mt-5 sm:mt-6 lg:mt-7 mb-2 sm:mb-3 text-[#8a6b12]",
-  4: "text-lg sm:text-xl lg:text-2xl font-semibold mt-4 sm:mt-4 mb-3 sm:mb-2 text-black/85",
-  5: "text-base sm:text-lg lg:text-xl font-semibold mt-2 sm:mt-3 mb-1 text-black/75",
-  6: "text-sm sm:text-base lg:text-lg font-semibold mt-1 sm:mt-2 mb-1 text-black/60",
 };
 
 const parseBlocks = (raw: any): any[] => {
@@ -47,22 +41,70 @@ const BlogDetailClient = ({
   blog: any;
   comments: any[];
 }) => {
+  const { idx, currentLanguage } = useLanguage();
   const { data: session } = useSession();
-  const blocks = parseBlocks(blog?.content);
+
+  // Heading classes per level — depends on language
+  const getHeadingClass = (level: number) => {
+    if (currentLanguage === "en") {
+      const headingClassEn: Record<number, string> = {
+        2: "text-2xl sm:text-3xl lg:text-4xl font-black mt-6 sm:mt-7 lg:mt-8 mb-3 sm:mb-4 border-l-4 border-[#C9981A] pl-3 sm:pl-4 text-black",
+        3: "text-xl sm:text-2xl lg:text-3xl font-bold mt-5 sm:mt-6 lg:mt-7 mb-2 sm:mb-3 text-[#8a6b12]",
+        4: "text-lg sm:text-xl lg:text-2xl font-semibold mt-4 sm:mt-4 mb-3 sm:mb-2 text-black/85",
+        5: "text-base sm:text-lg lg:text-xl font-semibold mt-2 sm:mt-3 mb-1 text-black/75",
+        6: "text-sm sm:text-base lg:text-lg font-semibold mt-1 sm:mt-2 mb-1 text-black/60",
+      };
+      return headingClassEn[level];
+    } else {
+      const headingClassNp: Record<number, string> = {
+        2: "text-3xl sm:text-4xl lg:text-5xl font-black mt-6 sm:mt-7 lg:mt-8 mb-3 sm:mb-4 border-l-4 border-[#C9981A] pl-3 sm:pl-4 text-black",
+        3: "text-2xl sm:text-3xl lg:text-4xl font-bold mt-5 sm:mt-6 lg:mt-7 mb-2 sm:mb-3 text-[#8a6b12]",
+        4: "text-xl sm:text-2xl lg:text-3xl font-semibold mt-4 sm:mt-4 mb-3 sm:mb-2 text-black/85",
+        5: "text-lg sm:text-xl lg:text-2xl font-semibold mt-2 sm:mt-3 mb-1 text-black/75",
+        6: "text-base sm:text-lg lg:text-xl font-semibold mt-1 sm:mt-2 mb-1 text-black/60",
+      };
+      return headingClassNp[level];
+    }
+  };
+
+  const translation = blog?.translations?.[idx] ?? {};
+  const rawBlocks = translation?.content;
+  const blocks = parseBlocks(rawBlocks).map((block: any) => ({
+    ...block,
+    content: block?.content ?? block?.value ?? block?.text ?? "",
+  }));
+  const categoryName = blog?.category?.translations?.[idx]?.name || blog?.category?.slug || "Category";
+  const tagLabel = (tag: any) => {
+    if (typeof tag === "string") return tag;
+    return tag?.translations?.[idx]?.name || tag?.slug || "Tag";
+  };
 
   return (
     <div className="w-full lg:w-[70%] h-full   px-3 py-5 text-black  sm:px-5 sm:py-6 lg:px-8 lg:py-8">
+
       {/* Header */}
       <div className="flex w-full flex-col gap-2.5 border-b border-[#eadcb4] pb-5">
-        <p className="mb-1 inline-flex w-fit items-center  border border-[#eadcb4] bg-[#fffaf0] px-4 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-[#8a6b12]">
-          {blog?.category?.name ?? "Category"}
+        <p
+          className={
+            currentLanguage === "en"
+              ? "mb-1 inline-flex w-fit items-center  border border-[#eadcb4] bg-[#fffaf0] px-4 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-[#8a6b12]"
+              : "mb-1 inline-flex w-fit items-center  border border-[#eadcb4] bg-[#fffaf0] px-4 py-1 text-sm font-semibold uppercase tracking-[0.22em] text-[#8a6b12]"
+          }
+        >
+          {categoryName}
         </p>
 
-        <h1 className="text-2xl font-[Nunito] font-bold leading-tight text-black sm:text-3xl lg:text-4xl xl:text-5xl">
-          {blog?.title}
+        <h1
+          className={
+            currentLanguage === "en"
+              ? "text-2xl font-[Nunito] font-bold leading-tight text-black sm:text-3xl lg:text-4xl xl:text-5xl"
+              : "text-3xl font-[Nunito] font-bold leading-tight text-black sm:text-4xl lg:text-5xl xl:text-6xl"
+          }
+        >
+          {blog?.translations?.[idx]?.title || blog?.title || "Untitled"}
         </h1>
 
-        <div className="relative mt-3 aspect-video w-full overflow-hidden border border-[#eadcb4] shadow-[0_12px_32px_rgba(0,0,0,0.08)] sm:aspect-[16/8] lg:aspect-[16/7]">
+        <div className="relative mt-3 aspect-video w-full overflow-hidden border border-[#eadcb4] shadow-[0_12px_32px_rgba(0,0,0,0.08)] sm:aspect-16/8 lg:aspect-16/7">
           <Image
             src={blog?.coverImage ?? "/logo.png"}
             alt={blog?.title ?? "Blog cover"}
@@ -79,14 +121,24 @@ const BlogDetailClient = ({
               blog.tags.map((tag: any) => (
                 <span
                   key={tag?.id ?? tag}
-                  className="w-fit  border border-[#eadcb4] bg-[#fffaf0] px-3 py-1 text-xs font-semibold uppercase tracking-[0.1em] text-[#8a6b12]"
+                  className={
+                    currentLanguage === "en"
+                      ? "w-fit  border border-[#eadcb4] bg-[#fffaf0] px-3 py-1 text-xs font-semibold uppercase tracking-widest text-[#8a6b12]"
+                      : "w-fit  border border-[#eadcb4] bg-[#fffaf0] px-3 py-1 text-sm font-semibold uppercase tracking-widest text-[#8a6b12]"
+                  }
                 >
-                  {typeof tag === "string" ? tag : tag.name}
+                  {tagLabel(tag)}
                 </span>
               ))}
           </div>
 
-          <span className="whitespace-nowrap text-xs font-semibold text-black/50 sm:text-sm">
+          <span
+            className={
+              currentLanguage === "en"
+                ? "whitespace-nowrap text-xs font-semibold text-black/50 sm:text-sm"
+                : "whitespace-nowrap text-sm font-semibold text-black/50 sm:text-base"
+            }
+          >
             {blog?.createdAt
               ? new Date(blog.createdAt).toLocaleDateString()
               : ""}
@@ -97,18 +149,36 @@ const BlogDetailClient = ({
       {/* Body */}
       <div className="flex w-full flex-col px-1 pb-5 pt-5 sm:px-2 lg:px-3">
         {blog?.description && (
-          <p className="mt-2  border-l-4 border-[#C9981A] bg-[#fffaf0] p-4 text-sm leading-7 italic text-black/70 shadow-sm sm:p-5 sm:text-base sm:leading-8">
-            "{blog.description}"
+          <p
+            className={
+              currentLanguage === "en"
+                ? "mt-2  border-l-4 border-[#C9981A] bg-[#fffaf0] p-4 text-sm leading-7 italic text-black/70 shadow-sm sm:p-5 sm:text-base sm:leading-8"
+                : "mt-2  border-l-4 border-[#C9981A] bg-[#fffaf0] p-4 text-base leading-8 italic text-black/70 shadow-sm sm:p-5 sm:text-lg sm:leading-9"
+            }
+          >
+            "{blog.translations?.[idx]?.description || blog?.description}"
           </p>
         )}
 
         {/* Table of Contents */}
         {blocks.some((b) => b.type === "heading") && (
           <div className="mt-8  border border-[#eadcb4] bg-[linear-gradient(180deg,#fff_0%,#faf6ec_100%)] p-4 shadow-[0_12px_32px_rgba(0,0,0,0.05)] sm:p-6">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#8a6b12]">
+            <p
+              className={
+                currentLanguage === "en"
+                  ? "mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#8a6b12]"
+                  : "mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-[#8a6b12]"
+              }
+            >
               Table of contents
             </p>
-            <p className="text-lg font-black text-black sm:text-xl lg:text-2xl">
+            <p
+              className={
+                currentLanguage === "en"
+                  ? "text-lg font-black text-black sm:text-xl lg:text-2xl"
+                  : "text-xl font-black text-black sm:text-2xl lg:text-3xl"
+              }
+            >
               On this page
             </p>
 
@@ -117,11 +187,16 @@ const BlogDetailClient = ({
               .map((b, i) => (
                 <div
                   key={i}
-                  className={`flex items-center py-2 font-semibold text-black/70 transition-all hover:translate-x-1 hover:text-[#8a6b12] ${
-                    b.level === 2 ? "pl-0" : b.level === 3 ? "pl-4" : "hidden"
-                  }`}
+                  className={
+                    currentLanguage === "en"
+                      ? `flex items-center py-2 font-semibold text-black/70 transition-all hover:translate-x-1 hover:text-[#8a6b12] ${
+                          b.level === 2 ? "pl-0" : b.level === 3 ? "pl-4" : "hidden"
+                        }`
+                      : `flex items-center py-2 text-base sm:text-lg font-semibold text-black/70 transition-all hover:translate-x-1 hover:text-[#8a6b12] ${
+                          b.level === 2 ? "pl-0" : b.level === 3 ? "pl-4" : "hidden"
+                        }`
+                  }
                 >
-                 
                   <Dot size={18} className="mt-1 shrink-0 text-[#C9981A] sm:mt-0.5" />
                    <a
                     href={`#heading-${i}`}
@@ -145,7 +220,11 @@ const BlogDetailClient = ({
                   return (
                     <p
                       key={block.id ?? index}
-                      className="py-2 text-sm leading-7 text-black/70 sm:text-base sm:leading-8 lg:text-lg"
+                      className={
+                        currentLanguage === "en"
+                          ? "py-2 text-sm leading-7 text-black/70 sm:text-base sm:leading-8 lg:text-lg"
+                          : "py-2 text-base leading-8 text-black/70 sm:text-lg sm:leading-9 lg:text-xl"
+                      }
                     >
                       {block.content}
                     </p>
@@ -154,7 +233,7 @@ const BlogDetailClient = ({
                 case "heading": {
                   const level = Math.min(Math.max(block.level ?? 2, 1), 6);
                   const Tag = headingTag[level];
-                  const cls = headingClass[level];
+                  const cls = getHeadingClass(level);
                   const anchorId = `heading-${headingIndex++}`;
 
                   return (
@@ -193,7 +272,11 @@ const BlogDetailClient = ({
                         (item: string, i: number) => (
                           <li
                             key={i}
-                            className="flex items-start gap-2 text-black/75"
+                            className={
+                              currentLanguage === "en"
+                                ? "flex items-start gap-2 text-black/75"
+                                : "flex items-start gap-2 text-base sm:text-lg text-black/75"
+                            }
                           >
                             <Dot
                               size={20}
@@ -210,7 +293,11 @@ const BlogDetailClient = ({
                   return (
                     <blockquote
                       key={block.id ?? index}
-                      className="my-6  border-l-4 border-[#C9981A] bg-[#fffaf0] px-4 py-4 italic text-black/75 shadow-sm sm:my-8 sm:px-6 sm:py-5"
+                      className={
+                        currentLanguage === "en"
+                          ? "my-6  border-l-4 border-[#C9981A] bg-[#fffaf0] px-4 py-4 italic text-black/75 shadow-sm sm:my-8 sm:px-6 sm:py-5"
+                          : "my-6  border-l-4 border-[#C9981A] bg-[#fffaf0] px-4 py-4 text-lg sm:text-xl italic text-black/75 shadow-sm sm:my-8 sm:px-6 sm:py-5"
+                      }
                     >
                       {block.content}
                     </blockquote>
@@ -222,12 +309,24 @@ const BlogDetailClient = ({
                       key={block.id ?? index}
                       className="my-6  border border-[#eadcb4] bg-[#fffaf0] p-4 shadow-sm sm:my-8 sm:p-5"
                     >
-                      <p className="mb-2 flex items-center gap-2 font-bold text-[#8a6b12]">
+                      <p
+                        className={
+                          currentLanguage === "en"
+                            ? "mb-2 flex items-center gap-2 font-bold text-[#8a6b12]"
+                            : "mb-2 flex items-center gap-2 text-lg sm:text-xl font-bold text-[#8a6b12]"
+                        }
+                      >
                         <Lightbulb size={20} />
                         {block.content?.title || "Important"}
                       </p>
 
-                      <p className="leading-7 text-black/70">
+                      <p
+                        className={
+                          currentLanguage === "en"
+                            ? "leading-7 text-black/70"
+                            : "leading-8 text-base sm:text-lg text-black/70"
+                        }
+                      >
                         {block.content?.description}
                       </p>
                     </div>

@@ -7,7 +7,7 @@ import Image from "next/image";
 import { useTrackBlogView } from "@/hooks/useTrackViews";
 import AsideAd from "./AsideAd";
 
-const LatestBlogs = ({ latestBlogs = [], ads }: { latestBlogs?: BlogItem[], ads: any[] }) => {
+const LatestBlogs = ({idx, latestBlogs = [], ads }: {idx:number, latestBlogs?: BlogItem[], ads: any[] }) => {
   const trackView = useTrackBlogView();
 
   if (!latestBlogs.length) return null;
@@ -38,7 +38,9 @@ const LatestBlogs = ({ latestBlogs = [], ads }: { latestBlogs?: BlogItem[], ads:
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
           <span className="absolute left-4 top-4  border border-white/70 bg-black/80 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white backdrop-blur">
-            {featuredBlog?.category?.name || "Featured"}
+            {
+             featuredBlog?.category?.translations?.[idx]?.name|| "Category"
+            }
           </span>
         </div>
 
@@ -52,10 +54,10 @@ const LatestBlogs = ({ latestBlogs = [], ads }: { latestBlogs?: BlogItem[], ads:
             })}
           </div>
           <h3 className="text-lg font-semibold font-[Nunito] leading-tight text-black transition-colors group-hover:text-[#7a5a09] sm:text-[1.65rem]">
-            {featuredBlog?.title}
+            {featuredBlog?.translations?.[idx]?.title || featuredBlog?.title}
           </h3>
           <p className="max-w-2xl text-sm leading-7 text-[#5f5743] sm:text-[15px]">
-            {featuredBlog?.discription || "A fresh story from our latest collection."}
+            {featuredBlog?.translations?.[idx]?.description || featuredBlog?.discription || "A fresh story from our latest collection."}
           </p>
           <div className="mt-1 flex items-center gap-2 text-sm font-semibold text-[#8a6b12]">
             Read story
@@ -90,10 +92,10 @@ const LatestBlogs = ({ latestBlogs = [], ads }: { latestBlogs?: BlogItem[], ads:
 
             <div className="flex min-w-0 flex-1 flex-col gap-2">
               <span className="w-fit rounded-full border border-[#f0d98c] bg-[#fffaf0] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#6f5a12]">
-                {blog?.category?.name || "Category"}
+                {blog?.category?.translations?.[idx]?.name || blog?.category?.name || "Category"}
               </span>
               <h4 className="line-clamp-2 text-sm font-[Nunito] leading-snug text-black transition-colors group-hover:text-[#7a5a09]">
-                {blog.title}
+                {blog?.translations?.[idx]?.title || blog.title}
               </h4>
               <div className="flex items-center gap-1.5 text-xs text-[#8a7a4a]">
                 <Calendar size={12} />
