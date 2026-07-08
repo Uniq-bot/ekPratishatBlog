@@ -10,10 +10,12 @@ import {
   Quote,
   Minus,
   Info,
+  Loader2,
 } from "lucide-react";
 import { useEffect, useMemo, useState, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import ConfirmDialog from "@/components/admin/ConfirmDialog";
+import PageLoader from "@/components/shared/PageLoader";
 
 const STORAGE_KEY = "translate-english-blog";
 
@@ -143,7 +145,10 @@ const TranslatePage = () => {
 
   const [persistedBlog, setPersistedBlog] = useState<any>(null);
   const [hydrated, setHydrated] = useState(false);
+  const [isBlogLoading, setIsBlogLoading] = useState(false);
+  const [isSavingTranslation, setIsSavingTranslation] = useState(false);
   const [initializedBlogId, setInitializedBlogId] = useState<string | null>(null);
+  const loadedBlogIdRef = useRef<string | null>(null);
 
   const [englishTitle, setEnglishTitle] = useState("");
   const [englishDescription, setEnglishDescription] = useState("");
@@ -159,6 +164,8 @@ const TranslatePage = () => {
   const fileInputRefs = useRef<Record<string | number, HTMLInputElement | null>>({});
 
   useEffect(() => {
+    let isMounted = true;
+
     const loadBlog = async () => {
       const requestedBlogId = searchParams.get("id");
       const storedId = sessionStorage.getItem(STORAGE_KEY);
@@ -166,11 +173,23 @@ const TranslatePage = () => {
       const blogIdToLoad = requestedBlogId ?? blogIdFromStorage;
 
       if (!blogIdToLoad) {
-        setHydrated(true);
+        if (isMounted) {
+          setPersistedBlog(null);
+          setInitializedBlogId(null);
+          setHydrated(true);
+          setIsBlogLoading(false);
+          loadedBlogIdRef.current = null;
+        }
         return;
       }
 
-      if (requestedBlogId && requestedBlogId !== persistedBlog?.id) {
+      if (loadedBlogIdRef.current === blogIdToLoad && persistedBlog?.id === blogIdToLoad) {
+        if (isMounted) setHydrated(true);
+        return;
+      }
+
+      if (isMounted) {
+        setIsBlogLoading(true);
         setPersistedBlog(null);
         setInitializedBlogId(null);
       }
@@ -180,17 +199,26 @@ const TranslatePage = () => {
         const json = await response.json();
         const blogData = json?.data ?? null;
 
+        if (!isMounted) return;
+
         if (blogData) {
           setPersistedBlog(blogData);
+          loadedBlogIdRef.current = blogIdToLoad;
           try {
             sessionStorage.setItem(STORAGE_KEY, JSON.stringify(blogData));
           } catch (err) {
             console.error("Failed to persist blog to sessionStorage", err);
           }
-        } else if (!hydrated) {
+        } else {
           try {
             const stored = sessionStorage.getItem(STORAGE_KEY);
-            if (stored) setPersistedBlog(JSON.parse(stored));
+            if (stored) {
+              const parsed = JSON.parse(stored);
+              if (parsed?.id) {
+                setPersistedBlog(parsed);
+                loadedBlogIdRef.current = parsed.id;
+              }
+            }
           } catch (err) {
             console.error("Failed to read persisted blog from sessionStorage", err);
           }
@@ -198,11 +226,18 @@ const TranslatePage = () => {
       } catch (err) {
         console.error("Failed to fetch onboarding blog", err);
       } finally {
-        setHydrated(true);
+        if (isMounted) {
+          setHydrated(true);
+          setIsBlogLoading(false);
+        }
       }
     };
 
     loadBlog();
+
+    return () => {
+      isMounted = false;
+    };
   }, [searchParams, persistedBlog?.id]);
 
   const blogId = persistedBlog?.id ?? null;
@@ -393,9 +428,10 @@ const TranslatePage = () => {
   };
 
   const handleTranslationSave = async () => {
-    if (!blogId) return;
+    if (!blogId || isSavingTranslation) return;
     setSubmitError(null);
     setSuccessMsg(null);
+    setIsSavingTranslation(true);
 
     if (!validateTranslationFields()) {
       return;
@@ -436,8 +472,14 @@ const TranslatePage = () => {
     } catch (error: any) {
       console.error("Translation save failed", error);
       setSubmitError(error.message || "Failed to save translation");
+    } finally {
+      setIsSavingTranslation(false);
     }
   };
+
+  if (isBlogLoading && !persistedBlog?.id && !hydrated) {
+    return <PageLoader title="Loading translation editor" subtitle="Fetching the selected blog from the database." />;
+  }
 
   return (
     <div className="min-h-screen bg-[#EBECD8]/70 px-3 lg:px-8 py-4 lg:py-6">
@@ -453,11 +495,18 @@ const TranslatePage = () => {
 
         <button
           type="button"
-          disabled={!blogId}
+          disabled={!blogId || isSavingTranslation}
           onClick={() => handleTranslationSave()}
-          className="rounded-none border-2 border-[#1f1f1f] bg-[#1f1f1f] px-4 py-2 text-xs lg:text-sm font-semibold text-[#f8f3d8] shadow-[4px_4px_0_#1f1f1f] transition-all hover:-translate-y-0.5 hover:bg-[#2b2b2b] disabled:opacity-50"
+          className="flex items-center justify-center gap-2 rounded-none border-2 border-[#1f1f1f] bg-[#1f1f1f] px-4 py-2 text-xs lg:text-sm font-semibold text-[#f8f3d8] shadow-[4px_4px_0_#1f1f1f] transition-all hover:-translate-y-0.5 hover:bg-[#2b2b2b] disabled:cursor-not-allowed disabled:opacity-50"
         >
-          Save Translation
+          {isSavingTranslation ? (
+            <>
+              <Loader2 size={16} className="animate-spin" />
+              Saving...
+            </>
+          ) : (
+            "Save Translation"
+          )}
         </button>
       </div>
 
