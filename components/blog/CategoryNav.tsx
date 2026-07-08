@@ -5,12 +5,14 @@ import { usePathname, useSearchParams } from "next/navigation";
 
 const CategoryNav = ({
   categories,
+  totalCounts,
   idx = 0,
   currentLanguage = "en",
 }: {
   categories: { id: string; name: string; slug: string; translations?: any }[];
   idx?: number;
   currentLanguage?: string;
+  totalCounts: number;
 }) => {
   const searchParams = useSearchParams();
 
@@ -49,20 +51,16 @@ const CategoryNav = ({
                 : "text-lg font-bold text-black"
             }
           >
-            {currentLanguage === "en" ? "Browse by topic" : "विषय अनुसार ब्राउज गर्नुहोस्"}
+            {currentLanguage === "en"
+              ? "Browse by topic"
+              : "विषय अनुसार ब्राउज गर्नुहोस्"}
           </h3>
         </div>
-        <span
-          className={
-            currentLanguage === "en"
-              ? " border border-[#eadcb4] bg-[#fffaf0] px-3 py-1 text-xs font-semibold text-black"
-              : " border border-[#eadcb4] bg-[#fffaf0] px-3 py-1 text-sm font-semibold text-black"
-          }
+        <div
+          className={`border border-[#eadcb4] bg-[#fffaf0] px-4 py-2 font-semibold text-black shadow-sm ${currentLanguage==="en" ? "text-sm" : "text-base"}`}
         >
-          {currentLanguage === "en"
-            ? `${categories.length} topics`
-            : `${categories.length} विषयहरू`}
-        </span>
+          {totalCounts} {currentLanguage==="en" ? "Articles" : "लेखहरू"}
+        </div>
       </div>
 
       <div className="flex gap-2 overflow-x-auto pb-1">

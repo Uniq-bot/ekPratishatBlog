@@ -49,7 +49,11 @@ const SearchFilter = ({ category, tag, search = "", currentLanguage = "en" }: Se
     <section className="border border-[#e7d6ab] bg-white/90 p-4 shadow-sm sm:p-5">
       <div className="mb-3 flex items-center justify-between gap-3">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8a6b12]">
+          <p className={
+            currentLanguage === "en"
+              ? "text-xs font-semibold uppercase tracking-[0.18em] text-[#8a6b12]"
+              : "text-sm font-semibold uppercase  text-[#8a6b12]"
+          }>
             {currentLanguage === "en" ? "SEARCH" : "खोज"}
           </p>
           <h3 className="text-base font-bold text-black">

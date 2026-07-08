@@ -84,15 +84,13 @@ const BlogClientPage = ({
             <div className="border border-[#eadcb4] bg-white/95 p-4 shadow-[0_18px_45px_rgba(15,23,42,0.06)] sm:p-5">
               <div className="mb-4 flex items-center justify-between gap-4 border-b border-[#f0e3bd] pb-3">
                 <div>
-                  <p className={`font-semibold uppercase text-[#8a6b12] ${isEnglish ? "text-xs tracking-[0.18em]" : "text-sm tracking-normal"}`}>
-                    {isEnglish ? "Latest Blogs" : "नवीनतम ब्लगहरू"}
-                  </p>
+                
                   <h2 className={`font-black text-black ${isEnglish ? "text-xl" : "text-[1.35rem] sm:text-[1.6rem]"}`}>
-                    {isEnglish ? "Fresh reads" : "ताजा पढाइहरू"}
+                    {isEnglish ? "Latest Blogs" : "नयाँ ब्लगहरू"}
                   </h2>
                 </div>
                 <span className={`hidden font-semibold text-black/60 lg:flex ${isEnglish ? "text-sm" : "text-base"}`}>
-                  {latestBlogs.posts.slice(0, 2).length} {isEnglish ? "posts" : "पोストहरू"}
+                  {latestBlogs.posts.slice(0, 2).length} {isEnglish ? "posts" : "पोस्टहरू"}
                 </span>
               </div>
               <LatestBlogs idx={idx} latestBlogs={latestBlogs?.posts ?? []} ads={ads} />
@@ -125,16 +123,15 @@ const BlogClientPage = ({
                     ? "Search the latest articles, filter by category, and read the updates that matter most."
                     : "नवीनतम लेखहरू खोज्नुहोस्, कोटिहरू अनुसार फिल्टर गर्नुहोस्, र सबैभन्दा महत्त्वपूर्ण अपडेटहरू पढ्नुहोस्।"}
                 </p>
+               
               </div>
-              <div className={`rounded-full border border-[#eadcb4] bg-[#fffaf0] px-4 py-2 font-semibold text-black shadow-sm ${isEnglish ? "text-sm" : "text-base"}`}>
-                {blogs.totalCount} {isEnglish ? "Articles" : "लेखहरू"}
-              </div>
+            
             </div>
           </div>
 
           <div className="flex flex-col gap-5">
             <SearchFilter category={category} tag={tag} search={search} idx={idx} currentLanguage={currentLanguage} />
-            <CategoryNav categories={categories} idx={idx} currentLanguage={currentLanguage} />
+            <CategoryNav totalCounts={blogs.totalCount} categories={categories} idx={idx} currentLanguage={currentLanguage} />
             <BlogList
               blogs={blogs.posts}
               page={page}

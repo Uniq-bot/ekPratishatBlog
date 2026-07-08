@@ -37,7 +37,7 @@ const RelatedBlogs = ({ relatedBlogs }: Props) => {
       </button>
 
       {/* Desktop */}
-   <section className="  p-4 sm:p-5 lg:p-5">
+   <section className=" hidden lg:block  p-4 sm:p-5 lg:p-5">
       <div className="flex items-center gap-3 border-b border-[#f0e3bd] pb-4">
         <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#f9efc5] text-[#c9981a]">
           <Link2 size={18} />

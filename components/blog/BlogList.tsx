@@ -63,7 +63,11 @@ const BlogList = ({
     <section className="w-full px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
       <div className="mb-7 flex flex-col gap-4 border-b border-[#f0e3bd] pb-5 sm:flex-row sm:items-end sm:justify-between">
         <div className="space-y-1.5">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#8a6b12]">
+          <p className={
+            isEnglish
+              ? "text-xs font-semibold uppercase tracking-[0.18em] text-[#8a6b12]"
+              : "text-lg font-semibold uppercase  text-[#8a6b12]"
+          }>
             {isEnglish ? "BLOGS" : "ब्लगहरू"}
           </p>
           <h2 className="text-2xl font-black text-black sm:text-3xl">
@@ -81,7 +85,7 @@ const BlogList = ({
             value={sort}
             onChange={(e) => updateParam("sort", e.target.value)}
           >
-            <option value="latest">{isEnglish ? "Latest" : "नवीनतम"}</option>
+            <option value="latest">{isEnglish ? "Latest" : "नयाँ"}</option>
             <option value="oldest">{isEnglish ? "Oldest" : "पुरानो"}</option>
           </select>
         </div>

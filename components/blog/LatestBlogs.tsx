@@ -87,8 +87,8 @@ const LatestBlogs = ({ idx, latestBlogs = [], ads }: { idx: number; latestBlogs?
                 {blog?.category?.translations?.[idx]?.name || blog?.category?.name || "Category"}
               </span>
               <h4 className={
-                idx===0? "line-clamp-2 font-[family-name:var(--font-display)] text-sm font-semibold leading-snug text-black transition-colors group-hover:text-[#7a5a09] sm:text-[15px]"
-                : "line-clamp-2 font-[family-name:var(--font-display)] text-base font-semibold leading-snug text-black transition-colors group-hover:text-[#7a5a09] sm:text-[20px]"
+                idx===0? "line-clamp-2 font-(family-name:--font-display) text-sm font-semibold leading-snug text-black transition-colors group-hover:text-[#7a5a09] sm:text-[15px]"
+                : "line-clamp-2 font-(family-name:--font-display) text-base font-semibold leading-snug text-black transition-colors group-hover:text-[#7a5a09] sm:text-[20px]"
               }>
                 {blog?.translations?.[idx]?.title || blog.title}
               </h4>
