@@ -80,10 +80,16 @@ const LatestBlogs = ({ idx, latestBlogs = [], ads }: { idx: number; latestBlogs?
             </div>
 
             <div className="flex min-w-0 flex-1 flex-col gap-2">
-              <span className="inline-flex w-fit items-center gap-1.5 border border-[#eadcb4] bg-[#fffaf0] px-3 py-1 text-[0.72rem] font-bold uppercase tracking-[0.2em] text-[#8a6b12]">
+              <span className={
+                idx===0? "inline-flex w-fit items-center gap-1.5 border border-[#eadcb4] bg-[#fffaf0] px-3 py-1 text-[0.72rem] font-bold uppercase tracking-[0.2em] text-[#8a6b12]"
+                : "inline-flex w-fit items-center gap-1.5 border border-[#eadcb4] bg-[#fffaf0] px-3 py-1 text-base font-bold uppercase text-[#8a6b12] sm:text-lg"
+              }>
                 {blog?.category?.translations?.[idx]?.name || blog?.category?.name || "Category"}
               </span>
-              <h4 className="font-[family-name:var(--font-display)] line-clamp-2 text-sm leading-snug text-black transition-colors group-hover:text-[#7a5a09]">
+              <h4 className={
+                idx===0? "line-clamp-2 font-[family-name:var(--font-display)] text-sm font-semibold leading-snug text-black transition-colors group-hover:text-[#7a5a09] sm:text-[15px]"
+                : "line-clamp-2 font-[family-name:var(--font-display)] text-base font-semibold leading-snug text-black transition-colors group-hover:text-[#7a5a09] sm:text-[20px]"
+              }>
                 {blog?.translations?.[idx]?.title || blog.title}
               </h4>
               <div className="flex items-center gap-1.5 text-xs text-[#8a7a4a]">

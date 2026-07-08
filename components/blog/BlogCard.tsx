@@ -98,7 +98,12 @@ const BlogCard = ({ blog, idx = 0, currentLanguage = "en" }: { blog: any; idx?: 
 
       <div className="flex min-w-0 flex-1 flex-col justify-between gap-3">
         <div className="flex flex-wrap items-center gap-2 text-sm text-[#8a7a4a]">
-          <span className="inline-flex items-center gap-1.5 border border-[#eadcb4] bg-[#fffaf0] px-3 py-1 text-[0.72rem] font-bold uppercase tracking-[0.2em] text-[#8a6b12]">
+          <span className={
+            currentLanguage === "en"?
+            "inline-flex items-center gap-1.5 border border-[#eadcb4] bg-[#fffaf0] px-3 py-1 text-[0.72rem] font-bold uppercase tracking-[0.2em] text-[#8a6b12]"
+            :
+            "inline-flex items-center gap-1.5 border border-[#eadcb4] bg-[#fffaf0] px-3 py-1 text-base font-bold uppercase text-[#8a6b12] sm:text-lg"
+          }>
             {blog.category?.translations?.[idx]?.name || "Category"}
           </span>
           <span className="text-sm font-medium">{publishedDate}</span>

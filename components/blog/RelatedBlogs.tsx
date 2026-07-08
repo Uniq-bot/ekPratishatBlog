@@ -65,7 +65,7 @@ const RelatedBlogs = ({ relatedBlogs }: Props) => {
             </span>
 
             <div className="flex min-w-0 flex-1 flex-col">
-              <h3 className="line-clamp-2 text-sm leading-snug text-black transition-colors group-hover:text-[#7a5a09] sm:text-[15px]">
+              <h3 className="line-clamp-2 text-sm leading-snug text-black transition-colors group-hover:text-[#7a5a09] sm:text-[20px]">
                 {blog.translations?.[idx]?.title || blog?.title}
               </h3>
             </div>
