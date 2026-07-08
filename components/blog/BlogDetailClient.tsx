@@ -80,15 +80,13 @@ const BlogDetailClient = ({
   };
 
   return (
-    <div className="w-full lg:w-[70%] h-full   px-3 py-5 text-black  sm:px-5 sm:py-6 lg:px-8 lg:py-8">
-
-      {/* Header */}
-      <div className="flex w-full flex-col gap-2.5 border-b border-[#eadcb4] pb-5">
+    <div className="h-full w-full px-3 py-5 text-black sm:px-5 sm:py-6 lg:w-[70%] lg:px-8 lg:py-8">
+      <div className="flex w-full flex-col gap-2.5 border-b border-[#eadcb4] pb-6">
         <p
           className={
             currentLanguage === "en"
-              ? "mb-1 inline-flex w-fit items-center  border border-[#eadcb4] bg-[#fffaf0] px-4 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-[#8a6b12]"
-              : "mb-1 inline-flex w-fit items-center  border border-[#eadcb4] bg-[#fffaf0] px-4 py-1 text-sm font-semibold uppercase tracking-[0.22em] text-[#8a6b12]"
+              ? "mb-1 inline-flex w-fit items-center gap-1.5 border border-[#eadcb4] bg-[#fffaf0] px-3 py-1 text-[0.72rem] font-bold uppercase tracking-[0.2em] text-[#8a6b12]"
+              : "mb-1 inline-flex w-fit items-center gap-1.5 border border-[#eadcb4] bg-[#fffaf0] px-3 py-1 text-base font-bold uppercase text-[#8a6b12] sm:text-lg"
           }
         >
           {categoryName}
@@ -97,8 +95,8 @@ const BlogDetailClient = ({
         <h1
           className={
             currentLanguage === "en"
-              ? "text-2xl font-[Nunito] font-bold leading-tight text-black sm:text-3xl lg:text-4xl xl:text-5xl"
-              : "text-3xl font-[Nunito] font-bold leading-tight text-black sm:text-4xl lg:text-5xl xl:text-6xl"
+              ? "font-(family-name:--font-display) text-2xl font-black leading-tight text-black sm:text-3xl lg:text-4xl xl:text-5xl"
+              : "font-(family-name:--font-display) text-3xl font-black leading-tight text-black sm:text-4xl lg:text-5xl xl:text-6xl"
           }
         >
           {blog?.translations?.[idx]?.title || blog?.title || "Untitled"}
@@ -123,8 +121,8 @@ const BlogDetailClient = ({
                   key={tag?.id ?? tag}
                   className={
                     currentLanguage === "en"
-                      ? "w-fit  border border-[#eadcb4] bg-[#fffaf0] px-3 py-1 text-xs font-semibold uppercase tracking-widest text-[#8a6b12]"
-                      : "w-fit  border border-[#eadcb4] bg-[#fffaf0] px-3 py-1 text-sm font-semibold uppercase tracking-widest text-[#8a6b12]"
+                      ? "w-fit rounded-full border border-[#eadcb4] bg-[#fffaf0] px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-[#8a6b12]"
+                      : "w-fit rounded-full border border-[#eadcb4] bg-[#fffaf0] px-3 py-1 text-sm font-semibold uppercase text-[#8a6b12] sm:text-base"
                   }
                 >
                   {tagLabel(tag)}
@@ -152,8 +150,8 @@ const BlogDetailClient = ({
           <p
             className={
               currentLanguage === "en"
-                ? "mt-2  border-l-4 border-[#C9981A] bg-[#fffaf0] p-4 text-sm leading-7 italic text-black/70 shadow-sm sm:p-5 sm:text-base sm:leading-8"
-                : "mt-2  border-l-4 border-[#C9981A] bg-[#fffaf0] p-4 text-base leading-8 italic text-black/70 shadow-sm sm:p-5 sm:text-lg sm:leading-9"
+                ? "mt-2 rounded-r-xl border-l-4 border-[#C9981A] bg-[#fffaf0] p-4 text-sm leading-7 italic text-black/70 shadow-sm sm:p-5 sm:text-base sm:leading-8"
+                : "mt-2 rounded-r-xl border-l-4 border-[#C9981A] bg-[#fffaf0] p-4 text-base leading-8 italic text-black/70 shadow-sm sm:p-5 sm:text-lg sm:leading-9"
             }
           >
             "{blog.translations?.[idx]?.description || blog?.description}"
@@ -162,12 +160,12 @@ const BlogDetailClient = ({
 
         {/* Table of Contents */}
         {blocks.some((b) => b.type === "heading") && (
-          <div className="mt-8  border border-[#eadcb4] bg-[linear-gradient(180deg,#fff_0%,#faf6ec_100%)] p-4 shadow-[0_12px_32px_rgba(0,0,0,0.05)] sm:p-6">
+          <div className="mt-8 border border-[#eadcb4] bg-[linear-gradient(180deg,#fff_0%,#faf6ec_100%)] p-4 shadow-[0_12px_32px_rgba(0,0,0,0.05)] sm:p-6">
             <p
               className={
                 currentLanguage === "en"
                   ? "mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#8a6b12]"
-                  : "mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-[#8a6b12]"
+                  : "mb-2 text-base font-semibold uppercase text-[#8a6b12] sm:text-lg"
               }
             >
               Table of contents
@@ -222,8 +220,8 @@ const BlogDetailClient = ({
                       key={block.id ?? index}
                       className={
                         currentLanguage === "en"
-                          ? "py-2 text-sm leading-7 text-black/70 sm:text-base sm:leading-8 lg:text-lg"
-                          : "py-2 text-base leading-8 text-black/70 sm:text-lg sm:leading-9 lg:text-xl"
+                          ? "py-2 text-[1rem] leading-8 text-black/75 sm:text-[1.05rem]"
+                          : "py-2 text-[1.05rem] leading-8 text-black/75 sm:text-[1.1rem]"
                       }
                     >
                       {block.content}
@@ -251,7 +249,7 @@ const BlogDetailClient = ({
                   return block.content ? (
                     <div
                       key={block.id ?? index}
-                      className="my-6 h-fit overflow-hidden  border border-[#eadcb4] shadow-[0_12px_32px_rgba(0,0,0,0.08)] sm:my-8"
+                      className="my-6 h-fit overflow-hidden border border-[#eadcb4] shadow-[0_12px_32px_rgba(0,0,0,0.08)] sm:my-8"
                     >
                       <img
                         src={block.content}
@@ -266,7 +264,7 @@ const BlogDetailClient = ({
                   return (
                     <ul
                       key={block.id ?? index}
-                      className="mb-5 flex flex-col gap-3  border border-[#eadcb4] bg-[#fffdf7] p-4 space-y-3 px-3 py-3 shadow-sm sm:p-5"
+                      className="mb-5 flex flex-col gap-3 border border-[#eadcb4] bg-[#fffdf7] p-4 px-3 py-3 shadow-sm sm:p-5"
                     >
                       {(Array.isArray(block.content) ? block.content : []).map(
                         (item: string, i: number) => (
@@ -295,8 +293,8 @@ const BlogDetailClient = ({
                       key={block.id ?? index}
                       className={
                         currentLanguage === "en"
-                          ? "my-6  border-l-4 border-[#C9981A] bg-[#fffaf0] px-4 py-4 italic text-black/75 shadow-sm sm:my-8 sm:px-6 sm:py-5"
-                          : "my-6  border-l-4 border-[#C9981A] bg-[#fffaf0] px-4 py-4 text-lg sm:text-xl italic text-black/75 shadow-sm sm:my-8 sm:px-6 sm:py-5"
+                          ? "my-6 border-l-4 border-[#C9981A] bg-[#fffaf0] px-4 py-4 italic text-black/75 shadow-sm sm:my-8 sm:px-6 sm:py-5"
+                          : "my-6 border-l-4 border-[#C9981A] bg-[#fffaf0] px-4 py-4 text-lg italic text-black/75 shadow-sm sm:my-8 sm:px-6 sm:py-5 sm:text-xl"
                       }
                     >
                       {block.content}
@@ -307,7 +305,7 @@ const BlogDetailClient = ({
                   return (
                     <div
                       key={block.id ?? index}
-                      className="my-6  border border-[#eadcb4] bg-[#fffaf0] p-4 shadow-sm sm:my-8 sm:p-5"
+                      className="my-6 border border-[#eadcb4] bg-[#fffaf0] p-4 shadow-sm sm:my-8 sm:p-5"
                     >
                       <p
                         className={

@@ -1,143 +1,118 @@
 @import "tailwindcss";
 
-
-
 :root {
-  /* Brand */
   --color-primary: #fee685;
   --color-primary-hover: #c9981a;
-
   --color-background: #ffffff;
   --color-background-secondary: #dddbdb;
   --color-surface: #ffffff;
   --color-surface-dark: #1d1d1d;
-
-  --color-text-primary: #000000;
-  --color-text-secondary: #4b5563; /* gray-600 */
-  --color-text-muted: #9ca3af; /* gray-400 */
+  --color-text-primary: #1f1a14;
+  --color-text-secondary: #5d5548;
+  --color-text-muted: #8f856f;
   --color-text-inverse: #ffffff;
-  
-  --color-border: #6b7280; /* gray-500 */
-  --color-border-light: #d1d5db;
+  --color-border: #6b7280;
+  --color-border-light: #e8ddbf;
   --color-category-bg: #000000;
   --color-category-text: #ffffff;
   --color-focus: #3b82f6;
-  --color-active: #f59e0b; /* amber-500 */
-  --color-selected: #fbbf24; /* amber-400 */
+  --color-active: #f59e0b;
+  --color-selected: #fbbf24;
+  --font-display: "Comfortaa", "Nunito", "Segoe UI", sans-serif;
+  --font-body: "Nunito", "Segoe UI", sans-serif;
+  --shadow-card: 0 18px 45px rgba(17, 24, 39, 0.08);
+  --shadow-soft: 0 10px 30px rgba(17, 24, 39, 0.05);
+  --radius-card: 0;
+  --surface-card: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(252, 248, 240, 0.96) 100%);
 
   --blog-card-bg: var(--color-surface);
   --blog-card-border: var(--color-border);
   --blog-pagination-active-bg: var(--color-primary);
   --blog-pagination-active-text: #000000;
 }
+
 .dark {
   --color-background: #171512;
   --color-background-secondary: #4a4a4b;
   --color-surface: #1e293b;
   --color-surface-dark: #111827;
-
   --color-text-primary: #f8fafc;
   --color-text-secondary: #cbd5e1;
   --color-text-muted: #94a3b8;
   --color-text-inverse: #000000;
-
   --color-border: #475569;
   --color-border-light: #334155;
   --color-category-bg: #ffffff;
   --color-category-text: #000000;
   --color-primary: #fee685;
   --color-primary-hover: #c9981a;
-
   --color-focus: #60a5fa;
   --color-active: #fbbf24;
   --color-selected: #fcd34d;
-
   --blog-card-bg: var(--color-surface);
   --blog-card-border: var(--color-border);
   --blog-pagination-active-bg: var(--color-primary);
   --blog-pagination-active-text: #000000;
 }
 
-
-
-@font-face{
-    font-family:"Girls";
-    src: url("/fonts/PerfectGirl-SansSerif.otf") format("opentype");
+@font-face {
+  font-family: "Girls";
+  src: url("/fonts/PerfectGirl-SansSerif.otf") format("opentype");
 }
 
-@font-face{
-    font-family:"Tungsten";
-    src: url("/fonts/Tungsten-Book.otf") format("opentype");
+@font-face {
+  font-family: "Tungsten";
+  src: url("/fonts/Tungsten-Book.otf") format("opentype");
 }
 
-@font-face{
-    font-family:"Nunito";
-    src: url("/fonts/NunitoSans-VariableFont_YTLC,opsz,wdth,wght.ttf") format("truetype");
-    font-weight: 400;
+@font-face {
+  font-family: "Nunito";
+  src: url("/fonts/NunitoSans-VariableFont_YTLC,opsz,wdth,wght.ttf") format("truetype");
+  font-weight: 400;
 }
+
+@font-face {
+  font-family: "Comfortaa";
+  src: url("/fonts/Comfortaa-VariableFont_wght.ttf") format("truetype");
+  font-weight: 400;
+}
+
 ::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
-/* .heading{
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif 
-} */
-
-/*  */
-
-
-/* letter clamp */
-.text-outline-yellow {
-  -webkit-text-stroke: 2px #f1c810; /* Width and Color */
-  color: transparent; /* Makes the fill transparent so only the outline shows */
-  /* OR use a specific color for the fill, e.g., color: white; */
-}
-
-.text-outline-silver {
-  -webkit-text-stroke: 1px #7b7b7b; /* Width and Color */
-  background-clip: text;
-  background-color:#c7c7c6;
-  color: transparent; /* Makes the fill transparent so only the outline shows */
-  /* OR use a specific color for the fill, e.g., color: white; */
-}
-/* Hide the Google Translate widget */
-.goog-te-gadget {
-  display: none !important;
-}
-
-.goog-te-gadget-simple {
-  display: none !important;
-}
-
-#google_translate_element {
-  display: none !important;
-}
+.goog-te-gadget,
+.goog-te-gadget-simple,
+#google_translate_element,
 .skiptranslate {
   display: none !important;
 }
 
 body {
   top: 0 !important;
+  font-family: var(--font-body);
+  background: linear-gradient(180deg, #fffcf6 0%, #f7efe0 100%);
+  color: var(--color-text-primary);
+  line-height: 1.65;
 }
 
-/* Responsive root font size so rem-based Tailwind typography scales on devices */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+::selection {
+  background: rgba(254, 230, 133, 0.7);
+  color: #111827;
+}
+
 html {
   font-size: clamp(14px, 1.2vw + 12px, 18px);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
-
-
-
-/* @media (min-width: 1024px) {
-  .sorting::before {
-    content: "";
-    display: block;
-    width: 300px;
-    height: 1px;
-    background: black;
-    flex-shrink: 0;
-    margin-right: 45px;
-  }
-} */

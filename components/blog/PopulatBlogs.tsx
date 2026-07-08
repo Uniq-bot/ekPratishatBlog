@@ -1,26 +1,15 @@
 "use client";
 import { TrendingUp } from "lucide-react";
 import Link from "next/link";
-import type { BlogItem, BlogItems } from "@/types/blog";
+import type { BlogItem } from "@/types/blog";
 import { useTrackBlogView } from "@/hooks/useTrackViews";
 
-const PopularBlogs = ({
-  idx,
-  currentLanguage,
-  popularBlogs = [],
-}: {
-  idx: number;
-  currentLanguage: string;
-  popularBlogs?: BlogItem[];
-}) => {
+const PopularBlogs = ({ idx, currentLanguage, popularBlogs = [] }: { idx: number; currentLanguage: string; popularBlogs?: BlogItem[] }) => {
   if (popularBlogs.length === 0) return null;
 
   const trackView = useTrackBlogView();
 
-  const handleClick = (
-    e: React.MouseEvent<HTMLAnchorElement>,
-    blog: BlogItem,
-  ) => {
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, blog: BlogItem) => {
     e.preventDefault();
     trackView(blog);
   };
@@ -32,21 +21,10 @@ const PopularBlogs = ({
           <TrendingUp size={18} />
         </span>
         <div>
-          <p
-            className={
-              currentLanguage === "en"
-                ? "text-xs font-semibold uppercase tracking-[0.18em] text-[#8a6b12]"
-                : "text-base font-semibold uppercase  text-[#8a6b12]"
-            }
-          >
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8a6b12]">
             {currentLanguage === "en" ? "Trending Posts" : "ट्रेन्डिङ पोस्टहरू"}
           </p>
-          <h2 className={
-            currentLanguage === "en"
-              ? "text-lg font-bold text-black"
-              : "text-xl font-bold text-black"
-          }>
-            {" "}
+          <h2 className="text-lg font-black text-black">
             {currentLanguage === "en" ? "Popular Posts" : "लोकप्रिय पोस्टहरू"}
           </h2>
         </div>
@@ -63,13 +41,8 @@ const PopularBlogs = ({
             <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#f9efc5] text-sm font-semibold text-[#8a6b12]">
               {index + 1}
             </span>
-
             <div className="flex min-w-0 flex-1 flex-col">
-              <h3 className={
-                currentLanguage === "en"
-                  ? "line-clamp-2 text-sm leading-snug text-black transition-colors group-hover:text-[#7a5a09] sm:text-[15px]"
-                  : "line-clamp-2 text-base leading-snug text-black transition-colors group-hover:text-[#7a5a09] sm:text-[20px]"
-              }>
+              <h3 className="line-clamp-2 text-sm leading-snug text-black transition-colors group-hover:text-[#7a5a09] sm:text-[15px]">
                 {blog.translations?.[idx]?.title || blog.title}
               </h3>
             </div>

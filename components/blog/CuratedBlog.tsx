@@ -5,76 +5,55 @@ import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 
-const CuratedBlog = ({
-  idx,
-  currentLanguage,
-  curatedBlog,
-}: {
-  idx: number;
-  currentLanguage: string;
-  curatedBlog: BlogItem | any;
-}) => {
+const CuratedBlog = ({ idx, currentLanguage, curatedBlog }: { idx: number; currentLanguage: string; curatedBlog: BlogItem | any }) => {
   if (!curatedBlog) return null;
 
   const trackView = useTrackBlogView();
+  const description = curatedBlog?.translations?.[idx]?.description || "";
 
-  const handleClick = async (e: React.MouseEvent) => {
+  const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
-
     trackView(curatedBlog);
   };
 
-  const description = curatedBlog?.translations?.[idx]?.description || "";
-
   return (
-    <div
-      onClick={handleClick}
-      className="group relative h-full w-full cursor-pointer overflow-hidden bg-black"
-    >
+    <div onClick={handleClick} className="group relative h-full w-full cursor-pointer overflow-hidden bg-black">
       <Image
         src={curatedBlog?.coverImage || "/Ad1.png"}
-        alt="Ad"
+        alt="Featured story"
         width={1000}
         height={1000}
         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
       />
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.04)_0%,rgba(0,0,0,0.08)_42%,rgba(0,0,0,0.72)_100%)]" />
-      <div className="absolute bottom-0 left-0 right-0 z-10 p-2 flex flex-col gap-1 sm:p-5 lg:p-6">
-        <p
-          className={
-            currentLanguage === "en"
-              ? "inline-flex w-fit rounded-full border border-white/30 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-white backdrop-blur-sm"
-              : "inline-flex w-fit rounded-full border border-white/30 bg-white/10 px-3 py-1 text-sm font-semibold uppercase tracking-[0.2em] text-white backdrop-blur-sm"
-          }
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.05)_0%,rgba(0,0,0,0.12)_42%,rgba(0,0,0,0.76)_100%)]" />
+      <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col gap-2 p-3 sm:p-5 lg:p-6">
+        <span
+          className={`inline-flex w-fit border border-white/30 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase text-white backdrop-blur-sm ${
+            currentLanguage === "en" ? "tracking-[0.2em]" : "tracking-normal"
+          }`}
         >
           {currentLanguage === "en" ? "FEATURED STORY" : "विशेष कथा"}
-        </p>
+        </span>
         <h1
-          className={
+          className={`max-w-2xl line-clamp-2 font-black leading-tight text-white ${
             currentLanguage === "en"
-              ? "max-w-2xl text-md line-clamp-2 font-black leading-tight text-white sm:text-3xl lg:text-5xl"
-              : "max-w-2xl text-lg line-clamp-2 font-black leading-tight text-white sm:text-4xl lg:text-6xl"
-          }
+              ? "text-lg sm:text-3xl lg:text-5xl"
+              : "text-[1.35rem] sm:text-[2.25rem] lg:text-[3.25rem]"
+          }`}
         >
           {curatedBlog?.translations?.[idx]?.title || curatedBlog?.title}
         </h1>
         <p
-          className={
-            currentLanguage === "en"
-              ? "max-w-2xl text-sm leading-6 line-clamp-2 lg:line-clamp-10 text-gray-100 sm:text-base"
-              : "max-w-2xl text-base leading-7 line-clamp-2 lg:line-clamp-10 text-gray-100 sm:text-lg"
-          }
+          className={`max-w-2xl line-clamp-3 leading-6 text-gray-100 ${
+            currentLanguage === "en" ? "text-sm sm:text-base" : "text-base sm:text-lg lg:text-xl"
+          }`}
         >
-          {description.length > 100
-            ? description.substring(0, 300) + "..."
-            : description}
+          {description.length > 100 ? `${description.substring(0, 280)}...` : description}
         </p>
         <div
-          className={
-            currentLanguage === "en"
-              ? "mt-4 lg:inline-flex hidden items-center gap-2 text-sm font-semibold text-white"
-              : "mt-4 lg:inline-flex hidden items-center gap-2 text-base font-semibold text-white"
-          }
+          className={`mt-2 hidden items-center gap-2 font-semibold text-white lg:inline-flex ${
+            currentLanguage === "en" ? "text-sm" : "text-base sm:text-lg"
+          }`}
         >
           {currentLanguage === "en" ? "Read More" : "थप पढ्नुहोस्"}
           <ArrowRight size={16} />

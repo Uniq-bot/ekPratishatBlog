@@ -16,6 +16,19 @@ const CategoryNav = ({
 
   const currentCategory = searchParams.get("category");
   const pathname = usePathname();
+
+  const buildCategoryHref = (slug?: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (slug) {
+      params.set("category", slug);
+    } else {
+      params.delete("category");
+    }
+    params.delete("page");
+
+    return params.toString() ? `${pathname}?${params.toString()}` : pathname;
+  };
+
   return (
     <section className=" border-b border-[#e7d6ab] bg-white/95 p-4  sm:p-5">
       <div className="mb-3 flex items-center justify-between gap-3">
@@ -42,8 +55,8 @@ const CategoryNav = ({
         <span
           className={
             currentLanguage === "en"
-              ? "rounded-full border border-[#eadcb4] bg-[#fffaf0] px-3 py-1 text-xs font-semibold text-black"
-              : "rounded-full border border-[#eadcb4] bg-[#fffaf0] px-3 py-1 text-sm font-semibold text-black"
+              ? " border border-[#eadcb4] bg-[#fffaf0] px-3 py-1 text-xs font-semibold text-black"
+              : " border border-[#eadcb4] bg-[#fffaf0] px-3 py-1 text-sm font-semibold text-black"
           }
         >
           {currentLanguage === "en"
@@ -55,8 +68,8 @@ const CategoryNav = ({
       <div className="flex gap-2 overflow-x-auto pb-1">
         <Link
           scroll={false}
-          href={pathname}
-          className={`shrink-0 rounded-full border px-4 py-2 font-semibold transition-colors ${
+          href={buildCategoryHref()}
+          className={`shrink-0  border px-4 py-2 font-semibold transition-colors ${
             currentLanguage === "en" ? "text-sm" : "text-base"
           } ${
             !currentCategory
@@ -70,8 +83,8 @@ const CategoryNav = ({
           <Link
             key={category.id}
             scroll={false}
-            href={`${pathname}?category=${category.slug}`}
-            className={`shrink-0 whitespace-nowrap rounded-full border px-4 py-2 font-semibold transition-colors ${
+            href={buildCategoryHref(category.slug)}
+            className={`shrink-0 whitespace-nowrap  border px-4 py-2 font-semibold transition-colors ${
               currentLanguage === "en" ? "text-sm" : "text-base"
             } ${
               currentCategory === category.slug
