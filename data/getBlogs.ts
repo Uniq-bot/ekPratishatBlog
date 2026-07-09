@@ -32,7 +32,7 @@ const serializeTag = (tag: any, language = "en") => {
 export const getBlogs = unstable_cache(
   async ({
     page = 1,
-    limit = 10,
+    limit = 4,
     category,
     tag,
     sort = "latest",

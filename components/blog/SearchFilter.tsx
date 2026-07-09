@@ -23,15 +23,40 @@ const SearchFilter = ({ category, tag, search = "", currentLanguage = "en" }: Se
 
   useEffect(() => {
     const timer = setTimeout(() => {
+      const queryValue = query.trim();
+      const currentSearch = searchParams.get("search") ?? "";
+      const currentCategory = searchParams.get("category") ?? "";
+      const currentTag = searchParams.get("tag") ?? "";
+      const targetCategory = category ?? "";
+      const targetTag = tag ?? "";
+
+      const isSearchSame = currentSearch === queryValue;
+      const isCategorySame = currentCategory === targetCategory;
+      const isTagSame = currentTag === targetTag;
+
+      if (isSearchSame && isCategorySame && isTagSame) {
+        return;
+      }
+
       const params = new URLSearchParams(searchParams.toString());
-      if (query.trim()) {
-        params.set("search", query.trim());
+      if (queryValue) {
+        params.set("search", queryValue);
       } else {
         params.delete("search");
       }
 
-      if (category) params.set("category", category);
-      if (tag) params.set("tag", tag);
+      if (category) {
+        params.set("category", category);
+      } else {
+        params.delete("category");
+      }
+
+      if (tag) {
+        params.set("tag", tag);
+      } else {
+        params.delete("tag");
+      }
+
       params.delete("page");
 
       const nextUrl = params.toString() ? `${pathname}?${params.toString()}` : pathname;

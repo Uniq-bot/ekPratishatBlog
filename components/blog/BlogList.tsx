@@ -2,7 +2,7 @@
 import React from "react";
 import BlogCard from "./BlogCard";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 interface Props {
   blogs: any[];
@@ -31,6 +31,7 @@ const BlogList = ({
 }: Props) => {
   const totalPages = Math.ceil(totalCount / limit);
   const router = useRouter();
+  const pathname = usePathname();
   const isEnglish = currentLanguage === "en";
 
   const updateParam = (key: string, value: string) => {
@@ -46,17 +47,19 @@ const BlogList = ({
     params.delete("page");
 
     const qs = params.toString();
-    const url = qs ? `?${qs}` : "?";
+    const url = qs ? `${pathname}?${qs}` : pathname;
     router.push(url, { scroll: false });
   };
 
   const buildUrl = (newPage: number) => {
     const params = new URLSearchParams();
     if (category) params.set("category", category);
+    if (tag) params.set("tag", tag);
+    if (sort && sort !== "latest") params.set("sort", sort);
     if (search) params.set("search", search);
     if (newPage > 1) params.set("page", String(newPage));
     const qs = params.toString();
-    return qs ? `?${qs}` : "?";
+    return qs ? `${pathname}?${qs}` : pathname;
   };
 
   return (
@@ -106,6 +109,7 @@ const BlogList = ({
           {page > 1 && (
             <Link
               href={buildUrl(page - 1)}
+              scroll={false}
               className="rounded-full border border-[#c9981a] px-4 py-2 text-sm font-semibold transition-colors hover:bg-[#c9981a] hover:text-black"
             >
               {isEnglish ? "Previous" : "अघिल्लो"}
@@ -116,6 +120,8 @@ const BlogList = ({
             const pageNum = i + 1;
             return (
               <Link
+              scroll={false}
+
                 key={pageNum}
                 href={buildUrl(pageNum)}
                 className={`border px-4 py-2 text-sm font-semibold transition-colors ${
@@ -132,6 +138,7 @@ const BlogList = ({
           {page < totalPages && (
             <Link
               href={buildUrl(page + 1)}
+              scroll={false}
               className="rounded-full border border-[#c9981a] px-4 py-2 text-sm font-semibold transition-colors hover:bg-[#c9981a] hover:text-black"
             >
               {isEnglish ? "Next" : "अर्को"}
