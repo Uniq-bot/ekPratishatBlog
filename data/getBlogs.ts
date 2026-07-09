@@ -96,7 +96,7 @@ export const getBlogs = unstable_cache(
         prisma.blogPost.count({ where }),
       ]);
 
-      return { posts: serializeBlogList(blogs), totalCount };
+      return { posts: serializeBlogList(blogs), totalCount, _source: "db", _fetchedAt: Date.now() };
     } catch (err) {
       if (process.env.NODE_ENV !== "production") {
         console.error("BLOG FETCH ERROR:", err);

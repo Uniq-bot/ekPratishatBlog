@@ -16,9 +16,8 @@ import { Metadata } from "next";
 
 
 
-export const getBlog = (slug: string) =>
-  unstable_cache(
-    async () => {
+export const getBlog = unstable_cache(
+   async (slug: string) => {
       const blog = await prisma.blogPost.findFirst({
         where: { slug },
         include: {
@@ -30,14 +29,11 @@ export const getBlog = (slug: string) =>
 
       return blog ? serializeBlogPost(blog) : null;
     },
-    [`blog-${slug}`],
-    {
-      tags: [`blog-${slug}`],
-      revalidate: 86400,
-    },
-  )();
+  ["blog"],
+  { tags: ["blog"], revalidate: 86400 },
+);
 
-  export async function generateMetadata({
+export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
