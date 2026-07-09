@@ -114,7 +114,7 @@ const BlogCard = ({ blog, idx = 0, currentLanguage = "en" }: { blog: any; idx?: 
         </div>
 
         <h2
-          className={`font-[family-name:var(--font-display)] line-clamp-2 text-sm  leading-snug text-[#1d1d1d] transition-colors group-hover:text-[#7a5a09] ${
+          className={`font-(family-name:--font-display) line-clamp-2 text-sm  leading-snug text-[#1d1d1d] transition-colors group-hover:text-[#7a5a09] ${
             isEnglish ? "sm:text-lg font-bold " : "text-[20px] sm:text-2xl"
           }`}
         >

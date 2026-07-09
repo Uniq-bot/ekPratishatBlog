@@ -9,7 +9,7 @@ function Subscriber() {
     <div className="bg-white relative z-20 shadow border overflow-hidden ">
      
       <div className="overflow-x-auto w-full">
-        <table className="w-full min-w-[640px]">
+        <table className="w-full min-w-160">
           <thead className="bg-[#DBDBB8]">
             <tr>
               <th className="px-4 py-3 ">#</th>
