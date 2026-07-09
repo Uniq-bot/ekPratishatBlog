@@ -336,12 +336,14 @@ const BlogDetailClient = ({
                       className="my-12 flex items-center gap-4"
                     >
                       <div className="h-px flex-1 bg-[#eadcb4]" />
-                      <Image
+                      <div className="flex h-10 w-10 lg:w-15  object-cover items-center justify-center ">
+                        <Image
                         src="/logo.png"
                         alt="Blog logo"
-                        width={70}
-                        height={40}
+                        width={100}
+                        height={100}
                       />
+                        </div>
                       <div className="h-px flex-1 bg-[#eadcb4]" />
                     </div>
                   );
