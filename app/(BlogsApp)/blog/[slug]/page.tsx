@@ -3,7 +3,7 @@ import RelatedBlogs from "@/components/blog/RelatedBlogs";
 import BackButton from "@/components/blog/BackButton";
 import { prisma } from "@/libs/prisma";
 import { notFound } from "next/navigation";
-import { serializeBlogPost } from "@/services/blogs.services";
+import { getLatestBlogs, serializeBlogPost } from "@/services/blogs.services";
 import { unwrapApiResponse } from "@/libs/api";
 
 interface Props {
@@ -133,7 +133,7 @@ export const getRelatedBlogs = (
           createdAt: "desc",
         },
         include: {
-          category: true,
+           category: { include: { translations: true } },
           translations: true,
           tagLinks: { include: { tag: true } },
         },
@@ -154,9 +154,8 @@ export default async function BlogDets({ params }: Props) {
   if (!blog) {
     notFound();
   }
-
+  
   const resolvedBlog = blog as any;
-
   const relatedBlogs = (await getRelatedBlogs(
     resolvedBlog.categoryID ?? resolvedBlog.category?.id ?? "",
     slug,
@@ -182,7 +181,7 @@ export default async function BlogDets({ params }: Props) {
       <BackButton slug={slug} />
       <div className="w-full relative flex flex-col lg:flex-row justify-between px-0 sm:px-2 lg:px-2 py-3 sm:py-5 gap-4 sm:gap-6 lg:gap-8">
         <BlogDetailClient blog={resolvedBlog} comments={comments} />
-        <RelatedBlogs relatedBlogs={relatedBlogs ? relatedBlogs : []} />
+        <RelatedBlogs blog={resolvedBlog} slug={slug} relatedBlogs={relatedBlogs ? relatedBlogs : []} />
       </div>
     </div>
   );

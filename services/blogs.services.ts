@@ -57,7 +57,6 @@ export const serializeBlogPost = (post: any, language = "en") => {
     ? post.category.translations.find((item: any) => item?.language === normalizeLanguage(language)) || post.category.translations[0]
     : null;
   const categoryName = categoryTranslation?.name ?? post?.category?.name ?? post?.category?.slug ?? "";
-
   const tags = (post?.tagLinks ?? []).map((link: any) => {
     const tag = link?.tag ?? link;
     const tagTranslation = Array.isArray(tag?.translations)

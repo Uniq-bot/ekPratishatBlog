@@ -28,17 +28,17 @@ const CuratedBlog = ({ idx, currentLanguage, curatedBlog }: { idx: number; curre
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.05)_0%,rgba(0,0,0,0.12)_42%,rgba(0,0,0,0.76)_100%)]" />
       <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col gap-2 p-3 sm:p-5 lg:p-6">
         <span
-          className={`inline-flex w-fit border border-white/30 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase text-white backdrop-blur-sm ${
-            currentLanguage === "en" ? "tracking-[0.2em]" : "tracking-normal"
+          className={`inline-flex w-fit border border-white/30 bg-white/10 px-3 py-1  font-semibold uppercase text-white backdrop-blur-sm ${
+            currentLanguage === "en" ? "tracking-[0.2em]" : "tracking-normal text-[20px]"
           }`}
         >
           {currentLanguage === "en" ? "FEATURED STORY" : "विशेष कथा"}
         </span>
         <h1
-          className={`max-w-2xl line-clamp-2 font-black leading-tight text-white ${
+          className={`max-w-2xl line-clamp-3  leading-tight text-white ${
             currentLanguage === "en"
-              ? "text-lg sm:text-3xl lg:text-5xl"
-              : "text-[1.35rem] sm:text-[2.25rem] lg:text-[3.25rem]"
+              ? "text-lg sm:text-3xl lg:text-4xl font-black"
+              : "text-[1.35rem] sm:text-[2.25rem] lg:text-[3rem] font-semibold"
           }`}
         >
           {curatedBlog?.translations?.[idx]?.title || curatedBlog?.title}

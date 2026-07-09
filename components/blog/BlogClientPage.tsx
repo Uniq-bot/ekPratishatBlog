@@ -72,10 +72,10 @@ const BlogClientPage = ({
           </div>
 
           <div className="grid gap-4 md:gap-6 lg:grid-cols-[1.3fr_0.7fr] lg:items-stretch">
-            <div className="overflow-hidden rounded-[1.25rem] border border-[#eadcb4] bg-white shadow-[0_18px_45px_rgba(15,23,42,0.06)]">
+            <div className="overflow-hidden  border border-[#eadcb4] bg-white shadow-[0_18px_45px_rgba(15,23,42,0.06)]">
               <CuratedBlog idx={idx} currentLanguage={currentLanguage} curatedBlog={curatedBlog} />
             </div>
-            <div className="rounded-[1.25rem] border border-[#eadcb4] bg-white/95 shadow-[0_18px_45px_rgba(15,23,42,0.06)]">
+            <div className=" border border-[#eadcb4] bg-white/95 shadow-[0_18px_45px_rgba(15,23,42,0.06)]">
               <PopularBlogs idx={idx} currentLanguage={currentLanguage} popularBlogs={popularBlogs?.posts ?? []} />
             </div>
           </div>
@@ -101,13 +101,12 @@ const BlogClientPage = ({
 
       <div className="w-full px-4 pb-12 sm:px-6 lg:px-8">
         <div className="mx-auto flex max-w-7xl flex-col gap-8">
-          {BannerAds && (
+          {BannerAds ? (
             <div className="relative h-20 w-full overflow-hidden border border-[#eadcb4] bg-white/90 shadow-[0_18px_45px_rgba(15,23,42,0.06)] md:h-40">
               <BannerAd BannerAds={BannerAds} />
             </div>
-          )}
-
-          <div className="border border-[#eadcb4] bg-white/90 p-5 shadow-[0_18px_45px_rgba(15,23,42,0.06)] sm:p-6 lg:p-7">
+          ) : (
+            <div className="border border-[#eadcb4] bg-white/90 p-5 shadow-[0_18px_45px_rgba(15,23,42,0.06)] sm:p-6 lg:p-7">
             <p className={`font-semibold uppercase text-[#8a6b12] ${isEnglish ? "text-sm tracking-[0.18em]" : "text-base tracking-normal"}`}>
               {isEnglish ? "BLOGS / GUIDES" : "ब्लगहरू / मार्गदर्शनहरू"}
             </p>
@@ -128,6 +127,9 @@ const BlogClientPage = ({
             
             </div>
           </div>
+          )}
+
+          
 
           <div className="flex flex-col gap-5">
             <SearchFilter category={category} tag={tag} search={search} idx={idx} currentLanguage={currentLanguage} />

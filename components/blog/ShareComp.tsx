@@ -60,7 +60,7 @@ const ShareComp = ({ blogTitle, blogSlug }: { blogTitle: string; blogSlug: strin
     }
   };
   return (
-     <div className="mt-12 border-t pt-6">
+     <div className=" pt-6 px-5">
   <div className="mb-4 flex items-center gap-2">
     <Share2 className="text-[#79570E]" size={20} />
     <h3 className="font-semibold text-lg">Share this post</h3>
@@ -72,7 +72,6 @@ const ShareComp = ({ blogTitle, blogSlug }: { blogTitle: string; blogSlug: strin
       className="flex items-center gap-2 rounded-md border px-4 py-2 transition hover:bg-blue-600 hover:text-white"
     >
       <FaFacebook size={18} />
-      Facebook
     </button>
 
     <button
@@ -80,7 +79,6 @@ const ShareComp = ({ blogTitle, blogSlug }: { blogTitle: string; blogSlug: strin
       className="flex items-center gap-2 rounded-md border px-4 py-2 transition hover:bg-black hover:text-white"
     >
       <BsTwitterX size={18} />
-      X
     </button>
 
     <button
@@ -88,7 +86,6 @@ const ShareComp = ({ blogTitle, blogSlug }: { blogTitle: string; blogSlug: strin
       className="flex items-center gap-2 rounded-md border px-4 py-2 transition hover:bg-blue-700 hover:text-white"
     >
       <LiaLinkedinIn size={18} />
-      LinkedIn
     </button>
 
      <button
@@ -96,14 +93,12 @@ const ShareComp = ({ blogTitle, blogSlug }: { blogTitle: string; blogSlug: strin
       className="flex items-center gap-2 rounded-md border px-4 py-2 transition hover:bg-green-500 hover:text-white"
     >
       <FaWhatsapp size={18} />
-      WhatsApp
     </button>
      <button
       onClick={shareReddit}
       className="flex items-center gap-2 rounded-md border px-4 py-2 transition hover:bg-green-500 hover:text-white"
     >
       <FaReddit size={18} />
-      Reddit
     </button>
 
     <button
@@ -111,7 +106,6 @@ const ShareComp = ({ blogTitle, blogSlug }: { blogTitle: string; blogSlug: strin
       className="flex items-center gap-2 rounded-md border px-4 py-2 transition hover:bg-gray-200"
     >
       <Copy  size={18} />
-      Copy Link
     </button>
   </div>
 </div>

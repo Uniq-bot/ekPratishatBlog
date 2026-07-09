@@ -95,8 +95,8 @@ const BlogDetailClient = ({
         <h1
           className={
             currentLanguage === "en"
-              ? "font-(family-name:--font-display) text-2xl font-black leading-tight text-black sm:text-3xl lg:text-4xl xl:text-5xl"
-              : "font-(family-name:--font-display) text-3xl font-black leading-tight text-black sm:text-4xl lg:text-5xl xl:text-6xl"
+              ? "font-(family-name:--font-display) text-2xl font-black leading-tight text-black sm:text-3xl lg:text-4xl xl:text-4xl"
+              : "font-(family-name:--font-display) text-2xl font-black leading-tight text-black sm:text-4xl lg:text-4xl xl:text-4xl"
           }
         >
           {blog?.translations?.[idx]?.title || blog?.title || "Untitled"}
@@ -353,7 +353,9 @@ const BlogDetailClient = ({
           })()}
         </div>
 
-        <ShareComp blogTitle={blog.title} blogSlug={blog.slug} />
+        <span className="block lg:hidden">
+          <ShareComp blogTitle={blog.title} blogSlug={blog.slug} />
+        </span>
         <BlogComments blogId={blog.id} slug={blog.slug} comments={comments} />
       </div>
     </div>

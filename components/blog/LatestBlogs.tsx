@@ -49,16 +49,20 @@ const LatestBlogs = ({ idx, latestBlogs = [], ads }: { idx: number; latestBlogs?
             <Calendar size={14} />
             {new Date(featuredBlog?.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
           </div>
-          <h3 className="font-[family-name:var(--font-display)] text-lg font-semibold leading-tight text-black transition-colors group-hover:text-[#7a5a09] sm:text-[1.65rem]">
+          <h3 className="font-(family-name:--font-display) text-lg font-semibold leading-tight text-black transition-colors group-hover:text-[#7a5a09] sm:text-[1.4rem]">
             {featuredBlog?.translations?.[idx]?.title || featuredBlog?.title}
           </h3>
           <p className="max-w-2xl text-sm leading-7 text-[#5f5743] sm:text-[15px]">
             {featuredBlog?.translations?.[idx]?.description || featuredBlog?.discription || "A fresh story from our latest collection."}
           </p>
-          <div className="mt-1 flex items-center gap-2 text-sm font-semibold text-[#8a6b12]">
-            Read story
-            <ArrowRight size={16} />
-          </div>
+          <div
+                   className={`mt-2 hidden items-center gap-2  text-black lg:inline-flex ${
+                     idx === 0 ? "text-sm" : "text-base sm:text-lg"
+                   }`}
+                 >
+                   {idx === 0 ? "Read More" : "थप पढ्नुहोस्"}
+                   <ArrowRight size={16} />
+                 </div>
         </div>
       </Link>
 
