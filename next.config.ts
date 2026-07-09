@@ -5,14 +5,14 @@ const nextConfig: NextConfig = {
     turbopackFileSystemCacheForDev: true,
   },
 
-  allowedDevOrigins: ["192.168.56.1", "192.168.1.70"],
-
   images: {
     remotePatterns: [
+      { protocol: "https", hostname: "res.cloudinary.com" },
       { protocol: "https", hostname: "picsum.photos" },
-      { protocol: "https", hostname: "example.com" },
-      { protocol: "http", hostname: "**" },
-      { protocol: "https", hostname: "**" },
+       {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+      },
     ],
   },
 };

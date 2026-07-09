@@ -105,7 +105,9 @@ export async function POST(req: Request) {
       { status: 201 },
     );
   } catch (err: any) {
-    console.error("CREATE BLOG ERROR:", err);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("CREATE BLOG ERROR:", err);
+    }
 
     return NextResponse.json(
       {

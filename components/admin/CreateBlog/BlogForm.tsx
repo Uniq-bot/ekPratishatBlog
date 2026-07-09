@@ -117,15 +117,16 @@ const handleImageReplace = async (
 ) => {
   try {
     const image = await uploadImageMutate(file);
-console.log("Uploaded image:", image);
     updateBlock(block.id, {
       content: image.imagePath,
     });
   } catch (err) {
-    console.error(
-      "Failed to replace image:",
-      err,
-    );
+    if (process.env.NODE_ENV !== "production") {
+      console.error(
+        "Failed to replace image:",
+        err,
+      );
+    }
   }
 };
   const updateListItem = (

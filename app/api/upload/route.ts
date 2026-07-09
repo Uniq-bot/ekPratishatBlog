@@ -39,7 +39,9 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ imagePath }, { status: 200 });
   } catch (error) {
-    console.error("Image Upload Error:", error);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Image Upload Error:", error);
+    }
     return NextResponse.json(
       { message: "Failed to upload image" },
       { status: 500 },

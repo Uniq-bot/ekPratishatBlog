@@ -59,7 +59,9 @@ export async function proxy(request: NextRequest) {
         },
       });
     } catch (error) {
-      console.error("Token verification failed:", error);
+      if (process.env.NODE_ENV !== "production") {
+        console.error("Token verification failed:", error);
+      }
       return NextResponse.json(
         { message: "Unauthorized: Token verification failed" },
         { status: 401 },

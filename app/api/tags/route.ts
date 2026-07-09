@@ -6,7 +6,9 @@ export async function GET() {
     const tags = await getAllTags();
     return NextResponse.json(tags, { status: 200 });
   } catch (err) {
-    console.error("Error fetching tags:", err);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Error fetching tags:", err);
+    }
     return NextResponse.json(
       { message: "Failed to fetch tags" },
       { status: 500 },
@@ -51,7 +53,9 @@ export async function POST(req: Request) {
         { status: 409 },
       );
     }
-    console.error("Error creating tag:", err);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Error creating tag:", err);
+    }
     return NextResponse.json(
       { message: "Failed to create tag" },
       { status: 500 },

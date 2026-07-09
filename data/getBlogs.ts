@@ -98,7 +98,9 @@ export const getBlogs = unstable_cache(
 
       return { posts: serializeBlogList(blogs), totalCount };
     } catch (err) {
-      console.error("BLOG FETCH ERROR:", err);
+      if (process.env.NODE_ENV !== "production") {
+        console.error("BLOG FETCH ERROR:", err);
+      }
       return { posts: [], totalCount: 0 };
     }
   },
@@ -125,7 +127,9 @@ export const getLatestBlogs = unstable_cache(
 
       return { posts: serializeBlogList(blogs) };
     } catch (err) {
-      console.error("INITIAL LATEST FETCH ERROR:", err);
+      if (process.env.NODE_ENV !== "production") {
+        console.error("INITIAL LATEST FETCH ERROR:", err);
+      }
       return { posts: [] };
     }
   },
@@ -182,7 +186,9 @@ export const getPopularBlogs = unstable_cache(
 
       return { posts: serializeBlogList(blogs) };
     } catch (err) {
-      console.error("POPULAR BLOGS FETCH ERROR:", err);
+      if (process.env.NODE_ENV !== "production") {
+        console.error("POPULAR BLOGS FETCH ERROR:", err);
+      }
       return { posts: [] };
     }
   },
@@ -230,7 +236,9 @@ export const getAds = unstable_cache(
       });
       return threeAds;
     } catch (error) {
-      console.error("ADS FETCH ERROR:", error);
+      if (process.env.NODE_ENV !== "production") {
+        console.error("ADS FETCH ERROR:", error);
+      }
       return [];
     }
   },

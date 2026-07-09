@@ -14,7 +14,6 @@ export const createAdvertisement = async (formData: FormData) => {
     const imageFile = formData.get("image") as File;
     // const isAdRunning = formData.get("isAdRunning") === "on";
 
-    console.log(formData);
     if (!title || !description || !imageFile) {
       throw new Error("Title, description and image are required");
     }
@@ -50,12 +49,13 @@ export const createAdvertisement = async (formData: FormData) => {
         // isAdRunning:false,
       },
     });
-    console.log(ad);
     revalidatePath("/admin");
     revalidateTag("ads", "max");
     return ad;
   } catch (error) {
-    console.error("Error creating the ad", error);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Error creating the ad", error);
+    }
     throw new Error("We could not create the advertisement right now.");
   }
 };
@@ -127,7 +127,9 @@ export const updateAd = async (formData: FormData) => {
 
     return updatedAd;
   } catch (error) {
-    console.error("Error updating ad:", error);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Error updating ad:", error);
+    }
     throw new Error("We could not update the advertisement right now.");
   }
 };
@@ -136,13 +138,14 @@ export const deleteAd = async (adId: string) => {
     await prisma.advertisement.delete({
       where: { id: adId },
     });
-    console.log("deleted");
     revalidateTag("ads", "max");
 
     revalidatePath("/admin");
     revalidatePath("/");
   } catch (error) {
-    console.log("Error deleting the ad", error);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Error deleting the ad", error);
+    }
     throw new Error("We could not delete the advertisement right now.");
   }
 };
@@ -187,7 +190,9 @@ export const setAdStatus = async ({
     revalidatePath("/admin");
     revalidatePath("/");
   } catch (error) {
-    console.error("Error setting ad status:", error);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Error setting ad status:", error);
+    }
     throw new Error("We could not update the advertisement status right now.");
   }
 };

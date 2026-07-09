@@ -13,7 +13,6 @@ import { useState } from "react";
 
 const ManageBlogs = () => {
   const { data: blogs, isLoading } = useGetAdminBlogs();
-  console.log(blogs)
   const { mutate: ToggleArchiveBlog, isPending: isArchiving } =
     useToggleArchiveBlog();
   const [actionId, setActionId] = useState<string | null>(null);

@@ -207,7 +207,9 @@ const TranslatePage = () => {
           try {
             sessionStorage.setItem(STORAGE_KEY, JSON.stringify(blogData));
           } catch (err) {
-            console.error("Failed to persist blog to sessionStorage", err);
+            if (process.env.NODE_ENV !== "production") {
+              console.error("Failed to persist blog to sessionStorage", err);
+            }
           }
         } else {
           try {
@@ -220,11 +222,15 @@ const TranslatePage = () => {
               }
             }
           } catch (err) {
-            console.error("Failed to read persisted blog from sessionStorage", err);
+            if (process.env.NODE_ENV !== "production") {
+              console.error("Failed to read persisted blog from sessionStorage", err);
+            }
           }
         }
       } catch (err) {
-        console.error("Failed to fetch onboarding blog", err);
+        if (process.env.NODE_ENV !== "production") {
+          console.error("Failed to fetch onboarding blog", err);
+        }
       } finally {
         if (isMounted) {
           setHydrated(true);
@@ -332,7 +338,9 @@ const TranslatePage = () => {
       const image = await uploadImageMutate(file);
       updateEnglishBlock(index, { content: image.imagePath });
     } catch (err) {
-      console.error("Failed to replace image:", err);
+      if (process.env.NODE_ENV !== "production") {
+        console.error("Failed to replace image:", err);
+      }
     }
   };
 
@@ -462,7 +470,6 @@ const TranslatePage = () => {
       });
 
       const data = await response.json().catch(() => ({}));
-      console.log(data)
       if (!response.ok) {
         throw new Error(data.message || "Failed to save translation");
       }
@@ -470,7 +477,9 @@ const TranslatePage = () => {
       setSuccessMsg("Translation saved successfully!");
       router.push("/admin");
     } catch (error: any) {
-      console.error("Translation save failed", error);
+      if (process.env.NODE_ENV !== "production") {
+        console.error("Translation save failed", error);
+      }
       setSubmitError(error.message || "Failed to save translation");
     } finally {
       setIsSavingTranslation(false);

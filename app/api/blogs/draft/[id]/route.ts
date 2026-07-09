@@ -31,7 +31,9 @@ export async function DELETE(
       try {
         await unlink(filePath);
       } catch (err) {
-        console.error("Failed to delete draft cover image:", err);
+        if (process.env.NODE_ENV !== "production") {
+          console.error("Failed to delete draft cover image:", err);
+        }
       }
     }
 
@@ -45,7 +47,9 @@ export async function DELETE(
       { status: 200 }
     );
   } catch (err: any) {
-    console.error("DELETE DRAFT ERROR:", err);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("DELETE DRAFT ERROR:", err);
+    }
     return NextResponse.json(
       { message: "Internal server error", error: err?.message },
       { status: 500 }
@@ -149,7 +153,9 @@ export async function PATCH(
       data: serializeBlogPost(updatedDraft),
     });
   } catch (err: any) {
-    console.error(err);
+    if (process.env.NODE_ENV !== "production") {
+      console.error(err);
+    }
 
     return NextResponse.json(
       {

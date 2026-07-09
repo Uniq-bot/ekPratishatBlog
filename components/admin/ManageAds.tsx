@@ -20,7 +20,9 @@ function ManageAds({ advertisements }: { advertisements: any[] }) {
       const res = await updateStatusMutation.mutateAsync({ adId, status });
       setSuccess("Ad status updated successfully");
     } catch (error) {
-      console.error("Error updating ad status:", error);
+      if (process.env.NODE_ENV !== "production") {
+        console.error("Error updating ad status:", error);
+      }
       setError("Error updating ad status");
     } finally {
       setTimeout(() => {
@@ -37,7 +39,9 @@ function ManageAds({ advertisements }: { advertisements: any[] }) {
       await deleteAdMutation.mutateAsync(id);
       setSuccess("Ad deleted successfully");
     } catch (error) {
-      console.error("Error deleting ad:", error);
+      if (process.env.NODE_ENV !== "production") {
+        console.error("Error deleting ad:", error);
+      }
       setError("Error deleting ad");
     } finally {
       setTimeout(() => {

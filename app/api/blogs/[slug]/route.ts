@@ -20,7 +20,9 @@ export async function GET(_req: Request, { params }: RouteContext) {
     }
     return NextResponse.json({ message: "Fetched blog successfully", data: serializeBlogPost(blog) }, { status: 200 });
   } catch (err: any) {
-    console.error("BLOG API ERROR:", err);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("BLOG API ERROR:", err);
+    }
     return NextResponse.json({ message: "Internal server error", error: err?.message }, { status: 500 });
   }
 }

@@ -5,7 +5,6 @@ import { useGetSubscribers } from "@/hooks/useGetSubscriber";
 
 function Subscriber() {
     const {data:subscribers, isLoading:isSubscriberLoading}=useGetSubscribers();
-    console.log(subscribers)
   return (
     <div className="bg-white relative z-20 shadow border overflow-hidden ">
      

@@ -12,8 +12,6 @@ interface TagNCategoryProps {
 }
 
 const TagNCategory = ({ tags, isTagLoading, categories, isCategoryLoading }: TagNCategoryProps) => {
-    console.log(tags)
-    console.log(categories)
   
   return (
     <div className="w-full h-full">

@@ -15,7 +15,9 @@ export async function POST(req: Request) {
 
     return Response.json({ success: true });
   } catch (err) {
-    console.error(err);
+    if (process.env.NODE_ENV !== "production") {
+      console.error(err);
+    }
 
     return Response.json(
       { message: "Failed to delete image" },

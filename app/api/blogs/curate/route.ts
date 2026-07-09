@@ -37,7 +37,9 @@ export async function PATCH(req: Request) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("CURATE BLOG ERROR:", error);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("CURATE BLOG ERROR:", error);
+    }
 
     return NextResponse.json(
       {

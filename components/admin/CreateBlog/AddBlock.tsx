@@ -86,7 +86,6 @@ setCalloutDescription: React.Dispatch<React.SetStateAction<string>>;
   };
 
   setBlocks((prev) => [...prev, newBlock]);
-  console.log(newBlock)
   setContent("");
   setImage(null);
   setCalloutTitle("");

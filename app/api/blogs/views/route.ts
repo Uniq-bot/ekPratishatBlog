@@ -33,7 +33,6 @@ export async function POST(request: Request) {
         data: { viewCount: { increment: 1 } },
       });
     });
-    console.log("success")
     return NextResponse.json(
       { message: "View recorded successfully" },
       { status: 200 },

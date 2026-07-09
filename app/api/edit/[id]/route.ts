@@ -119,7 +119,9 @@ export async function PUT(req: Request, { params }: RouteContext) {
       { status: 200 },
     );
   } catch (err: any) {
-    console.error("UPDATE BLOG ERROR:", err);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("UPDATE BLOG ERROR:", err);
+    }
     return NextResponse.json(
       { message: "Internal server error", error: err?.message },
       { status: 500 },
@@ -144,7 +146,9 @@ export async function DELETE(_req: Request, { params }: RouteContext) {
       try {
         await unlink(filePath);
       } catch (err) {
-        console.error("Failed to delete cover image:", err);
+        if (process.env.NODE_ENV !== "production") {
+          console.error("Failed to delete cover image:", err);
+        }
       }
     }
 
@@ -169,7 +173,9 @@ export async function DELETE(_req: Request, { params }: RouteContext) {
       { status: 200 },
     );
   } catch (err: any) {
-    console.error("DELETE BLOG ERROR:", err);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("DELETE BLOG ERROR:", err);
+    }
     return NextResponse.json(
       { message: "Internal server error", error: err?.message },
       { status: 500 },

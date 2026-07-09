@@ -165,7 +165,6 @@ export const curateBlog = async (id: string) => {
     const err = await res.json().catch(() => ({}));
     throw new Error(err.message || "Failed to curate blog");
   }
-  console.log("Succeed to curate the blog");
   return res.json();
 };
 

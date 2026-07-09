@@ -88,7 +88,7 @@ const BlogEditor = ({
     .replace(/[^\w-]+/g, "")
     .replace(/--+/g, "-")
     .replace(/(^-|-$)/g, "");
-  // console.log(data)
+  
   // Populate fields when editing
   useEffect(() => {
     if (!initialBlog?.data) return;

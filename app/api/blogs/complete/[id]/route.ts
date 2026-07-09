@@ -74,7 +74,9 @@ export async function POST(req: Request, { params }: RouteContext) {
       { status: 200 },
     );
   } catch (err: any) {
-    console.error("COMPLETE BLOG ERROR:", err);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("COMPLETE BLOG ERROR:", err);
+    }
     return NextResponse.json(
       { message: "Internal server error", error: err?.message ?? String(err) },
       { status: 500 },

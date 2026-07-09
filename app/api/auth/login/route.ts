@@ -26,7 +26,7 @@ export async function POST(req: Request) {
         const cookieStore = await cookies();
         cookieStore.set("token", token, {
             httpOnly: true,
-            secure: false,
+            secure: process.env.NODE_ENV === "production",
             sameSite: "lax",
             maxAge: 60 * 60 * 24 * 30,
         });
@@ -46,7 +46,9 @@ export async function POST(req: Request) {
             { status: 200 },
         );
     } catch (err) {
-        console.error("Login error:", err);
+        if (process.env.NODE_ENV !== "production") {
+            console.error("Login error:", err);
+        }
         return NextResponse.json(
             { message: "Internal Server Error" },
             { status: 500 },

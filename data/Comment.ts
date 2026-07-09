@@ -29,9 +29,10 @@ export const createComment = async (form: FormData) => {
     });
     revalidatePath(`/`);
     revalidatePath(`/blog/${slug}`);
-    console.log(comment);
   } catch (error) {
-    console.error("Error creating comment:", error);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Error creating comment:", error);
+    }
     throw error;
   }
 };

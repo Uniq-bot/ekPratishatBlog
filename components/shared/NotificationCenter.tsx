@@ -29,7 +29,6 @@ export default function NotificationCenter() {
   useEffect(() => {
     const handleToast = (event: Event) => {
       const detail = (event as CustomEvent<ToastPayload>).detail;
-        console.log(event)
       if (!detail?.title) return;
 
       setItems((current) => {

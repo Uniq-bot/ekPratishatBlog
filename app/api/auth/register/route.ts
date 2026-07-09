@@ -58,7 +58,9 @@ export async function POST(req: Request) {
       { status: 201 },
     );
   } catch (err) {
-    console.error("Register error:", err);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Register error:", err);
+    }
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 },

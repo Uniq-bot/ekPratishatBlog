@@ -65,8 +65,6 @@ const handleSubmit = async (e: React.FormEvent) => {
     setComments((prev) =>
       prev.filter((c) => c.id !== optimisticComment.id)
     );
-
-    console.error(err);
   } finally {
     setIsSubmitting(false);
   }

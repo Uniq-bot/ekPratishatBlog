@@ -49,7 +49,9 @@ export async function GET(_req: Request, { params }: RouteContext) {
 
     return NextResponse.json({ data: responseData }, { status: 200 });
   } catch (error: any) {
-    console.error("ONBOARDING BLOG GET ERROR:", error);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("ONBOARDING BLOG GET ERROR:", error);
+    }
     return NextResponse.json(
       { message: "Failed to load onboarding blog", error: error?.message ?? String(error) },
       { status: 500 },

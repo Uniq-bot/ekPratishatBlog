@@ -12,6 +12,5 @@ export async function uploadImage(buffer: Buffer) {
       )
       .end(buffer);
   });
-  console.log(result)
   return result;
 }

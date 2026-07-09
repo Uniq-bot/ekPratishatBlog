@@ -28,6 +28,7 @@ export default function BlogLayout({
         }}
       /> */}
       {!pathname.includes("/blog/") && <NavBar />}
+      
         {/* <NavBar /> */}
       {children}
      
