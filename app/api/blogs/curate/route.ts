@@ -28,7 +28,7 @@ export async function PATCH(req: Request) {
     revalidateTag("blogs", "max");
     revalidateTag("latestBlogs", "max");
     revalidateTag("popularBlogs", "max");
-    revalidateTag("curatedBlog", "max");
+    revalidateTag("curated-blog", "max");
     revalidatePath("/");
     revalidatePath("/blog");
 
