@@ -35,7 +35,7 @@ const CuratedBlog = ({ idx, currentLanguage, curatedBlog }: { idx: number; curre
           {currentLanguage === "en" ? "FEATURED STORY" : "विशेष कथा"}
         </span>
         <h1
-          className={`max-w-2xl line-clamp-2  leading-tight text-white ${
+          className={`max-w-2xl line-clamp-2    leading-tight text-white ${
             currentLanguage === "en"
               ? "text-lg sm:text-3xl lg:text-4xl font-black"
               : "text-[1.35rem] sm:text-[2.25rem] lg:text-[3rem] font-semibold"
