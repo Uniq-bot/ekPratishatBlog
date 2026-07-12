@@ -33,78 +33,114 @@ const serializeTag = (tag: any, language = "en") => {
   };
 };
 
-export const getBlogs = unstable_cache(
-  async ({
-    page = 1,
-    limit = 4,
-    category,
-    tag,
-    sort = "latest",
-    search,
-  }: {
-    page?: number;
-    limit?: number;
-    category?: string;
-    tag?: string;
-    sort?: "latest" | "oldest";
-    search?: string;
-  } = {}) => {
-    try {
-      const t1 = performance.now();
-      const skip = (page - 1) * limit;
+import { cacheTag, cacheLife } from "next/cache";
+import { Prisma } from "@/generated/prisma/client";
 
-      const where: any = {
-        status: "PUBLISHED",
-        ...(category && {
-          category: {
-            is: { slug: category },
+export async function getBlogs({
+  page = 1,
+  limit = 4,
+  category,
+  tag,
+  sort = "latest",
+  search,
+}: {
+  page?: number;
+  limit?: number;
+  category?: string;
+  tag?: string;
+  sort?: "latest" | "oldest";
+  search?: string;
+} = {}) {
+  "use cache";
+
+  cacheTag("blogs");
+  cacheLife("hours");
+
+  const skip = (page - 1) * limit;
+
+  const where: Prisma.BlogPostWhereInput = {
+    status: "PUBLISHED",
+
+    ...(category && {
+      category: {
+        is: {
+          slug: category,
+        },
+      },
+    }),
+
+    ...(tag && {
+      tagLinks: {
+        some: {
+          tag: {
+            slug: tag,
           },
-        }),
-        ...(tag && {
-          tagLinks: {
-            some: {
-              tag: {
-                slug: tag,
+        },
+      },
+    }),
+
+    ...(search && {
+      translations: {
+        some: {
+          OR: [
+            {
+              title: {
+                contains: search,
+                mode: "insensitive",
+              },
+            },
+            {
+              description: {
+                contains: search,
+                mode: "insensitive",
+              },
+            },
+          ],
+        },
+      },
+    }),
+  };
+
+  const orderBy = {
+    createdAt: sort === "oldest" ? "asc" : "desc",
+  } as const;
+
+  const [blogs, totalCount] = await Promise.all([
+    prisma.blogPost.findMany({
+      where,
+      orderBy,
+      skip,
+      take: limit,
+      select: {
+        id: true,
+        slug: true,
+        createdAt: true,
+        coverImage: true,
+        viewCount: true,
+
+        category: {
+          select: {
+            slug: true,
+            translations: {
+              select: {
+                language: true,
+                name: true,
               },
             },
           },
-        }),
-        ...(search && {
-          translations: {
-            some: {
-              OR: [
-                { title: { contains: search, mode: "insensitive" as const } },
-                {
-                  description: {
-                    contains: search,
-                    mode: "insensitive" as const,
-                  },
-                },
-              ],
-            },
-          },
-        }),
-      };
+        },
 
-      const orderBy =
-        sort === "oldest"
-          ? { createdAt: "asc" as const }
-          : { createdAt: "desc" as const };
-
-      const [blogs, totalCount] = await Promise.all([
-        prisma.blogPost.findMany({
-          where,
-          orderBy,
-          skip,
-          take: limit,
+        translations: {
           select: {
-            id: true,
-            slug: true,
-            createdAt: true,
-            coverImage: true,
-            viewCount: true,
+            language: true,
+            title: true,
+            description: true,
+          },
+        },
 
-            category: {
+        tagLinks: {
+          select: {
+            tag: {
               select: {
                 slug: true,
                 translations: {
@@ -115,55 +151,21 @@ export const getBlogs = unstable_cache(
                 },
               },
             },
-
-            translations: {
-              select: {
-                language: true,
-                title: true,
-                description: true,
-              },
-            },
-
-            tagLinks: {
-              select: {
-                tag: {
-                  select: {
-                    slug: true,
-                    translations: {
-                      select: {
-                        language: true,
-                        name: true,
-                      },
-                    },
-                  },
-                },
-              },
-            },
           },
-        }),
-        prisma.blogPost.count({ where }),
-      ]);
-      const t2 = performance.now();
-      console.log("findMany:", t2 - t1);
-      return {
-        posts: serializeBlogList(blogs),
-        totalCount,
-        _source: "db",
-        _fetchedAt: Date.now(),
-      };
-    } catch (err) {
-      if (process.env.NODE_ENV !== "production") {
-        console.error("BLOG FETCH ERROR:", err);
-      }
-      return { posts: [], totalCount: 0 };
-    }
-  },
-  ["blogs"],
-  {
-    tags: ["blogs"],
-    revalidate: 60 * 60 * 24,
-  },
-);
+        },
+      },
+    }),
+
+    prisma.blogPost.count({
+      where,
+    }),
+  ]);
+
+  return {
+    posts: serializeBlogList(blogs),
+    totalCount,
+  };
+}
 
 export const getLatestBlogs = unstable_cache(
   async () => {
