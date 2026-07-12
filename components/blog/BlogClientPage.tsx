@@ -84,7 +84,7 @@ const BlogClientPage = ({
           </div>
 
           <div className="grid gap-4 md:gap-6 lg:grid-cols-[1.3fr_0.7fr] lg:items-stretch">
-            <div className="overflow-hidden  border border-[#eadcb4] bg-white shadow-[0_18px_45px_rgba(15,23,42,0.06)]">
+            <div className="overflow-hidden h-60 md:h-full  border border-[#eadcb4] bg-white shadow-[0_18px_45px_rgba(15,23,42,0.06)]">
               <CuratedBlog
                 idx={idx}
                 currentLanguage={currentLanguage}
@@ -179,12 +179,7 @@ const BlogClientPage = ({
                       {isEnglish ? "Latest Blogs" : "नयाँ ब्लगहरू"}
                     </h2>
                   </div>
-                  <span
-                    className={`hidden font-semibold text-black/60 lg:flex ${isEnglish ? "text-sm" : "text-base"}`}
-                  >
-                    {latestBlogs.posts.slice(0, 2).length}{" "}
-                    {isEnglish ? "posts" : "पोस्टहरू"}
-                  </span>
+                
                 </div>
                 <LatestBlogs
                   idx={idx}

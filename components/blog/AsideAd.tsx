@@ -2,17 +2,21 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { X } from "lucide-react";
 
 const AsideAd = ({ AsideAds }: { AsideAds: any }) => {
+  const pathname = usePathname();
   const [hide, setHide] = useState(false);
   const [visible, setVisible] = useState(false); // controls fade in/out
 
+  // Reset the ad every time the route changes
   useEffect(() => {
-    // trigger fade-in on mount
+    setHide(false);
+    setVisible(false);
     const raf = requestAnimationFrame(() => setVisible(true));
     return () => cancelAnimationFrame(raf);
-  }, []);
+  }, [pathname]);
 
   const handleClose = () => {
     setVisible(false); // start fade-out
@@ -45,7 +49,6 @@ const AsideAd = ({ AsideAds }: { AsideAds: any }) => {
 
   return (
     <>
-      {/* Dim backdrop — only for the popup state (below lg) */}
       <div
         className={`fixed inset-0 bg-black/50 z-20 lg:hidden transition-opacity duration-300 ease-in-out ${
           visible ? "opacity-100" : "opacity-0"

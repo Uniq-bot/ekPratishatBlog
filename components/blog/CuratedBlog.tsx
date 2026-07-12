@@ -29,7 +29,7 @@ const CuratedBlog = ({ idx, currentLanguage, curatedBlog }: { idx: number; curre
       <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col gap-2 p-3 sm:p-5 lg:p-6">
         <span
           className={`inline-flex w-fit border border-white/30 bg-white/10 px-3 py-1  font-semibold uppercase text-white backdrop-blur-sm ${
-            currentLanguage === "en" ? "tracking-[0.2em]" : "tracking-normal text-[20px]"
+            currentLanguage === "en" ? "tracking-[0.18em]" : "tracking-normal text-[20px]"
           }`}
         >
           {currentLanguage === "en" ? "FEATURED STORY" : "विशेष कथा"}

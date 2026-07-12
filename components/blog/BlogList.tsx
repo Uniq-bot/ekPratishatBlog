@@ -66,11 +66,13 @@ const BlogList = ({
     <section className="w-full px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
       <div className="mb-7 flex flex-col gap-4 border-b border-[#f0e3bd] pb-5 sm:flex-row sm:items-end sm:justify-between">
         <div className="space-y-1.5">
-          <p className={
-            isEnglish
-              ? "text-xs font-semibold uppercase tracking-[0.18em] text-[#8a6b12]"
-              : "text-lg font-semibold uppercase  text-[#8a6b12]"
-          }>
+          <p
+            className={
+              isEnglish
+                ? "text-xs font-semibold uppercase tracking-[0.18em] text-[#8a6b12]"
+                : "text-lg font-semibold uppercase  text-[#8a6b12]"
+            }
+          >
             {isEnglish ? "BLOGS" : "ब्लगहरू"}
           </p>
           <h2 className="text-2xl font-black text-black sm:text-3xl">
@@ -79,7 +81,10 @@ const BlogList = ({
         </div>
 
         <div className="flex items-center gap-3 border border-[#eadcb4] bg-[#fffdf7] px-3 py-2 shadow-sm">
-          <label className="text-sm font-semibold text-black/70" htmlFor="sort-select">
+          <label
+            className="text-sm font-semibold text-black/70"
+            htmlFor="sort-select"
+          >
             {isEnglish ? "Sort" : "क्रमबद्ध गर्नुहोस्"}
           </label>
           <select
@@ -96,7 +101,14 @@ const BlogList = ({
 
       <div className="flex w-full flex-col gap-4">
         {blogs?.length > 0 ? (
-          blogs.map((blog) => <BlogCard key={blog.id} blog={blog} idx={idx} currentLanguage={currentLanguage} />)
+          blogs.map((blog) => (
+            <BlogCard
+              key={blog.id}
+              blog={blog}
+              idx={idx}
+              currentLanguage={currentLanguage}
+            />
+          ))
         ) : (
           <p className="w-full py-10 text-center text-sm text-gray-500">
             {isEnglish ? "No posts found." : "कुनै पोस्ट फेला परेन।"}
@@ -120,8 +132,7 @@ const BlogList = ({
             const pageNum = i + 1;
             return (
               <Link
-              scroll={false}
-
+                scroll={false}
                 key={pageNum}
                 href={buildUrl(pageNum)}
                 className={`border px-4 py-2 text-sm font-semibold transition-colors ${

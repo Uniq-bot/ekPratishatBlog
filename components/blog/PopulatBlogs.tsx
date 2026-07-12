@@ -13,7 +13,7 @@ const PopularBlogs = ({ idx, currentLanguage, popularBlogs = [] }: { idx: number
     e.preventDefault();
     trackView(blog);
   };
-
+  console.log(popularBlogs)
   return (
     <section className="w-full p-4 sm:p-5 lg:p-5">
       <div className="flex items-center gap-3 border-b border-[#f0e3bd] pb-4">
@@ -33,7 +33,7 @@ const PopularBlogs = ({ idx, currentLanguage, popularBlogs = [] }: { idx: number
       <div className="mt-4 flex flex-col gap-2">
         {popularBlogs.map((blog, index) => (
           <Link
-            key={blog.id}
+            key={index}
             href={`/blog/${blog.slug}`}
             onClick={(e) => handleClick(e, blog)}
             className="group flex items-start gap-3 rounded-xl border border-transparent px-2 py-3 transition-all duration-300 hover:border-[#eadcb4] hover:bg-[#fffdf8]"

@@ -135,22 +135,7 @@ export async function getBlogs({
             language: true,
             title: true,
             description: true,
-          },
-        },
-
-        tagLinks: {
-          select: {
-            tag: {
-              select: {
-                slug: true,
-                translations: {
-                  select: {
-                    language: true,
-                    name: true,
-                  },
-                },
-              },
-            },
+            content: true,
           },
         },
       },
@@ -174,10 +159,19 @@ export const getLatestBlogs = unstable_cache(
         where: { isToggled: false, status: "PUBLISHED" },
         orderBy: { createdAt: "desc" },
         take: 4,
-        include: {
+        select: {
+          id: true,
+          slug: true,
+
+          coverImage: true,
+          createdAt: true,
           category: { include: { translations: true } },
-          translations: true,
-          tagLinks: { include: { tag: { include: { translations: true } } } },
+          translations: {
+            select: {
+              title: true,
+              description: true,
+            },
+          },
         },
       });
 
@@ -233,13 +227,18 @@ export const getPopularBlogs = unstable_cache(
         where: { status: "PUBLISHED" },
         orderBy: [{ viewCount: "desc" }, { createdAt: "desc" }],
         take: 3,
-        include: {
-          category: { include: { translations: true } },
-          translations: true,
-          tagLinks: { include: { tag: { include: { translations: true } } } },
+        select: {
+          slug: true,
+          // createdAt: true,
+          // category: { include: { translations: true } },
+          translations: {
+            select: {
+              title: true,
+            },
+          },
+          // tagLinks: { include: { tag: { include: { translations: true } } } },
         },
       });
-
       return { posts: serializeBlogList(blogs) };
     } catch (err) {
       if (process.env.NODE_ENV !== "production") {
@@ -262,10 +261,16 @@ export const getCuratedBlog = unstable_cache(
         isToggled: true,
         status: "PUBLISHED",
       },
-      include: {
+      select: {
+        coverImage: true,
+        slug: true,
         category: { include: { translations: true } },
-        translations: true,
-        tagLinks: { include: { tag: { include: { translations: true } } } },
+        translations: {
+          select: {
+            title: true,
+            description: true,
+          },
+        },
       },
     });
 
