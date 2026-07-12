@@ -51,11 +51,10 @@ const BlogEditor = ({
   const [tagsValue, setTagsValue] = useState<any[]>([]);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
-  // Add ref at the top of the component, with other useState hooks
   const coverImageRef = useRef<HTMLInputElement>(null);
   // AddBlock panel state
   const [blockType, setBlockType] = useState("heading");
-  const [setLevel, setSetLevel] = useState(1);
+  const [setLevel, setSetLevel] = useState(2);
   const [content, setContent] = useState("");
   const [calloutTitle, setCalloutTitle] = useState("");
   const [calloutDescription, setCalloutDescription] = useState("");
@@ -94,7 +93,7 @@ const BlogEditor = ({
     if (!initialBlog?.data) return;
 
     const blog = initialBlog.data;
-
+    console.log(blog)
     setDraftId(blog.id ?? null);
     setTitle(blog.title ?? "");
     setDescription(blog.description ?? "");

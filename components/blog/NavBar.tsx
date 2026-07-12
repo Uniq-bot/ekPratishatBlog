@@ -56,9 +56,9 @@ const [menuOpen, setMenuOpen] = useState(false);
       <Image
         src="/logo.png"
         alt="Logo"
-        width={45}
-        height={45}
-        className="w-10 h-10 lg:w-12 lg:h-12"
+        width={100}
+        height={100}
+        className="w-10 h-10 lg:w-20 lg:h-15"
       />
     </Link>
 

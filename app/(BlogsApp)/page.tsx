@@ -31,6 +31,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
   const sort = (params.sort as "latest" | "oldest") ?? "latest";
   const search = params.search;
 
+
   const [blogs, latestBlogs, popularBlogs, categories, tags, ads, curatedBlog] =
     await Promise.all([
       getBlogs({ page, category, tag, sort, search }),
@@ -41,6 +42,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
       getAds(),
       getCuratedBlog(),
     ]);
+   
   const AsideAds = ads.find((ad) => ad.AdType === "ASIDE");
   const BannerAds = ads.find((ad) => ad.AdType === "BANNER");
   return (

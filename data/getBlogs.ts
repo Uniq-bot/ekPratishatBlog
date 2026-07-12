@@ -8,7 +8,9 @@ const normalizeLanguage = (value: string | null | undefined) => {
 
 const serializeCategory = (category: any, language = "en") => {
   const translation = Array.isArray(category?.translations)
-    ? category.translations.find((item: any) => item?.language === normalizeLanguage(language)) || category.translations[0]
+    ? category.translations.find(
+        (item: any) => item?.language === normalizeLanguage(language),
+      ) || category.translations[0]
     : null;
 
   return {
@@ -20,7 +22,9 @@ const serializeCategory = (category: any, language = "en") => {
 
 const serializeTag = (tag: any, language = "en") => {
   const translation = Array.isArray(tag?.translations)
-    ? tag.translations.find((item: any) => item?.language === normalizeLanguage(language)) || tag.translations[0]
+    ? tag.translations.find(
+        (item: any) => item?.language === normalizeLanguage(language),
+      ) || tag.translations[0]
     : null;
 
   return {
@@ -46,6 +50,7 @@ export const getBlogs = unstable_cache(
     search?: string;
   } = {}) => {
     try {
+      const t1 = performance.now();
       const skip = (page - 1) * limit;
 
       const where: any = {
@@ -69,7 +74,12 @@ export const getBlogs = unstable_cache(
             some: {
               OR: [
                 { title: { contains: search, mode: "insensitive" as const } },
-                { description: { contains: search, mode: "insensitive" as const } },
+                {
+                  description: {
+                    contains: search,
+                    mode: "insensitive" as const,
+                  },
+                },
               ],
             },
           },
@@ -87,16 +97,60 @@ export const getBlogs = unstable_cache(
           orderBy,
           skip,
           take: limit,
-          include: {
-            category: { include: { translations: true } },
-            translations: true,
-            tagLinks: { include: { tag: { include: { translations: true } } } },
+          select: {
+            id: true,
+            slug: true,
+            createdAt: true,
+            coverImage: true,
+            viewCount: true,
+
+            category: {
+              select: {
+                slug: true,
+                translations: {
+                  select: {
+                    language: true,
+                    name: true,
+                  },
+                },
+              },
+            },
+
+            translations: {
+              select: {
+                language: true,
+                title: true,
+                description: true,
+              },
+            },
+
+            tagLinks: {
+              select: {
+                tag: {
+                  select: {
+                    slug: true,
+                    translations: {
+                      select: {
+                        language: true,
+                        name: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
           },
         }),
         prisma.blogPost.count({ where }),
       ]);
-
-      return { posts: serializeBlogList(blogs), totalCount, _source: "db", _fetchedAt: Date.now() };
+      const t2 = performance.now();
+      console.log("findMany:", t2 - t1);
+      return {
+        posts: serializeBlogList(blogs),
+        totalCount,
+        _source: "db",
+        _fetchedAt: Date.now(),
+      };
     } catch (err) {
       if (process.env.NODE_ENV !== "production") {
         console.error("BLOG FETCH ERROR:", err);
@@ -152,7 +206,7 @@ export const getCategory = unstable_cache(
   {
     tags: ["categories"],
     revalidate: 86400,
-  }
+  },
 );
 
 export const getTags = unstable_cache(
@@ -167,7 +221,7 @@ export const getTags = unstable_cache(
   {
     tags: ["tags"],
     revalidate: 86400,
-  }
+  },
 );
 
 export const getPopularBlogs = unstable_cache(
@@ -199,7 +253,8 @@ export const getPopularBlogs = unstable_cache(
   },
 );
 
-export const getCuratedBlog = unstable_cache(async () => {
+export const getCuratedBlog = unstable_cache(
+  async () => {
     const blog = await prisma.blogPost.findFirst({
       where: {
         isToggled: true,
@@ -213,8 +268,10 @@ export const getCuratedBlog = unstable_cache(async () => {
     });
 
     return blog ? serializeBlogList([blog])[0] : null;
-  }, ["curated-blog"], { revalidate: 300 });
-
+  },
+  ["curated-blog"],
+  { revalidate: 300 },
+);
 
 export const getAds = unstable_cache(
   async () => {
@@ -246,5 +303,5 @@ export const getAds = unstable_cache(
   {
     tags: ["ads"],
     revalidate: 60 * 60 * 24,
-  }
+  },
 );

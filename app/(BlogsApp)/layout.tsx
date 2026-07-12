@@ -14,22 +14,9 @@ export default function BlogLayout({
 
   return (
     <>
-      {/* <Script
-        src="https://cdn.jsdelivr.net/gh/Flowcodelab/LingoJs@main/lingo-snippet.obf.js"
-        strategy="afterInteractive"
-        onLoad={() => {
-          window.lingojs?.initialize?.({
-            projectKey: "2bc6a8bd04",
-            baseLanguage: "en",
-            targetLanguage: "ne",
-            showWidget: true,
-            rememberLanguage: true,
-          });
-        }}
-      /> */}
+     
       {!pathname.includes("/blog/") && <NavBar />}
       
-        {/* <NavBar /> */}
       {children}
      
       {!pathname.includes("/blog/") && <Footer />}

@@ -64,7 +64,6 @@ const BlogForm = ({
   );
   const [pendingBlock, setPendingBlock] = React.useState<Block | null>(null);
   const [showBlockDeleteConfirm, setShowBlockDeleteConfirm] = React.useState(false);
-  const [imageUrl, setImageUrl] = React.useState<string | null>(null);
   const {mutateAsync:uploadImageMutate}= useImageUpload();
 
   // ── Drag handlers ────────────────────────────────────────────────
@@ -217,7 +216,7 @@ const handleImageReplace = async (
               {block.type === "heading" && (
                 <div className="flex flex-col gap-1">
                   <div className="flex gap-1 flex-wrap mb-1">
-                    {[1, 2, 3, 4, 5].map((l) => (
+                    {[2, 3, 4, 5].map((l) => (
                       <button
                         key={l}
                         type="button"
