@@ -17,8 +17,9 @@ const AsideAd = ({ AsideAds }: { AsideAds: any }) => {
         absolute top-3 right-3 w-60 h-40 rounded-md shadow-md
         sm:w-36 sm:h-48
         md:w-100 md:h-80
+        
         md:top-30 md:left-1/2 md:-translate-x-1/2 
-        lg:static lg:top-auto lg:right-auto lg:w-full lg:h-full lg:rounded-none lg:shadow-none
+        lg:relative lg:top-auto lg:right-auto lg:w-full lg:h-full lg:rounded-none lg:shadow-none
         z-30
       "
     >
@@ -45,11 +46,10 @@ const AsideAd = ({ AsideAds }: { AsideAds: any }) => {
             fill
             className="object-cover"
           />
-             <div className="absolute bg-black px-2 py-0.5 text-white text-[10px] md:px-5 md:py-1 md:text-sm top-1 md:top-4 right-0 z-20 cursor-pointer">
-          <p>AD</p>
+          <div className="absolute bg-black px-2 py-0.5 text-white text-[10px] md:px-5 md:py-1 md:text-sm top-1 md:top-4 right-0 z-20 cursor-pointer">
+            <p>AD</p>
+          </div>
         </div>
-        </div>
-     
 
         <div className="px-2 min-[1200px]:px-5">
           <h1 className="text-black text-[11px] sm:text-sm md:text-xl lg:text-2xl font-bold ">

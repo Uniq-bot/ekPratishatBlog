@@ -2,11 +2,13 @@ import { Mail, PhoneCall, Verified } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { Suspense } from "react";
+import NewsLetter from "./NewsLetter";
 
 const Footer = () => {
   return (
-    <div className="bg-[#1F1B16] w-full text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 lg:py-12  flex flex-col lg:flex-row gap-8 lg:gap-10">
+    <div className="bg-[#1F1B16] w-full  text-white">
+      <NewsLetter />
+      <div className="max-w-[80%] mx-auto px-4 sm:px-6 py-8 lg:py-12 border-t border-dashed border-[#5E4F29] border-b flex flex-col lg:flex-row gap-8 lg:gap-10">
         {/* Left Section */}
         <div className="w-full lg:w-1/2 flex flex-col items-start gap-6 lg:pl-10 xl:pl-20 lg:border-r lg:border-[#5E4F29] lg:pr-6 xl:pr-10">
           <div className="flex items-center gap-3 sm:gap-8">
@@ -56,7 +58,7 @@ const Footer = () => {
 
         {/* Right Section */}
         <div className="w-full lg:w-1/2 flex justify-center">
-          <div className="w-full lg:max-w-[500px] flex flex-col items-center justify-center border border-[#493F27] bg-[#302B24] rounded-xl p-4 sm:p-6">
+          <div className="w-full lg:max-w-125 flex flex-col items-center justify-center border border-[#493F27] bg-[#302B24] rounded-xl p-4 sm:p-6">
             <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-4">
               <h2 className="text-lg sm:text-xl font-bold">Find us at:</h2>
               <div className="flex flex-wrap items-center gap-2 sm:gap-3 [&_svg]:w-5 [&_svg]:h-5">
@@ -230,7 +232,7 @@ const Footer = () => {
   </h1>
   
 </div> */}
-      <div className="py-4 border-t w-[90%] mx-auto border-dashed flex justify-around border-[#5E4F29] ">
+      <div className="py-4  w-[90%] mx-auto  flex justify-around  ">
         <p className="text-center text-[10px] sm:text-base text-gray-400">
          All right reserved
         </p>

@@ -37,33 +37,35 @@ const NewsLetter = () => {
   };
 
   return (
-    <section className="w-full border border-[#e7d6ab] bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(248,242,229,0.96)_100%)] p-4 sm:p-5 lg:p-6 text-black shadow-[0_16px_40px_rgba(0,0,0,0.06)]">
-      <div className="flex flex-col gap-4">
-        <div className="space-y-2">
-          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#8a6b12]">
-            NEWSLETTER
+    <section className="w-full  py-2 ">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 xl:px-20 py-5 lg:py-6 flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-8">
+        {/* Left: label + heading */}
+        <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-4 lg:shrink-0">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#EFC75A]">
+            Newsletter
           </p>
-          <h2 className="text-lg font-bold leading-tight sm:text-xl">
+          <h2 className="text-base sm:text-lg font-bold leading-tight text-white">
             Stay in the loop
           </h2>
         </div>
 
-        <p className="max-w-md text-sm leading-6 text-black/75 sm:text-[0.95rem]">
+        <p className="hidden lg:block text-sm leading-6 text-gray-400 lg:flex-1">
           Get the latest articles and stories delivered straight to your inbox.
         </p>
 
-        <div className="flex flex-col gap-3 sm:flex-row">
+        {/* Right: input + button */}
+        <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-3 lg:shrink-0">
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
-            className="h-11 w-full rounded-lg border border-[#dbc88d] bg-white px-4 text-black outline-none transition-colors placeholder:text-black/40 focus:border-[#c9981a]"
+            className="h-11 w-full sm:w-64 rounded-lg border-2 border-[#5E4F29] bg-[#1F1B16] px-4 text-sm text-white outline-none transition-colors placeholder:text-gray-500 focus:border-[#EFC75A]"
           />
           <button
             onClick={handleClick}
             disabled={isSubmitting}
-            className="inline-flex h-11 items-center justify-center rounded-lg bg-[linear-gradient(135deg,#EBC044,#F4CA3B_28%,#FFD33A_55%,#F4DC91_78%,#F4CA3B)] px-5 font-bold text-black transition-all hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+            className="inline-flex h-11 items-center justify-center whitespace-nowrap rounded-lg bg-[linear-gradient(135deg,#EBC044,#F4CA3B_28%,#FFD33A_55%,#F4DC91_78%,#F4CA3B)] px-5 font-bold text-[#1F1B16] transition-all hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
           >
             {isSubmitting ? "Submitting..." : "Subscribe"}
           </button>
