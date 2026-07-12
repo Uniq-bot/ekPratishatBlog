@@ -50,7 +50,7 @@ const AsideAd = ({ AsideAds }: { AsideAds: any }) => {
   return (
     <>
       <div
-        className={`fixed inset-0 bg-black/50 z-999999 lg:hidden transition-opacity duration-300 ease-in-out ${
+        className={`fixed inset-0 bg-black/50 z-20 lg:hidden transition-opacity duration-300 ease-in-out ${
           visible ? "opacity-100" : "opacity-0"
         }`}
         onClick={handleClose}

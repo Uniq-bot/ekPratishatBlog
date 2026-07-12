@@ -32,7 +32,7 @@ const NavBar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50 );
+      setIsScrolled(window.scrollY > 50);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -45,7 +45,7 @@ const [menuOpen, setMenuOpen] = useState(false);
   return (
   <div
   className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-    isScrolled
+    isScrolled || menuOpen
       ? "bg-black/70 backdrop-blur-md shadow-lg"
       : "bg-transparent"
   }`}
@@ -56,9 +56,9 @@ const [menuOpen, setMenuOpen] = useState(false);
       <Image
         src="/logo.png"
         alt="Logo"
-        width={100}
-        height={100}
-        className="w-10 h-10 lg:w-20 lg:h-15"
+        width={45}
+        height={45}
+        className="w-10 h-10 lg:w-12 lg:h-12"
       />
     </Link>
 
@@ -100,38 +100,38 @@ const [menuOpen, setMenuOpen] = useState(false);
       </button>
 
       {/* Mobile Menu Button */}
-      <button
-        className={`lg:hidden ${!isScrolled ? "text-black/70" : "text-white"}`}
-        onClick={() => setMenuOpen(!menuOpen)}
-      >
-        {menuOpen ? <X size={28} /> : <Menu size={28} />}
-      </button>
+<button
+  className={`lg:hidden ${
+    !isScrolled && !menuOpen ? "text-black/70" : "text-white"
+  }`}
+  onClick={() => setMenuOpen(!menuOpen)}
+>
+  {menuOpen ? <X size={28} /> : <Menu size={28} />}
+</button>
     </div>
   </div>
 
   {/* Mobile Menu */}
-  <div
-    className={`lg:hidden overflow-hidden transition-all duration-300 ${
-      menuOpen ? "max-h-96" : "max-h-0"
-    }`}
-  >
-    <div className="bg-black/90 backdrop-blur-md px-6 pb-6 flex flex-col items-center gap-5">
-      {navItems.map((item) => (
-        <Link
-          key={item.name}
-          href={item.href}
-          onClick={() => setMenuOpen(false)}
-          className={`text-lg py-2 ${
-            pathname === item.href
-              ? "text-[#C9981A]"
-              : "text-white"
-          }`}
-        >
-          {currentLanguage === "en" ? item.name : item.nameNp}
-        </Link>
-      ))}
-    </div>
+<div
+  className={`lg:hidden overflow-hidden transition-all duration-300 ${
+    menuOpen ? "max-h-96" : "max-h-0"
+  }`}
+>
+  <div className="px-6 pb-6 flex flex-col items-center gap-5">
+    {navItems.map((item) => (
+      <Link
+        key={item.name}
+        href={item.href}
+        onClick={() => setMenuOpen(false)}
+        className={`text-lg py-2 ${
+          pathname === item.href ? "text-[#C9981A]" : "text-white"
+        }`}
+      >
+        {currentLanguage === "en" ? item.name : item.nameNp}
+      </Link>
+    ))}
   </div>
+</div>
 </div>
   );
 };
