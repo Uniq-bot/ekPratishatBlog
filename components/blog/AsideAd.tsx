@@ -16,16 +16,18 @@ const AsideAd = ({ AsideAds }: { AsideAds: any }) => {
          overflow-hidden bg-white
         absolute top-3 right-3 w-60 h-40 rounded-md shadow-md
         sm:w-36 sm:h-48
-        md:static md:top-auto md:right-auto md:w-full md:h-full md:rounded-none md:shadow-none
+        md:w-100 md:h-80
+        md:top-30 md:left-1/2 md:-translate-x-1/2 
+        lg:static lg:top-auto lg:right-auto lg:w-full lg:h-full lg:rounded-none lg:shadow-none
         z-30
       "
     >
       <button
         onClick={() => setHide(true)}
         aria-label="Close ad"
-        className="absolute md:hidden z-50 bg-black text-white left-1 top-1 p-1.5 text-xs font-bold rounded-full leading-none"
+        className="absolute lg:hidden z-50 bg-black text-white left-1 top-1 p-1.5 text-xs font-bold rounded-full leading-none"
       >
-        <X size={12} />
+        <X size={20} />
       </button>
 
       <Link
