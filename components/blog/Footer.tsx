@@ -25,7 +25,7 @@ const Footer = () => {
 
   return (
     <div className="bg-[#1F1B16] w-full lg:h-screen text-white">
-      <footer className="w-full lg:h-1/2 relative z-10 bg-[#1F1B16] text-white">
+      <footer className="w-full lg:h-1/2 relative z-1 bg-[#1F1B16] text-white">
         <NewsLetter />
         <div className="max-w-[80%] mx-auto px-4 sm:px-6 py-8 lg:py-12 border-t border-dashed border-[#5E4F29] border-b flex flex-col lg:flex-row gap-8 lg:gap-10">
           {/* Left Section */}
@@ -289,6 +289,7 @@ const Footer = () => {
 
           <div className="grid gap-4 border-t border-[#D9C89A] pt-5 sm:gap-6 lg:grid-cols-[auto_1fr_auto] lg:items-center">
             <Link
+
               href="#list"
               className="group inline-flex w-fit items-center justify-center gap-2 rounded-xl bg-[linear-gradient(135deg,#EBC044,#F4CA3B_28%,#FFD33A_55%,#F4DC91_78%,#F4CA3B)] px-6 py-3.5 text-sm font-black text-[#151006] shadow-[0_18px_38px_rgba(0,0,0,0.28)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_22px_44px_rgba(154,106,0,0.32)] hover:brightness-105 sm:px-7 sm:py-4 sm:text-sm"
             >
