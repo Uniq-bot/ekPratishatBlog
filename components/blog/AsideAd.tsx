@@ -6,6 +6,18 @@ import { X } from "lucide-react";
 
 const AsideAd = ({ AsideAds }: { AsideAds: any }) => {
   const [hide, setHide] = useState(false);
+  const [visible, setVisible] = useState(false); // controls fade in/out
+
+  useEffect(() => {
+    // trigger fade-in on mount
+    const raf = requestAnimationFrame(() => setVisible(true));
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
+  const handleClose = () => {
+    setVisible(false); // start fade-out
+    setTimeout(() => setHide(true), 300); // match transition duration
+  };
 
   useEffect(() => {
     if (hide) return;
@@ -35,24 +47,29 @@ const AsideAd = ({ AsideAds }: { AsideAds: any }) => {
     <>
       {/* Dim backdrop — only for the popup state (below lg) */}
       <div
-        className="fixed inset-0 bg-black/50 z-20 lg:hidden"
-        onClick={() => setHide(true)}
+        className={`fixed inset-0 bg-black/50 z-20 lg:hidden transition-opacity duration-300 ease-in-out ${
+          visible ? "opacity-100" : "opacity-0"
+        }`}
+        onClick={handleClose}
       />
 
       <div
         title={AsideAds?.AdDescription}
-        className="
+        className={`
           overflow-hidden bg-white
-          fixed inset-0 m-auto w-60 h-40 rounded-md shadow-md
+          fixed inset-0 m-auto w-[80%] h-50 rounded-md shadow-md
           sm:w-36 sm:h-48
           md:w-100 md:h-80
 
           lg:static lg:m-0 lg:w-full lg:h-full lg:rounded-none lg:shadow-none
           z-30
-        "
+
+          transition-all duration-300 ease-in-out
+          ${visible ? "opacity-100 lg:scale-100 scale-100" : "opacity-0 lg:scale-100 scale-95"}
+        `}
       >
         <button
-          onClick={() => setHide(true)}
+          onClick={handleClose}
           aria-label="Close ad"
           className="absolute lg:hidden z-50 bg-black text-white left-1 top-1 p-1.5 text-xs font-bold rounded-full leading-none"
         >
