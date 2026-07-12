@@ -13,7 +13,6 @@ const PopularBlogs = ({ idx, currentLanguage, popularBlogs = [] }: { idx: number
     e.preventDefault();
     trackView(blog);
   };
-  console.log(popularBlogs)
   return (
     <section className="w-full p-4 sm:p-5 lg:p-5">
       <div className="flex items-center gap-3 border-b border-[#f0e3bd] pb-4">

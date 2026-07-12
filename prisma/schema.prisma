@@ -63,9 +63,9 @@ model BlogPost {
   comments     BlogComment[]
 
   @@index([status, createdAt])
-  @@index([status, viewCount, createdAt])
   @@index([isToggled, status])
   @@index([categoryID])
+  @@index([slug])
 }
 
 model BlogTranslation {

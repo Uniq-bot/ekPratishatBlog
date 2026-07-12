@@ -46,13 +46,13 @@ const BlogClientPage = ({
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-[linear-gradient(180deg,#fffdf8_0%,#f7efe0_100%)]">
-      <div className="relative w-full overflow-hidden px-4 pb-12 pt-24 sm:pt-28 md:px-16 lg:px-10 lg:pt-30">
+      <div className="relative w-full overflow-hidden px-4 pb-12 pt-24 sm:pt-28 md:px-16 lg:px-10 lg:pt-25">
         <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-6 lg:gap-8">
           <div className="text-center">
             <p
               className={`mx-auto mb-3 inline-flex rounded-full border border-[#eadcb4] bg-[#fffaf0] px-4 py-1 font-semibold uppercase text-[#8a6b12] ${
                 isEnglish
-                  ? "text-xs tracking-[0.22em]"
+                  ? "text-[14px] tracking-[0.22em]"
                   : "text-sm tracking-normal"
               }`}
             >
@@ -64,14 +64,14 @@ const BlogClientPage = ({
               <h1
                 className={`font-black ${
                   isEnglish
-                    ? "text-[1.75rem] sm:text-[2.5rem] md:text-[4rem] lg:text-[5rem] xl:text-[6rem]"
+                    ? "text-[1.75rem] sm:text-[2.5rem] md:text-[4rem] lg:text-[3rem] xl:text-[5rem]"
                     : "text-[2.2rem] sm:text-[3rem] md:text-[4.5rem] lg:text-[5.6rem] xl:text-[6.5rem]"
                 }`}
               >
                 {isEnglish ? "REAL-ESTATE" : "घरजग्गा"}
               </h1>
               <span
-                className={`flex flex-col font-black leading-none ${isEnglish ? "text-[1.75rem] sm:text-[2rem] lg:text-[3rem]" : "text-[1.95rem] sm:text-[2.4rem] lg:text-[3.4rem]"}`}
+                className={`flex flex-col font-black leading-none ${isEnglish ? "text-[1.75rem] sm:text-[2rem] lg:text-[2.7rem]" : "text-[1.95rem] sm:text-[2.4rem] lg:text-[3.4rem]"}`}
               >
                 <span className="text-transparent [-webkit-text-stroke:2px_#f1c810]">
                   {isEnglish ? "MADE" : "सम्बन्धी"}

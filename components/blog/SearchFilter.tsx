@@ -71,7 +71,7 @@ const SearchFilter = ({ category, tag, search = "", currentLanguage = "en" }: Se
   }, [query, category, tag, pathname, router, searchParams]);
 
   return (
-    <section className="border border-[#e7d6ab] bg-white/90 p-4 shadow-sm sm:p-5">
+    <section id="list"  className="border  border-[#e7d6ab] bg-white/90 p-4 shadow-sm sm:p-5">
       <div className="mb-3 flex items-center justify-between gap-3">
         <div>
           <p className={

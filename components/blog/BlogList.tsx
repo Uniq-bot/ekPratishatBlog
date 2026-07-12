@@ -63,7 +63,7 @@ const BlogList = ({
   };
 
   return (
-    <section className="w-full px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+    <section className="w-full  px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
       <div className="mb-7 flex flex-col gap-4 border-b border-[#f0e3bd] pb-5 sm:flex-row sm:items-end sm:justify-between">
         <div className="space-y-1.5">
           <p

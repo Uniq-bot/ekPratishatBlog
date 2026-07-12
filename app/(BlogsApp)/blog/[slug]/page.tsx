@@ -18,7 +18,7 @@ import { Metadata } from "next";
 
 export const getBlog = unstable_cache(
    async (slug: string) => {
-      const blog = await prisma.blogPost.findFirst({
+      const blog = await prisma.blogPost.findUnique({
         where: { slug },
         include: {
           category: { include: { translations: true } },
