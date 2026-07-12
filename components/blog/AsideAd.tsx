@@ -1,68 +1,95 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { X } from "lucide-react";
 
 const AsideAd = ({ AsideAds }: { AsideAds: any }) => {
   const [hide, setHide] = useState(false);
 
+  useEffect(() => {
+    if (hide) return;
+
+    const mql = window.matchMedia("(min-width: 1024px)"); // lg breakpoint
+
+    const lockScroll = () => {
+      if (!mql.matches) {
+        document.body.style.overflow = "hidden";
+      } else {
+        document.body.style.overflow = "";
+      }
+    };
+
+    lockScroll();
+    mql.addEventListener("change", lockScroll);
+
+    return () => {
+      document.body.style.overflow = "";
+      mql.removeEventListener("change", lockScroll);
+    };
+  }, [hide]);
+
   if (hide) return null;
 
   return (
-    <div
-      title={AsideAds?.AdDescription}
-      className="
-         overflow-hidden bg-white
-        absolute top-3 right-3 w-60 h-40 rounded-md shadow-md
-        sm:w-36 sm:h-48
-        md:w-100 md:h-80
-        
-        md:top-30 md:left-1/2 md:-translate-x-1/2 
-        lg:relative lg:top-auto lg:right-auto lg:w-full lg:h-full lg:rounded-none lg:shadow-none
-        z-30
-      "
-    >
-      <button
+    <>
+      {/* Dim backdrop — only for the popup state (below lg) */}
+      <div
+        className="fixed inset-0 bg-black/50 z-20 lg:hidden"
         onClick={() => setHide(true)}
-        aria-label="Close ad"
-        className="absolute lg:hidden z-50 bg-black text-white left-1 top-1 p-1.5 text-xs font-bold rounded-full leading-none"
-      >
-        <X size={20} />
-      </button>
+      />
 
-      <Link
-        href={AsideAds?.AdLink || "#"}
-        target="_blank"
-        className="w-full h-full flex flex-col gap-1 md:gap-2"
+      <div
+        title={AsideAds?.AdDescription}
+        className="
+          overflow-hidden bg-white
+          fixed inset-0 m-auto w-60 h-40 rounded-md shadow-md
+          sm:w-36 sm:h-48
+          md:w-100 md:h-80
+
+          lg:static lg:m-0 lg:w-full lg:h-full lg:rounded-none lg:shadow-none
+          z-30
+        "
       >
-        {/* Fixed-ratio image box using `fill` instead of forcing w-full on a
-            box whose width was undefined — this was the source of the blowup */}
-        <div className="relative w-full h-2/3">
-          <Image
-            src={AsideAds?.AdPoster || "/Ad1.png"}
-            unoptimized
-            alt="Ad"
-            fill
-            className="object-cover"
-          />
-          <div className="absolute bg-black px-2 py-0.5 text-white text-[10px] md:px-5 md:py-1 md:text-sm top-1 md:top-4 right-0 z-20 cursor-pointer">
-            <p>AD</p>
+        <button
+          onClick={() => setHide(true)}
+          aria-label="Close ad"
+          className="absolute lg:hidden z-50 bg-black text-white left-1 top-1 p-1.5 text-xs font-bold rounded-full leading-none"
+        >
+          <X size={20} />
+        </button>
+
+        <Link
+          href={AsideAds?.AdLink || "#"}
+          target="_blank"
+          className="w-full h-full flex flex-col gap-1 md:gap-2"
+        >
+          <div className="relative w-full h-2/3">
+            <Image
+              src={AsideAds?.AdPoster || "/Ad1.png"}
+              unoptimized
+              alt="Ad"
+              fill
+              className="object-cover"
+            />
+            <div className="absolute bg-black px-2 py-0.5 text-white text-[10px] md:px-5 md:py-1 md:text-sm top-1 md:top-4 right-0 z-20 cursor-pointer">
+              <p>AD</p>
+            </div>
           </div>
-        </div>
 
-        <div className="px-2 min-[1200px]:px-5">
-          <h1 className="text-black text-[11px] sm:text-sm md:text-xl lg:text-2xl font-bold ">
-            {AsideAds?.AdTitle}
-          </h1>
-          <p className="text-gray-700 text-[10px] sm:text-md min-[1200px]:text-xl">
-            {AsideAds?.AdDescription
-              ? `${AsideAds.AdDescription.substring(0, 30)}...`
-              : ""}
-          </p>
-        </div>
-      </Link>
-    </div>
+          <div className="px-2 min-[1200px]:px-5">
+            <h1 className="text-black text-[11px] sm:text-sm md:text-xl lg:text-2xl font-bold ">
+              {AsideAds?.AdTitle}
+            </h1>
+            <p className="text-gray-700 text-[10px] sm:text-md min-[1200px]:text-xl">
+              {AsideAds?.AdDescription
+                ? `${AsideAds.AdDescription.substring(0, 30)}...`
+                : ""}
+            </p>
+          </div>
+        </Link>
+      </div>
+    </>
   );
 };
 
