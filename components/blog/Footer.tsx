@@ -111,10 +111,11 @@ const Footer = () => {
         {/* Privacy row */}
         <div className="mt-12 pt-4 border-t border-[#3A3226] flex justify-end">
           <Link
-            href="#"
+           href="/terms"
             className="group inline-flex items-center gap-1.5 text-sm font-semibold uppercase tracking-[0.14em] text-gray-400 hover:text-[#EBC044] transition-colors"
           >
-            Privacy
+                          Terms
+
             <ArrowUpRight
               size={20}
               className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
@@ -125,15 +126,7 @@ const Footer = () => {
         {/* Bottom bar */}
         <div className="mt-4 pt-4 border-t border-[#3A3226] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-sm text-gray-400">
           <span>© {new Date().getFullYear()} Ekpratishat. All rights reserved.</span>
-          <div className="flex items-center gap-3 font-medium">
-            <Link href="#" className="hover:text-[#EBC044] transition-colors">
-              Terms
-            </Link>
-            <span>·</span>
-            <Link href="#" className="hover:text-[#EBC044] transition-colors">
-              Disclaimer
-            </Link>
-          </div>
+         
         </div>
        </div>
       </footer>
