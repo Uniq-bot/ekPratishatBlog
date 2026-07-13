@@ -21,9 +21,9 @@ const socialLinks = [
 const Footer = () => {
   return (
     <div className=" w-full bg-[#1D1D1D]  text-white">
-      <footer className=" relative z-10 w-full bg-[#1D1D1D] mx-auto px-4 sm:px-6 lg:px-10 py-14 sm:py-20">
-       <div className="max-w-7xl w-full mx-auto">
-         <div className="grid  grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
+      <footer className=" relative z-10 w-full bg-[#1D1D1D] mx-auto px-4 sm:px-6 lg:px-10 py-10 sm:py-15">
+       <div className="max-w-7xl  w-full mx-auto">
+         <div className="grid  grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 items-center gap-10 lg:gap-8">
           {/* Logo + tagline */}
           <div className="flex flex-col gap-4">
             <Image
@@ -31,15 +31,15 @@ const Footer = () => {
               width={100}
               height={100}
               alt="Ekpratishat Logo"
-              className="w-14 h-14 object-contain"
+              className="w-20 h-20 object-contain"
             />
-            <p className="text-sm leading-6 text-gray-400 max-w-[26ch]">
+            <p className="text-3xl font-black text-gray-300 tracking-wider max-w-[26ch]">
               Reach EkPratishat through the right channel.
             </p>
           </div>
 
           {/* Contact */}
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col pt-7 gap-6">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#EBC044] mb-2">
                 Call us
@@ -83,7 +83,7 @@ const Footer = () => {
           </div>
 
           {/* Social */}
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col items-start gap-3">
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#EBC044] mb-1">
               Find us at
             </p>
@@ -112,18 +112,18 @@ const Footer = () => {
         <div className="mt-12 pt-4 border-t border-[#3A3226] flex justify-end">
           <Link
             href="#"
-            className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-gray-400 hover:text-[#EBC044] transition-colors"
+            className="group inline-flex items-center gap-1.5 text-sm font-semibold uppercase tracking-[0.14em] text-gray-400 hover:text-[#EBC044] transition-colors"
           >
             Privacy
             <ArrowUpRight
-              size={12}
+              size={20}
               className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
             />
           </Link>
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-4 pt-4 border-t border-[#3A3226] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-xs text-gray-400">
+        <div className="mt-4 pt-4 border-t border-[#3A3226] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-sm text-gray-400">
           <span>© {new Date().getFullYear()} Ekpratishat. All rights reserved.</span>
           <div className="flex items-center gap-3 font-medium">
             <Link href="#" className="hover:text-[#EBC044] transition-colors">
@@ -150,7 +150,7 @@ const Footer = () => {
               </h2>
               <p className="mt-3 text-sm sm:text-base leading-6 text-[#6B5C3D]">
                 Deep-dives, trends, and expert takes to help you understand real
-                estate — before you make a move.
+                estate - before you make a move.
               </p>
             </div>
 
@@ -169,7 +169,7 @@ const Footer = () => {
           <div className="pt-6 text-xs text-[#6B5C3D]">
             <p className="max-w-md leading-5">
               Ekpratishat Blog shares real estate knowledge, market trends, and
-              buying tips — for informational purposes only.
+              buying tips - for informational purposes only.
             </p>
           </div>
         </div>
