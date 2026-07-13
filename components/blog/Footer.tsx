@@ -20,8 +20,8 @@ const socialLinks = [
 
 const Footer = () => {
   return (
-    <div className=" w-full bg-[#1D1D1D]  text-white">
-      <footer className=" relative z-10 w-full bg-[#1D1D1D] mx-auto px-4 sm:px-6 lg:px-10 py-10 sm:py-15">
+    <div className=" w-full bg-[#252119]  text-white">
+      <footer className=" relative z-10 w-full bg-[#252119] mx-auto px-4 sm:px-6 lg:px-10 py-10 sm:py-15">
        <div className="max-w-7xl  w-full mx-auto">
          <div className="grid  grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 items-center gap-10 lg:gap-8">
           {/* Logo + tagline */}
@@ -138,7 +138,7 @@ const Footer = () => {
        </div>
       </footer>
 
-      <section className="border-t sticky bottom-0 z-0 border-[#3A3226] bg-[#fffaf0] text-[#241D12]">
+      <section className="border-t sticky bottom-0 z-0 border-[#3A3226] bg-[linear-gradient(160deg,#fffaf0_0%,#f7f0df_58%,#eadcc4_100%)]  text-[#241D12]">
         <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 py-10 sm:py-14">
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 pb-10 border-b border-[#eadcb4]">
             <div className="max-w-xl">
