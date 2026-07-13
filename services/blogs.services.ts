@@ -340,7 +340,16 @@ export const getAllCategories = async () => {
   });
 };
 
-export const updateCategory = async (id: string, name: string, description?: string) => {
+export const updateCategory = async (
+  id: string,
+  name: string,
+  nameNp?: string,
+  description?: string,
+) => {
+  const englishName = name.trim();
+  const nepaliName = nameNp?.trim() || englishName;
+  const englishDescription = description?.trim() || null;
+
   return prisma.category.update({
     where: { id },
     data: {
@@ -350,12 +359,24 @@ export const updateCategory = async (id: string, name: string, description?: str
             where: { categoryId_language: { categoryId: id, language: "en" } },
             create: {
               language: "en",
-              name,
-              description: description?.trim() || null,
+              name: englishName,
+              description: englishDescription,
             },
             update: {
-              name,
-              description: description?.trim() || null,
+              name: englishName,
+              description: englishDescription,
+            },
+          },
+          {
+            where: { categoryId_language: { categoryId: id, language: "ne" } },
+            create: {
+              language: "ne",
+              name: nepaliName,
+              description: englishDescription,
+            },
+            update: {
+              name: nepaliName,
+              description: englishDescription,
             },
           },
         ],
@@ -403,7 +424,10 @@ export const getAllTags = async () => {
   }));
 };
 
-export const updateTag = async (id: string, name: string) => {
+export const updateTag = async (id: string, name: string, nameNp?: string) => {
+  const englishName = name.trim();
+  const nepaliName = nameNp?.trim() || englishName;
+
   return prisma.tag.update({
     where: { id },
     data: {
@@ -413,10 +437,20 @@ export const updateTag = async (id: string, name: string) => {
             where: { tagId_language: { tagId: id, language: "en" } },
             create: {
               language: "en",
-              name,
+              name: englishName,
             },
             update: {
-              name,
+              name: englishName,
+            },
+          },
+          {
+            where: { tagId_language: { tagId: id, language: "ne" } },
+            create: {
+              language: "ne",
+              name: nepaliName,
+            },
+            update: {
+              name: nepaliName,
             },
           },
         ],

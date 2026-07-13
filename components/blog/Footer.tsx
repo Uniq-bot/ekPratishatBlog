@@ -22,113 +22,113 @@ const Footer = () => {
   return (
     <div className=" w-full bg-[#252119]  text-white">
       <footer className=" relative z-10 w-full bg-[#252119] mx-auto px-4 sm:px-6 lg:px-10 py-10 sm:py-15">
-       <div className="max-w-7xl  w-full mx-auto">
-         <div className="grid  grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 items-center gap-10 lg:gap-8">
-          {/* Logo + tagline */}
-          <div className="flex flex-col gap-4">
-            <Image
-              src="/logo.png"
-              width={100}
-              height={100}
-              alt="Ekpratishat Logo"
-              className="w-20 h-20 object-contain"
-            />
-            <p className="text-3xl font-black text-gray-300 tracking-wider max-w-[26ch]">
-              Reach EkPratishat through the right channel.
-            </p>
-          </div>
+        <div className="max-w-7xl  w-full mx-auto">
+          <div className="grid  grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 items-center gap-10 lg:gap-8">
+            {/* Logo + tagline */}
+            <div className="flex flex-col gap-4">
+              <Image
+                src="/logo.png"
+                width={100}
+                height={100}
+                alt="Ekpratishat Logo"
+                className="w-20 h-20 object-contain"
+              />
+              <p className="text-3xl font-black text-gray-300 tracking-wider max-w-[26ch]">
+                Reach EkPratishat through the right channel.
+              </p>
+            </div>
 
-          {/* Contact */}
-          <div className="flex flex-col pt-7 gap-6">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#EBC044] mb-2">
-                Call us
-              </p>
-              <p className="text-sm font-medium text-white">9712068341</p>
-              <p className="text-sm font-medium text-white">9712068342</p>
-            </div>
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#EBC044] mb-2">
-                Get in touch
-              </p>
-              <p className="text-sm font-medium text-white break-all">
-                hello@ekpratishat.com
-              </p>
-            </div>
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#EBC044] mb-2">
-                Get the app
-              </p>
-              <div className="flex gap-2">
-                <button className="border border-[#3A3226] rounded-lg overflow-hidden cursor-pointer w-24 shrink-0 hover:border-[#EBC044] transition-colors">
-                  <Image
-                    src="/playstore.png"
-                    alt="Play Store"
-                    width={130}
-                    height={45}
-                    className="object-contain w-full h-full"
-                  />
-                </button>
-                <button className="border border-[#3A3226] rounded-lg overflow-hidden cursor-pointer w-24 shrink-0 hover:border-[#EBC044] transition-colors">
-                  <Image
-                    src="/appstore.png"
-                    alt="App Store"
-                    width={130}
-                    height={45}
-                    className="object-contain w-full h-full"
-                  />
-                </button>
+            {/* Contact */}
+            <div className="flex flex-col pt-7 gap-6">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#EBC044] mb-2">
+                  Call us
+                </p>
+                <p className="text-sm font-medium text-white">9712068341</p>
+                <p className="text-sm font-medium text-white">9712068342</p>
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#EBC044] mb-2">
+                  Get in touch
+                </p>
+                <p className="text-sm font-medium text-white break-all">
+                  hello@ekpratishat.com
+                </p>
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#EBC044] mb-2">
+                  Get the app
+                </p>
+                <div className="flex gap-2">
+                  <button className="border border-[#3A3226] rounded-lg overflow-hidden cursor-pointer w-24 shrink-0 hover:border-[#EBC044] transition-colors">
+                    <Image
+                      src="/playstore.png"
+                      alt="Play Store"
+                      width={130}
+                      height={45}
+                      className="object-contain w-full h-full"
+                    />
+                  </button>
+                  <button className="border border-[#3A3226] rounded-lg overflow-hidden cursor-pointer w-24 shrink-0 hover:border-[#EBC044] transition-colors">
+                    <Image
+                      src="/appstore.png"
+                      alt="App Store"
+                      width={130}
+                      height={45}
+                      className="object-contain w-full h-full"
+                    />
+                  </button>
+                </div>
               </div>
             </div>
+
+            {/* Social */}
+            <div className="flex flex-col items-start gap-3">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#EBC044] mb-1">
+                Find us at
+              </p>
+              {socialLinks.map(({ label, href }) => (
+                <Link
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-1.5 text-sm font-medium w-fit text-white hover:text-[#EBC044] transition-colors"
+                >
+                  {label}
+                  <ArrowUpRight
+                    size={14}
+                    className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  />
+                </Link>
+              ))}
+            </div>
+
+            {/* Newsletter */}
+            <NewsLetter />
           </div>
 
-          {/* Social */}
-          <div className="flex flex-col items-start gap-3">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#EBC044] mb-1">
-              Find us at
-            </p>
-            {socialLinks.map(({ label, href }) => (
-              <Link
-                key={label}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group inline-flex items-center gap-1.5 text-sm font-medium w-fit text-white hover:text-[#EBC044] transition-colors"
-              >
-                {label}
-                <ArrowUpRight
-                  size={14}
-                  className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                />
-              </Link>
-            ))}
+          {/* Privacy row */}
+          <div className="mt-12 pt-4 border-t border-[#3A3226] flex justify-end">
+            <Link
+              href="/terms"
+              className="group inline-flex items-center gap-1.5 text-sm font-semibold uppercase tracking-[0.14em] text-gray-400 hover:text-[#EBC044] transition-colors"
+            >
+              Terms
+              <ArrowUpRight
+                size={20}
+                className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              />
+            </Link>
           </div>
 
-          {/* Newsletter */}
-          <NewsLetter />
+          {/* Bottom bar */}
+          <div className="mt-4 pt-4 border-t border-[#3A3226] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-sm text-gray-400">
+            <span>
+              © {new Date().getFullYear()} Ekpratishat. All rights reserved.
+            </span>
+          </div>
         </div>
-
-        {/* Privacy row */}
-        <div className="mt-12 pt-4 border-t border-[#3A3226] flex justify-end">
-          <Link
-           href="/terms"
-            className="group inline-flex items-center gap-1.5 text-sm font-semibold uppercase tracking-[0.14em] text-gray-400 hover:text-[#EBC044] transition-colors"
-          >
-                          Terms
-
-            <ArrowUpRight
-              size={20}
-              className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-            />
-          </Link>
-        </div>
-
-        {/* Bottom bar */}
-        <div className="mt-4 pt-4 border-t border-[#3A3226] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-sm text-gray-400">
-          <span>© {new Date().getFullYear()} Ekpratishat. All rights reserved.</span>
-         
-        </div>
-       </div>
       </footer>
 
       <section className="border-t sticky bottom-0 z-0 border-[#3A3226] bg-[linear-gradient(160deg,#fffaf0_0%,#f7f0df_58%,#eadcc4_100%)]  text-[#241D12]">

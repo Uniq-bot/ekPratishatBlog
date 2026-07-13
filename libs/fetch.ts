@@ -190,6 +190,24 @@ export const createCategory = async (newCat: {
   return res.json();
 };
 
+export const updateCategory = async (payload: {
+  id: string;
+  name: string;
+  nameNp?: string;
+  description?: string;
+}) => {
+  const res = await fetch(`${getBaseUrl()}/api/categories`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || "Failed to update category");
+  }
+  return res.json();
+};
+
 export const fetchTags = async () => {
   const res = await fetch(`${getBaseUrl()}/api/tags`);
   if (!res.ok) throw new Error("Failed to fetch tags");
@@ -205,6 +223,19 @@ export const createTag = async (newTag: { name: string; nameNp?: string }) => {
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
     throw new Error(err.message || "Failed to create tag");
+  }
+  return res.json();
+};
+
+export const updateTag = async (payload: { id: string; name: string; nameNp?: string }) => {
+  const res = await fetch(`${getBaseUrl()}/api/tags`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || "Failed to update tag");
   }
   return res.json();
 };

@@ -6,7 +6,7 @@ export type AdminTab =
   | "tags";
 
 export interface Category {
-  translations: any;
+  translations?: Array<{ language: string; name: string; description?: string | null }>;
   id: string;
   name: string;
   slug: string;
@@ -27,6 +27,7 @@ export type BlogItems = {
 export interface Tag {
   id: string;
   name: string;
+  translations?: Array<{ language: string; name: string }>;
 }
 
 export interface Blog {

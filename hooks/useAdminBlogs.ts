@@ -3,6 +3,8 @@ import {
   createCategory,
   createTag,
   curateBlog,
+  updateCategory,
+  updateTag,
   deleteBlog,
   fetchBlogs,
   fetchCategory,
@@ -246,6 +248,26 @@ export const useCreateCategory = () => {
   });
 };
 
+export const useUpdateCategory = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: updateCategory,
+    onMutate: (payload) => ({
+      toastId: notify.loading("Updating category", `Saving changes for “${payload.name}”.`),
+    }),
+    onSuccess: (_data, _variables, context) => {
+      notify.success("Category updated", "The category details were saved successfully.", context?.toastId);
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
+    },
+    onError: (error, _variables, context) =>
+      notify.error(
+        "Category update failed",
+        messageFromError(error, "We could not update the category right now."),
+        context?.toastId,
+      ),
+  });
+};
+
 // ─── Tags ────────────────────────────────────────────────────────────────────
 
 export const useGetTags = () => {
@@ -273,6 +295,26 @@ export const useCreateTag = () => {
       notify.error(
         "Tag creation failed",
         messageFromError(error, "We could not create the tag right now."),
+        context?.toastId,
+      ),
+  });
+};
+
+export const useUpdateTag = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: updateTag,
+    onMutate: (payload) => ({
+      toastId: notify.loading("Updating tag", `Saving changes for “${payload.name}”.`),
+    }),
+    onSuccess: (_data, _variables, context) => {
+      notify.success("Tag updated", "The tag details were saved successfully.", context?.toastId);
+      queryClient.invalidateQueries({ queryKey: ["tags"] });
+    },
+    onError: (error, _variables, context) =>
+      notify.error(
+        "Tag update failed",
+        messageFromError(error, "We could not update the tag right now."),
         context?.toastId,
       ),
   });
