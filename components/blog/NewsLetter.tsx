@@ -1,5 +1,6 @@
 "use client";
 import { useNewsLetterMutate } from "@/hooks/useNewsLetter";
+import { ArrowUpRight } from "lucide-react";
 import React from "react";
 import { notify } from "@/libs/notify";
 
@@ -37,41 +38,32 @@ const NewsLetter = () => {
   };
 
   return (
-    <section className="w-full  py-2 ">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 xl:px-20 py-5 lg:py-6 flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-8">
-        {/* Left: label + heading */}
-        <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-4 lg:shrink-0">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#EFC75A]">
-            Newsletter
-          </p>
-          <h2 className="text-base sm:text-lg font-bold leading-tight text-white">
-            Stay in the loop
-          </h2>
-        </div>
-
-        <p className="hidden lg:block text-sm leading-6 text-gray-400 lg:flex-1">
-          Get the latest articles and stories delivered straight to your inbox.
-        </p>
-
-        {/* Right: input + button */}
-        <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-3 lg:shrink-0">
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email"
-            className="h-11 w-full sm:w-64 rounded-lg border-2 border-[#5E4F29] bg-[#1F1B16] px-4 text-sm text-white outline-none transition-colors placeholder:text-gray-500 focus:border-[#EFC75A]"
-          />
-          <button
-            onClick={handleClick}
-            disabled={isSubmitting}
-            className="inline-flex h-11 items-center justify-center whitespace-nowrap rounded-lg bg-[linear-gradient(135deg,#EBC044,#F4CA3B_28%,#FFD33A_55%,#F4DC91_78%,#F4CA3B)] px-5 font-bold text-[#1F1B16] transition-all hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
-          >
-            {isSubmitting ? "Submitting..." : "Subscribe"}
-          </button>
-        </div>
+    <div className="flex flex-col gap-3">
+      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#EBC044]">
+        Newsletter
+      </p>
+      <div className="flex items-center gap-2 rounded-full border border-[#3A3226] bg-[#252017] pl-4 pr-1.5 py-1.5 focus-within:border-[#EBC044] transition-colors">
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Your email address"
+          className="flex-1 min-w-0 bg-transparent text-sm outline-none text-white placeholder:text-gray-500"
+        />
+        <button
+          onClick={handleClick}
+          disabled={isSubmitting}
+          aria-label="Subscribe"
+          className="shrink-0 inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#EBC044] text-[#1D1D1D] transition-colors hover:bg-[#F4D673] disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {isSubmitting ? (
+            <span className="h-2 w-2 rounded-full bg-[#1D1D1D] animate-pulse" />
+          ) : (
+            <ArrowUpRight size={16} />
+          )}
+        </button>
       </div>
-    </section>
+    </div>
   );
 };
 

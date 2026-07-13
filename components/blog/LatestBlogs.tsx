@@ -80,7 +80,7 @@ const LatestBlogs = ({ idx, latestBlogs = [], ads }: { idx: number; latestBlogs?
             className="group flex gap-3 border border-[#eadcb4] bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(251,247,239,0.96)_100%)] p-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#d8b24a]"
           >
             <div className="relative h-20 w-24 shrink-0 overflow-hidden bg-[#1d1d1d]">
-              <Image src={blog?.coverImage ?? "/logo.png"} alt={blog?.title ?? "Blog cover"} fill sizes="96px" className="object-cover transition-transform duration-500 group-hover:scale-105" />
+              <Image src={blog?.coverImage ?? "/logo.png"} alt={blog?.title ?? "Blog cover"}  width={200} height={200} className=" object-cover w-full h-full transition-transform duration-500 group-hover:scale-105" />
             </div>
 
             <div className="flex min-w-0 flex-1 flex-col gap-2">
