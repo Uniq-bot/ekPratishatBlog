@@ -18,13 +18,15 @@ const CuratedBlog = ({ idx, currentLanguage, curatedBlog }: { idx: number; curre
 
   return (
     <div onClick={handleClick} className="group relative h-full w-full cursor-pointer overflow-hidden bg-black">
-      <Image
+     <div className="w-full h-100">
+       <Image
         src={curatedBlog?.coverImage || "/Ad1.png"}
         alt="Featured story"
         width={1000}
         height={1000}
         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
       />
+     </div>
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.05)_0%,rgba(0,0,0,0.12)_42%,rgba(0,0,0,0.76)_100%)]" />
       <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col gap-2 p-3 sm:p-5 lg:p-6">
         <span
@@ -35,7 +37,7 @@ const CuratedBlog = ({ idx, currentLanguage, curatedBlog }: { idx: number; curre
           {currentLanguage === "en" ? "FEATURED STORY" : "विशेष कथा"}
         </span>
         <h1
-          className={`max-w-2xl line-clamp-2    leading-tight text-white ${
+          className={`max-w-2xl text-shadow-2xl text-shadow-black  line-clamp-2    leading-tight text-white ${
             currentLanguage === "en"
               ? "text-lg sm:text-3xl lg:text-4xl font-black"
               : "text-[1.35rem] sm:text-[2.25rem] lg:text-[3rem] font-semibold"

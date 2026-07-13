@@ -38,7 +38,7 @@ import { Prisma } from "@/generated/prisma/client";
 
 export async function getBlogs({
   page = 1,
-  limit = 4,
+  limit = 6,
   category,
   tag,
   sort = "latest",

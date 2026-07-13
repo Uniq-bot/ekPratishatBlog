@@ -99,7 +99,7 @@ const BlogList = ({
         </div>
       </div>
 
-      <div className="flex w-full flex-col gap-4">
+      <div className=" w-full grid grid-cols-3  gap-4">
         {blogs?.length > 0 ? (
           blogs.map((blog) => (
             <BlogCard

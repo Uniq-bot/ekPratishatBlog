@@ -84,9 +84,9 @@ const BlogCard = ({ blog, idx = 0, currentLanguage = "en" }: { blog: any; idx?: 
       href={`/blog/${blog.slug}`}
       onClick={handleClick}
       title={blog.title}
-      className="group flex h-full flex-col gap-4 overflow-hidden border border-[#e8ddbf] bg-[linear-gradient(135deg,rgba(255,255,255,0.98)_0%,rgba(252,248,240,0.96)_100%)] p-3 shadow-[0_18px_45px_rgba(17,24,39,0.08)] transition-all duration-300 hover:-translate-y-1 hover:border-[#d8b24a] sm:flex-row sm:items-start sm:gap-5 sm:p-5"
+      className="group flex h-full flex-col gap-4 overflow-hidden justify-between border border-[#e8ddbf] bg-[linear-gradient(135deg,rgba(255,255,255,0.98)_0%,rgba(252,248,240,0.96)_100%)] p-3 shadow-[0_18px_45px_rgba(17,24,39,0.08)] transition-all duration-300 hover:-translate-y-1 hover:border-[#d8b24a] "
     >
-      <div className="relative h-48 w-full shrink-0 overflow-hidden bg-[#1d1d1d] sm:h-36 sm:w-56">
+      <div className="relative h-48 w-full shrink-0 overflow-hidden bg-[#1d1d1d] sm:h-36 sm:w-full">
         <Image
           src={thumbnail}
           alt={blog.title}
@@ -96,7 +96,7 @@ const BlogCard = ({ blog, idx = 0, currentLanguage = "en" }: { blog: any; idx?: 
         />
       </div>
 
-      <div className="flex min-w-0 flex-1 flex-col justify-between gap-3">
+      <div className="flex min-w-0 flex-1 flex-col  gap-3">
         <div className="flex flex-wrap items-center gap-2 text-sm text-[#8a7a4a]">
           <span className={
             currentLanguage === "en"?
@@ -114,8 +114,8 @@ const BlogCard = ({ blog, idx = 0, currentLanguage = "en" }: { blog: any; idx?: 
         </div>
 
         <h2
-          className={`font-(family-name:--font-display) line-clamp-2 text-sm  leading-snug text-[#1d1d1d] transition-colors group-hover:text-[#7a5a09] ${
-            isEnglish ? "sm:text-lg font-bold " : "text-[20px] sm:text-2xl"
+          className={`font-(family-name:--font-display) line-clamp-3 text-sm  leading-snug text-[#1d1d1d] transition-colors group-hover:text-[#7a5a09] ${
+            isEnglish ? "sm:text-[17px] tracking-wider font-bold " : "text-[20px] sm:text-2xl"
           }`}
         >
           {blog.translations?.[idx]?.title || blog.title || "Untitled"}

@@ -53,13 +53,7 @@ const [menuOpen, setMenuOpen] = useState(false);
   <div className="flex items-center justify-between px-4 lg:px-10 py-4">
     {/* Logo */}
     <Link href="/">
-      <Image
-        src="/logo.png"
-        alt="Logo"
-        width={45}
-        height={45}
-        className="w-10 h-10 lg:w-12 lg:h-12"
-      />
+      <img src={"/logo.png"} className="w-12 h-10 md:w-16 md:h-12 lg:w-20 lg:h-15" />
     </Link>
 
     {/* Desktop Nav */}
