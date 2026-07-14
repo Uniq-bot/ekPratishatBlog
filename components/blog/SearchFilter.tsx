@@ -71,11 +71,15 @@ const SearchFilter = ({ category, tag, search = "", currentLanguage = "en" }: Se
 
     return () => clearTimeout(timer);
   }, [query, category, tag, pathname, router, searchParams]);
-
+  const  handleButton=()=>{
+    setQuery("");
+    setSearchBoxOpen(!searchBoxOpen)
+    
+  }
   return (
     <div className="flex w-full  gap-0 sm:w-auto pb-1">
       <button
-        onClick={() => setSearchBoxOpen(!searchBoxOpen)}
+        onClick={() => handleButton()}
         aria-label={searchBoxOpen ? "Close search" : "Open search"}
         className="flex shrink-0 items-center justify-center border border-[#d8c58e] bg-[#fffdf7] px-4  text-sm text-black transition-colors hover:bg-[#f4c91b]/20"
       >
