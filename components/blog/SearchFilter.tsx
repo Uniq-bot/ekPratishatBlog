@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Search, X } from "lucide-react";
 
 interface SearchFilterProps {
   category?: string;
@@ -16,6 +17,7 @@ const SearchFilter = ({ category, tag, search = "", currentLanguage = "en" }: Se
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [query, setQuery] = useState(search ?? "");
+  const [searchBoxOpen, setSearchBoxOpen] = useState(false);
 
   useEffect(() => {
     setQuery(search ?? "");
@@ -71,32 +73,27 @@ const SearchFilter = ({ category, tag, search = "", currentLanguage = "en" }: Se
   }, [query, category, tag, pathname, router, searchParams]);
 
   return (
-    <section id="list"  className="border  border-[#e7d6ab] bg-white/90 p-4 shadow-sm sm:p-5">
-      <div className="mb-3 flex items-center justify-between gap-3">
-        <div>
-          <p className={
-            currentLanguage === "en"
-              ? "text-xs font-semibold uppercase tracking-[0.18em] text-[#8a6b12]"
-              : "text-sm font-semibold uppercase  text-[#8a6b12]"
-          }>
-            {currentLanguage === "en" ? "SEARCH" : "खोज"}
-          </p>
-          <h3 className="text-base font-bold text-black">
-            {currentLanguage === "en" ? "Find articles" : "लेख खोज्नुहोस्"}
-          </h3>
-        </div>
-        <span className="bg-[#fff7dc] px-3 py-1 text-xs font-semibold text-black">
-          {currentLanguage === "en" ? "Quick search" : "द्रुत खोज"}
-        </span>
-      </div>
+    <div className="flex w-full  gap-0 sm:w-auto pb-1">
+      <button
+        onClick={() => setSearchBoxOpen(!searchBoxOpen)}
+        aria-label={searchBoxOpen ? "Close search" : "Open search"}
+        className="flex shrink-0 items-center justify-center border border-[#d8c58e] bg-[#fffdf7] px-4  text-sm text-black transition-colors hover:bg-[#f4c91b]/20"
+      >
+        {searchBoxOpen ? <X size={18} /> : <Search size={18} />}
+      </button>
+
       <input
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         type="text"
         placeholder={currentLanguage === "en" ? "Search posts" : "पोस्टहरू खोज्नुहोस्"}
-        className="h-12 w-full border border-[#d8c58e] bg-[#fffdf7] px-4 text-sm text-black outline-none transition-colors placeholder:text-black/35 focus:border-[#c9981a] focus:ring-2 focus:ring-[#f4c91b]/20"
+        className={`min-w-0 border border-l-0 border-[#d8c58e] bg-[#fffdf7] py-2 text-sm text-black outline-none transition-all duration-300 placeholder:text-black/35 focus:border-[#c9981a] focus:ring-2 focus:ring-[#f4c91b]/20 ${
+          searchBoxOpen
+            ? "w-full px-4 opacity-100 sm:w-64"
+            : "w-0 border-l-0 px-0 opacity-0 pointer-events-none"
+        }`}
       />
-    </section>
+    </div>
   );
 };
 

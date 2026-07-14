@@ -99,16 +99,18 @@ const BlogList = ({
         </div>
       </div>
 
-      <div className=" w-full grid grid-cols-3  gap-4">
+      <div className=" w-full flex items-center justify-center">
         {blogs?.length > 0 ? (
-          blogs.map((blog) => (
+         <div className=" w-full grid grid-cols-1 md:grid-cols-3 items-center  gap-4">
+          { blogs.map((blog) => (
             <BlogCard
               key={blog.id}
               blog={blog}
               idx={idx}
               currentLanguage={currentLanguage}
             />
-          ))
+          ))}
+         </div>
         ) : (
           <p className="w-full py-10 text-center text-sm text-gray-500">
             {isEnglish ? "No posts found." : "कुनै पोस्ट फेला परेन।"}

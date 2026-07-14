@@ -2,17 +2,24 @@
 import Link from "next/link";
 import React from "react";
 import { usePathname, useSearchParams } from "next/navigation";
+import SearchFilter from "./SearchFilter";
 
 const CategoryNav = ({
   categories,
   totalCounts,
   idx = 0,
+  category,
+  tag,
+  search,
   currentLanguage = "en",
 }: {
   categories: { id: string; name: string; slug: string; translations?: any }[];
   idx?: number;
   currentLanguage?: string;
   totalCounts: number;
+  category?: string;
+  tag?: string;
+  search?: string;
 }) => {
   const searchParams = useSearchParams();
 
@@ -57,42 +64,51 @@ const CategoryNav = ({
           </h3>
         </div>
         <div
-          className={`border border-[#eadcb4] bg-[#fffaf0] px-4 py-2 font-semibold text-black shadow-sm ${currentLanguage==="en" ? "text-sm" : "text-base"}`}
+          className={`border border-[#eadcb4] bg-[#fffaf0] px-4 py-2 font-semibold text-black shadow-sm ${currentLanguage === "en" ? "text-sm" : "text-base"}`}
         >
-          {totalCounts} {currentLanguage==="en" ? "Articles" : "लेखहरू"}
+          {totalCounts} {currentLanguage === "en" ? "Articles" : "लेखहरू"}
         </div>
       </div>
 
-      <div className="flex gap-2 overflow-x-auto pb-1">
-        <Link
-          scroll={false}
-          href={buildCategoryHref()}
-          className={`shrink-0  border px-4 py-2 font-semibold transition-colors ${
-            currentLanguage === "en" ? "text-sm" : "text-base"
-          } ${
-            !currentCategory
-              ? "border-[#f2cf67] bg-[linear-gradient(135deg,#EBC044,#F4CA3B_28%,#FFD33A_55%,#F4DC91_78%,#F4CA3B)] text-black"
-              : "border-[#d9c8a0] bg-[#fffdf6] text-black hover:border-[#c9981a]"
-          }`}
-        >
-          {currentLanguage === "en" ? "All" : "सबै"}
-        </Link>
-        {categories.map((category) => (
+ <div className="flex items-center flex-col lg:flex-row lg:overflow-x-hidden gap-2">
+        <SearchFilter
+          category={category}
+          tag={tag}
+          search={search}
+          idx={idx}
+          currentLanguage={currentLanguage}
+        />
+        <div className="flex w-full min-w-0 gap-2 overflow-x-auto pb-1 items-center">
           <Link
-            key={category.id}
             scroll={false}
-            href={buildCategoryHref(category.slug)}
-            className={`shrink-0 whitespace-nowrap  border px-4 py-2 font-semibold transition-colors ${
+            href={buildCategoryHref()}
+            className={`shrink-0  border px-4 py-2 font-semibold transition-colors ${
               currentLanguage === "en" ? "text-sm" : "text-base"
             } ${
-              currentCategory === category.slug
+              !currentCategory
                 ? "border-[#f2cf67] bg-[linear-gradient(135deg,#EBC044,#F4CA3B_28%,#FFD33A_55%,#F4DC91_78%,#F4CA3B)] text-black"
                 : "border-[#d9c8a0] bg-[#fffdf6] text-black hover:border-[#c9981a]"
             }`}
           >
-            {category?.translations?.[idx]?.name || category.name}
+            {currentLanguage === "en" ? "All" : "सबै"}
           </Link>
-        ))}
+          {categories.map((cat) => (
+            <Link
+              key={cat.id}
+              scroll={false}
+              href={buildCategoryHref(cat.slug)}
+              className={`shrink-0 whitespace-nowrap  border px-4 py-2 font-semibold transition-colors ${
+                currentLanguage === "en" ? "text-sm" : "text-base"
+              } ${
+                currentCategory === cat.slug
+                  ? "border-[#f2cf67] bg-[linear-gradient(135deg,#EBC044,#F4CA3B_28%,#FFD33A_55%,#F4DC91_78%,#F4CA3B)] text-black"
+                  : "border-[#d9c8a0] bg-[#fffdf6] text-black hover:border-[#c9981a]"
+              }`}
+            >
+              {cat?.translations?.[idx]?.name || cat.name}
+            </Link>
+          ))}
+        </div>
       </div>
     </section>
   );

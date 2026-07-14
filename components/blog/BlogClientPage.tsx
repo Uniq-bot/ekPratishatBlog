@@ -195,18 +195,15 @@ const BlogClientPage = ({
       <div className="w-full px-4 pb-12 sm:px-6 lg:px-8">
         <div className="mx-auto flex max-w-7xl flex-col gap-8">
           <div className="flex flex-col gap-5">
-            <SearchFilter
-              category={category}
-              tag={tag}
-              search={search}
-              idx={idx}
-              currentLanguage={currentLanguage}
-            />
+            
             <CategoryNav
               totalCounts={blogs.totalCount}
               categories={categories}
               idx={idx}
               currentLanguage={currentLanguage}
+               category={category}
+              tag={tag}
+              search={search}
             />
             <BlogList
               blogs={blogs.posts}
