@@ -41,92 +41,102 @@ const NavBar = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
-  <div
-  className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-    isScrolled || menuOpen
-      ? "bg-black/70 backdrop-blur-md shadow-lg"
-      : "bg-transparent"
-  }`}
->
-  <div className="flex items-center justify-between px-4 lg:px-10 py-4">
-    {/* Logo */}
-    <Link href="/">
-      <img src={"/logo.png"} className="w-12 h-10 md:w-16 md:h-12 lg:w-20 lg:h-15" />
-    </Link>
-
-    {/* Desktop Nav */}
     <div
-      className={`hidden lg:flex items-center gap-5 rounded-full px-6 py-2 ${
-        !isScrolled &&
-        "lg:bg-black/70 backdrop-blur-md border border-white/10"
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        menuOpen ? "bg-black/70 backdrop-blur-md shadow-lg" : "bg-transparent"
       }`}
     >
-      {navItems.map((item) => (
-        <Link
-          key={item.name}
-          href={item.href}
-          className={`transition ${
-            currentLanguage === "en" ? "text-lg" : "text-xl"
-          } ${
-            pathname === item.href
-              ? "border-b-2 border-[#C9981A] text-white"
-              : "text-white"
-          }`}
-        >
-          {currentLanguage === "en" ? item.name : item.nameNp}
+      <div className="flex items-center justify-between px-4 lg:px-10 py-4">
+        {/* Logo */}
+        <Link href="/">
+          <img
+            src={"/logo.png"}
+            className="w-12 h-10 md:w-16 md:h-12 lg:w-20 lg:h-15"
+          />
         </Link>
-      ))}
-    </div>
 
-    {/* Right Side */}
-    <div className="flex items-center gap-2">
-      {/* Language */}
-      <button
-        onClick={handleLanguageChange}
-        className="flex items-center gap-2 rounded-full border border-white/20 bg-black/70 backdrop-blur-md px-3 py-2 text-white hover:border-[#C9981A]"
-      >
-        <Languages size={16} />
-        <span className="hidden sm:inline">
-          {currentLanguage === "en" ? "नेपाली" : "English"}
-        </span>
-      </button>
+        {/* Desktop Nav */}
+        <div
+          className={`hidden lg:flex items-center gap-5 rounded-full px-6 py-2 lg:bg-black/70 backdrop-blur-md border border-white/10
+      `}
+        >
+          {navItems.map((item) => (
+            <Link
+              key={item.name}
+              href={item.href}
+              className={`transition ${
+                currentLanguage === "en" ? "text-lg" : "text-xl"
+              } ${
+                pathname === item.href
+                  ? "border-b-2 border-[#C9981A] text-white"
+                  : "text-white"
+              }`}
+            >
+              {currentLanguage === "en" ? item.name : item.nameNp}
+            </Link>
+          ))}
+          <div className="flex items-center gap-2">
+            {/* Language */}
+            <button
+              onClick={handleLanguageChange}
+              className="flex items-center gap-2 rounded-full border border-white/20 bg-black/70 backdrop-blur-md px-3 py-2 text-white hover:border-[#C9981A]"
+            >
+              <Languages size={16} />
+              <span className="hidden sm:inline">
+                {currentLanguage === "en" ? "नेपाली" : "English"}
+              </span>
+            </button>
 
-      {/* Mobile Menu Button */}
-<button
-  className={`lg:hidden ${
-    !isScrolled && !menuOpen ? "text-black/70" : "text-white"
-  }`}
-  onClick={() => setMenuOpen(!menuOpen)}
->
-  {menuOpen ? <X size={28} /> : <Menu size={28} />}
-</button>
-    </div>
-  </div>
+            {/* Mobile Menu Button */}
+          </div>
+        </div>
 
-  {/* Mobile Menu */}
-<div
-  className={`lg:hidden overflow-hidden transition-all duration-300 ${
-    menuOpen ? "max-h-96" : "max-h-0"
-  }`}
->
-  <div className="px-6 pb-6 flex flex-col items-center gap-5">
-    {navItems.map((item) => (
-      <Link
-        key={item.name}
-        href={item.href}
-        onClick={() => setMenuOpen(false)}
-        className={`text-lg py-2 ${
-          pathname === item.href ? "text-[#C9981A]" : "text-white"
+        {/* Right Side */}
+        <div className="flex items-center gap-3">
+          <button
+            className={`lg:hidden ${
+              !isScrolled && !menuOpen ? "text-black/70" : "text-white"
+            }`}
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            {menuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
+          <button
+            onClick={handleLanguageChange}
+            className="flex items-center gap-2 rounded-full border border-white/20 bg-black/70 backdrop-blur-md px-3 py-2 text-white hover:border-[#C9981A]"
+          >
+            <Languages size={16} />
+            <span className="hidden sm:inline">
+              {currentLanguage === "en" ? "नेपाली" : "English"}
+            </span>
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      <div
+        className={`lg:hidden overflow-hidden transition-all duration-300 ${
+          menuOpen ? "max-h-96" : "max-h-0"
         }`}
       >
-        {currentLanguage === "en" ? item.name : item.nameNp}
-      </Link>
-    ))}
-  </div>
-</div>
-</div>
+        <div className="px-6 pb-6 flex flex-col items-center gap-5">
+          {navItems.map((item) => (
+            <Link
+              key={item.name}
+              href={item.href}
+              onClick={() => setMenuOpen(false)}
+              className={`text-lg py-2 ${
+                pathname === item.href ? "text-[#C9981A]" : "text-white"
+              }`}
+            >
+              {currentLanguage === "en" ? item.name : item.nameNp}
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 };
 

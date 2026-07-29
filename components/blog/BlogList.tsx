@@ -101,7 +101,7 @@ const BlogList = ({
 
       <div className=" w-full flex items-center justify-center">
         {blogs?.length > 0 ? (
-         <div className=" w-full grid grid-cols-1 md:grid-cols-3 items-center  gap-4">
+         <div className="  m-auto grid grid-cols-1  items-center  gap-4">
           { blogs.map((blog) => (
             <BlogCard
               key={blog.id}
@@ -119,7 +119,19 @@ const BlogList = ({
       </div>
 
       {totalPages > 1 && (
-        <div className="mt-8 flex w-full flex-wrap items-center justify-center gap-3 text-black">
+        <div className="mt-8 flex w-full flex-wrap items-center justify-center gap-2 text-black">
+          {/* First */}
+          {page > 2 && (
+            <Link
+              href={buildUrl(1)}
+              scroll={false}
+              className="rounded-full border border-[#d8c79b] px-4 py-2 text-sm font-semibold transition-colors hover:border-[#c9981a] hover:bg-[#c9981a] hover:text-black"
+            >
+              {isEnglish ? "« First" : "« पहिलो"}
+            </Link>
+          )}
+
+          {/* Prev */}
           {page > 1 && (
             <Link
               href={buildUrl(page - 1)}
@@ -130,24 +142,57 @@ const BlogList = ({
             </Link>
           )}
 
-          {[...Array(totalPages)].map((_, i) => {
-            const pageNum = i + 1;
-            return (
-              <Link
-                scroll={false}
-                key={pageNum}
-                href={buildUrl(pageNum)}
-                className={`border px-4 py-2 text-sm font-semibold transition-colors ${
-                  page === pageNum
-                    ? "border-[#fee685] bg-[#fee685] text-black"
-                    : "border-[#d8c79b] hover:border-[#c9981a]"
-                }`}
-              >
-                {pageNum}
-              </Link>
-            );
-          })}
+          {/* Windowed page numbers: 1 2 3 … 8 9 10 */}
+          {(() => {
+            const SIBLINGS = 1; // pages on each side of current page
 
+            // Collect unique page numbers to show
+            const pageSet = new Set<number>();
+            pageSet.add(1);
+            pageSet.add(totalPages);
+            for (let i = page - SIBLINGS; i <= page + SIBLINGS; i++) {
+              if (i >= 1 && i <= totalPages) pageSet.add(i);
+            }
+            const pages = Array.from(pageSet).sort((a, b) => a - b);
+
+            // Build final list inserting "…" where there are gaps
+            const result: (number | "ellipsis")[] = [];
+            for (let i = 0; i < pages.length; i++) {
+              if (i > 0 && pages[i] - pages[i - 1] > 1) {
+                result.push("ellipsis");
+              }
+              result.push(pages[i]);
+            }
+
+            return result.map((item, i) => {
+              if (item === "ellipsis") {
+                return (
+                  <span
+                    key={`ellipsis-${i}`}
+                    className="px-1 py-2 text-sm text-[#7a6e58] select-none"
+                  >
+                    …
+                  </span>
+                );
+              }
+              return (
+                <Link
+                  scroll={false}
+                  key={item}
+                  href={buildUrl(item)}
+                  className={`min-w-[2.25rem] text-center border px-3 py-2 text-sm font-semibold transition-colors ${
+                    page === item
+                      ? "border-[#fee685] bg-[#fee685] text-black"
+                      : "border-[#d8c79b] hover:border-[#c9981a]"
+                  }`}
+                >
+                  {item}
+                </Link>
+              );
+            });
+          })()}
+
+          {/* Next */}
           {page < totalPages && (
             <Link
               href={buildUrl(page + 1)}
@@ -155,6 +200,17 @@ const BlogList = ({
               className="rounded-full border border-[#c9981a] px-4 py-2 text-sm font-semibold transition-colors hover:bg-[#c9981a] hover:text-black"
             >
               {isEnglish ? "Next" : "अर्को"}
+            </Link>
+          )}
+
+          {/* Last */}
+          {page < totalPages - 1 && (
+            <Link
+              href={buildUrl(totalPages)}
+              scroll={false}
+              className="rounded-full border border-[#d8c79b] px-4 py-2 text-sm font-semibold transition-colors hover:border-[#c9981a] hover:bg-[#c9981a] hover:text-black"
+            >
+              {isEnglish ? "Last »" : "अन्तिम »"}
             </Link>
           )}
         </div>

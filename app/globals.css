@@ -18,8 +18,8 @@
   --color-focus: #3b82f6;
   --color-active: #f59e0b;
   --color-selected: #fbbf24;
-  --font-display: "Comfortaa", "Nunito", "Segoe UI", sans-serif;
-  --font-body: "Nunito", "Segoe UI", sans-serif;
+  --font-display: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-body: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --shadow-card: 0 18px 45px rgba(17, 24, 39, 0.08);
   --shadow-soft: 0 10px 30px rgba(17, 24, 39, 0.05);
   --radius-card: 0;
@@ -65,28 +65,12 @@
   src: url("/fonts/Tungsten-Book.otf") format("opentype");
 }
 
-@font-face {
-  font-family: "Nunito";
-  src: url("/fonts/NunitoSans-VariableFont_YTLC,opsz,wdth,wght.ttf") format("truetype");
-  font-weight: 400;
-}
-
-@font-face {
-  font-family: "Comfortaa";
-  src: url("/fonts/Comfortaa-VariableFont_wght.ttf") format("truetype");
-  font-weight: 400;
-}
-
 ::-webkit-scrollbar {
   display: none;
 }
 
-.goog-te-gadget,
-.goog-te-gadget-simple,
-#google_translate_element,
-.skiptranslate {
-  display: none !important;
-}
+
+
 
 body {
   top: 0 !important;
@@ -96,14 +80,14 @@ body {
   line-height: 1.65;
 }
 
-h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
   font-family: var(--font-display);
-  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+  line-height: 1.25;
 }
 
 ::selection {

@@ -26,6 +26,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
   const params = await searchParams;
 
   const page = Math.max(1, Number(params.page) || 1);
+  const limit = 10;
   const category = params.category;
   const tag = params.tag;
   const sort = (params.sort as "latest" | "oldest") ?? "latest";
@@ -34,7 +35,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
 
   const [blogs, latestBlogs, popularBlogs, categories, tags, ads, curatedBlog] =
     await Promise.all([
-      getBlogs({ page, category, tag, sort, search }),
+      getBlogs({ page, limit, category, tag, sort, search }),
       getLatestBlogs(),
       getPopularBlogs(),
       getCategory(),
@@ -57,6 +58,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
       blogs={blogs}
       ads={ads}
       page={page}
+      limit={limit}
       category={category}
       tag={tag}
       sort={sort}

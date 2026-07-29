@@ -39,7 +39,7 @@ const CategoryNav = ({
   };
 
   return (
-    <section className=" border-b border-[#e7d6ab] bg-white/95 p-4  sm:p-5">
+    <section className=" border-b border-[#f0e3bd] p-4  sm:p-5">
       <div className="mb-3 flex items-center justify-between gap-3">
         <div>
           <p

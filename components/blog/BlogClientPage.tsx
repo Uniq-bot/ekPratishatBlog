@@ -4,11 +4,11 @@ import type { BlogItem, Category, Tag } from "@/types/blog";
 import CuratedBlog from "./CuratedBlog";
 import PopularBlogs from "./PopulatBlogs";
 import LatestBlogs from "./LatestBlogs";
-import SearchFilter from "./SearchFilter";
 import CategoryNav from "./CategoryNav";
 import BlogList from "./BlogList";
 import BannerAd from "./BannerAds";
 import { useLanguage } from "@/context/ClientLanguageContext";
+import Link from "next/link";
 
 interface BlogClientPageProps {
   curatedBlog: BlogItem | null;
@@ -21,6 +21,7 @@ interface BlogClientPageProps {
   tags: Tag[];
   blogs: { posts: BlogItem[]; totalCount: number };
   page: number;
+  limit: number;
   category?: string;
   tag?: string;
   sort: "latest" | "oldest";
@@ -36,123 +37,111 @@ const BlogClientPage = ({
   categories,
   blogs,
   page,
+  limit,
   category,
   tag,
   sort,
   search,
 }: BlogClientPageProps) => {
   const { currentLanguage, idx } = useLanguage();
-  const isEnglish = currentLanguage === "en";
+  const isEn = currentLanguage === "en";
 
   return (
-    <div className="flex min-h-screen w-full flex-col bg-[linear-gradient(180deg,#fffdf8_0%,#f7efe0_100%)]">
-      <div className="relative w-full overflow-hidden px-4 pb-12 pt-24 sm:pt-28 md:px-16 lg:px-10 lg:pt-25">
-        <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-6 lg:gap-8">
-          <div className="text-center">
-            <p
-              className={`mx-auto mb-3 inline-flex rounded-full border border-[#eadcb4] bg-[#fffaf0] px-4 py-1 font-semibold uppercase text-[#8a6b12] ${
-                isEnglish
-                  ? "text-[14px] tracking-[0.22em]"
-                  : "text-sm tracking-normal"
+    <div className="min-h-screen w-full bg-[#fafaf8]">
+      {/* ── Hero masthead ───────────────────────── */}
+      <section className="pt-24 sm:pt-28 pb-12 px-5 sm:px-8 lg:px-10">
+        <div className="mx-auto max-w-7xl">
+          {/* Title + category pills */}
+          <div className="text-center pb-10 border-b border-[#e8e0cc]">
+            <h1
+              className={`font-black tracking-tight text-[#1a1610] ${
+                isEn
+                  ? "text-4xl sm:text-5xl lg:text-6xl"
+                  : "text-3xl sm:text-4xl lg:text-5xl"
               }`}
             >
-              {isEnglish
+              {isEn
                 ? "Your Guide to Real Estate"
-                : "रियल-स्टेटको लागि तपाईंको मार्गदर्शक"}
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-2 leading-none sm:gap-4">
-              <h1
-                className={`font-black ${
-                  isEnglish
-                    ? "text-[1.75rem] sm:text-[2.5rem] md:text-[4rem] lg:text-[3rem] xl:text-[5rem]"
-                    : "text-[2.2rem] sm:text-[3rem] md:text-[4.5rem] lg:text-[5.6rem] xl:text-[6.5rem]"
-                }`}
-              >
-                {isEnglish ? "REAL-ESTATE" : "घरजग्गा"}
-              </h1>
-              <span
-                className={`flex flex-col font-black leading-none ${isEnglish ? "text-[1.75rem] sm:text-[2rem] lg:text-[2.7rem]" : "text-[1.95rem] sm:text-[2.4rem] lg:text-[3.4rem]"}`}
-              >
-                <span className="text-transparent [-webkit-text-stroke:2px_#f1c810]">
-                  {isEnglish ? "MADE" : "सम्बन्धी"}
-                </span>
-                <span className="bg-clip-text text-transparent bg-[#c7c7c6] [-webkit-text-stroke:1px_#7b7b7b]">
-                  {isEnglish ? "CLEAR" : "स्पष्ट जानकारी"}
-                </span>
-              </span>
-            </div>
+                : "घरजग्गा लागि तपाईंको मार्गदर्शक"}
+            </h1>
+
+            {categories.length > 0 && (
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
+                {categories.slice(0, 6).map((cat) => (
+                  <Link
+                    key={cat.id}
+                    href={`/?category=${cat.slug}`}
+                    onClick={() =>
+                      setTimeout(
+                        () =>
+                          document
+                            .getElementById("blogs")
+                            ?.scrollIntoView({ behavior: "smooth" }),
+                        100,
+                      )
+                    }
+                    className="rounded-full bg-white border border-[#e8e0cc] px-4 py-1.5 text-sm font-medium text-[#4a4030] transition-all hover:border-[#c9981a] hover:text-[#8a6b12] hover:bg-[#fffaf0]"
+                  >
+                    {isEn
+                      ? cat.name
+                      : cat.translations?.[idx]?.name || cat.name}
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
 
-          <div className="grid gap-4 md:gap-6 lg:grid-cols-[1.3fr_0.7fr] lg:items-stretch">
-            <div className="overflow-hidden h-60 md:h-full  border border-[#eadcb4] bg-white shadow-[0_18px_45px_rgba(15,23,42,0.06)]">
+          {/* ── Hero grid: featured + popular ────── */}
+          <div className="mt-10 flex ">
+            {/* Featured blog */}
+            <div
+              className="overflow-hidden w-full   bg-white "
+              style={{ minHeight: 320 }}
+            >
               <CuratedBlog
                 idx={idx}
                 currentLanguage={currentLanguage}
                 curatedBlog={curatedBlog}
               />
             </div>
-           { BannerAds && (
-            <div className="relative h-20 w-full block lg:hidden overflow-hidden border border-[#eadcb4] bg-white/90 shadow-[0_18px_45px_rgba(15,23,42,0.06)] md:h-40">
-              <BannerAd BannerAds={BannerAds} />
-            </div>)}
-            <div className=" border border-[#eadcb4] lg:block hidden bg-white/95 shadow-[0_18px_45px_rgba(15,23,42,0.06)]">
+
+            {/* Popular — desktop only */}
+            <div className="hidden lg:flex flex-col  overflow-hidden">
               <PopularBlogs
                 idx={idx}
                 currentLanguage={currentLanguage}
                 popularBlogs={popularBlogs?.posts ?? []}
               />
             </div>
-            <div className=" border border-[#eadcb4]  lg:hidden bg-white/95 shadow-[0_18px_45px_rgba(15,23,42,0.06)]">
-              {latestBlogs?.posts.length > 0 && (
-                <div className="border border-[#eadcb4] bg-white/95 p-4 shadow-[0_18px_45px_rgba(15,23,42,0.06)] sm:p-5">
-                  <div className="mb-4 flex items-center justify-between gap-4 border-b border-[#f0e3bd] pb-3">
-                    <div>
-                      <h2
-                        className={`font-black text-black ${isEnglish ? "text-xl" : "text-[1.35rem] sm:text-[1.6rem]"}`}
-                      >
-                        {isEnglish ? "Latest Blogs" : "नयाँ ब्लगहरू"}
-                      </h2>
-                    </div>
-                    <span
-                      className={`hidden font-semibold text-black/60 lg:flex ${isEnglish ? "text-sm" : "text-base"}`}
-                    >
-                      {latestBlogs.posts.slice(0, 2).length}{" "}
-                      {isEnglish ? "posts" : "पोस्टहरू"}
-                    </span>
-                  </div>
-                  <LatestBlogs
-                    idx={idx}
-                    latestBlogs={latestBlogs?.posts ?? []}
-                    ads={ads}
-                  />
-                </div>
-              )}
-            </div>
           </div>
+
+          {/* ── Banner ad ────────────────────────── */}
           {BannerAds ? (
-            <div className="relative h-20 w-full hidden lg:block overflow-hidden border border-[#eadcb4] bg-white/90 shadow-[0_18px_45px_rgba(15,23,42,0.06)] md:h-40">
-              <BannerAd BannerAds={BannerAds} />
+            <div className="mt-6 overflow-hidden  bg-white  ring-1 ring-black/5">
+              <div className="relative h-24 md:h-40 w-full">
+                <BannerAd BannerAds={BannerAds} />
+              </div>
             </div>
-          ) : (
-            <div className="border border-[#eadcb4] bg-white/90 p-5 shadow-[0_18px_45px_rgba(15,23,42,0.06)] sm:p-6 lg:p-7">
+          ): (
+            <div className="border mt-6 border-[#eadcb4] bg-white/90 p-5 shadow-[0_18px_45px_rgba(15,23,42,0.06)] sm:p-6 lg:p-7">
               <p
-                className={`font-semibold uppercase text-[#8a6b12] ${isEnglish ? "text-sm tracking-[0.18em]" : "text-base tracking-normal"}`}
+                className={`font-semibold uppercase text-[#8a6b12] ${isEn ? "text-sm tracking-[0.18em]" : "text-base tracking-normal"}`}
               >
-                {isEnglish ? "BLOGS / GUIDES" : "ब्लगहरू / मार्गदर्शनहरू"}
+                {isEn ? "BLOGS / GUIDES" : "ब्लगहरू / मार्गदर्शनहरू"}
               </p>
               <div className="mt-3 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
                 <div className="max-w-3xl space-y-2">
                   <h2
-                    className={`font-black leading-tight text-black ${isEnglish ? "text-2xl sm:text-3xl lg:text-4xl" : "text-[1.45rem] sm:text-[1.8rem] lg:text-[2.2rem]"}`}
+                    className={`font-black leading-tight text-black ${isEn ? "text-2xl sm:text-3xl lg:text-4xl" : "text-[1.45rem] sm:text-[1.8rem] lg:text-[2.2rem]"}`}
                   >
-                    {isEnglish
+                    {isEn
                       ? "Practical property guidance for buyers, sellers, and investors."
                       : "किन्ने, बेच्ने, र लगानीकर्ताहरूको लागि व्यावहारिक सम्पत्ति मार्गदर्शन।"}
                   </h2>
                   <p
-                    className={`max-w-2xl leading-6 text-black/65 ${isEnglish ? "text-sm sm:text-base" : "text-base sm:text-lg"}`}
+                    className={`max-w-2xl leading-6 text-black/65 ${isEn ? "text-sm sm:text-base" : "text-base sm:text-lg"}`}
                   >
-                    {isEnglish
+                    {isEn
                       ? "Search the latest articles, filter by category, and read the updates that matter most."
                       : "नवीनतम लेखहरू खोज्नुहोस्, कोटिहरू अनुसार फिल्टर गर्नुहोस्, र सबैभन्दा महत्त्वपूर्ण अपडेटहरू पढ्नुहोस्।"}
                   </p>
@@ -160,66 +149,75 @@ const BlogClientPage = ({
               </div>
             </div>
           )}
+       
 
-          <div className=" border border-[#eadcb4] lg:hidden block bg-white/95 shadow-[0_18px_45px_rgba(15,23,42,0.06)]">
+
+          {/* ── Popular — mobile ─────────────────── */}
+          <div className="mt-6 lg:hidden bg-white  shadow-sm ring-1 ring-black/5 overflow-hidden">
             <PopularBlogs
               idx={idx}
               currentLanguage={currentLanguage}
               popularBlogs={popularBlogs?.posts ?? []}
             />
           </div>
-          <div className=" border border-[#eadcb4] hidden lg:block bg-white/95 shadow-[0_18px_45px_rgba(15,23,42,0.06)]">
-            {latestBlogs?.posts.length > 0 && (
-              <div className="border border-[#eadcb4] bg-white/95 p-4 shadow-[0_18px_45px_rgba(15,23,42,0.06)] sm:p-5">
-                <div className="mb-4 flex items-center justify-between gap-4 border-b border-[#f0e3bd] pb-3">
-                  <div>
-                    <h2
-                      className={`font-black text-black ${isEnglish ? "text-xl" : "text-[1.35rem] sm:text-[1.6rem]"}`}
-                    >
-                      {isEnglish ? "Latest Blogs" : "नयाँ ब्लगहरू"}
-                    </h2>
-                  </div>
-                
+
+          {/* ── Latest blogs ─────────────────────── */}
+          {(latestBlogs?.posts?.length ?? 0) > 0 && (
+            <div className="mt-6   overflow-hidden">
+              <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#f0e8d4]">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-widest text-[#8a6b12]">
+                    {isEn ? "Latest" : "नयाँ"}
+                  </p>
+                  <h2
+                    className={`mt-0.5 font-bold text-[#1a1610] ${isEn ? "text-lg" : "text-xl"}`}
+                  >
+                    {isEn ? "Latest Blogs" : "नयाँ ब्लगहरू"}
+                  </h2>
                 </div>
+                <span className="text-sm text-[#7a6e58]">
+                  {Math.min(latestBlogs.posts.length, 4)}{" "}
+                  {isEn ? "posts" : "पोस्टहरू"}
+                </span>
+              </div>
+              <div className="p-6">
                 <LatestBlogs
                   idx={idx}
                   latestBlogs={latestBlogs?.posts ?? []}
                   ads={ads}
                 />
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
-      </div>
+      </section>
 
-      <div className="w-full px-4 pb-12 sm:px-6 lg:px-8">
-        <div className="mx-auto flex max-w-7xl flex-col gap-8">
-          <div className="flex flex-col gap-5">
-            
-            <CategoryNav
-              totalCounts={blogs.totalCount}
-              categories={categories}
-              idx={idx}
-              currentLanguage={currentLanguage}
-               category={category}
-              tag={tag}
-              search={search}
-            />
-            <BlogList
-              blogs={blogs.posts}
-              page={page}
-              totalCount={blogs.totalCount}
-              limit={6}
-              category={category}
-              tag={tag}
-              sort={sort}
-              search={search}
-              idx={idx}
-              currentLanguage={currentLanguage}
-            />
-          </div>
+      {/* ── Blog listing section ─────────────────── */}
+      <section id="blogs" className="px-5 sm:px-8 lg:px-10 pb-20">
+        <div className="mx-auto max-w-7xl space-y-4">
+          <CategoryNav
+            totalCounts={blogs.totalCount}
+            categories={categories}
+            idx={idx}
+            currentLanguage={currentLanguage}
+            category={category}
+            tag={tag}
+            search={search}
+          />
+          <BlogList
+            blogs={blogs.posts}
+            page={page}
+            totalCount={blogs.totalCount}
+            limit={limit}
+            category={category}
+            tag={tag}
+            sort={sort}
+            search={search}
+            idx={idx}
+            currentLanguage={currentLanguage}
+          />
         </div>
-      </div>
+      </section>
     </div>
   );
 };
