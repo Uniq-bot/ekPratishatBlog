@@ -50,8 +50,8 @@ const LatestBlogs = ({
           <span
             className={
               idx === 0
-                ? "absolute top-3 left-3 inline-flex w-fit items-center gap-1.5   px-3 py-1 text-[0.72rem] font-bold uppercase tracking-[0.2em] text-[#8a6b12]"
-                : "absolute top-3 left-3 inline-flex w-fit items-center gap-1.5   px-3 py-1 text-base font-bold uppercase text-[#8a6b12] sm:text-lg"
+                ? "absolute top-3 left-3 inline-flex w-fit items-center gap-1.5 bg-white   px-3 py-1 text-[0.72rem] font-bold uppercase tracking-[0.2em] text-[#8a6b12]"
+                : "absolute top-3 left-3 inline-flex w-fit items-center gap-1.5 bg-white   px-3 py-1 text-base font-bold uppercase text-[#8a6b12] sm:text-lg"
             }
           >
             {featuredBlog?.category?.translations?.[idx]?.name || "Category"}

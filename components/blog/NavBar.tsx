@@ -94,7 +94,7 @@ const NavBar = () => {
         </div>
 
         {/* Right Side */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 md:hidden">
           <button
             className={`lg:hidden ${
               !isScrolled && !menuOpen ? "text-black/70" : "text-white"

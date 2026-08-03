@@ -196,7 +196,7 @@ const BlogCard = ({
 
         {/* Title */}
         <h1
-          className={`font-bold leading-none text-[#1a1610] transition-colors group-hover:text-[#8a6b12] ${
+          className={`font-bold  text-[#1a1610] transition-colors group-hover:text-[#8a6b12] ${
             isEn
               ? "text-sm sm:text-[27px] line-clamp-2 sm:line-clamp-3"
               : "text-base sm:text-lg line-clamp-2 sm:line-clamp-3"

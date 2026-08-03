@@ -80,7 +80,7 @@ const BlogClientPage = ({
                         100,
                       )
                     }
-                    className="rounded-full bg-white border border-[#e8e0cc] px-4 py-1.5 text-sm font-medium text-[#4a4030] transition-all hover:border-[#c9981a] hover:text-[#8a6b12] hover:bg-[#fffaf0]"
+                    className=" bg-white border border-[#e8e0cc] px-4 py-1.5 text-sm font-medium text-[#4a4030] transition-all hover:border-[#c9981a] hover:text-[#8a6b12] hover:bg-[#fffaf0]"
                   >
                     {isEn
                       ? cat.name
