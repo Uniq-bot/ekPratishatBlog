@@ -62,7 +62,7 @@ const BlogClientPage = ({
             >
               {isEn
                 ? "Your Guide to Real Estate"
-                : "घरजग्गा लागि तपाईंको मार्गदर्शक"}
+                : "घरजग्गाको लागि तपाईंको मार्गदर्शक"}
             </h1>
 
             {categories.length > 0 && (

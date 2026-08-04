@@ -1,9 +1,10 @@
 "use client";
 
-import { ArrowRight, Calendar } from "lucide-react";
+import { ArrowRight, Calendar, X } from "lucide-react";
 import Link from "next/link";
 import type { BlogItem } from "@/types/blog";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import { useTrackBlogView } from "@/hooks/useTrackViews";
 import AsideAd from "./AsideAd";
 
@@ -17,12 +18,29 @@ const LatestBlogs = ({
   ads: any[];
 }) => {
   const trackView = useTrackBlogView();
+  const [showAdPopup, setShowAdPopup] = useState(false);
+
+  const AsideAds = ads.find((ad) => ad.AdType === "ASIDE");
+
+  // Show the popup a short moment after the page loads, once per session
+  useEffect(() => {
+    if (!AsideAds) return;
+
+    const alreadyShown = sessionStorage.getItem("asideAdShown");
+    if (alreadyShown) return;
+
+    const timer = setTimeout(() => {
+      setShowAdPopup(true);
+      sessionStorage.setItem("asideAdShown", "true");
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, [AsideAds]);
 
   if (!latestBlogs.length) return null;
 
   const featuredBlog = latestBlogs[0];
   const supportingBlogs = latestBlogs.slice(1, 5);
-  const AsideAds = ads.find((ad) => ad.AdType === "ASIDE");
 
   const handleClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
@@ -39,7 +57,7 @@ const LatestBlogs = ({
         onClick={(e) => handleClick(e, featuredBlog)}
         className="group overflow-hidden  transition-all duration-300 hover:-translate-y-1"
       >
-        <div className="relative aspect-16/10 w-full overflow-hidden">
+        <div className="relative aspect-10/4 w-full overflow-hidden">
           <Image
             src={featuredBlog?.coverImage ?? "/logo.png"}
             alt={featuredBlog?.title ?? "Blog cover"}
@@ -87,11 +105,6 @@ const LatestBlogs = ({
       </Link>
 
       <div className="flex flex-col gap-3">
-        {AsideAds && (
-          <div className="h-full w-full overflow-hidden border border-[#f0e3bd]  bg-white">
-            <AsideAd AsideAds={AsideAds} />
-          </div>
-        )}
         {supportingBlogs.map((blog) => (
           <Link
             href={`/blog/${blog.slug}`}
@@ -141,6 +154,30 @@ const LatestBlogs = ({
           </Link>
         ))}
       </div>
+
+      {AsideAds && showAdPopup && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+          onClick={() => setShowAdPopup(false)}
+        >
+          <div
+            className="relative max-h-[90vh] w-full max-w-md overflow-auto bg-white p-4 shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setShowAdPopup(false)}
+              aria-label="Close ad"
+              className="absolute z-99999 right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-black shadow hover:bg-white"
+            >
+              <X size={18} />
+            </button>
+           <div className="relative h-80 lg:h-96 w-full">
+             <AsideAd AsideAds={AsideAds} />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
