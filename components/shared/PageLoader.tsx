@@ -21,9 +21,7 @@ export default function PageLoader({
         <div className="space-y-3">
           <div className="h-4 w-24 animate-pulse bg-black/10" />
           <div className="h-10 w-1/2 animate-pulse bg-black/10" />
-          <p className="text-sm text-black/60">
-            {title} · {subtitle}
-          </p>
+        
         </div>
 
         <div className="grid flex-1 gap-6 lg:grid-cols-3">

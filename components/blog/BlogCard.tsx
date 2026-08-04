@@ -171,7 +171,7 @@ const BlogCard = ({
       className="group flex flex-row-reverse  items-start gap-4 sm:gap-6 border-b border-[#e8e0cc] py-6 transition-all"
     >
       {/* Thumbnail — fixed size */}
-      <div className="relative shrink-0 w-28 h-20 sm:w-40 sm:h-28 overflow-hidden bg-neutral-100">
+      <div className="relative shrink-0 w-28 h-20 sm:w-80 sm:h-35 overflow-hidden bg-neutral-100">
         <Image
           src={thumb}
           alt={title}
@@ -198,8 +198,8 @@ const BlogCard = ({
         <h1
           className={`font-bold  text-[#1a1610] pr-30 transition-colors group-hover:text-[#8a6b12] ${
             isEn
-              ? "text-sm sm:text-[33px] line-clamp-2 sm:line-clamp-3"
-              : "text-base sm:text-lg line-clamp-2 sm:line-clamp-3"
+              ? "text-sm sm:text-[33px] line-clamp-2 sm:line-clamp-2"
+              : "text-base sm:text-lg line-clamp-2 sm:line-clamp-2"
           }`}
         >
           {title}
