@@ -60,9 +60,16 @@ const BlogClientPage = ({
                   : "text-3xl sm:text-4xl lg:text-5xl"
               }`}
             >
-              {isEn
-                ? "Your Guide to Real Estate"
-                : "घरजग्गाको लागि तपाईंको मार्गदर्शक"}
+              {isEn ? (
+  <>
+    Your <span className="bg-[linear-gradient(135deg,#D4A82A,#E0B633_28%,#EDC13A_55%,#E3CC7A_78%,#E0B633)] text-transparent bg-clip-text">Guide</span> to Real
+    Estate
+  </>
+) : (
+  <>
+   घरजग्गाको लागि तपाईंको <span className="bg-[linear-gradient(135deg,#D4A82A,#E0B633_28%,#EDC13A_55%,#E3CC7A_78%,#E0B633)] text-transparent bg-clip-text"> मार्गदर्शक</span>
+  </>
+)}
             </h1>
 
             {categories.length > 0 && (
@@ -122,7 +129,7 @@ const BlogClientPage = ({
                 <BannerAd BannerAds={BannerAds} />
               </div>
             </div>
-          ): (
+          ) : (
             <div className="border mt-6 border-[#eadcb4] bg-white/90 p-5 shadow-[0_18px_45px_rgba(15,23,42,0.06)] sm:p-6 lg:p-7">
               <p
                 className={`font-semibold uppercase text-[#8a6b12] ${isEn ? "text-sm tracking-[0.18em]" : "text-base tracking-normal"}`}
@@ -149,8 +156,6 @@ const BlogClientPage = ({
               </div>
             </div>
           )}
-       
-
 
           {/* ── Popular — mobile ─────────────────── */}
           <div className="mt-6 lg:hidden bg-white  shadow-sm ring-1 ring-black/5 overflow-hidden">
