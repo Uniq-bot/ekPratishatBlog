@@ -50,7 +50,14 @@ const NavBar = () => {
     >
       <div className="flex items-center justify-between px-4 lg:px-10 py-4">
         {/* Logo */}
-        <Link href="/">
+        <Link
+          href="/"
+          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+            isScrolled
+              ? "max-w-0 h-0 opacity-0 scale-90 pointer-events-none"
+              : "max-w-50 h-full opacity-100 scale-100"
+          }`}
+        >
           <img
             src={"/logo.png"}
             className="w-12 h-10 md:w-16 md:h-12 lg:w-20 lg:h-15"
@@ -94,10 +101,10 @@ const NavBar = () => {
         </div>
 
         {/* Right Side */}
-        <div className="flex items-center gap-3 md:hidden">
+        <div className={`flex text-black items-center gap-3 transition-all lg:hidden ${isScrolled ? "bg-black/70 p-3 rounded-full backdrop-blur-3xl" : "bg-transparent"} `}>
           <button
             className={`lg:hidden ${
-              !isScrolled && !menuOpen ? "text-black/70" : "text-white"
+        !isScrolled && !menuOpen ? "text-black/70" : "text-white"
             }`}
             onClick={() => setMenuOpen(!menuOpen)}
           >

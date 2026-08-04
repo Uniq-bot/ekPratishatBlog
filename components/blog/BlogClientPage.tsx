@@ -61,15 +61,22 @@ const BlogClientPage = ({
               }`}
             >
               {isEn ? (
-  <>
-    Your <span className="bg-[linear-gradient(135deg,#D4A82A,#E0B633_28%,#EDC13A_55%,#E3CC7A_78%,#E0B633)] text-transparent bg-clip-text">Guide</span> to Real
-    Estate
-  </>
-) : (
-  <>
-   घरजग्गाको लागि तपाईंको <span className="bg-[linear-gradient(135deg,#D4A82A,#E0B633_28%,#EDC13A_55%,#E3CC7A_78%,#E0B633)] text-transparent bg-clip-text"> मार्गदर्शक</span>
-  </>
-)}
+                <>
+                  Your{" "}
+                  <span className="bg-[linear-gradient(135deg,#D4A82A,#E0B633_28%,#EDC13A_55%,#E3CC7A_78%,#E0B633)] text-transparent bg-clip-text">
+                    Guide
+                  </span>{" "}
+                  to Real Estate
+                </>
+              ) : (
+                <>
+                  घरजग्गाको लागि तपाईंको{" "}
+                  <span className="bg-[linear-gradient(135deg,#D4A82A,#E0B633_28%,#EDC13A_55%,#E3CC7A_78%,#E0B633)] text-transparent bg-clip-text">
+                    {" "}
+                    मार्गदर्शक
+                  </span>
+                </>
+              )}
             </h1>
 
             {categories.length > 0 && (
