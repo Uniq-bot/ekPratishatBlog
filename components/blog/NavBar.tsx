@@ -44,9 +44,7 @@ const NavBar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   return (
     <div
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        menuOpen ? "bg-black/70 backdrop-blur-md shadow-lg" : "bg-transparent"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 `}
     >
       <div className="flex items-center justify-between px-4 lg:px-10 py-4">
         {/* Logo */}
@@ -101,10 +99,10 @@ const NavBar = () => {
         </div>
 
         {/* Right Side */}
-        <div className={`flex text-black items-center gap-3 transition-all lg:hidden ${isScrolled ? "bg-black/70 p-3 rounded-full backdrop-blur-3xl" : "bg-transparent"} `}>
+        <div className={`flex text-black items-center gap-3 transition-all lg:hidden ${isScrolled || menuOpen ? "bg-black/70 p-3 rounded-full backdrop-blur-3xl" : "bg-transparent"} `}>
           <button
             className={`lg:hidden ${
-        !isScrolled && !menuOpen ? "text-black/70" : "text-white"
+        !isScrolled && !menuOpen ? "text-black/70 " : "text-white"
             }`}
             onClick={() => setMenuOpen(!menuOpen)}
           >
@@ -124,8 +122,8 @@ const NavBar = () => {
 
       {/* Mobile Menu */}
       <div
-        className={`lg:hidden overflow-hidden transition-all duration-300 ${
-          menuOpen ? "max-h-96" : "max-h-0"
+        className={`lg:hidden overflow-hidden rounded-xl absolute right-35 top-15 bg-black/70 backdrop-blur-md transition-all duration-300 ${
+          menuOpen ? "max-h-96  w-50" : "max-h-0 w-0"
         }`}
       >
         <div className="px-6 pb-6 flex flex-col items-center gap-5">
