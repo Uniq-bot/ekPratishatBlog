@@ -3,6 +3,9 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   experimental: {
     turbopackFileSystemCacheForDev: true,
+     serverActions: {
+      bodySizeLimit: "10mb", // adjust to whatever max upload size you want to allow
+    },
   },
  cacheComponents: true,
   images: {
