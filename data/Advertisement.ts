@@ -1,8 +1,7 @@
 "use server";
 import { prisma } from "@/libs/prisma";
-import { mkdir, writeFile } from "fs/promises";
+import { deleteUploadedImage, saveUploadedImage } from "@/libs/images";
 import { revalidatePath, revalidateTag } from "next/cache";
-import { join } from "path";
 
 export const createAdvertisement = async (formData: FormData) => {
   try {
@@ -18,25 +17,11 @@ export const createAdvertisement = async (formData: FormData) => {
       throw new Error("Title, description and image are required");
     }
 
-    const uploadDir = join(process.cwd(), "public", "uploads");
-    await mkdir(uploadDir, { recursive: true });
+    const imagePath = await saveUploadedImage(imageFile, "ad");
 
-    const bytes = await imageFile.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-
-    const allowedTypes = ["jpg", "jpeg", "png", "webp", "gif"];
-
-    const ext = imageFile.name.split(".").pop()?.toLowerCase();
-
-    if (!ext || !allowedTypes.includes(ext)) {
-      throw new Error("Invalid file type. Only images are allowed.");
+    if (!imagePath) {
+      throw new Error("Failed to save advertisement image.");
     }
-
-    const filename = `ad-${Date.now()}.${ext}`;
-    const filepath = join(uploadDir, filename);
-
-    await writeFile(filepath, buffer);
-    const imagePath = `/uploads/${filename}`;
 
     const ad = await prisma.advertisement.create({
       data: {
@@ -97,21 +82,21 @@ export const updateAd = async (formData: FormData) => {
       AdType: adType,
     };
 
+    const existingAd = await prisma.advertisement.findUnique({
+      where: { id: adId },
+      select: { AdPoster: true },
+    });
+
     // Update image only if a new one was uploaded
     if (imageFile && imageFile.size > 0) {
-      const uploadDir = join(process.cwd(), "public", "uploads");
-      await mkdir(uploadDir, { recursive: true });
+      if (existingAd?.AdPoster) {
+        await deleteUploadedImage(existingAd.AdPoster);
+      }
 
-      const bytes = await imageFile.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-
-      const ext = imageFile.name.split(".").pop();
-      const filename = `ad-${Date.now()}.${ext}`;
-      const filepath = join(uploadDir, filename);
-
-      await writeFile(filepath, buffer);
-
-      updateData.AdPoster = `/uploads/${filename}`;
+      const imagePath = await saveUploadedImage(imageFile, "ad");
+      if (imagePath) {
+        updateData.AdPoster = imagePath;
+      }
     }
 
     const updatedAd = await prisma.advertisement.update({
@@ -135,9 +120,18 @@ export const updateAd = async (formData: FormData) => {
 };
 export const deleteAd = async (adId: string) => {
   try {
-    await prisma.advertisement.delete({
-      where: { id: adId },
-    });
+    const ad = await prisma.advertisement.findUnique({ where: { id: adId } });
+    if (ad?.AdPoster) {
+      try {
+        await deleteUploadedImage(ad.AdPoster);
+      } catch (err) {
+        if (process.env.NODE_ENV !== "production") {
+          console.error("Failed to delete ad image:", err);
+        }
+      }
+    }
+
+    await prisma.advertisement.delete({ where: { id: adId } });
     revalidateTag("ads", "max");
 
     revalidatePath("/admin");

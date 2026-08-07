@@ -3,10 +3,10 @@
 import { ArrowRight, Calendar, X } from "lucide-react";
 import Link from "next/link";
 import type { BlogItem } from "@/types/blog";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useTrackBlogView } from "@/hooks/useTrackViews";
 import AsideAd from "./AsideAd";
+import { normalizeImageUrl } from "@/libs/image-url";
 
 const LatestBlogs = ({
   idx,
@@ -58,10 +58,9 @@ const LatestBlogs = ({
         className="group overflow-hidden  transition-all duration-300 hover:-translate-y-1"
       >
         <div className="relative aspect-10/4 w-full overflow-hidden">
-          <Image
-            src={featuredBlog?.coverImage ?? "/logo.png"}
+          <img
+            src={normalizeImageUrl(featuredBlog?.coverImage)}
             alt={featuredBlog?.title ?? "Blog cover"}
-            fill
             sizes="(max-width: 1024px) 100vw, 55vw"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
@@ -109,8 +108,8 @@ const LatestBlogs = ({
             className="group flex gap-3  border-b border-[#f0e3bd] p-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#d8b24a]"
           >
             <div className="relative h-20 w-24 shrink-0 overflow-hidden bg-[#1d1d1d]">
-              <Image
-                src={blog?.coverImage ?? "/logo.png"}
+              <img
+                src={normalizeImageUrl(blog?.coverImage)}
                 alt={blog?.title ?? "Blog cover"}
                 width={200}
                 height={200}

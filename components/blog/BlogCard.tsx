@@ -1,8 +1,8 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
 import { useTrackBlogView } from "@/hooks/useTrackViews";
 import { Clock } from "lucide-react";
+import { normalizeImageUrl } from "@/libs/image-url";
 
 /* ─── helpers ──────────────────────────────────────────── */
 const parseBlocks = (raw: any): any[] => {
@@ -53,8 +53,9 @@ export function FeaturedBlogCard({
   const isEn = currentLanguage === "en";
   const readTime = useReadTime(blog);
 
-  const thumb =
-    blog?.coverImage || blog?.thumbnail || blog?.image || "/logo.png";
+  const thumb = normalizeImageUrl(
+    blog?.coverImage || blog?.thumbnail || blog?.image,
+  );
   const date = new Date(blog.createdAt).toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
@@ -78,13 +79,10 @@ export function FeaturedBlogCard({
     >
       {/* Image — left on desktop, top on mobile */}
       <div className="relative w-full sm:w-[52%] aspect-[16/10] sm:aspect-auto shrink-0 overflow-hidden bg-neutral-100">
-        <Image
+        <img
           src={thumb}
           alt={title}
-          fill
-          priority
-          sizes="(max-width: 640px) 100vw, 52vw"
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
       </div>
 
@@ -151,8 +149,10 @@ const BlogCard = ({
   const isEn = currentLanguage === "en";
   const readTime = useReadTime(blog);
 
-  const thumb =
-    blog?.coverImage || blog?.thumbnail || blog?.image || "/logo.png";
+  const thumb = normalizeImageUrl(
+    blog?.coverImage || blog?.thumbnail || blog?.image,
+  );
+  console.log(thumb)
   const date = new Date(blog.createdAt).toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
@@ -168,16 +168,14 @@ const BlogCard = ({
       href={`/blog/${blog.slug}`}
       onClick={(e) => { e.preventDefault(); trackView(blog); }}
       title={title}
-      className="group flex flex-row-reverse  items-start gap-4 sm:gap-6 border-b border-[#e8e0cc] py-6 transition-all"
+      className="group w-full flex flex-row-reverse  items-start gap-4 sm:gap-6 border-b border-[#e8e0cc] py-6 transition-all"
     >
       {/* Thumbnail — fixed size */}
       <div className="relative shrink-0 w-28 h-20 sm:w-80 sm:h-35 overflow-hidden bg-neutral-100">
-        <Image
+        <img
           src={thumb}
           alt={title}
-          fill
-          sizes="(max-width: 640px) 112px, 160px"
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
+          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
       </div>
 

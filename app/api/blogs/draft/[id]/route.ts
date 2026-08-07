@@ -1,9 +1,8 @@
 import { prisma } from "@/libs/prisma";
-import { mkdir, writeFile, unlink } from "fs/promises";
 import { NextResponse } from "next/server";
-import { join } from "path";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { extractTranslationsFromFormData, extractTagsFromFormData, serializeBlogPost } from "@/services/blogs.services";
+import { deleteUploadedImage, saveUploadedImage } from "@/libs/images";
 
 export async function DELETE(
   _req: Request,
@@ -27,14 +26,7 @@ export async function DELETE(
     }
 
     if (draft.coverImage) {
-      const filePath = join(process.cwd(), "public", draft.coverImage);
-      try {
-        await unlink(filePath);
-      } catch (err) {
-        if (process.env.NODE_ENV !== "production") {
-          console.error("Failed to delete draft cover image:", err);
-        }
-      }
+      await deleteUploadedImage(draft.coverImage);
     }
 
     await prisma.blogPost.delete({ where: { id } });
@@ -75,21 +67,8 @@ export async function PATCH(
     let coverImagePath: string | undefined;
 
     if (imageFile && imageFile.size > 0) {
-      const uploadDir = join(process.cwd(), "public", "uploads");
-      await mkdir(uploadDir, { recursive: true });
-
-      const bytes = await imageFile.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-      const ext = imageFile.name.split(".").pop()?.toLowerCase();
-      const allowedTypes = ["jpg", "jpeg", "png", "webp", "gif"];
-
-      if (!ext || !allowedTypes.includes(ext)) {
-        throw new Error("Invalid image type.");
-      }
-
-      const filename = `draft-${Date.now()}.${ext}`;
-      await writeFile(join(uploadDir, filename), buffer);
-      coverImagePath = `/uploads/${filename}`;
+      const uploaded = await saveUploadedImage(imageFile, "draft");
+      coverImagePath = uploaded ?? undefined;
     }
 
     const slug =

@@ -6,6 +6,7 @@ import { Dot, Lightbulb } from "lucide-react";
 import Image from "next/image";
 
 const PreviewBlog = ({ blocks }: { blocks: any[] }) => {
+  console.log(blocks)
   return (
     <div className="w-full border bg-white shadow-sm">
       {/* Header */}
@@ -141,7 +142,7 @@ const PreviewBlog = ({ blocks }: { blocks: any[] }) => {
                   className="my-8 overflow-hidden rounded-xl shadow-md"
                 >
                   <img
-                    src={block.content}
+                    src={`http://localhost${block.content}`}
                     alt="Preview"
                     className="w-full object-cover"
                   />

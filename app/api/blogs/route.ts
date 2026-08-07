@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
-import { mkdir, writeFile } from "fs/promises";
-import { join } from "path";
 import { prisma } from "@/libs/prisma";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { getBlogByFilters, extractTranslationsFromFormData, extractTagsFromFormData, serializeBlogPost } from "@/services/blogs.services";
+import { saveUploadedImage } from "@/libs/images";
 
 export async function POST(req: Request) {
   try {
@@ -36,22 +35,7 @@ export async function POST(req: Request) {
     let coverImagePath: string | null = null;
 
     if (imageFile && imageFile.size > 0) {
-      const uploadDir = join(process.cwd(), "public", "uploads");
-      await mkdir(uploadDir, { recursive: true });
-
-      const bytes = await imageFile.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-      const allowedTypes = ["jpg", "jpeg", "png", "webp", "gif"];
-      const ext = imageFile.name.split(".").pop()?.toLowerCase();
-
-      if (!ext || !allowedTypes.includes(ext)) {
-        throw new Error("Invalid file type. Only images are allowed.");
-      }
-
-      const filename = `blog-${Date.now()}.${ext}`;
-      const filepath = join(uploadDir, filename);
-      await writeFile(filepath, buffer);
-      coverImagePath = `/uploads/${filename}`;
+      coverImagePath = await saveUploadedImage(imageFile, "cover", title);
     }
 
     const generatedSlug = `${title

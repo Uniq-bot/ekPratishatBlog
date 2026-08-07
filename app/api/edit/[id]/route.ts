@@ -1,9 +1,8 @@
 import { prisma } from "@/libs/prisma";
-import { writeFile, mkdir, unlink } from "fs/promises";
-import { join } from "path";
 import { NextResponse } from "next/server";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { extractTranslationsFromFormData, extractTagsFromFormData, serializeBlogPost } from "@/services/blogs.services";
+import { deleteUploadedImage, saveUploadedImage } from "@/libs/images";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -56,15 +55,19 @@ export async function PUT(req: Request, { params }: RouteContext) {
       );
     }
 
+    const existingBlog = await prisma.blogPost.findUnique({
+      where: { id },
+      select: { coverImage: true },
+    });
+
     let coverImagePath: string | undefined = undefined;
     if (imageFile && imageFile.size > 0) {
-      const uploadDir = join(process.cwd(), "public", "uploads");
-      await mkdir(uploadDir, { recursive: true });
-      const bytes = await imageFile.arrayBuffer();
-      const ext = imageFile.name.split(".").pop();
-      const filename = `cover-${Date.now()}.${ext}`;
-      await writeFile(join(uploadDir, filename), Buffer.from(bytes));
-      coverImagePath = `/uploads/${filename}`;
+      if (existingBlog?.coverImage) {
+        await deleteUploadedImage(existingBlog.coverImage);
+      }
+
+      const uploaded = await saveUploadedImage(imageFile, "cover", title);
+      coverImagePath = uploaded ?? undefined;
     }
 
     const updated = await prisma.blogPost.update({
@@ -142,14 +145,7 @@ export async function DELETE(_req: Request, { params }: RouteContext) {
 
     const deleteImagePath = blog?.coverImage;
     if (deleteImagePath) {
-      const filePath = join(process.cwd(), "public", deleteImagePath);
-      try {
-        await unlink(filePath);
-      } catch (err) {
-        if (process.env.NODE_ENV !== "production") {
-          console.error("Failed to delete cover image:", err);
-        }
-      }
+      await deleteUploadedImage(deleteImagePath);
     }
 
     await prisma.blogViews.deleteMany({ where: { blogPostId: id } });

@@ -5,6 +5,7 @@ import { prisma } from "@/libs/prisma";
 import { notFound } from "next/navigation";
 import { getLatestBlogs, serializeBlogPost } from "@/services/blogs.services";
 import { unwrapApiResponse } from "@/libs/api";
+import { toAbsoluteImageUrl } from "@/libs/image-url";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -42,11 +43,8 @@ export async function generateMetadata({
 
   const blog = await getBlog(slug);
 
-const url = `${process.env.NEXT_PUBLIC_BASE_URL}/blog/${slug}`;
-const image =
-  blog?.coverImage?.startsWith("http")
-    ? blog.coverImage
-    : `${process.env.NEXT_PUBLIC_BASE_URL}${blog?.coverImage}`;
+const url = `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/blog/${slug}`;
+const image = toAbsoluteImageUrl(blog?.coverImage);
   return {
     title: blog?.title,
     description: blog?.description,

@@ -33,7 +33,7 @@ const BlogList = ({
   const router = useRouter();
   const pathname = usePathname();
   const isEnglish = currentLanguage === "en";
-
+  console.log(blogs)
   const updateParam = (key: string, value: string) => {
     const params = new URLSearchParams();
     if (category) params.set("category", category);
@@ -101,7 +101,7 @@ const BlogList = ({
 
       <div className=" w-full flex items-center justify-center">
         {blogs?.length > 0 ? (
-         <div className="  m-auto grid grid-cols-1  items-center  gap-4">
+         <div className="  m-auto grid grid-cols-1 w-full  items-center  gap-4">
           { blogs.map((blog) => (
             <BlogCard
               key={blog.id}

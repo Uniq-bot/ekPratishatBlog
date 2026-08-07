@@ -6,6 +6,7 @@ import {
 } from "@/hooks/useAdminAdvertisement";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { normalizeImageUrl } from "@/libs/image-url";
 import { notify } from "@/libs/notify";
 
 export default function Advertisement({ editAd }: { editAd?: any }) {
@@ -35,7 +36,7 @@ export default function Advertisement({ editAd }: { editAd?: any }) {
     setSponsorName(editAd.AdSponsorName || "");
     setAdLink(editAd.AdLink || "");
     setAdType(editAd.AdType || "BANNER");
-    setExistingImageUrl(editAd.AdImage || editAd.image || null);
+    setExistingImageUrl(editAd.AdPoster || editAd.AdImage || editAd.image || null);
     setImage(null);
   }, [editAd]);
 
@@ -173,7 +174,7 @@ export default function Advertisement({ editAd }: { editAd?: any }) {
         ) : existingImageUrl ? (
           <div className="relative w-1/2 border bg-gray-50 overflow-hidden">
             <img
-              src={existingImageUrl}
+              src={normalizeImageUrl(existingImageUrl)}
               alt="Current advertisement image"
               className="w-full h-32 sm:h-40 lg:h-60 object-cover"
             />

@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { normalizeImageUrl } from "@/libs/image-url";
 
 const AsideAd = ({ AsideAds }: { AsideAds: any }) => {
   return (
@@ -16,7 +17,7 @@ const AsideAd = ({ AsideAds }: { AsideAds: any }) => {
       >
         <div className="relative w-full aspect-video">
           <Image
-            src={AsideAds?.AdPoster || "/Ad1.png"}
+            src={normalizeImageUrl(AsideAds?.AdPoster)}
             unoptimized
             alt="Ad"
             fill

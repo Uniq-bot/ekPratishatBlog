@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useImageUpload } from "@/hooks/useAdminBlogs";
 import ConfirmDialog from "@/components/admin/ConfirmDialog";
+import { normalizeImageUrl } from "@/libs/image-url";
 
 interface Block {
   id: string | number;
@@ -295,7 +296,7 @@ const handleImageReplace = async (
                   >
                     {block.content ? (
                       <img
-                        src={block.content}
+                        src={normalizeImageUrl(block.content)}
                         alt="Block preview"
                         className="w-full h-full object-cover"
                       />

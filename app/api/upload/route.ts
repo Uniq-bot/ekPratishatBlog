@@ -15,11 +15,12 @@ export async function POST(req: Request) {
       );
     }
 
-    const uploadDir = join(process.cwd(), "public", "uploads");
+    const uploadDir = "/srv/images";
     await mkdir(uploadDir, { recursive: true });
 
     const bytes = await imageFile.arrayBuffer();
     const buffer = Buffer.from(bytes);
+
     const allowedTypes = ["jpg", "jpeg", "png", "webp", "gif"];
 
     const ext = imageFile.name.split(".").pop()?.toLowerCase();
@@ -30,12 +31,14 @@ export async function POST(req: Request) {
 
     const filename = `ad-${Date.now()}.${ext}`;
     const filepath = join(uploadDir, filename);
-    await writeFile(filepath, buffer);
-    const imagePath = `/uploads/${filename}`;
-  
-  // const uploadedImage = await uploadImage(buffer);
 
-  // const imagePath = uploadedImage.secure_url;
+    await writeFile(filepath, buffer);
+
+    // Store this in the database
+    const imagePath = `/images/${filename}`;
+    // const uploadedImage = await uploadImage(buffer);
+
+    // const imagePath = uploadedImage.secure_url;
 
     return NextResponse.json({ imagePath }, { status: 200 });
   } catch (error) {

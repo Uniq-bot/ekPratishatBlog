@@ -2,7 +2,7 @@
 import { useTrackBlogView } from "@/hooks/useTrackViews";
 import { BlogItem } from "@/types/blog";
 import { ArrowRight } from "lucide-react";
-import Image from "next/image";
+import { normalizeImageUrl } from "@/libs/image-url";
 
 const CuratedBlog = ({
   idx,
@@ -24,6 +24,7 @@ const CuratedBlog = ({
     e.preventDefault();
     trackView(curatedBlog);
   };
+  // console.log(curatedBlog)
 
   return (
     <div
@@ -31,14 +32,13 @@ const CuratedBlog = ({
       className="group relative h-full min-h-80 w-full cursor-pointer overflow-hidden bg-black"
     >
       {/* Cover image */}
-      <Image
-        src={curatedBlog?.coverImage || "/logo.png"}
-        alt={title}
-        fill
-        sizes="(max-width: 1024px) 100vw, 65vw"
-        className="object-cover transition-transform duration-500 group-hover:scale-105"
-        priority
-      />
+      <div className="relative h-80 w-full overflow-hidden bg-neutral-900">
+        <img
+          src={normalizeImageUrl(curatedBlog?.coverImage)}
+          alt={title}
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+      </div>
 
       {/* Gradient overlay — stronger at bottom for readability */}
       <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/30 to-transparent" />

@@ -2,12 +2,13 @@
 
 import { Dot, Lightbulb } from "lucide-react";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import BlogComments from "./BlogComments";
+import { normalizeImageUrl } from "@/libs/image-url";
 
 import ShareComp from "./ShareComp";
 import { useState } from "react";
 import { useLanguage } from "@/context/ClientLanguageContext";
+import Image from "next/image";
 
 // Heading tag map: level → HTML tag
 const headingTag: Record<number, keyof React.JSX.IntrinsicElements> = {
@@ -78,6 +79,7 @@ const BlogDetailClient = ({
     if (typeof tag === "string") return tag;
     return tag?.translations?.[idx]?.name || tag?.slug || "Tag";
   };
+  console.log(`http://localhost:80${blog?.coverImage}`)
 
   return (
     <div className="h-full w-full px-3 py-5 text-black sm:px-5 sm:py-6 lg:w-[70%] lg:px-8 lg:py-8">
@@ -103,13 +105,12 @@ const BlogDetailClient = ({
         </h1>
 
         <div className="relative mt-3 aspect-video w-full overflow-hidden border border-[#eadcb4] shadow-[0_12px_32px_rgba(0,0,0,0.08)] sm:aspect-16/8 lg:aspect-16/7">
-          <Image
-            src={blog?.coverImage ?? "/logo.png"}
+          <img
+            src={`http://localhost:80${blog?.coverImage}`}
             alt={blog?.title ?? "Blog cover"}
             width={800}
             height={400}
             className="h-full w-full object-cover"
-            priority
           />
         </div>
 
@@ -252,7 +253,7 @@ const BlogDetailClient = ({
                       className="my-6 h-fit overflow-hidden border border-[#eadcb4] shadow-[0_12px_32px_rgba(0,0,0,0.08)] sm:my-8"
                     >
                       <img
-                        src={block.content}
+                        src={normalizeImageUrl(block.content)}
                         alt="Blog illustration"
                         className="h-full w-full object-cover"
                         loading="lazy"

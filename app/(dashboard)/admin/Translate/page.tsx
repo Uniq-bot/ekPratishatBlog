@@ -35,7 +35,21 @@ interface EnglishBlock {
   content: any;
   level?: number;
 }
-
+interface ValidationErrors {
+  englishTitle?: boolean;
+  nepaliTitle?: boolean;
+  englishDescription?: boolean;
+  nepaliDescription?: boolean;
+  blocks: Record<
+    number,
+    {
+      english?: boolean;
+      nepali?: boolean;
+      englishItems?: number[];
+      nepaliItems?: number[];
+    }
+  >;
+}
 type NepaliValue =
   | string
   | string[]
@@ -167,7 +181,9 @@ const TranslatePage = () => {
   const [nepaliTitle, setNepaliTitle] = useState("");
   const [nepaliDescription, setNepaliDescription] = useState("");
   const [nepaliValues, setNepaliValues] = useState<NepaliValue[]>([]);
-
+  const [validationErrors, setValidationErrors] = useState<ValidationErrors>({
+    blocks: {},
+  });
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
@@ -177,16 +193,16 @@ const TranslatePage = () => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
-     const handleScroll = () => {
-       setIsScrolled(window.scrollY > 50);
-     };
- 
-     window.addEventListener("scroll", handleScroll);
- 
-     return () => {
-       window.removeEventListener("scroll", handleScroll);
-     };
-   }, []);
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
   useEffect(() => {
     let isMounted = true;
 
@@ -402,19 +418,25 @@ const TranslatePage = () => {
     setNepaliValues((prev) => prev.map((v, i) => (i === index ? value : v)));
   };
 
-  const getNepaliListText = (value: NepaliValue) => {
-    if (Array.isArray(value)) return value.join("\n");
-    return "";
-  };
+const trimText = (value: unknown) => String(value ?? "").trim();
 
-  const handleNepaliListTextChange = (index: number, text: string) => {
-    const items = text
-      .split("\n")
-      .map((item) => item.trim())
-      .filter((item) => item.length > 0);
+const cleanListItems = (items: any[] = []) =>
+  items
+    .map((item) => String(item ?? "").trim())
+    .filter((item) => item.length > 0);
 
-    updateNepaliValue(index, items);
-  };
+const getNepaliListText = (value: NepaliValue) => {
+  if (Array.isArray(value)) return cleanListItems(value).join("\n");
+  return "";
+};
+
+const handleNepaliListTextChange = (index: number, text: string) => {
+  const items = text
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+  updateNepaliValue(index, items);
+};
 
   const updateNepaliCallout = (
     index: number,
@@ -439,7 +461,10 @@ const TranslatePage = () => {
       id: block.id,
       type: block.type,
       ...(block.type === "heading" && { level: block.level ?? 1 }),
-      content: block.content,
+      content:
+        block.type === "list"
+          ? cleanListItems(Array.isArray(block.content) ? block.content : [])
+          : block.content,
     }));
   };
 
@@ -448,79 +473,136 @@ const TranslatePage = () => {
       id: block.id,
       type: block.type,
       ...(block.type === "heading" && { level: block.level ?? 1 }),
-      content: nepaliValues[index],
+      content:
+        block.type === "list"
+          ? cleanListItems(
+              Array.isArray(nepaliValues[index]) ? nepaliValues[index] : [],
+            )
+          : nepaliValues[index],
     }));
   };
 
   const validateTranslationFields = () => {
-    if (!englishTitle.trim() || !nepaliTitle.trim()) {
-      setSubmitError(
-        "Please add both English and Nepali titles before saving.",
-      );
-      return false;
-    }
+    const errors: ValidationErrors = { blocks: {} };
+    let isValid = true;
 
-    if (!englishDescription.trim() || !nepaliDescription.trim()) {
-      setSubmitError(
-        "Please add both English and Nepali descriptions before saving.",
-      );
-      return false;
+    if (!trimText(englishTitle)) {
+      errors.englishTitle = true;
+      isValid = false;
+    }
+    if (!trimText(nepaliTitle)) {
+      errors.nepaliTitle = true;
+      isValid = false;
+    }
+    if (!trimText(englishDescription)) {
+      errors.englishDescription = true;
+      isValid = false;
+    }
+    if (!trimText(nepaliDescription)) {
+      errors.nepaliDescription = true;
+      isValid = false;
     }
 
     if (englishBlocks.length === 0) {
       setSubmitError("Add at least one content block before saving.");
+      setValidationErrors(errors);
       return false;
     }
 
-    const hasIncompleteContent = englishBlocks.some((block, index) => {
+    englishBlocks.forEach((block, index) => {
       if (
         block.type === "heading" ||
         block.type === "paragraph" ||
         block.type === "quote"
       ) {
-        return (
-          !String(block.content ?? "").trim() ||
-          !String(nepaliValues[index] ?? "").trim()
+        const englishEmpty = !trimText(block.content);
+        const nepaliEmpty = !trimText(nepaliValues[index]);
+
+        if (englishEmpty || nepaliEmpty) {
+          errors.blocks[index] = {
+            english: englishEmpty,
+            nepali: nepaliEmpty,
+          };
+          isValid = false;
+        }
+      }
+
+      if (block.type === "callout") {
+        const englishTitleEmpty = !trimText((block.content as any)?.title);
+        const englishDescriptionEmpty = !trimText(
+          (block.content as any)?.description,
         );
+        const nepaliValue = nepaliValues[index] as any;
+        const nepaliTitleEmpty = !trimText(nepaliValue?.title);
+        const nepaliDescriptionEmpty = !trimText(nepaliValue?.description);
+
+        if (
+          englishTitleEmpty ||
+          englishDescriptionEmpty ||
+          nepaliTitleEmpty ||
+          nepaliDescriptionEmpty
+        ) {
+          errors.blocks[index] = {
+            english: englishTitleEmpty || englishDescriptionEmpty,
+            nepali: nepaliTitleEmpty || nepaliDescriptionEmpty,
+          };
+          isValid = false;
+        }
       }
 
       if (block.type === "list") {
-        const englishItems = (
-          Array.isArray(block.content) ? block.content : []
-        ).filter(Boolean);
-        const nepaliItems = (
-          Array.isArray(nepaliValues[index]) ? nepaliValues[index] : []
-        ).filter(Boolean);
-        return (
-          englishItems.length === 0 ||
-          englishItems.length !== nepaliItems.length
-        );
-      }
+        const englishList = Array.isArray(block.content) ? block.content : [];
+        const nepaliList = Array.isArray(nepaliValues[index])
+          ? (nepaliValues[index] as string[])
+          : [];
 
-      return false;
+        const cleanedEnglish = cleanListItems(englishList);
+        const cleanedNepali = cleanListItems(nepaliList);
+        const emptyEnglishItems = englishList
+          .map((v, i) => (trimText(v) ? -1 : i))
+          .filter((i) => i !== -1);
+        const emptyNepaliItems = nepaliList
+          .map((v, i) => (trimText(v) ? -1 : i))
+          .filter((i) => i !== -1);
+
+        const countMismatch =
+          cleanedEnglish.length === 0 ||
+          cleanedEnglish.length !== cleanedNepali.length;
+
+        if (emptyEnglishItems.length > 0 || emptyNepaliItems.length > 0 || countMismatch) {
+          errors.blocks[index] = {
+            english: emptyEnglishItems.length > 0 || countMismatch,
+            nepali: emptyNepaliItems.length > 0 || countMismatch,
+            englishItems: emptyEnglishItems,
+            nepaliItems: emptyNepaliItems,
+          };
+          isValid = false;
+        }
+      }
     });
 
-    if (hasIncompleteContent) {
-      setSubmitError(
-        "Please complete the English and Nepali versions of each content block before saving.",
-      );
-      return false;
+    setValidationErrors(errors);
+
+    if (!isValid) {
+      setSubmitError("Please complete the highlighted fields before saving.");
     }
 
-    return true;
+    return isValid;
   };
 
   const handleTranslationSave = async () => {
     if (!blogId || isSavingTranslation) return;
     setSubmitError(null);
     setSuccessMsg(null);
-    setIsSavingTranslation(true);
+    setValidationErrors({ blocks: {} });
 
     if (!validateTranslationFields()) {
       return;
     }
 
-    const payload = {
+    setIsSavingTranslation(true);
+
+   const payload = {
       translations: [
         {
           language: "en",
@@ -536,8 +618,7 @@ const TranslatePage = () => {
         },
       ],
     };
-
-    try {
+   try {
       const response = await fetch(`/api/blogs/complete/${blogId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -569,11 +650,12 @@ const TranslatePage = () => {
       />
     );
   }
-  
 
   return (
     <div className="min-h-screen bg-[#EBECD8]/70 px-3 lg:px-8 py-4 lg:py-6">
-      <div className={`mb-4 lg:mb-6 flex items-center justify-between sticky top-0  gap-2 flex-wrap `}>
+      <div
+        className={`mb-4 lg:mb-6 flex items-center justify-between sticky top-0  gap-2 flex-wrap `}
+      >
         <button
           type="button"
           onClick={() => setShowLeaveConfirm(true)}
@@ -663,6 +745,7 @@ const TranslatePage = () => {
             handleTranslationSave={handleTranslationSave}
             BlockIcon={BlockIcon}
             ImageIcon={ImageIcon}
+            validationErrors={validationErrors}
           />
         </div>
       )}
