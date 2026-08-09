@@ -33,11 +33,11 @@ const CuratedBlog = ({
     >
       {/* Cover image */}
       <div className="relative h-80 w-full overflow-hidden bg-neutral-900">
-        {/* <img
+        <img
           src={normalizeImageUrl(curatedBlog?.coverImage)}
           alt={title}
           className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-        /> */}
+        />
       </div>
 
       {/* Gradient overlay — stronger at bottom for readability */}

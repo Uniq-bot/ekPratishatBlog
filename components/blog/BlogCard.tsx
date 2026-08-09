@@ -172,11 +172,11 @@ const BlogCard = ({
     >
       {/* Thumbnail — fixed size */}
       <div className="relative shrink-0 w-28 h-20 sm:w-80 sm:h-35 overflow-hidden bg-neutral-100">
-        {/* <img
+        <img
           src={thumb}
           alt={title}
           className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-        /> */}
+        />
       </div>
 
       {/* Content */}

@@ -58,12 +58,12 @@ const LatestBlogs = ({
         className="group overflow-hidden  transition-all duration-300 hover:-translate-y-1"
       >
         <div className="relative aspect-10/4 w-full overflow-hidden">
-          {/* <img
+          <img
             src={normalizeImageUrl(featuredBlog?.coverImage)}
             alt={featuredBlog?.title ?? "Blog cover"}
             sizes="(max-width: 1024px) 100vw, 55vw"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
-          /> */}
+          />
           <span
             className={
               idx === 0
@@ -108,13 +108,13 @@ const LatestBlogs = ({
             className="group flex gap-3  border-b border-[#f0e3bd] p-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#d8b24a]"
           >
             <div className="relative h-20 w-24 shrink-0 overflow-hidden bg-[#1d1d1d]">
-              {/* <img
+              <img
                 src={normalizeImageUrl(blog?.coverImage)}
                 alt={blog?.title ?? "Blog cover"}
                 width={200}
                 height={200}
                 className=" object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-              /> */}
+              />
             </div>
 
             <div className="flex min-w-0 flex-1 flex-col gap-2">
