@@ -3,12 +3,10 @@
 import { Dot, Lightbulb } from "lucide-react";
 import { useSession } from "next-auth/react";
 import BlogComments from "./BlogComments";
-import { normalizeImageUrl } from "@/libs/image-url";
-
 import ShareComp from "./ShareComp";
 import { useState } from "react";
 import { useLanguage } from "@/context/ClientLanguageContext";
-import Image from "next/image";
+import { normalizeImageUrl } from "@/libs/image-url";
 
 // Heading tag map: level → HTML tag
 const headingTag: Record<number, keyof React.JSX.IntrinsicElements> = {
@@ -69,11 +67,37 @@ const BlogDetailClient = ({
   };
 
   const translation = blog?.translations?.[idx] ?? {};
+  console.log("translation",translation)
   const rawBlocks = translation?.content;
-  const blocks = parseBlocks(rawBlocks).map((block: any) => ({
-    ...block,
-    content: block?.content ?? block?.value ?? block?.text ?? "",
-  }));
+  console.log("raw",rawBlocks)
+  const blocks = parseBlocks(rawBlocks).map((block: any) => {
+    if (block?.type !== "image") {
+      return {
+        ...block,
+        content: block?.content ?? block?.value ?? block?.text ?? "",
+      };
+    }
+
+    const imageContent = block?.content;
+
+    if (typeof imageContent === "string") {
+      return {
+        ...block,
+        content: {
+          URL: imageContent,
+          title: "",
+        },
+      };
+    }
+
+    return {
+      ...block,
+      content: {
+        URL: imageContent?.URL ?? imageContent?.imageUrl ?? imageContent?.src ?? "",
+        title: imageContent?.title ?? imageContent?.description ?? "",
+      },
+    };
+  });
   const categoryName = blog?.category?.translations?.[idx]?.name || blog?.category?.slug || "Category";
   const tagLabel = (tag: any) => {
     if (typeof tag === "string") return tag;
@@ -105,13 +129,13 @@ const BlogDetailClient = ({
         </h1>
 
         <div className="relative mt-3 aspect-video w-full overflow-hidden border border-[#eadcb4] shadow-[0_12px_32px_rgba(0,0,0,0.08)] sm:aspect-16/8 lg:aspect-16/7">
-          {/* <img
+          <img
             src={`${process.env.NEXT_PUBLIC_IMAGE_HOST_URL}${blog?.coverImage}`}
             alt={blog?.title ?? "Blog cover"}
             width={800}
             height={400}
             className="h-full w-full object-cover"
-          /> */}
+          />
         </div>
 
         <div className="mt-4 flex w-full flex-wrap items-start justify-between gap-2 sm:items-center">
@@ -214,6 +238,7 @@ const BlogDetailClient = ({
             let headingIndex = 0;
 
             return blocks.map((block: any, index: number) => {
+              console.log(block)
               switch (block.type) {
                 case "paragraph":
                   return (
@@ -246,20 +271,35 @@ const BlogDetailClient = ({
                   );
                 }
 
-                case "image":
-                  return block.content ? (
+                case "image": {
+                  const imageUrl =
+                    typeof block.content === "string"
+                      ? block.content
+                      : block.content?.URL || block.content?.url || "";
+                  const imageTitle =
+                    typeof block.content === "object" && block.content !== null
+                      ? block.content?.title || block.content?.description || ""
+                      : "";
+
+                  return imageUrl ? (
                     <div
                       key={block.id ?? index}
                       className="my-6 h-fit overflow-hidden border border-[#eadcb4] shadow-[0_12px_32px_rgba(0,0,0,0.08)] sm:my-8"
                     >
-                      {/* <img
-                        src={normalizeImageUrl(block.content)}
-                        alt="Blog illustration"
+                      <img
+                        src={normalizeImageUrl(imageUrl)}
+                        alt={imageTitle || "Blog illustration"}
                         className="h-full w-full object-cover"
                         loading="lazy"
-                      /> */}
+                      />
+                      {imageTitle ? (
+                        <p className="border-t border-[#eadcb4] bg-[#fffdf7] px-4 py-3 text-sm leading-7 text-black/70 sm:px-5 sm:text-base">
+                          {imageTitle}
+                        </p>
+                      ) : null}
                     </div>
                   ) : null;
+                }
 
                 case "list":
                   return (
@@ -337,14 +377,13 @@ const BlogDetailClient = ({
                       className="my-12 flex items-center gap-4"
                     >
                       <div className="h-px flex-1 bg-[#eadcb4]" />
-                      <div className="flex h-10 w-10 lg:w-15  object-cover items-center justify-center ">
-                        <Image
-                        src="/logo.png"
-                        alt="Blog logo"
-                        width={100}
-                        height={100}
-                      />
-                        </div>
+                      <div className="flex h-10 w-10 items-center justify-center lg:w-15">
+                        <img
+                          src="/logo.png"
+                          alt="Blog logo"
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
                       <div className="h-px flex-1 bg-[#eadcb4]" />
                     </div>
                   );

@@ -1,4 +1,5 @@
 import React from "react";
+import { normalizeImageUrl } from "@/libs/image-url";
 
 const TranslationComponent = ({
   setEnglishTitle,
@@ -406,7 +407,11 @@ const TranslationComponent = ({
                       >
                         {block.content ? (
                           <img
-                            src={block.content}
+                            src={normalizeImageUrl(
+                              typeof block.content === "string"
+                                ? block.content
+                                : block.content?.URL || block.content?.url || "",
+                            )}
                             alt="Block preview"
                             className="w-full h-full object-cover"
                           />
@@ -434,10 +439,17 @@ const TranslationComponent = ({
                           }}
                         />
                       </div>
-                      <p className="text-xs text-gray-400 pt-2">
-                        Images are shared across languages — no separate
-                        translation needed.
-                      </p>
+                      <div className="flex-1 text-xs text-gray-500 pt-2">
+                        <p>
+                          Images are shared across languages — no separate
+                          translation needed.
+                        </p>
+                        {typeof block.content === "object" && block.content !== null && (block.content?.title || block.content?.description) ? (
+                          <p className="mt-2 text-gray-600">
+                            {block.content?.title || block.content?.description}
+                          </p>
+                        ) : null}
+                      </div>
                     </div>
                   )}
 

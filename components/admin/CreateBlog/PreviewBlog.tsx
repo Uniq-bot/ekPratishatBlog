@@ -4,9 +4,9 @@
 import React from "react";
 import { Dot, Lightbulb } from "lucide-react";
 import Image from "next/image";
+import { normalizeImageUrl } from "@/libs/image-url";
 
 const PreviewBlog = ({ blocks }: { blocks: any[] }) => {
-  console.log(blocks)
   return (
     <div className="w-full border bg-white shadow-sm">
       {/* Header */}
@@ -135,19 +135,34 @@ const PreviewBlog = ({ blocks }: { blocks: any[] }) => {
                 </div>
               );
 
-            case "image":
-              return (
+            case "image": {
+              const imageUrl =
+                typeof block.content === "string"
+                  ? block.content
+                  : block.content?.URL || block.content?.url || "";
+              const imageTitle =
+                typeof block.content === "object" && block.content !== null
+                  ? block.content?.title || block.content?.description || ""
+                  : "";
+
+              return imageUrl ? (
                 <div
                   key={block.id ?? index}
                   className="my-8 overflow-hidden rounded-xl shadow-md"
                 >
                   <img
-                    src={`http://localhost${block.content}`}
-                    alt="Preview"
+                    src={normalizeImageUrl(imageUrl)}
+                    alt={imageTitle || "Preview"}
                     className="w-full object-cover"
                   />
+                  {imageTitle ? (
+                    <p className="border-t bg-gray-50 px-4 py-3 text-sm text-gray-700">
+                      {imageTitle}
+                    </p>
+                  ) : null}
                 </div>
-              );
+              ) : null;
+            }
 
             default:
               return null;

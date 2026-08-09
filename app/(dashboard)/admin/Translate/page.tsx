@@ -108,9 +108,14 @@ const normalizeEnglishBlock = (raw: any, index: number): EnglishBlock => {
   }
 
   if (type === "image") {
-    const content =
-      typeof raw?.content === "string" ? raw.content : (raw?.value ?? "");
-    return { id, type, content };
+    return {
+      id,
+      type,
+      content:
+        typeof raw?.content === "string"
+          ? { title: "", URL: raw.content }
+          : raw?.content || raw?.value || { title: "", URL: "" },
+    };
   }
 
   if (type === "separator") {

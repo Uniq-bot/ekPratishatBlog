@@ -27,7 +27,7 @@ const BlogEditor = ({
   user,
   activeEditor,
   setActiveEditor,
-  setOnBoardingBlog
+  setOnBoardingBlog,
 }: {
   mode?: "create" | "edit";
   initialBlog?: any;
@@ -39,8 +39,8 @@ const BlogEditor = ({
   categories: Category[];
   isCategoryLoading: boolean;
   user: any;
-  activeEditor:string;
-  setActiveEditor:React.Dispatch<React.SetStateAction<string>>;
+  activeEditor: string;
+  setActiveEditor: React.Dispatch<React.SetStateAction<string>>;
   setOnBoardingBlog: React.Dispatch<React.SetStateAction<any>>;
 }) => {
   const router = useRouter();
@@ -58,16 +58,23 @@ const BlogEditor = ({
   const [content, setContent] = useState("");
   const [calloutTitle, setCalloutTitle] = useState("");
   const [calloutDescription, setCalloutDescription] = useState("");
+  const [imageTitle, setImageTitle] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [showModel, setShowModal] = useState(false);
   const [draftId, setDraftId] = useState<string | null>(null);
-  const { mutateAsync: createBlog, isPending: isCreating, data } = useCreateBlog();
+  const {
+    mutateAsync: createBlog,
+    isPending: isCreating,
+    data,
+  } = useCreateBlog();
   const { mutateAsync: updateBlog, isPending: isUpdating } = useUpdateBlog();
   const { mutateAsync: saveToDraft, isPending: isSavingDraft } =
     useSaveToDraft(); // Reuse the createBlog hook for saving drafts
   const [preview, setPreview] = useState("");
   const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
-  const [pendingAction, setPendingAction] = useState<"next" | "draft" | null>(null);
+  const [pendingAction, setPendingAction] = useState<"next" | "draft" | null>(
+    null,
+  );
 
   useEffect(() => {
     if (!coverImage) {
@@ -87,13 +94,12 @@ const BlogEditor = ({
     .replace(/[^\w-]+/g, "")
     .replace(/--+/g, "-")
     .replace(/(^-|-$)/g, "");
-  
+
   // Populate fields when editing
   useEffect(() => {
     if (!initialBlog?.data) return;
 
     const blog = initialBlog.data;
-    console.log(blog)
     setDraftId(blog.id ?? null);
     setTitle(blog.title ?? "");
     setDescription(blog.description ?? "");
@@ -112,7 +118,6 @@ const BlogEditor = ({
 
     setBlocks(parsedBlocks);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   // In resetForm(), reset the file input via ref
   const resetForm = () => {
@@ -162,9 +167,7 @@ const BlogEditor = ({
     setSubmitError(null);
     setSuccessMsg(null);
 
-    if (!validateRequiredFields()) {
-      return;
-    }
+    if (!validateRequiredFields()) return;
 
     const formData = buildFormData("draft");
 
@@ -173,14 +176,11 @@ const BlogEditor = ({
         id: draftId ?? initialBlog?.data?.id ?? undefined,
         formData,
       });
-      // Adjust this to match whatever shape your API actually returns
       const newId = result?.data?.id ?? result?.id;
       if (!draftId && newId) setDraftId(newId);
       setSuccessMsg("Draft saved successfully!");
-
-    } catch (err: any) {
+    } catch {
       setSubmitError("We could not save the draft right now.");
-      
     }
   };
 
@@ -189,11 +189,10 @@ const BlogEditor = ({
     setSubmitError(null);
     setSuccessMsg(null);
 
-    if (!validateRequiredFields()) {
-      return;
-    }
+    if (!validateRequiredFields()) return;
 
     const formData = buildFormData("published");
+
     try {
       if (mode === "edit") {
         const blogId = initialBlog?.data?.id;
@@ -210,7 +209,7 @@ const BlogEditor = ({
         setSuccessMsg("Blog created successfully!");
         resetForm();
       }
-    } catch (err: any) {
+    } catch {
       setSubmitError("We could not save the blog right now.");
     }
   };
@@ -354,15 +353,13 @@ const BlogEditor = ({
 
             {coverImage ? (
               <div className="relative w-1/2 border bg-gray-50 overflow-hidden">
-                {
-                  preview&&(
-                    <img
-                  src={preview}
-                  alt="Cover preview"
-                  className="w-full h-32 sm:h-40 lg:h-60 object-cover"
-                />
-                  )
-                }
+                {preview && (
+                  <img
+                    src={preview}
+                    alt="Cover preview"
+                    className="w-full h-32 sm:h-40 lg:h-60 object-cover"
+                  />
+                )}
                 <button
                   type="button"
                   onClick={() => {
@@ -418,7 +415,7 @@ const BlogEditor = ({
               }}
               className="px-4 lg:px-6 py-2 text-xs lg:text-sm  bg-green-400 border shadow shadow-black hover:bg-gray-50 disabled:opacity-50 transition-colors w-full sm:w-auto"
             >
-             Next
+              Next
             </button>
             <button
               type="button"
@@ -441,6 +438,8 @@ const BlogEditor = ({
           content={content}
           setContent={setContent}
           image={image}
+          imageTitle={imageTitle}
+          setImageTitle={setImageTitle}
           setImage={setImage}
           calloutTitle={calloutTitle}
           setCalloutTitle={setCalloutTitle}
@@ -454,7 +453,11 @@ const BlogEditor = ({
       )}
       <ConfirmDialog
         open={showLeaveConfirm}
-        title={pendingAction === "draft" ? "Save as draft?" : "Continue to translation?"}
+        title={
+          pendingAction === "draft"
+            ? "Save as draft?"
+            : "Continue to translation?"
+        }
         message={
           pendingAction === "draft"
             ? "This will save the current blog as a draft. Continue?"

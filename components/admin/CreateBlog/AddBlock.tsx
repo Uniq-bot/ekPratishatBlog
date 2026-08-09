@@ -12,6 +12,8 @@ const AddBlock = ({
   content,
   setContent,
   image,
+  imageTitle,
+  setImageTitle,
   setImage,
   calloutTitle,
   setCalloutTitle,
@@ -26,83 +28,67 @@ const AddBlock = ({
   content: string;
   setContent: React.Dispatch<React.SetStateAction<string>>;
   image: File | null;
+  imageTitle: string;
+  setImageTitle: React.Dispatch<React.SetStateAction<string>>;
   setImage: React.Dispatch<React.SetStateAction<File | null>>;
   calloutTitle: string;
-setCalloutTitle: React.Dispatch<React.SetStateAction<string>>;
-calloutDescription: string;
-setCalloutDescription: React.Dispatch<React.SetStateAction<string>>;
+  setCalloutTitle: React.Dispatch<React.SetStateAction<string>>;
+  calloutDescription: string;
+  setCalloutDescription: React.Dispatch<React.SetStateAction<string>>;
 }) => {
-  const headingLevels = [ 2, 3, 4, 5];
-
+  const headingLevels = [2, 3, 4, 5];
   const imageUpload = useImageUpload();
- const handleAddBlock = async (e: React.MouseEvent) => {
-  e.preventDefault();
+  const handleAddBlock = async (e: React.MouseEvent) => {
+    e.preventDefault();
 
- if (blockType === "callout") {
-  if (!calloutTitle.trim() && !calloutDescription.trim()) {
-    return;
-  }
-} else if (
-  blockType !== "separator" &&
-  blockType !== "image" &&
-  !content.trim()
-) {
-  return;
-} else if (blockType === "image" && !image) {
-  return;
-}
+    if (blockType === "callout") {
+      if (!calloutTitle.trim() && !calloutDescription.trim()) return;
+    } else if (blockType !== "separator" && blockType !== "image" && !content.trim()) {
+      return;
+    } else if (blockType === "image" && !image) {
+      return;
+    }
 
-  let imagePath = null;
+    let imagePath = null;
+    if (blockType === "image" && image) {
+      const res = await imageUpload.mutateAsync(image);
+      imagePath = res.imagePath;
+    }
 
-  if (blockType === "image" && image) {
-    const res = await imageUpload.mutateAsync(image);
-    imagePath = res.imagePath;
-  }
+    const newBlock = {
+      id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+      type: blockType,
+      ...(blockType === "heading" && { level: setLevel }),
+      content:
+        blockType === "list"
+          ? content
+              .split("\n")
+              .map((line) => line.trim())
+              .filter(Boolean)
+          : blockType === "image"
+            ? { title: imageTitle, URL: imagePath }
+            : blockType === "separator"
+              ? null
+              : blockType === "callout"
+                ? { title: calloutTitle, description: calloutDescription }
+                : content,
+    };
 
-  const newBlock = {
-    id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
-    type: blockType,
-
-    ...(blockType === "heading" && {
-      level: setLevel,
-    }),
-
-   content:
-  blockType === "list"
-    ? content
-        .split("\n")
-        .map((s) => s.trim())
-        .filter(Boolean)
-    : blockType === "image"
-    ? imagePath
-    : blockType === "separator"
-    ? null
-    : blockType === "callout"
-    ? {
-        title: calloutTitle,
-        description: calloutDescription,
-      }
-    : content,
+    setBlocks((prev) => [...prev, newBlock]);
+    setContent("");
+    setImage(null);
+    setImageTitle("");
+    setCalloutTitle("");
+    setCalloutDescription("");
   };
-
-  setBlocks((prev) => [...prev, newBlock]);
-  setContent("");
-  setImage(null);
-  setCalloutTitle("");
-setCalloutDescription("");
-};
 
   return (
     <div className="w-full border p-3 lg:p-5 bg-[#F0EFE1]">
-      <h2 className="text-sm lg:text-base font-semibold mb-3">
-        Add Block
-      </h2>
+      <h2 className="text-sm lg:text-base font-semibold mb-3">Add Block</h2>
 
       {/* Block Type */}
       <div className="flex flex-col gap-1">
-        <label className="text-xs lg:text-sm font-medium">
-          Block Type
-        </label>
+        <label className="text-xs lg:text-sm font-medium">Block Type</label>
 
         <select
           value={blockType}
@@ -150,9 +136,7 @@ setCalloutDescription("");
 
       {/* Content */}
       <div className="w-full flex flex-col gap-2 mt-4">
-        <label className="text-xs lg:text-sm font-medium">
-          Content
-        </label>
+        <label className="text-xs lg:text-sm font-medium">Content</label>
 
         {blockType === "paragraph" && (
           <textarea
@@ -183,18 +167,26 @@ List item 3`}
           />
         )}
 
-    {blockType === "image" && (
-  <input
-    type="file"
-    accept="image/*"
-    className="w-full h-10 outline-none p-2 border text-xs lg:text-sm"
-    onChange={(e) => {
-      const file = e.target.files?.[0];
-      if (!file) return;
-      setImage(file); 
-    }}
-  />
-)}
+        {blockType === "image" && (
+          <>
+            <input
+              type="text"
+              placeholder="Image title..."
+              className="w-full h-10 outline-none p-2 border text-xs lg:text-sm"
+              value={imageTitle}
+              onChange={(e) => setImageTitle(e.target.value)}
+            />
+            <input
+              type="file"
+              accept="image/*"
+              className="w-full h-10 outline-none p-2 border text-xs lg:text-sm"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) setImage(file);
+              }}
+            />
+          </>
+        )}
 
         {blockType === "quote" && (
           <textarea
@@ -205,23 +197,23 @@ List item 3`}
           />
         )}
 
-       {blockType === "callout" && (
-  <div className="flex flex-col gap-3">
-    <input
-      className="w-full h-10 outline-none p-2 border font-semibold text-xs lg:text-sm"
-      placeholder="Bold title..."
-      value={calloutTitle}
-      onChange={(e) => setCalloutTitle(e.target.value)}
-    />
+        {blockType === "callout" && (
+          <div className="flex flex-col gap-3">
+            <input
+              className="w-full h-10 outline-none p-2 border font-semibold text-xs lg:text-sm"
+              placeholder="Bold title..."
+              value={calloutTitle}
+              onChange={(e) => setCalloutTitle(e.target.value)}
+            />
 
-    <textarea
-      className="w-full h-24 outline-none p-2 border bg-yellow-50 text-xs lg:text-sm resize-y"
-      placeholder="Description..."
-      value={calloutDescription}
-      onChange={(e) => setCalloutDescription(e.target.value)}
-    />
-  </div>
-)}
+            <textarea
+              className="w-full h-24 outline-none p-2 border bg-yellow-50 text-xs lg:text-sm resize-y"
+              placeholder="Description..."
+              value={calloutDescription}
+              onChange={(e) => setCalloutDescription(e.target.value)}
+            />
+          </div>
+        )}
 
         {blockType === "separator" && (
           <div className="border rounded p-4 text-center text-gray-400 text-sm">

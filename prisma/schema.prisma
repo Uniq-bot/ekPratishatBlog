@@ -26,41 +26,42 @@ enum AdType {
 }
 
 model User {
-  id        String     @id @default(cuid())
-  email     String     @unique
-  name      String?
-  password  String
+  id       String  @id @default(cuid())
+  email    String  @unique
+  name     String?
+  password String
 
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  posts      BlogPost[]
+  posts BlogPost[]
 }
 
 model BlogPost {
-  id          String      @id @default(cuid())
-  slug        String      @unique
+  id   String @id @default(cuid())
+  slug String @unique
 
-  authorID    String
-  categoryID  String?
+  authorID   String
+  categoryID String?
 
-  coverImage  String?
-  status      PostStatus  @default(DRAFT)
-  viewCount   Int         @default(0)
-  isToggled   Boolean     @default(false)
+  coverImage String?
+  status     PostStatus @default(DRAFT)
+  viewCount  Int        @default(0)
+  isToggled  Boolean    @default(false)
 
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  author       User       @relation(fields: [authorID], references: [id])
-  category     Category?  @relation(fields: [categoryID], references: [id])
+  author   User      @relation(fields: [authorID], references: [id])
+  category Category? @relation(fields: [categoryID], references: [id])
 
   translations BlogTranslation[]
 
-  tagLinks     TagOnPost[]
+  tagLinks TagOnPost[]
 
-  blogViews    BlogViews[]
-  comments     BlogComment[]
+  blogViews BlogViews[]
+  comments  BlogComment[]
+  audioBook AudioBook?
 
   @@index([status, createdAt])
   @@index([isToggled, status])
@@ -69,143 +70,152 @@ model BlogPost {
 }
 
 model BlogTranslation {
-  id              String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  blogPostId      String
-  blogPost        BlogPost @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
+  blogPostId String
+  blogPost   BlogPost @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
 
-  language        Language
+  language Language
 
-  title           String
-  description     String?
-  content         Json
+  title       String
+  description String?
+  content     Json
 
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([blogPostId, language])
 }
 
+model AudioBook {
+  id         String   @id @default(cuid())
+  blogPostId String   @unique
+  blogPost   BlogPost @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
+
+  audioFile String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Category {
-  id          String    @id @default(cuid())
+  id String @id @default(cuid())
 
-  slug        String    @unique
+  slug String @unique
 
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   posts        BlogPost[]
   translations CategoryTranslation[]
 }
 
 model CategoryTranslation {
-  id            String    @id @default(cuid())
+  id String @id @default(cuid())
 
-  categoryId    String
-  category      Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
-  language      Language
+  language Language
 
-  name          String
-  description   String?
+  name        String
+  description String?
 
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([categoryId, language])
 }
 
 model Tag {
-  id          String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  slug        String   @unique
+  slug String @unique
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  blogPosts   TagOnPost[]
+  blogPosts TagOnPost[]
 
   translations TagTranslation[]
 }
 
 model TagTranslation {
-  id          String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  tagId       String
-  tag         Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tagId String
+  tag   Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
 
-  language    Language
+  language Language
 
-  name        String
+  name String
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([tagId, language])
 }
 
 model TagOnPost {
-  blogPostId  String
-  tagId        String
+  blogPostId String
+  tagId      String
 
-  blogPost     BlogPost @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
-  tag          Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  blogPost BlogPost @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
+  tag      Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
 
   @@id([blogPostId, tagId])
-
   @@index([tagId])
 }
 
 model BlogComment {
-  id            String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  blogPostId    String
-  blogPost      BlogPost @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
+  blogPostId String
+  blogPost   BlogPost @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
 
-  userEmail     String
-  userName      String
-  userImage     String
-  commentText   String
+  userEmail   String
+  userName    String
+  userImage   String
+  commentText String
 
-  createdAt     DateTime @default(now())
+  createdAt DateTime @default(now())
 
   @@index([blogPostId])
 }
 
 model BlogViews {
-  id            String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  blogPostId    String
-  sessionId     String
+  blogPostId String
+  sessionId  String
 
-  createdAt     DateTime @default(now())
+  createdAt DateTime @default(now())
 
-  blogPost      BlogPost @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
+  blogPost BlogPost @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
 
   @@unique([blogPostId, sessionId])
   @@index([blogPostId])
 }
 
 model Advertisement {
-  id              String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  AdTitle         String
-  AdDescription   String
-  AdPoster        String
-  AdLink          String
-  AdSponsorName   String
+  AdTitle       String
+  AdDescription String
+  AdPoster      String
+  AdLink        String
+  AdSponsorName String
 
-  AdType          AdType   @default(BANNER)
-  isAdRunning     Boolean  @default(false)
+  AdType      AdType  @default(BANNER)
+  isAdRunning Boolean @default(false)
 
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model NewsletterSubscriber {
-  id          String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  email       String   @unique
+  email String @unique
 
-  createdAt   DateTime @default(now())
+  createdAt DateTime @default(now())
 }

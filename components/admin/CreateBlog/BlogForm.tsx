@@ -65,7 +65,7 @@ const BlogForm = ({
   );
   const [pendingBlock, setPendingBlock] = React.useState<Block | null>(null);
   const [showBlockDeleteConfirm, setShowBlockDeleteConfirm] = React.useState(false);
-  const {mutateAsync:uploadImageMutate}= useImageUpload();
+  const { mutateAsync: uploadImageMutate } = useImageUpload();
 
   // ── Drag handlers ────────────────────────────────────────────────
   const handleDragStart = (e: React.DragEvent, index: number) => {
@@ -111,24 +111,39 @@ const BlogForm = ({
     setShowBlockDeleteConfirm(false);
   };
 
-const handleImageReplace = async (
-  block: Block,
-  file: File,
-) => {
-  try {
-    const image = await uploadImageMutate(file);
-    updateBlock(block.id, {
-      content: image.imagePath,
-    });
-  } catch (err) {
-    if (process.env.NODE_ENV !== "production") {
-      console.error(
-        "Failed to replace image:",
-        err,
-      );
+  const handleImageReplace = async (block: Block, file: File) => {
+    try {
+      const image = await uploadImageMutate(file);
+      const currentContent = block.content;
+      const nextContent =
+        typeof currentContent === "object" && currentContent !== null
+          ? { ...currentContent, URL: image.imagePath }
+          : { title: "", URL: image.imagePath };
+
+      updateBlock(block.id, { content: nextContent });
+    } catch (err) {
+      if (process.env.NODE_ENV !== "production") {
+        console.error("Failed to replace image:", err);
+      }
     }
-  }
-};
+  };
+
+  const updateImageTitle = (blockId: string | number, title: string) => {
+    setBlocks((prev) =>
+      prev.map((block) => {
+        if (block.id !== blockId) return block;
+        const currentContent =
+          typeof block.content === "object" && block.content !== null
+            ? block.content
+            : {};
+
+        return {
+          ...block,
+          content: { ...currentContent, title },
+        };
+      }),
+    );
+  };
   const updateListItem = (
     blockId: string | number,
     itemIndex: number,
@@ -289,6 +304,17 @@ const handleImageReplace = async (
 
               {block.type === "image" && (
                 <div className="flex items-start gap-3">
+                  <input
+                    type="text"
+                    placeholder="Image title..."
+                    className="w-1/2 h-10 outline-none p-2 border text-xs lg:text-sm"
+                    value={
+                      typeof block.content === "object" && block.content !== null
+                        ? block.content?.title ?? ""
+                        : ""
+                    }
+                    onChange={(e) => updateImageTitle(block.id, e.target.value)}
+                  />
                   <div
                     onClick={() => fileInputRefs.current[block.id]?.click()}
                     className="relative group w-24 h-24 sm:w-28 sm:h-28 shrink-0 border border-gray-200 overflow-hidden cursor-pointer bg-gray-50"
@@ -296,7 +322,11 @@ const handleImageReplace = async (
                   >
                     {block.content ? (
                       <img
-                        src={normalizeImageUrl(block.content)}
+                        src={normalizeImageUrl(
+                          typeof block.content === "object" && block.content !== null
+                            ? block.content?.URL
+                            : block.content,
+                        )}
                         alt="Block preview"
                         className="w-full h-full object-cover"
                       />
