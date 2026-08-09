@@ -105,13 +105,13 @@ const BlogDetailClient = ({
         </h1>
 
         <div className="relative mt-3 aspect-video w-full overflow-hidden border border-[#eadcb4] shadow-[0_12px_32px_rgba(0,0,0,0.08)] sm:aspect-16/8 lg:aspect-16/7">
-          <img
-            src={`http://localhost:80${blog?.coverImage}`}
+          {/* <img
+            src={`${process.env.NEXT_PUBLIC_IMAGE_HOST_URL}${blog?.coverImage}`}
             alt={blog?.title ?? "Blog cover"}
             width={800}
             height={400}
             className="h-full w-full object-cover"
-          />
+          /> */}
         </div>
 
         <div className="mt-4 flex w-full flex-wrap items-start justify-between gap-2 sm:items-center">
@@ -252,12 +252,12 @@ const BlogDetailClient = ({
                       key={block.id ?? index}
                       className="my-6 h-fit overflow-hidden border border-[#eadcb4] shadow-[0_12px_32px_rgba(0,0,0,0.08)] sm:my-8"
                     >
-                      <img
+                      {/* <img
                         src={normalizeImageUrl(block.content)}
                         alt="Blog illustration"
                         className="h-full w-full object-cover"
                         loading="lazy"
-                      />
+                      /> */}
                     </div>
                   ) : null;
 

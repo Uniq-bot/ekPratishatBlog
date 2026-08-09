@@ -10,13 +10,13 @@ const BannerAd = ({ BannerAds }:{BannerAds:any}) => {
       target="_blank"
       className="h-fit"
     >
-      <img
+      {/* <img
         src={normalizeImageUrl(BannerAds?.AdPoster)}
         alt={BannerAds?.AdDescription || "Advertisement"}
         width={1000}
         height={1000}
         className="w-full h-full object-cover object-center"
-      />
+      /> */}
     </Link>
   );
 };

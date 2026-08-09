@@ -16,13 +16,13 @@ const AsideAd = ({ AsideAds }: { AsideAds: any }) => {
         className="flex w-full h-full flex-col gap-1 md:gap-2"
       >
         <div className="relative w-full aspect-video">
-          <Image
+          {/* <Image
             src={normalizeImageUrl(AsideAds?.AdPoster)}
             unoptimized
             alt="Ad"
             fill
             className="object-cover"
-          />
+          /> */}
           <div className="absolute right-2 top-2 z-20 bg-black px-2 py-0.5 text-[10px] text-white md:px-3 md:py-1 md:text-xs">
             <p>AD</p>
           </div>
