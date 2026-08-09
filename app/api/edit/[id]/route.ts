@@ -37,14 +37,21 @@ export async function GET(_req: Request, { params }: RouteContext) {
 
 export async function PUT(req: Request, { params }: RouteContext) {
   const { id } = await params;
+
   try {
     const formData = await req.formData();
 
     const categoryId = formData.get("categoryId") as string;
     const imageFile = formData.get("coverImage") as File | null;
+
     const translations = extractTranslationsFromFormData(formData);
     const tags = extractTagsFromFormData(formData);
-    const english = translations.find((translation: any) => translation.language === "en") || translations[0];
+
+    const english =
+      translations.find(
+        (translation: any) => translation.language === "en",
+      ) || translations[0];
+
     const title = english?.title?.trim();
     const description = english?.description ?? "";
 
@@ -60,24 +67,45 @@ export async function PUT(req: Request, { params }: RouteContext) {
       select: { coverImage: true },
     });
 
-    let coverImagePath: string | undefined = undefined;
-    if (imageFile && imageFile.size > 0) {
-      if (existingBlog?.coverImage) {
-        await deleteUploadedImage(existingBlog.coverImage);
-      }
+    /*
+     * TEMPORARILY DISABLED
+     *
+     * Cover image upload/delete uses the local filesystem/Nginx.
+     * This is disabled while testing the Vercel deployment.
+     */
 
-      const uploaded = await saveUploadedImage(imageFile, "cover", title);
-      coverImagePath = uploaded ?? undefined;
-    }
+    // let coverImagePath: string | undefined = undefined;
+
+    // if (imageFile && imageFile.size > 0) {
+    //   if (existingBlog?.coverImage) {
+    //     await deleteUploadedImage(existingBlog.coverImage);
+    //   }
+
+    //   const uploaded = await saveUploadedImage(
+    //     imageFile,
+    //     "cover",
+    //     title,
+    //   );
+
+    //   coverImagePath = uploaded ?? undefined;
+    // }
 
     const updated = await prisma.blogPost.update({
       where: { id },
+
       data: {
-        ...(coverImagePath ? { coverImage: coverImagePath } : {}),
+        /*
+         * Image update temporarily disabled.
+         *
+         * Existing coverImage remains unchanged.
+         */
+
         status: "ONBOARDING",
+
         category: {
           connect: { id: categoryId },
         },
+
         translations: {
           upsert: translations.map((translation: any) => ({
             where: {
@@ -86,12 +114,14 @@ export async function PUT(req: Request, { params }: RouteContext) {
                 language: translation.language ?? "en",
               },
             },
+
             create: {
               language: translation.language ?? "en",
               title: translation.title ?? "",
               description: translation.description ?? "",
               content: translation.content ?? [],
             },
+
             update: {
               title: translation.title ?? "",
               description: translation.description ?? "",
@@ -99,17 +129,36 @@ export async function PUT(req: Request, { params }: RouteContext) {
             },
           })),
         },
+
         tagLinks: {
           deleteMany: {},
+
           create: tags.map((tagId: string) => ({
-            tag: { connect: { id: tagId } },
+            tag: {
+              connect: { id: tagId },
+            },
           })),
         },
       },
+
       include: {
-        category: { include: { translations: true } },
+        category: {
+          include: {
+            translations: true,
+          },
+        },
+
         translations: true,
-        tagLinks: { include: { tag: { include: { translations: true } } } },
+
+        tagLinks: {
+          include: {
+            tag: {
+              include: {
+                translations: true,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -118,15 +167,22 @@ export async function PUT(req: Request, { params }: RouteContext) {
     revalidatePath("/blog");
 
     return NextResponse.json(
-      { message: "Blog updated successfully", data: serializeBlogPost(updated) },
+      {
+        message: "Blog updated successfully",
+        data: serializeBlogPost(updated),
+      },
       { status: 200 },
     );
   } catch (err: any) {
     if (process.env.NODE_ENV !== "production") {
       console.error("UPDATE BLOG ERROR:", err);
     }
+
     return NextResponse.json(
-      { message: "Internal server error", error: err?.message },
+      {
+        message: "Internal server error",
+        error: err?.message,
+      },
       { status: 500 },
     );
   }
