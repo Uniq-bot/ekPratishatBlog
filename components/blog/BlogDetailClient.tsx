@@ -67,9 +67,7 @@ const BlogDetailClient = ({
   };
 
   const translation = blog?.translations?.[idx] ?? {};
-  console.log("translation",translation)
   const rawBlocks = translation?.content;
-  console.log("raw",rawBlocks)
   const blocks = parseBlocks(rawBlocks).map((block: any) => {
     if (block?.type !== "image") {
       return {
@@ -238,7 +236,6 @@ const BlogDetailClient = ({
             let headingIndex = 0;
 
             return blocks.map((block: any, index: number) => {
-              console.log(block)
               switch (block.type) {
                 case "paragraph":
                   return (

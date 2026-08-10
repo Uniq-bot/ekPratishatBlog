@@ -387,6 +387,7 @@ export const ModelName = {
   User: 'User',
   BlogPost: 'BlogPost',
   BlogTranslation: 'BlogTranslation',
+  AudioBook: 'AudioBook',
   Category: 'Category',
   CategoryTranslation: 'CategoryTranslation',
   Tag: 'Tag',
@@ -411,7 +412,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "blogPost" | "blogTranslation" | "category" | "categoryTranslation" | "tag" | "tagTranslation" | "tagOnPost" | "blogComment" | "blogViews" | "advertisement" | "newsletterSubscriber"
+    modelProps: "user" | "blogPost" | "blogTranslation" | "audioBook" | "category" | "categoryTranslation" | "tag" | "tagTranslation" | "tagOnPost" | "blogComment" | "blogViews" | "advertisement" | "newsletterSubscriber"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -634,6 +635,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.BlogTranslationCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.BlogTranslationCountAggregateOutputType> | number
+        }
+      }
+    }
+    AudioBook: {
+      payload: Prisma.$AudioBookPayload<ExtArgs>
+      fields: Prisma.AudioBookFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AudioBookFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AudioBookPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AudioBookFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AudioBookPayload>
+        }
+        findFirst: {
+          args: Prisma.AudioBookFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AudioBookPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AudioBookFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AudioBookPayload>
+        }
+        findMany: {
+          args: Prisma.AudioBookFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AudioBookPayload>[]
+        }
+        create: {
+          args: Prisma.AudioBookCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AudioBookPayload>
+        }
+        createMany: {
+          args: Prisma.AudioBookCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AudioBookCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AudioBookPayload>[]
+        }
+        delete: {
+          args: Prisma.AudioBookDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AudioBookPayload>
+        }
+        update: {
+          args: Prisma.AudioBookUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AudioBookPayload>
+        }
+        deleteMany: {
+          args: Prisma.AudioBookDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AudioBookUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AudioBookUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AudioBookPayload>[]
+        }
+        upsert: {
+          args: Prisma.AudioBookUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AudioBookPayload>
+        }
+        aggregate: {
+          args: Prisma.AudioBookAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAudioBook>
+        }
+        groupBy: {
+          args: Prisma.AudioBookGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AudioBookGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AudioBookCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AudioBookCountAggregateOutputType> | number
         }
       }
     }
@@ -1384,6 +1459,17 @@ export const BlogTranslationScalarFieldEnum = {
 export type BlogTranslationScalarFieldEnum = (typeof BlogTranslationScalarFieldEnum)[keyof typeof BlogTranslationScalarFieldEnum]
 
 
+export const AudioBookScalarFieldEnum = {
+  id: 'id',
+  blogSlug: 'blogSlug',
+  audioFile: 'audioFile',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AudioBookScalarFieldEnum = (typeof AudioBookScalarFieldEnum)[keyof typeof AudioBookScalarFieldEnum]
+
+
 export const CategoryScalarFieldEnum = {
   id: 'id',
   slug: 'slug',
@@ -1762,6 +1848,7 @@ export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   blogPost?: Prisma.BlogPostOmit
   blogTranslation?: Prisma.BlogTranslationOmit
+  audioBook?: Prisma.AudioBookOmit
   category?: Prisma.CategoryOmit
   categoryTranslation?: Prisma.CategoryTranslationOmit
   tag?: Prisma.TagOmit

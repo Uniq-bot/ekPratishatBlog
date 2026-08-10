@@ -29,7 +29,7 @@ const RelatedBlogs = ({ blog, relatedBlogs, slug }: Props) => {
   };
 
   return (
-    <div className="w-full h-full lg:w-[35%] lg:sticky flex flex-col  gap-5 lg:top-5 text-black">
+    <div className="">
       <span className="hidden lg:block">
         <ShareComp blogTitle={blog.title} blogSlug={slug} />
       </span>

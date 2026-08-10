@@ -13,23 +13,21 @@ interface Props {
 
 import { unstable_cache } from "next/cache";
 import { Metadata } from "next";
-
-
-
+import AudioPlayer from "@/components/blog/AudioPlayer";
 
 export const getBlog = unstable_cache(
-   async (slug: string) => {
-      const blog = await prisma.blogPost.findUnique({
-        where: { slug },
-        include: {
-          category: { include: { translations: true } },
-          translations: true,
-          tagLinks: { include: { tag: { include: { translations: true } } } },
-        },
-      });
-
-      return blog ? serializeBlogPost(blog) : null;
-    },
+  async (slug: string) => {
+    const blog = await prisma.blogPost.findUnique({
+      where: { slug },
+      include: {
+        category: { include: { translations: true } },
+        translations: true,
+        audioBook: true,
+        tagLinks: { include: { tag: { include: { translations: true } } } },
+      },
+    });
+    return blog ? serializeBlogPost(blog) : null;
+  },
   ["blog"],
   { tags: ["blog"], revalidate: 86400 },
 );
@@ -42,13 +40,12 @@ export async function generateMetadata({
   const { slug } = await params;
 
   const blog = await getBlog(slug);
-
-const url = `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/blog/${slug}`;
-const image = toAbsoluteImageUrl(blog?.coverImage);
+  const url = `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/blog/${slug}`;
+  const image = toAbsoluteImageUrl(blog?.coverImage);
   return {
     title: blog?.title,
     description: blog?.description,
-    
+
     openGraph: {
       title: blog?.title,
       url,
@@ -80,7 +77,7 @@ const image = toAbsoluteImageUrl(blog?.coverImage);
       card: "summary_large_image",
       title: blog?.title,
       description: blog?.description,
-       images: [
+      images: [
         {
           url: image,
           width: 1200,
@@ -127,7 +124,7 @@ export const getRelatedBlogs = (
           createdAt: "desc",
         },
         include: {
-           category: { include: { translations: true } },
+          category: { include: { translations: true } },
           translations: true,
           tagLinks: { include: { tag: true } },
         },
@@ -140,21 +137,24 @@ export const getRelatedBlogs = (
     },
   )();
 
-
-
 export default async function BlogDets({ params }: Props) {
   const { slug } = await params;
   const blog = unwrapApiResponse<any>(await getBlog(slug));
   if (!blog) {
     notFound();
   }
-  
+  console.log(`http://localhost:80${blog.audioBook?.audioFile}`)
+
   const resolvedBlog = blog as any;
-  const relatedBlogs = (await getRelatedBlogs(
-    resolvedBlog.categoryID ?? resolvedBlog.category?.id ?? "",
-    slug,
-    Array.isArray(resolvedBlog.tags) ? resolvedBlog.tags.map((t: any) => t.id) : [],
-  )).map((item: any) => serializeBlogPost(item));
+  const relatedBlogs = (
+    await getRelatedBlogs(
+      resolvedBlog.categoryID ?? resolvedBlog.category?.id ?? "",
+      slug,
+      Array.isArray(resolvedBlog.tags)
+        ? resolvedBlog.tags.map((t: any) => t.id)
+        : [],
+    )
+  ).map((item: any) => serializeBlogPost(item));
 
   const comments = await prisma.blogComment.findMany({
     where: { blogPostId: resolvedBlog.id },
@@ -171,11 +171,20 @@ export default async function BlogDets({ params }: Props) {
   });
 
   return (
-<div className="rounded-2xl border border-[#eadcb4] bg-[linear-gradient(180deg,#ffffff_0%,#fbf8ef_100%)] p-3 shadow-[0_16px_40px_rgba(0,0,0,0.06)] sm:p-5 lg:p-6">
+    <div className="rounded-2xl border border-[#eadcb4] bg-[linear-gradient(180deg,#ffffff_0%,#fbf8ef_100%)] p-3 shadow-[0_16px_40px_rgba(0,0,0,0.06)] sm:p-5 lg:p-6">
       <BackButton slug={slug} />
       <div className="w-full relative flex flex-col lg:flex-row justify-between px-0 sm:px-2 lg:px-2 py-3 sm:py-5 gap-4 sm:gap-6 lg:gap-8">
         <BlogDetailClient blog={resolvedBlog} comments={comments} />
-        <RelatedBlogs blog={resolvedBlog} slug={slug} relatedBlogs={relatedBlogs ? relatedBlogs : []} />
+       <div className="w-full h-full lg:w-[35%] lg:sticky flex flex-col  gap-5 lg:top-5 text-black">
+         <RelatedBlogs
+          blog={resolvedBlog}
+          slug={slug}
+          relatedBlogs={relatedBlogs ? relatedBlogs : []}
+        />
+        {resolvedBlog.audioBook && resolvedBlog.audioBook.audioFile && (
+          <AudioPlayer audioFileUrl={`http://localhost:80${resolvedBlog.audioBook.audioFile}`} />
+        )}
+       </div>
       </div>
     </div>
   );

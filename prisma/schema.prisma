@@ -88,9 +88,11 @@ model BlogTranslation {
 }
 
 model AudioBook {
-  id         String   @id @default(cuid())
-  blogPostId String   @unique
-  blogPost   BlogPost @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
+  id String @id @default(cuid())
+
+  blogSlug String? @unique
+    blogPost   BlogPost? @relation(fields: [blogSlug], references: [slug], onDelete: Cascade)
+
 
   audioFile String
   createdAt DateTime @default(now())

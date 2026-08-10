@@ -33,6 +33,11 @@ export type BlogPost = Prisma.BlogPostModel
  */
 export type BlogTranslation = Prisma.BlogTranslationModel
 /**
+ * Model AudioBook
+ * 
+ */
+export type AudioBook = Prisma.AudioBookModel
+/**
  * Model Category
  * 
  */

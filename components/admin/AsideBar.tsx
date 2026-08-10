@@ -20,6 +20,8 @@ const AsideBar = ({
     {id:4, slug:"advertisement", name:"Advertisement"},
     {id:5, slug:"manage-ads", name:"Manage Advertisement"},
     {id:6, slug:"subscribers", name:"Subscribers"},
+    {id:7, slug:"add-audiobook", name:"Add Audiobook"},
+    {id:8, slug:"manage-audiobooks", name:"Manage Audiobooks"}
   ];
 
   const handleClick = (slug: string) => {

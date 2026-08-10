@@ -54,6 +54,7 @@ export const ModelName = {
   User: 'User',
   BlogPost: 'BlogPost',
   BlogTranslation: 'BlogTranslation',
+  AudioBook: 'AudioBook',
   Category: 'Category',
   CategoryTranslation: 'CategoryTranslation',
   Tag: 'Tag',
@@ -121,6 +122,17 @@ export const BlogTranslationScalarFieldEnum = {
 } as const
 
 export type BlogTranslationScalarFieldEnum = (typeof BlogTranslationScalarFieldEnum)[keyof typeof BlogTranslationScalarFieldEnum]
+
+
+export const AudioBookScalarFieldEnum = {
+  id: 'id',
+  blogSlug: 'blogSlug',
+  audioFile: 'audioFile',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AudioBookScalarFieldEnum = (typeof AudioBookScalarFieldEnum)[keyof typeof AudioBookScalarFieldEnum]
 
 
 export const CategoryScalarFieldEnum = {

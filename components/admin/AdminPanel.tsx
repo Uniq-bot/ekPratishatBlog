@@ -10,11 +10,15 @@ import Image from "next/image";
 import Advertisement from "./Advertisement";
 import ManageAds from "./ManageAds";
 import Subscriber from "./Subscriber";
+import AddAudioBook from "./AddAudioBook";
+import { useState } from "react";
+import ManageAudioBooks from "./ManageAudioBooks";
 
 const AdminPanel = ({ advertisements }: { advertisements: any[] }) => {
   const { activeTab, setActiveTab, blocks, setBlocks, user, activeEditor, setActiveEditor, setOnBoardingBlog } = useAdminUI();
   const {data:categories, isLoading:isCategoryLoading}=useGetCategory();
     const {data:tags, isLoading:isTagLoading}=useGetTags()
+    const [audioSlug, setAudioSlug] = useState<string | null>(null);
   const tabComponents: Record<string, React.ReactNode> = {
     "tag&category": (
       <TagNCategory
@@ -35,10 +39,12 @@ const AdminPanel = ({ advertisements }: { advertisements: any[] }) => {
         setOnBoardingBlog={setOnBoardingBlog}
       />
     ),
-    "manage-blogs": <ManageBlogs />,
+    "manage-blogs": <ManageBlogs setAudioSlug={setAudioSlug} setActiveTab={setActiveTab} />,
     "advertisement": <Advertisement  />,
     "manage-ads": <ManageAds advertisements={advertisements} />,
-    "subscribers": <Subscriber />
+    "subscribers": <Subscriber />,
+    "add-audiobook": <AddAudioBook audioSlug={audioSlug} />,
+    "manage-audiobooks": <ManageAudioBooks  />
   };
 
   return (
