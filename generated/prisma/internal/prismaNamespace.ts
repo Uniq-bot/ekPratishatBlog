@@ -387,7 +387,7 @@ export const ModelName = {
   User: 'User',
   BlogPost: 'BlogPost',
   BlogTranslation: 'BlogTranslation',
-  AudioBook: 'AudioBook',
+  FileSystem: 'FileSystem',
   Category: 'Category',
   CategoryTranslation: 'CategoryTranslation',
   Tag: 'Tag',
@@ -412,7 +412,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "blogPost" | "blogTranslation" | "audioBook" | "category" | "categoryTranslation" | "tag" | "tagTranslation" | "tagOnPost" | "blogComment" | "blogViews" | "advertisement" | "newsletterSubscriber"
+    modelProps: "user" | "blogPost" | "blogTranslation" | "fileSystem" | "category" | "categoryTranslation" | "tag" | "tagTranslation" | "tagOnPost" | "blogComment" | "blogViews" | "advertisement" | "newsletterSubscriber"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -638,77 +638,77 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    AudioBook: {
-      payload: Prisma.$AudioBookPayload<ExtArgs>
-      fields: Prisma.AudioBookFieldRefs
+    FileSystem: {
+      payload: Prisma.$FileSystemPayload<ExtArgs>
+      fields: Prisma.FileSystemFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.AudioBookFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AudioBookPayload> | null
+          args: Prisma.FileSystemFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileSystemPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.AudioBookFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AudioBookPayload>
+          args: Prisma.FileSystemFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileSystemPayload>
         }
         findFirst: {
-          args: Prisma.AudioBookFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AudioBookPayload> | null
+          args: Prisma.FileSystemFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileSystemPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.AudioBookFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AudioBookPayload>
+          args: Prisma.FileSystemFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileSystemPayload>
         }
         findMany: {
-          args: Prisma.AudioBookFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AudioBookPayload>[]
+          args: Prisma.FileSystemFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileSystemPayload>[]
         }
         create: {
-          args: Prisma.AudioBookCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AudioBookPayload>
+          args: Prisma.FileSystemCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileSystemPayload>
         }
         createMany: {
-          args: Prisma.AudioBookCreateManyArgs<ExtArgs>
+          args: Prisma.FileSystemCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.AudioBookCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AudioBookPayload>[]
+          args: Prisma.FileSystemCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileSystemPayload>[]
         }
         delete: {
-          args: Prisma.AudioBookDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AudioBookPayload>
+          args: Prisma.FileSystemDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileSystemPayload>
         }
         update: {
-          args: Prisma.AudioBookUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AudioBookPayload>
+          args: Prisma.FileSystemUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileSystemPayload>
         }
         deleteMany: {
-          args: Prisma.AudioBookDeleteManyArgs<ExtArgs>
+          args: Prisma.FileSystemDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.AudioBookUpdateManyArgs<ExtArgs>
+          args: Prisma.FileSystemUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.AudioBookUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AudioBookPayload>[]
+          args: Prisma.FileSystemUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileSystemPayload>[]
         }
         upsert: {
-          args: Prisma.AudioBookUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AudioBookPayload>
+          args: Prisma.FileSystemUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileSystemPayload>
         }
         aggregate: {
-          args: Prisma.AudioBookAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateAudioBook>
+          args: Prisma.FileSystemAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFileSystem>
         }
         groupBy: {
-          args: Prisma.AudioBookGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AudioBookGroupByOutputType>[]
+          args: Prisma.FileSystemGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FileSystemGroupByOutputType>[]
         }
         count: {
-          args: Prisma.AudioBookCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AudioBookCountAggregateOutputType> | number
+          args: Prisma.FileSystemCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FileSystemCountAggregateOutputType> | number
         }
       }
     }
@@ -1459,15 +1459,20 @@ export const BlogTranslationScalarFieldEnum = {
 export type BlogTranslationScalarFieldEnum = (typeof BlogTranslationScalarFieldEnum)[keyof typeof BlogTranslationScalarFieldEnum]
 
 
-export const AudioBookScalarFieldEnum = {
+export const FileSystemScalarFieldEnum = {
   id: 'id',
-  blogSlug: 'blogSlug',
-  audioFile: 'audioFile',
+  fileName: 'fileName',
+  originalName: 'originalName',
+  url: 'url',
+  fileType: 'fileType',
+  mimeType: 'mimeType',
+  fileSize: 'fileSize',
+  blogPostId: 'blogPostId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
-export type AudioBookScalarFieldEnum = (typeof AudioBookScalarFieldEnum)[keyof typeof AudioBookScalarFieldEnum]
+export type FileSystemScalarFieldEnum = (typeof FileSystemScalarFieldEnum)[keyof typeof FileSystemScalarFieldEnum]
 
 
 export const CategoryScalarFieldEnum = {
@@ -1848,7 +1853,7 @@ export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   blogPost?: Prisma.BlogPostOmit
   blogTranslation?: Prisma.BlogTranslationOmit
-  audioBook?: Prisma.AudioBookOmit
+  fileSystem?: Prisma.FileSystemOmit
   category?: Prisma.CategoryOmit
   categoryTranslation?: Prisma.CategoryTranslationOmit
   tag?: Prisma.TagOmit

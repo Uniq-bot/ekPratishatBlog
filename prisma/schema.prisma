@@ -61,7 +61,7 @@ model BlogPost {
 
   blogViews BlogViews[]
   comments  BlogComment[]
-  audioBook AudioBook?
+  files FileSystem[]
 
   @@index([status, createdAt])
   @@index([isToggled, status])
@@ -87,14 +87,21 @@ model BlogTranslation {
   @@unique([blogPostId, language])
 }
 
-model AudioBook {
+
+
+model FileSystem {
   id String @id @default(cuid())
 
-  blogSlug String? @unique
-    blogPost   BlogPost? @relation(fields: [blogSlug], references: [slug], onDelete: Cascade)
+  fileName     String
+  originalName String?
+  url          String
+  fileType     String
+  mimeType     String?
+  fileSize     Int?
 
+  blogPostId String?
+  blogPost   BlogPost? @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
 
-  audioFile String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

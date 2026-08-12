@@ -7,9 +7,11 @@ import Link from "next/link";
 const AsideBar = ({
   activeTab,
   setActiveTab,
+  onClearSelectedBlog,
 }: {
   activeTab: string;
   setActiveTab: React.Dispatch<React.SetStateAction<string>>;
+  onClearSelectedBlog?: () => void;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -20,11 +22,15 @@ const AsideBar = ({
     {id:4, slug:"advertisement", name:"Advertisement"},
     {id:5, slug:"manage-ads", name:"Manage Advertisement"},
     {id:6, slug:"subscribers", name:"Subscribers"},
-    {id:7, slug:"add-audiobook", name:"Add Audiobook"},
-    {id:8, slug:"manage-audiobooks", name:"Manage Audiobooks"}
+    {id:7, slug:"add-files", name:"Add Files"},
+    {id:8, slug:"manage-files", name:"Manage Files"}
+
   ];
 
   const handleClick = (slug: string) => {
+    if (slug === "add-files") {
+      onClearSelectedBlog?.();
+    }
     setActiveTab(slug);
     setIsOpen(false);
   };

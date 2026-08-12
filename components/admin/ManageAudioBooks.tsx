@@ -1,3 +1,5 @@
+// Legacy audio management component kept as a reference implementation.
+// The current admin experience now uses the file API with TanStack Query for file listing and deletion.
 import { useDeleteAudio, useGetAudio } from "@/hooks/useAudioPost";
 import ConfirmDialog from "@/components/admin/ConfirmDialog";
 import React, { useState } from "react";
@@ -109,7 +111,7 @@ const ManageAudioBooks = () => {
                       </div>
 
                       <div className="min-w-0">
-                        <p className="max-w-[260px] truncate text-sm font-medium text-gray-900">
+                        <p className="max-w-65 truncate text-sm font-medium text-gray-900">
                           {audio.audioFile?.split("/").pop()}
                         </p>
 
@@ -125,7 +127,7 @@ const ManageAudioBooks = () => {
                           controls
                           preload="none"
                           className="w-full"
-                          src={`http://localhost:80${audio.audioFile}`}
+                          src={`${process.env.NEXT_PUBLIC_AUDIO_HOST_URL}${audio.audioFile}`}
                         />
                       </div>
                     )}
@@ -148,7 +150,7 @@ const ManageAudioBooks = () => {
                 {/* Linked Blog */}
                 <td className="px-5 py-4">
                   {audio.blogSlug ? (
-                    <div className="max-w-[280px]">
+                    <div className="max-w-70">
                       <p className="truncate text-sm font-medium text-gray-800">
                         {audio.blogSlug}
                       </p>

@@ -5,7 +5,7 @@ import { prisma } from "@/libs/prisma";
 import { notFound } from "next/navigation";
 import { getLatestBlogs, serializeBlogPost } from "@/services/blogs.services";
 import { unwrapApiResponse } from "@/libs/api";
-import { toAbsoluteImageUrl } from "@/libs/image-url";
+import { normalizeFileUrl, toAbsoluteImageUrl } from "@/libs/image-url";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -22,7 +22,11 @@ export const getBlog = unstable_cache(
       include: {
         category: { include: { translations: true } },
         translations: true,
-        audioBook: true,
+        files: {
+          where: { fileType: "AUDIO" },
+          orderBy: { createdAt: "desc" },
+          take: 1,
+        },
         tagLinks: { include: { tag: { include: { translations: true } } } },
       },
     });
@@ -143,9 +147,8 @@ export default async function BlogDets({ params }: Props) {
   if (!blog) {
     notFound();
   }
-  console.log(`http://localhost:80${blog.audioBook?.audioFile}`)
-
   const resolvedBlog = blog as any;
+  const audioFile = resolvedBlog.files?.[0];
   const relatedBlogs = (
     await getRelatedBlogs(
       resolvedBlog.categoryID ?? resolvedBlog.category?.id ?? "",
@@ -181,8 +184,12 @@ export default async function BlogDets({ params }: Props) {
           slug={slug}
           relatedBlogs={relatedBlogs ? relatedBlogs : []}
         />
-        {resolvedBlog.audioBook && resolvedBlog.audioBook.audioFile && (
-          <AudioPlayer audioFileUrl={`http://localhost:80${resolvedBlog.audioBook.audioFile}`} />
+        {audioFile?.url && (
+          <AudioPlayer
+            audioFileUrl={normalizeFileUrl(audioFile.url)}
+            blogTitle={resolvedBlog.title}
+            fileTitle={audioFile.originalName || audioFile.fileName}
+          />
         )}
        </div>
       </div>

@@ -262,7 +262,7 @@ export type BlogPostWhereInput = {
   tagLinks?: Prisma.TagOnPostListRelationFilter
   blogViews?: Prisma.BlogViewsListRelationFilter
   comments?: Prisma.BlogCommentListRelationFilter
-  audioBook?: Prisma.XOR<Prisma.AudioBookNullableScalarRelationFilter, Prisma.AudioBookWhereInput> | null
+  files?: Prisma.FileSystemListRelationFilter
 }
 
 export type BlogPostOrderByWithRelationInput = {
@@ -282,7 +282,7 @@ export type BlogPostOrderByWithRelationInput = {
   tagLinks?: Prisma.TagOnPostOrderByRelationAggregateInput
   blogViews?: Prisma.BlogViewsOrderByRelationAggregateInput
   comments?: Prisma.BlogCommentOrderByRelationAggregateInput
-  audioBook?: Prisma.AudioBookOrderByWithRelationInput
+  files?: Prisma.FileSystemOrderByRelationAggregateInput
 }
 
 export type BlogPostWhereUniqueInput = Prisma.AtLeast<{
@@ -305,7 +305,7 @@ export type BlogPostWhereUniqueInput = Prisma.AtLeast<{
   tagLinks?: Prisma.TagOnPostListRelationFilter
   blogViews?: Prisma.BlogViewsListRelationFilter
   comments?: Prisma.BlogCommentListRelationFilter
-  audioBook?: Prisma.XOR<Prisma.AudioBookNullableScalarRelationFilter, Prisma.AudioBookWhereInput> | null
+  files?: Prisma.FileSystemListRelationFilter
 }, "id" | "slug">
 
 export type BlogPostOrderByWithAggregationInput = {
@@ -357,7 +357,7 @@ export type BlogPostCreateInput = {
   tagLinks?: Prisma.TagOnPostCreateNestedManyWithoutBlogPostInput
   blogViews?: Prisma.BlogViewsCreateNestedManyWithoutBlogPostInput
   comments?: Prisma.BlogCommentCreateNestedManyWithoutBlogPostInput
-  audioBook?: Prisma.AudioBookCreateNestedOneWithoutBlogPostInput
+  files?: Prisma.FileSystemCreateNestedManyWithoutBlogPostInput
 }
 
 export type BlogPostUncheckedCreateInput = {
@@ -375,7 +375,7 @@ export type BlogPostUncheckedCreateInput = {
   tagLinks?: Prisma.TagOnPostUncheckedCreateNestedManyWithoutBlogPostInput
   blogViews?: Prisma.BlogViewsUncheckedCreateNestedManyWithoutBlogPostInput
   comments?: Prisma.BlogCommentUncheckedCreateNestedManyWithoutBlogPostInput
-  audioBook?: Prisma.AudioBookUncheckedCreateNestedOneWithoutBlogPostInput
+  files?: Prisma.FileSystemUncheckedCreateNestedManyWithoutBlogPostInput
 }
 
 export type BlogPostUpdateInput = {
@@ -393,7 +393,7 @@ export type BlogPostUpdateInput = {
   tagLinks?: Prisma.TagOnPostUpdateManyWithoutBlogPostNestedInput
   blogViews?: Prisma.BlogViewsUpdateManyWithoutBlogPostNestedInput
   comments?: Prisma.BlogCommentUpdateManyWithoutBlogPostNestedInput
-  audioBook?: Prisma.AudioBookUpdateOneWithoutBlogPostNestedInput
+  files?: Prisma.FileSystemUpdateManyWithoutBlogPostNestedInput
 }
 
 export type BlogPostUncheckedUpdateInput = {
@@ -411,7 +411,7 @@ export type BlogPostUncheckedUpdateInput = {
   tagLinks?: Prisma.TagOnPostUncheckedUpdateManyWithoutBlogPostNestedInput
   blogViews?: Prisma.BlogViewsUncheckedUpdateManyWithoutBlogPostNestedInput
   comments?: Prisma.BlogCommentUncheckedUpdateManyWithoutBlogPostNestedInput
-  audioBook?: Prisma.AudioBookUncheckedUpdateOneWithoutBlogPostNestedInput
+  files?: Prisma.FileSystemUncheckedUpdateManyWithoutBlogPostNestedInput
 }
 
 export type BlogPostCreateManyInput = {
@@ -590,20 +590,20 @@ export type BlogPostUpdateOneRequiredWithoutTranslationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BlogPostUpdateToOneWithWhereWithoutTranslationsInput, Prisma.BlogPostUpdateWithoutTranslationsInput>, Prisma.BlogPostUncheckedUpdateWithoutTranslationsInput>
 }
 
-export type BlogPostCreateNestedOneWithoutAudioBookInput = {
-  create?: Prisma.XOR<Prisma.BlogPostCreateWithoutAudioBookInput, Prisma.BlogPostUncheckedCreateWithoutAudioBookInput>
-  connectOrCreate?: Prisma.BlogPostCreateOrConnectWithoutAudioBookInput
+export type BlogPostCreateNestedOneWithoutFilesInput = {
+  create?: Prisma.XOR<Prisma.BlogPostCreateWithoutFilesInput, Prisma.BlogPostUncheckedCreateWithoutFilesInput>
+  connectOrCreate?: Prisma.BlogPostCreateOrConnectWithoutFilesInput
   connect?: Prisma.BlogPostWhereUniqueInput
 }
 
-export type BlogPostUpdateOneWithoutAudioBookNestedInput = {
-  create?: Prisma.XOR<Prisma.BlogPostCreateWithoutAudioBookInput, Prisma.BlogPostUncheckedCreateWithoutAudioBookInput>
-  connectOrCreate?: Prisma.BlogPostCreateOrConnectWithoutAudioBookInput
-  upsert?: Prisma.BlogPostUpsertWithoutAudioBookInput
+export type BlogPostUpdateOneWithoutFilesNestedInput = {
+  create?: Prisma.XOR<Prisma.BlogPostCreateWithoutFilesInput, Prisma.BlogPostUncheckedCreateWithoutFilesInput>
+  connectOrCreate?: Prisma.BlogPostCreateOrConnectWithoutFilesInput
+  upsert?: Prisma.BlogPostUpsertWithoutFilesInput
   disconnect?: Prisma.BlogPostWhereInput | boolean
   delete?: Prisma.BlogPostWhereInput | boolean
   connect?: Prisma.BlogPostWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.BlogPostUpdateToOneWithWhereWithoutAudioBookInput, Prisma.BlogPostUpdateWithoutAudioBookInput>, Prisma.BlogPostUncheckedUpdateWithoutAudioBookInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BlogPostUpdateToOneWithWhereWithoutFilesInput, Prisma.BlogPostUpdateWithoutFilesInput>, Prisma.BlogPostUncheckedUpdateWithoutFilesInput>
 }
 
 export type BlogPostCreateNestedManyWithoutCategoryInput = {
@@ -704,7 +704,7 @@ export type BlogPostCreateWithoutAuthorInput = {
   tagLinks?: Prisma.TagOnPostCreateNestedManyWithoutBlogPostInput
   blogViews?: Prisma.BlogViewsCreateNestedManyWithoutBlogPostInput
   comments?: Prisma.BlogCommentCreateNestedManyWithoutBlogPostInput
-  audioBook?: Prisma.AudioBookCreateNestedOneWithoutBlogPostInput
+  files?: Prisma.FileSystemCreateNestedManyWithoutBlogPostInput
 }
 
 export type BlogPostUncheckedCreateWithoutAuthorInput = {
@@ -721,7 +721,7 @@ export type BlogPostUncheckedCreateWithoutAuthorInput = {
   tagLinks?: Prisma.TagOnPostUncheckedCreateNestedManyWithoutBlogPostInput
   blogViews?: Prisma.BlogViewsUncheckedCreateNestedManyWithoutBlogPostInput
   comments?: Prisma.BlogCommentUncheckedCreateNestedManyWithoutBlogPostInput
-  audioBook?: Prisma.AudioBookUncheckedCreateNestedOneWithoutBlogPostInput
+  files?: Prisma.FileSystemUncheckedCreateNestedManyWithoutBlogPostInput
 }
 
 export type BlogPostCreateOrConnectWithoutAuthorInput = {
@@ -780,7 +780,7 @@ export type BlogPostCreateWithoutTranslationsInput = {
   tagLinks?: Prisma.TagOnPostCreateNestedManyWithoutBlogPostInput
   blogViews?: Prisma.BlogViewsCreateNestedManyWithoutBlogPostInput
   comments?: Prisma.BlogCommentCreateNestedManyWithoutBlogPostInput
-  audioBook?: Prisma.AudioBookCreateNestedOneWithoutBlogPostInput
+  files?: Prisma.FileSystemCreateNestedManyWithoutBlogPostInput
 }
 
 export type BlogPostUncheckedCreateWithoutTranslationsInput = {
@@ -797,7 +797,7 @@ export type BlogPostUncheckedCreateWithoutTranslationsInput = {
   tagLinks?: Prisma.TagOnPostUncheckedCreateNestedManyWithoutBlogPostInput
   blogViews?: Prisma.BlogViewsUncheckedCreateNestedManyWithoutBlogPostInput
   comments?: Prisma.BlogCommentUncheckedCreateNestedManyWithoutBlogPostInput
-  audioBook?: Prisma.AudioBookUncheckedCreateNestedOneWithoutBlogPostInput
+  files?: Prisma.FileSystemUncheckedCreateNestedManyWithoutBlogPostInput
 }
 
 export type BlogPostCreateOrConnectWithoutTranslationsInput = {
@@ -830,7 +830,7 @@ export type BlogPostUpdateWithoutTranslationsInput = {
   tagLinks?: Prisma.TagOnPostUpdateManyWithoutBlogPostNestedInput
   blogViews?: Prisma.BlogViewsUpdateManyWithoutBlogPostNestedInput
   comments?: Prisma.BlogCommentUpdateManyWithoutBlogPostNestedInput
-  audioBook?: Prisma.AudioBookUpdateOneWithoutBlogPostNestedInput
+  files?: Prisma.FileSystemUpdateManyWithoutBlogPostNestedInput
 }
 
 export type BlogPostUncheckedUpdateWithoutTranslationsInput = {
@@ -847,10 +847,10 @@ export type BlogPostUncheckedUpdateWithoutTranslationsInput = {
   tagLinks?: Prisma.TagOnPostUncheckedUpdateManyWithoutBlogPostNestedInput
   blogViews?: Prisma.BlogViewsUncheckedUpdateManyWithoutBlogPostNestedInput
   comments?: Prisma.BlogCommentUncheckedUpdateManyWithoutBlogPostNestedInput
-  audioBook?: Prisma.AudioBookUncheckedUpdateOneWithoutBlogPostNestedInput
+  files?: Prisma.FileSystemUncheckedUpdateManyWithoutBlogPostNestedInput
 }
 
-export type BlogPostCreateWithoutAudioBookInput = {
+export type BlogPostCreateWithoutFilesInput = {
   id?: string
   slug: string
   coverImage?: string | null
@@ -867,7 +867,7 @@ export type BlogPostCreateWithoutAudioBookInput = {
   comments?: Prisma.BlogCommentCreateNestedManyWithoutBlogPostInput
 }
 
-export type BlogPostUncheckedCreateWithoutAudioBookInput = {
+export type BlogPostUncheckedCreateWithoutFilesInput = {
   id?: string
   slug: string
   authorID: string
@@ -884,23 +884,23 @@ export type BlogPostUncheckedCreateWithoutAudioBookInput = {
   comments?: Prisma.BlogCommentUncheckedCreateNestedManyWithoutBlogPostInput
 }
 
-export type BlogPostCreateOrConnectWithoutAudioBookInput = {
+export type BlogPostCreateOrConnectWithoutFilesInput = {
   where: Prisma.BlogPostWhereUniqueInput
-  create: Prisma.XOR<Prisma.BlogPostCreateWithoutAudioBookInput, Prisma.BlogPostUncheckedCreateWithoutAudioBookInput>
+  create: Prisma.XOR<Prisma.BlogPostCreateWithoutFilesInput, Prisma.BlogPostUncheckedCreateWithoutFilesInput>
 }
 
-export type BlogPostUpsertWithoutAudioBookInput = {
-  update: Prisma.XOR<Prisma.BlogPostUpdateWithoutAudioBookInput, Prisma.BlogPostUncheckedUpdateWithoutAudioBookInput>
-  create: Prisma.XOR<Prisma.BlogPostCreateWithoutAudioBookInput, Prisma.BlogPostUncheckedCreateWithoutAudioBookInput>
+export type BlogPostUpsertWithoutFilesInput = {
+  update: Prisma.XOR<Prisma.BlogPostUpdateWithoutFilesInput, Prisma.BlogPostUncheckedUpdateWithoutFilesInput>
+  create: Prisma.XOR<Prisma.BlogPostCreateWithoutFilesInput, Prisma.BlogPostUncheckedCreateWithoutFilesInput>
   where?: Prisma.BlogPostWhereInput
 }
 
-export type BlogPostUpdateToOneWithWhereWithoutAudioBookInput = {
+export type BlogPostUpdateToOneWithWhereWithoutFilesInput = {
   where?: Prisma.BlogPostWhereInput
-  data: Prisma.XOR<Prisma.BlogPostUpdateWithoutAudioBookInput, Prisma.BlogPostUncheckedUpdateWithoutAudioBookInput>
+  data: Prisma.XOR<Prisma.BlogPostUpdateWithoutFilesInput, Prisma.BlogPostUncheckedUpdateWithoutFilesInput>
 }
 
-export type BlogPostUpdateWithoutAudioBookInput = {
+export type BlogPostUpdateWithoutFilesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -917,7 +917,7 @@ export type BlogPostUpdateWithoutAudioBookInput = {
   comments?: Prisma.BlogCommentUpdateManyWithoutBlogPostNestedInput
 }
 
-export type BlogPostUncheckedUpdateWithoutAudioBookInput = {
+export type BlogPostUncheckedUpdateWithoutFilesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   authorID?: Prisma.StringFieldUpdateOperationsInput | string
@@ -948,7 +948,7 @@ export type BlogPostCreateWithoutCategoryInput = {
   tagLinks?: Prisma.TagOnPostCreateNestedManyWithoutBlogPostInput
   blogViews?: Prisma.BlogViewsCreateNestedManyWithoutBlogPostInput
   comments?: Prisma.BlogCommentCreateNestedManyWithoutBlogPostInput
-  audioBook?: Prisma.AudioBookCreateNestedOneWithoutBlogPostInput
+  files?: Prisma.FileSystemCreateNestedManyWithoutBlogPostInput
 }
 
 export type BlogPostUncheckedCreateWithoutCategoryInput = {
@@ -965,7 +965,7 @@ export type BlogPostUncheckedCreateWithoutCategoryInput = {
   tagLinks?: Prisma.TagOnPostUncheckedCreateNestedManyWithoutBlogPostInput
   blogViews?: Prisma.BlogViewsUncheckedCreateNestedManyWithoutBlogPostInput
   comments?: Prisma.BlogCommentUncheckedCreateNestedManyWithoutBlogPostInput
-  audioBook?: Prisma.AudioBookUncheckedCreateNestedOneWithoutBlogPostInput
+  files?: Prisma.FileSystemUncheckedCreateNestedManyWithoutBlogPostInput
 }
 
 export type BlogPostCreateOrConnectWithoutCategoryInput = {
@@ -1008,7 +1008,7 @@ export type BlogPostCreateWithoutTagLinksInput = {
   translations?: Prisma.BlogTranslationCreateNestedManyWithoutBlogPostInput
   blogViews?: Prisma.BlogViewsCreateNestedManyWithoutBlogPostInput
   comments?: Prisma.BlogCommentCreateNestedManyWithoutBlogPostInput
-  audioBook?: Prisma.AudioBookCreateNestedOneWithoutBlogPostInput
+  files?: Prisma.FileSystemCreateNestedManyWithoutBlogPostInput
 }
 
 export type BlogPostUncheckedCreateWithoutTagLinksInput = {
@@ -1025,7 +1025,7 @@ export type BlogPostUncheckedCreateWithoutTagLinksInput = {
   translations?: Prisma.BlogTranslationUncheckedCreateNestedManyWithoutBlogPostInput
   blogViews?: Prisma.BlogViewsUncheckedCreateNestedManyWithoutBlogPostInput
   comments?: Prisma.BlogCommentUncheckedCreateNestedManyWithoutBlogPostInput
-  audioBook?: Prisma.AudioBookUncheckedCreateNestedOneWithoutBlogPostInput
+  files?: Prisma.FileSystemUncheckedCreateNestedManyWithoutBlogPostInput
 }
 
 export type BlogPostCreateOrConnectWithoutTagLinksInput = {
@@ -1058,7 +1058,7 @@ export type BlogPostUpdateWithoutTagLinksInput = {
   translations?: Prisma.BlogTranslationUpdateManyWithoutBlogPostNestedInput
   blogViews?: Prisma.BlogViewsUpdateManyWithoutBlogPostNestedInput
   comments?: Prisma.BlogCommentUpdateManyWithoutBlogPostNestedInput
-  audioBook?: Prisma.AudioBookUpdateOneWithoutBlogPostNestedInput
+  files?: Prisma.FileSystemUpdateManyWithoutBlogPostNestedInput
 }
 
 export type BlogPostUncheckedUpdateWithoutTagLinksInput = {
@@ -1075,7 +1075,7 @@ export type BlogPostUncheckedUpdateWithoutTagLinksInput = {
   translations?: Prisma.BlogTranslationUncheckedUpdateManyWithoutBlogPostNestedInput
   blogViews?: Prisma.BlogViewsUncheckedUpdateManyWithoutBlogPostNestedInput
   comments?: Prisma.BlogCommentUncheckedUpdateManyWithoutBlogPostNestedInput
-  audioBook?: Prisma.AudioBookUncheckedUpdateOneWithoutBlogPostNestedInput
+  files?: Prisma.FileSystemUncheckedUpdateManyWithoutBlogPostNestedInput
 }
 
 export type BlogPostCreateWithoutCommentsInput = {
@@ -1092,7 +1092,7 @@ export type BlogPostCreateWithoutCommentsInput = {
   translations?: Prisma.BlogTranslationCreateNestedManyWithoutBlogPostInput
   tagLinks?: Prisma.TagOnPostCreateNestedManyWithoutBlogPostInput
   blogViews?: Prisma.BlogViewsCreateNestedManyWithoutBlogPostInput
-  audioBook?: Prisma.AudioBookCreateNestedOneWithoutBlogPostInput
+  files?: Prisma.FileSystemCreateNestedManyWithoutBlogPostInput
 }
 
 export type BlogPostUncheckedCreateWithoutCommentsInput = {
@@ -1109,7 +1109,7 @@ export type BlogPostUncheckedCreateWithoutCommentsInput = {
   translations?: Prisma.BlogTranslationUncheckedCreateNestedManyWithoutBlogPostInput
   tagLinks?: Prisma.TagOnPostUncheckedCreateNestedManyWithoutBlogPostInput
   blogViews?: Prisma.BlogViewsUncheckedCreateNestedManyWithoutBlogPostInput
-  audioBook?: Prisma.AudioBookUncheckedCreateNestedOneWithoutBlogPostInput
+  files?: Prisma.FileSystemUncheckedCreateNestedManyWithoutBlogPostInput
 }
 
 export type BlogPostCreateOrConnectWithoutCommentsInput = {
@@ -1142,7 +1142,7 @@ export type BlogPostUpdateWithoutCommentsInput = {
   translations?: Prisma.BlogTranslationUpdateManyWithoutBlogPostNestedInput
   tagLinks?: Prisma.TagOnPostUpdateManyWithoutBlogPostNestedInput
   blogViews?: Prisma.BlogViewsUpdateManyWithoutBlogPostNestedInput
-  audioBook?: Prisma.AudioBookUpdateOneWithoutBlogPostNestedInput
+  files?: Prisma.FileSystemUpdateManyWithoutBlogPostNestedInput
 }
 
 export type BlogPostUncheckedUpdateWithoutCommentsInput = {
@@ -1159,7 +1159,7 @@ export type BlogPostUncheckedUpdateWithoutCommentsInput = {
   translations?: Prisma.BlogTranslationUncheckedUpdateManyWithoutBlogPostNestedInput
   tagLinks?: Prisma.TagOnPostUncheckedUpdateManyWithoutBlogPostNestedInput
   blogViews?: Prisma.BlogViewsUncheckedUpdateManyWithoutBlogPostNestedInput
-  audioBook?: Prisma.AudioBookUncheckedUpdateOneWithoutBlogPostNestedInput
+  files?: Prisma.FileSystemUncheckedUpdateManyWithoutBlogPostNestedInput
 }
 
 export type BlogPostCreateWithoutBlogViewsInput = {
@@ -1176,7 +1176,7 @@ export type BlogPostCreateWithoutBlogViewsInput = {
   translations?: Prisma.BlogTranslationCreateNestedManyWithoutBlogPostInput
   tagLinks?: Prisma.TagOnPostCreateNestedManyWithoutBlogPostInput
   comments?: Prisma.BlogCommentCreateNestedManyWithoutBlogPostInput
-  audioBook?: Prisma.AudioBookCreateNestedOneWithoutBlogPostInput
+  files?: Prisma.FileSystemCreateNestedManyWithoutBlogPostInput
 }
 
 export type BlogPostUncheckedCreateWithoutBlogViewsInput = {
@@ -1193,7 +1193,7 @@ export type BlogPostUncheckedCreateWithoutBlogViewsInput = {
   translations?: Prisma.BlogTranslationUncheckedCreateNestedManyWithoutBlogPostInput
   tagLinks?: Prisma.TagOnPostUncheckedCreateNestedManyWithoutBlogPostInput
   comments?: Prisma.BlogCommentUncheckedCreateNestedManyWithoutBlogPostInput
-  audioBook?: Prisma.AudioBookUncheckedCreateNestedOneWithoutBlogPostInput
+  files?: Prisma.FileSystemUncheckedCreateNestedManyWithoutBlogPostInput
 }
 
 export type BlogPostCreateOrConnectWithoutBlogViewsInput = {
@@ -1226,7 +1226,7 @@ export type BlogPostUpdateWithoutBlogViewsInput = {
   translations?: Prisma.BlogTranslationUpdateManyWithoutBlogPostNestedInput
   tagLinks?: Prisma.TagOnPostUpdateManyWithoutBlogPostNestedInput
   comments?: Prisma.BlogCommentUpdateManyWithoutBlogPostNestedInput
-  audioBook?: Prisma.AudioBookUpdateOneWithoutBlogPostNestedInput
+  files?: Prisma.FileSystemUpdateManyWithoutBlogPostNestedInput
 }
 
 export type BlogPostUncheckedUpdateWithoutBlogViewsInput = {
@@ -1243,7 +1243,7 @@ export type BlogPostUncheckedUpdateWithoutBlogViewsInput = {
   translations?: Prisma.BlogTranslationUncheckedUpdateManyWithoutBlogPostNestedInput
   tagLinks?: Prisma.TagOnPostUncheckedUpdateManyWithoutBlogPostNestedInput
   comments?: Prisma.BlogCommentUncheckedUpdateManyWithoutBlogPostNestedInput
-  audioBook?: Prisma.AudioBookUncheckedUpdateOneWithoutBlogPostNestedInput
+  files?: Prisma.FileSystemUncheckedUpdateManyWithoutBlogPostNestedInput
 }
 
 export type BlogPostCreateManyAuthorInput = {
@@ -1272,7 +1272,7 @@ export type BlogPostUpdateWithoutAuthorInput = {
   tagLinks?: Prisma.TagOnPostUpdateManyWithoutBlogPostNestedInput
   blogViews?: Prisma.BlogViewsUpdateManyWithoutBlogPostNestedInput
   comments?: Prisma.BlogCommentUpdateManyWithoutBlogPostNestedInput
-  audioBook?: Prisma.AudioBookUpdateOneWithoutBlogPostNestedInput
+  files?: Prisma.FileSystemUpdateManyWithoutBlogPostNestedInput
 }
 
 export type BlogPostUncheckedUpdateWithoutAuthorInput = {
@@ -1289,7 +1289,7 @@ export type BlogPostUncheckedUpdateWithoutAuthorInput = {
   tagLinks?: Prisma.TagOnPostUncheckedUpdateManyWithoutBlogPostNestedInput
   blogViews?: Prisma.BlogViewsUncheckedUpdateManyWithoutBlogPostNestedInput
   comments?: Prisma.BlogCommentUncheckedUpdateManyWithoutBlogPostNestedInput
-  audioBook?: Prisma.AudioBookUncheckedUpdateOneWithoutBlogPostNestedInput
+  files?: Prisma.FileSystemUncheckedUpdateManyWithoutBlogPostNestedInput
 }
 
 export type BlogPostUncheckedUpdateManyWithoutAuthorInput = {
@@ -1330,7 +1330,7 @@ export type BlogPostUpdateWithoutCategoryInput = {
   tagLinks?: Prisma.TagOnPostUpdateManyWithoutBlogPostNestedInput
   blogViews?: Prisma.BlogViewsUpdateManyWithoutBlogPostNestedInput
   comments?: Prisma.BlogCommentUpdateManyWithoutBlogPostNestedInput
-  audioBook?: Prisma.AudioBookUpdateOneWithoutBlogPostNestedInput
+  files?: Prisma.FileSystemUpdateManyWithoutBlogPostNestedInput
 }
 
 export type BlogPostUncheckedUpdateWithoutCategoryInput = {
@@ -1347,7 +1347,7 @@ export type BlogPostUncheckedUpdateWithoutCategoryInput = {
   tagLinks?: Prisma.TagOnPostUncheckedUpdateManyWithoutBlogPostNestedInput
   blogViews?: Prisma.BlogViewsUncheckedUpdateManyWithoutBlogPostNestedInput
   comments?: Prisma.BlogCommentUncheckedUpdateManyWithoutBlogPostNestedInput
-  audioBook?: Prisma.AudioBookUncheckedUpdateOneWithoutBlogPostNestedInput
+  files?: Prisma.FileSystemUncheckedUpdateManyWithoutBlogPostNestedInput
 }
 
 export type BlogPostUncheckedUpdateManyWithoutCategoryInput = {
@@ -1372,6 +1372,7 @@ export type BlogPostCountOutputType = {
   tagLinks: number
   blogViews: number
   comments: number
+  files: number
 }
 
 export type BlogPostCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1379,6 +1380,7 @@ export type BlogPostCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensio
   tagLinks?: boolean | BlogPostCountOutputTypeCountTagLinksArgs
   blogViews?: boolean | BlogPostCountOutputTypeCountBlogViewsArgs
   comments?: boolean | BlogPostCountOutputTypeCountCommentsArgs
+  files?: boolean | BlogPostCountOutputTypeCountFilesArgs
 }
 
 /**
@@ -1419,6 +1421,13 @@ export type BlogPostCountOutputTypeCountCommentsArgs<ExtArgs extends runtime.Typ
   where?: Prisma.BlogCommentWhereInput
 }
 
+/**
+ * BlogPostCountOutputType without action
+ */
+export type BlogPostCountOutputTypeCountFilesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FileSystemWhereInput
+}
+
 
 export type BlogPostSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1437,7 +1446,7 @@ export type BlogPostSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   tagLinks?: boolean | Prisma.BlogPost$tagLinksArgs<ExtArgs>
   blogViews?: boolean | Prisma.BlogPost$blogViewsArgs<ExtArgs>
   comments?: boolean | Prisma.BlogPost$commentsArgs<ExtArgs>
-  audioBook?: boolean | Prisma.BlogPost$audioBookArgs<ExtArgs>
+  files?: boolean | Prisma.BlogPost$filesArgs<ExtArgs>
   _count?: boolean | Prisma.BlogPostCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["blogPost"]>
 
@@ -1492,7 +1501,7 @@ export type BlogPostInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   tagLinks?: boolean | Prisma.BlogPost$tagLinksArgs<ExtArgs>
   blogViews?: boolean | Prisma.BlogPost$blogViewsArgs<ExtArgs>
   comments?: boolean | Prisma.BlogPost$commentsArgs<ExtArgs>
-  audioBook?: boolean | Prisma.BlogPost$audioBookArgs<ExtArgs>
+  files?: boolean | Prisma.BlogPost$filesArgs<ExtArgs>
   _count?: boolean | Prisma.BlogPostCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type BlogPostIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1513,7 +1522,7 @@ export type $BlogPostPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     tagLinks: Prisma.$TagOnPostPayload<ExtArgs>[]
     blogViews: Prisma.$BlogViewsPayload<ExtArgs>[]
     comments: Prisma.$BlogCommentPayload<ExtArgs>[]
-    audioBook: Prisma.$AudioBookPayload<ExtArgs> | null
+    files: Prisma.$FileSystemPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1926,7 +1935,7 @@ export interface Prisma__BlogPostClient<T, Null = never, ExtArgs extends runtime
   tagLinks<T extends Prisma.BlogPost$tagLinksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BlogPost$tagLinksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TagOnPostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   blogViews<T extends Prisma.BlogPost$blogViewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BlogPost$blogViewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlogViewsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   comments<T extends Prisma.BlogPost$commentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BlogPost$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlogCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  audioBook<T extends Prisma.BlogPost$audioBookArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BlogPost$audioBookArgs<ExtArgs>>): Prisma.Prisma__AudioBookClient<runtime.Types.Result.GetResult<Prisma.$AudioBookPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  files<T extends Prisma.BlogPost$filesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BlogPost$filesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FileSystemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2482,22 +2491,27 @@ export type BlogPost$commentsArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
- * BlogPost.audioBook
+ * BlogPost.files
  */
-export type BlogPost$audioBookArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type BlogPost$filesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the AudioBook
+   * Select specific fields to fetch from the FileSystem
    */
-  select?: Prisma.AudioBookSelect<ExtArgs> | null
+  select?: Prisma.FileSystemSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the AudioBook
+   * Omit specific fields from the FileSystem
    */
-  omit?: Prisma.AudioBookOmit<ExtArgs> | null
+  omit?: Prisma.FileSystemOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.AudioBookInclude<ExtArgs> | null
-  where?: Prisma.AudioBookWhereInput
+  include?: Prisma.FileSystemInclude<ExtArgs> | null
+  where?: Prisma.FileSystemWhereInput
+  orderBy?: Prisma.FileSystemOrderByWithRelationInput | Prisma.FileSystemOrderByWithRelationInput[]
+  cursor?: Prisma.FileSystemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FileSystemScalarFieldEnum | Prisma.FileSystemScalarFieldEnum[]
 }
 
 /**

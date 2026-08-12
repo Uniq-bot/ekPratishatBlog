@@ -188,7 +188,6 @@ export const getBlogByFilters = async ({
       include: {
         category: { include: { translations: true } },
         translations: true,
-        audioBook: true,
         tagLinks: { include: { tag: { include: { translations: true } } } },
       },
       orderBy: { createdAt: "desc" },

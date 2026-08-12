@@ -1,10 +1,13 @@
 const DEFAULT_IMAGE = "/logo.png";
 
-function getConfiguredImageHost() {
+function getConfiguredMediaHost() {
   const rawHost = [
+    process.env.NEXT_PUBLIC_AUDIO_HOST_URL,
+    process.env.AUDIO_HOST_URL,
     process.env.NEXT_PUBLIC_IMAGE_HOST_URL,
     process.env.IMAGE_HOST_URL,
     process.env.NEXT_PUBLIC_BASE_URL,
+    process.env.BASE_URL,
     process.env.imageHostUrl,
   ].find(Boolean);
 
@@ -20,7 +23,21 @@ export function normalizeImageUrl(src?: string | null) {
   if (/^https?:\/\//i.test(trimmed)) return trimmed;
 
   const normalized = trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
-  const host = getConfiguredImageHost();
+  const host = getConfiguredMediaHost();
+
+  return host ? `${host}${normalized}` : normalized;
+}
+
+export function normalizeFileUrl(src?: string | null) {
+  if (!src) return "";
+
+  const trimmed = src.trim();
+  if (!trimmed) return "";
+
+  if (/^https?:\/\//i.test(trimmed)) return trimmed;
+
+  const normalized = trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
+  const host = getConfiguredMediaHost();
 
   return host ? `${host}${normalized}` : normalized;
 }

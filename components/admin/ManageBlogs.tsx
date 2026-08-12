@@ -2,17 +2,23 @@
 
 import {
   useCurateBlog,
-  useDeleteBlog,
   useGetAdminBlogs,
   useToggleArchiveBlog,
 } from "@/hooks/useAdminBlogs";
-import { Archive, ArchiveRestore, Edit } from "lucide-react";
+import { Archive, ArchiveRestore, Edit, FilePlus } from "lucide-react";
 import Link from "next/link";
 import { TableSkeleton } from "@/components/admin/skeleton/TableSkeleton";
 import { useState } from "react";
 
-const ManageBlogs = ({setActiveTab, setAudioSlug}: {setActiveTab: (tab: string) => void; setAudioSlug: (slug: string | null) => void}) => {
+const ManageBlogs = ({
+  setActiveTab,
+  setSelectedBlog,
+}: {
+  setActiveTab: (tab: string) => void;
+  setSelectedBlog: (blog: { id: string; title: string } | null) => void;
+}) => {
   const { data: blogs, isLoading } = useGetAdminBlogs();
+  const blogList = blogs?.posts ?? [];
   const { mutate: ToggleArchiveBlog, isPending: isArchiving } =
     useToggleArchiveBlog();
   const [actionId, setActionId] = useState<string | null>(null);
@@ -51,8 +57,6 @@ const ManageBlogs = ({setActiveTab, setAudioSlug}: {setActiveTab: (tab: string) 
       setActionId(null);
     }
   };
-  console.log(blogs);
-
   return (
     <div className="bg-white relative z-20 shadow border overflow-hidden">
       {isLoading ? (
@@ -66,8 +70,6 @@ const ManageBlogs = ({setActiveTab, setAudioSlug}: {setActiveTab: (tab: string) 
                 <th className="px-4 py-3 text-left">Title</th>
                 <th className="px-4 py-3 text-left">Category</th>
                 <th className="px-4 py-3 text-left">Tags</th>
-                <th className="px-4 py-3 text-left">AudioBook</th>
-
                 <th className="px-4 py-3 text-left">Status</th>
                 <th className="px-4 py-3 text-center">Views</th>
                 <th className="px-4 py-3 text-center">Actions</th>
@@ -75,17 +77,17 @@ const ManageBlogs = ({setActiveTab, setAudioSlug}: {setActiveTab: (tab: string) 
               </tr>
             </thead>
             <tbody>
-              {blogs?.posts?.length === 0 && (
+              {blogList.length === 0 && (
                 <tr>
                   <td
-                    colSpan={6}
+                    colSpan={8}
                     className="px-4 py-8 text-center text-gray-400"
                   >
                     No blogs yet.
                   </td>
                 </tr>
               )}
-              {blogs?.posts?.map((blog: any, index: number) => {
+              {blogList.map((blog: any, index: number) => {
                 const isRowDisabled = actionId === blog.id;
 
                 return (
@@ -120,38 +122,6 @@ const ManageBlogs = ({setActiveTab, setAudioSlug}: {setActiveTab: (tab: string) 
                       </div>
                     </td>
                     <td className="px-4 py-4">
-                      {blog.audioBook ? (
-                        <div className="flex items-center gap-3">
-                          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-green-100 text-green-600">
-                            🎧
-                          </div>
-
-                          <div className="min-w-0">
-                            <p className="truncate max-w-45 text-sm font-medium text-gray-900">
-                              Audio Book
-                            </p>
-
-                            <p className="truncate max-w-45 text-xs text-gray-500">
-                              {blog.audioBook.audioFile.split("-").pop()}
-                            </p>
-                          </div>
-                        </div>
-                      ) : (
-                        <button
-                          type="button"
-                          onClick={()=>  {
-                            setActiveTab("add-audiobook")
-                            setAudioSlug(blog.slug)
-                          }             
-                          }
-                          className="inline-flex items-center gap-2 rounded-lg border border-dashed border-gray-300 px-3 py-2 text-sm font-medium text-gray-600 transition hover:border-gray-400 hover:bg-gray-50 hover:text-gray-900"
-                        >
-                          <span className="text-lg">+</span>
-                          Add Audio
-                        </button>
-                      )}
-                    </td>
-                    <td className="px-4 py-4">
                       <span
                         className={`px-3 py-1 rounded-full text-xs ${
                           blog.status === "PUBLISHED"
@@ -167,7 +137,6 @@ const ManageBlogs = ({setActiveTab, setAudioSlug}: {setActiveTab: (tab: string) 
                     </td>
                     <td className="px-4 py-4">
                       <div className="flex justify-center gap-2">
-                        {/* Link instead of router.push */}
                         <Link
                           href={
                             isRowDisabled
@@ -183,6 +152,18 @@ const ManageBlogs = ({setActiveTab, setAudioSlug}: {setActiveTab: (tab: string) 
                         >
                           <Edit />
                         </Link>
+                        <button
+                          type="button"
+                          disabled={isRowDisabled}
+                          onClick={() => {
+                            setSelectedBlog({ id: blog.id, title: blog.title });
+                            setActiveTab("add-files");
+                          }}
+                          title="Add File"
+                          className="p-2 border transition-all hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                          <FilePlus size={18} />
+                        </button>
                         {blog.status !== "ARCHIVED" ? (
                           <button
                             disabled={isArchiving && isRowDisabled}

@@ -11,7 +11,7 @@
 export type * from './models/User'
 export type * from './models/BlogPost'
 export type * from './models/BlogTranslation'
-export type * from './models/AudioBook'
+export type * from './models/FileSystem'
 export type * from './models/Category'
 export type * from './models/CategoryTranslation'
 export type * from './models/Tag'

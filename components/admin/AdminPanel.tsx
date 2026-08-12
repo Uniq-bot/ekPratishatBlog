@@ -10,15 +10,15 @@ import Image from "next/image";
 import Advertisement from "./Advertisement";
 import ManageAds from "./ManageAds";
 import Subscriber from "./Subscriber";
-import AddAudioBook from "./AddAudioBook";
 import { useState } from "react";
-import ManageAudioBooks from "./ManageAudioBooks";
+import ManageFiles from "./ManageFiles";
+import AddFiles from "./AddFiles";
 
 const AdminPanel = ({ advertisements }: { advertisements: any[] }) => {
   const { activeTab, setActiveTab, blocks, setBlocks, user, activeEditor, setActiveEditor, setOnBoardingBlog } = useAdminUI();
   const {data:categories, isLoading:isCategoryLoading}=useGetCategory();
     const {data:tags, isLoading:isTagLoading}=useGetTags()
-    const [audioSlug, setAudioSlug] = useState<string | null>(null);
+  const [selectedBlog, setSelectedBlog] = useState<{ id: string; title: string } | null>(null);
   const tabComponents: Record<string, React.ReactNode> = {
     "tag&category": (
       <TagNCategory
@@ -39,17 +39,28 @@ const AdminPanel = ({ advertisements }: { advertisements: any[] }) => {
         setOnBoardingBlog={setOnBoardingBlog}
       />
     ),
-    "manage-blogs": <ManageBlogs setAudioSlug={setAudioSlug} setActiveTab={setActiveTab} />,
+    "manage-blogs": (
+      <ManageBlogs setActiveTab={setActiveTab} setSelectedBlog={setSelectedBlog} />
+    ),
     "advertisement": <Advertisement  />,
     "manage-ads": <ManageAds advertisements={advertisements} />,
     "subscribers": <Subscriber />,
-    "add-audiobook": <AddAudioBook audioSlug={audioSlug} />,
-    "manage-audiobooks": <ManageAudioBooks  />
+    "add-files": (
+      <AddFiles
+        preselectedBlog={selectedBlog}
+        onClearPreselectedBlog={() => setSelectedBlog(null)}
+      />
+    ),
+    "manage-files": <ManageFiles />
   };
 
   return (
     <div className="w-full relative bg-[#F7F3EA] min-h-screen flex">
-      <AsideBar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <AsideBar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        onClearSelectedBlog={() => setSelectedBlog(null)}
+      />
 
       <div className="w-full lg:ml-2 p-4 lg:p-5 min-h-screen overflow-y-auto">
         {/* Watermark */}

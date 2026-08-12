@@ -57,10 +57,10 @@ export type BlogPost = Prisma.BlogPostModel
  */
 export type BlogTranslation = Prisma.BlogTranslationModel
 /**
- * Model AudioBook
+ * Model FileSystem
  * 
  */
-export type AudioBook = Prisma.AudioBookModel
+export type FileSystem = Prisma.FileSystemModel
 /**
  * Model Category
  * 

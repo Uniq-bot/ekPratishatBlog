@@ -1,5 +1,7 @@
 "use client";
 
+// Legacy audio upload component kept for reference.
+// The newer file management flow uses the file API and TanStack Query hooks.
 import { useUploadAudio, useUploadAudioForBlog } from "@/hooks/useAudioPost";
 import React, { useRef, useState } from "react";
 
