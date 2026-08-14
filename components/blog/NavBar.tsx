@@ -24,6 +24,11 @@ const NavBar = () => {
       href: "/",
     },
     {
+      name:"EMI Calculator",
+      nameNp:"ईएमआई क्यालकुलेटर",
+      href:"/emi-calculator"
+    },
+    {
       name: "About",
       nameNp: "हाम्रोबारे",
       href: "https://ekpratishat.com/about",

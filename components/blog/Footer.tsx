@@ -109,7 +109,7 @@ const Footer = () => {
           </div>
 
           {/* Privacy row */}
-          <div className="mt-12 pt-4 border-t border-[#3A3226] flex justify-end">
+          <div className="mt-12 pt-4 border-t border-[#3A3226] flex gap-10 justify-end">
             <Link
               href="/terms"
               className="group inline-flex items-center gap-1.5 text-sm font-semibold uppercase tracking-[0.14em] text-gray-400 hover:text-[#EBC044] transition-colors"
@@ -120,6 +120,7 @@ const Footer = () => {
                 className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
               />
             </Link>
+           
           </div>
 
           {/* Bottom bar */}
